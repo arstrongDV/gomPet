@@ -1,0 +1,44 @@
+@import 'styles';
+
+.container {
+  position: relative;
+  width: fit-content;
+}
+
+.button {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-2;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.icon {
+  transition: transform $transition-main;
+  &.rotate {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdownMenu {
+  @include element-flex(column, flex-start, flex-start);
+  position: absolute;
+  top: calc(100% + $spacing-2);
+  right: 0;
+  z-index: 2;
+  background-color: $color-background-1;
+  border: 0.1rem solid $color-border;
+  border-radius: $radius-m;
+  box-shadow: $shadow-soft;
+  padding: $spacing-2;
+  transition: opacity $transition-main, transform $transition-main;
+  opacity: 0;
+  transform: translateY(-1rem);
+  pointer-events: none;
+
+  &.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+}

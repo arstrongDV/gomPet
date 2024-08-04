@@ -1,0 +1,36 @@
+@import 'styles';
+
+.card {
+  @include element-flex(column, center, stretch);
+  gap: $spacing-6;
+  width: 35rem;
+
+  @include phoneWidth {
+    width: 100%;
+  }
+}
+
+.header {
+  @include element-flex(column, flex-start, center);
+
+  .title {
+    @include title2;
+
+    color: $color-foreground;
+  }
+
+  .subtitle {
+    @include body1;
+    color: $color-accent;
+    text-align: center;
+  }
+}
+
+.icon {
+  margin: 1.2rem auto;
+  transform: scale(2);
+}
+
+.labelLink {
+  align-self: center;
+}

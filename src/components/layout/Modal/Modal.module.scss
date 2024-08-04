@@ -1,0 +1,92 @@
+@import 'styles';
+
+.overlay {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation-duration: $transition-duration-fast !important;
+  background-color: rgba($color: $color-gray-500, $alpha: 0.4);
+
+  @include light-theme {
+    background-color: rgba($color: $color-gray-500, $alpha: 0.5);
+  }
+
+  &.blur {
+    backdrop-filter: blur(0.1rem);
+    -webkit-backdrop-filter: blur(0.1rem);
+  }
+}
+
+.modal {
+  margin: 0 $spacing-5;
+  border-radius: $radius-l;
+  box-shadow: $shadow-main;
+  background-color: $color-background-1;
+  padding: $spacing-6;
+  padding-right: $spacing-3;
+  width: 100%;
+  max-width: 50.5rem;
+  animation-duration: $transition-duration-fast;
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn $transition-duration-fast ease-out;
+
+  @include custom-scrollbar;
+}
+
+.modalHeader {
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-4;
+  padding-right: $spacing-3;
+}
+
+.modalBody {
+  line-height: 1.38;
+  overflow: auto;
+  max-height: 75vh;
+
+  &.extraPadding {
+    padding-left: 1px;
+    padding-top: 1px;
+  }
+
+  &.withScroll {
+    padding-right: $spacing-3;
+    @include custom-scrollbar;
+  }
+}
+
+.floatingCloseButton {
+  position: absolute;
+  top: $spacing-2;
+  right: $spacing-2;
+  z-index: 100;
+  background-color: $color-background-1;
+}
+
+.modalTitle {
+  width: 100%;
+  @include title3;
+  color: $color-foreground;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  70% {
+    transform: none;
+  }
+  100% {
+    opacity: 1;
+  }
+}

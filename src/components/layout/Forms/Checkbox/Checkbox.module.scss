@@ -1,0 +1,93 @@
+@import 'src/styles';
+
+.checkboxContainer {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+
+  @include smDesktopWidth() {
+    align-items: flex-start;
+  }
+}
+
+.checkbox {
+  border: 0.1rem solid $color-border;
+  border-radius: $radius-s;
+  height: 3.2rem;
+  min-width: 3.2rem;
+  @include appearance(none);
+  cursor: pointer;
+
+  transition: all $transition-main;
+
+  &:checked {
+    color: $color-foreground;
+
+    & + .icon {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  &:focus {
+    box-shadow: $shadow-main;
+    @include dark-theme {
+      box-shadow: unset;
+    }
+  }
+
+  &:disabled + label {
+    cursor: not-allowed !important;
+  }
+
+  &__error {
+    border-color: $color-danger;
+    box-shadow: $color-danger;
+  }
+}
+
+.errorMessage {
+  padding-top: 0.5rem;
+  color: $color-danger;
+  font-size: $font-size-xs;
+  animation: fadeIn 0.5s;
+}
+
+.label {
+  @include body1;
+  cursor: pointer;
+  margin-top: $spacing-1;
+
+  &.small {
+    @include body2;
+  }
+}
+
+.star {
+  color: $color-danger;
+}
+
+.checkboxWrapper {
+  position: relative;
+  height: 3.2rem;
+  width: 3.2rem;
+}
+
+.icon {
+  position: absolute;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  transition: all $transition-main;
+}
+
+.disabled {
+  @include disabled-ui;
+}
+
+@keyframes fadeIn {
+  @include keyframe-fadeIn;
+}

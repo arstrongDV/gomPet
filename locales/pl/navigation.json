@@ -1,0 +1,9 @@
+{
+  "sidebar": {
+    "landing": "Strona główna",
+    "login": "Zaloguj się",
+    "library": "Biblioteka",
+    "logout": "Wyloguj się",
+    "offers": "Oferty"
+  }
+}

@@ -1,0 +1,21 @@
+@import 'styles';
+
+.visibilityButton {
+  @include element-flex(row, center, center);
+  height: calc($size-input-height + 0.1rem);
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: 0;
+  padding-right: 1.7rem;
+  padding-left: 0.7rem;
+  top: calc(50%);
+  transform: translateY(-50%);
+  box-sizing: border-box;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

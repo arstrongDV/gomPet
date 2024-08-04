@@ -1,0 +1,51 @@
+@import 'src/styles';
+
+.link {
+  @include body1;
+  color: $color-primary;
+  cursor: pointer;
+
+  transition: color $transition-main;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &.accent {
+    color: $color-accent;
+  }
+
+  &.font {
+    color: $color-foreground;
+  }
+
+  &.dimmed {
+    color: $color-foreground-dim;
+  }
+
+  &.underlined {
+    text-decoration: underline;
+  }
+
+  &.color.underlined {
+    color: $color-primary;
+
+    &:hover {
+      color: $color-primary-hover;
+    }
+  }
+
+  &.small {
+    @include body2;
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+.img {
+  width: 1.7rem;
+  margin-right: 1.5rem;
+}

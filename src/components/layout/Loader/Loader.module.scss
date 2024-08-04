@@ -1,0 +1,37 @@
+@import 'src/styles';
+
+.loader {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  @include loading-spinner-animation;
+}
+
+.contentIndicator {
+  width: 2.5rem;
+  height: 2.5rem;
+  position: fixed;
+  top: 50%;
+  //left: calc(50% + #{$size-sidebar-width / 2});
+  transform: translate(-50%, -50%);
+
+  @include desktopWidth() {
+    left: 50%;
+  }
+}
+
+.global {
+  width: 2.5rem;
+  height: 2.5rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  @include desktopWidth() {
+    left: 50%;
+  }
+}

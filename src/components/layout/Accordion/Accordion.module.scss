@@ -1,0 +1,71 @@
+@import 'src/styles';
+
+.container {
+  width: 100%;
+}
+
+.card {
+  background-color: $color-background-3;
+  border-radius: $radius-m;
+  overflow: hidden;
+  padding: $spacing-4;
+}
+.toggle {
+  display: flex;
+  flex-direction: column;
+
+  transition: $transition-main;
+}
+
+.toggle.active .icon {
+  transform: rotate(180deg);
+}
+
+.card {
+  border-radius: $radius-m;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  &.background {
+    background-color: $color-background-1;
+  }
+}
+
+.card:last-child {
+  margin-bottom: 0;
+}
+
+.title {
+  position: relative;
+  margin-bottom: 0;
+  transition: $transition-main;
+}
+
+.toggle.active .icon {
+  color: $color-primary;
+}
+
+.description {
+  color: $color-foreground-dim;
+  margin-top: $spacing-5;
+}
+
+.icon {
+  transition: $transition-main;
+}
+
+.collapse {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  transition: height $transition-main;
+}
+
+.collapse.show {
+  height: auto;
+}
+
+.header {
+  @include element-flex(row, space-between, center);
+  cursor: pointer;
+}

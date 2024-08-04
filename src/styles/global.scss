@@ -1,0 +1,50 @@
+@import 'vars';
+@import 'colors';
+@import 'mixins';
+
+html {
+  font-size: 62.5%; // 1rem = 10px
+}
+
+body {
+  font-family: $main-font;
+  color: $color-foreground;
+  background-color: $color-background-3;
+  @include body1;
+}
+
+button {
+  @include button;
+}
+
+h1 {
+  @include title1;
+}
+h2 {
+  @include title2;
+}
+h3 {
+  @include title3;
+}
+h4 {
+  @include title4;
+}
+h5 {
+  @include title5;
+}
+h6 {
+  @include title6;
+}
+
+input,
+input::placeholder {
+  @include body1;
+}
+
+input::placeholder {
+  color: $color-foreground-placeholder;
+}
+
+a {
+  color: inherit;
+}

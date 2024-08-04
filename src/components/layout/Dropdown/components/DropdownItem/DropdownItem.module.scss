@@ -1,0 +1,58 @@
+@import 'styles';
+
+.link {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-3;
+  width: 100%;
+  position: relative;
+  padding: $spacing-2;
+  border-radius: $radius-m;
+
+  font-family: $main-font;
+  color: $color-foreground;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  flex-shrink: 0;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-align: left;
+
+  transition: background-color $transition-main, color $transition-main, fill $transition-main;
+
+  @include tabletWidth {
+    max-width: 40rem;
+    word-break: normal;
+    white-space: pre-wrap;
+  }
+
+  @include body2;
+  &.sectionTitle {
+    @include label;
+  }
+
+  &.button {
+    background: transparent;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    object-fit: contain;
+  }
+
+  & .icon {
+    path {
+      fill: $color-foreground-dim;
+    }
+  }
+
+  &:hover {
+    background: $color-background-2;
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

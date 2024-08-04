@@ -1,0 +1,42 @@
+$screen-xl: 1600px;
+@mixin desktopWidth {
+  @media screen and (max-width: $screen-xl) {
+    @content;
+  }
+}
+$screen-lg: 1240px;
+@mixin smDesktopWidth {
+  @media screen and (max-width: $screen-lg) {
+    @content;
+  }
+}
+$screen-sd: 1024px;
+@mixin mobileWidth {
+  @media screen and (max-width: $screen-sd) {
+    @content;
+  }
+}
+$screen-sm: 768px;
+@mixin tabletWidth {
+  @media screen and (max-width: $screen-sm) {
+    @content;
+  }
+}
+$screen-xs: 480px;
+@mixin phoneWidth {
+  @media screen and (max-width: $screen-xs) {
+    @content;
+  }
+}
+$screen-ss: 320px;
+@mixin smPhoneWidth {
+  @media screen and (max-width: $screen-ss) {
+    @content;
+  }
+}
+
+@mixin customWidth($width) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}

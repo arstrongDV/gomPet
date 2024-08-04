@@ -1,0 +1,127 @@
+@import 'src/styles';
+
+.button {
+  @include button;
+  text-align: center;
+  color: $color-white;
+  background-color: $color-primary;
+  white-space: nowrap;
+
+  border: 1px solid transparent;
+  column-gap: $spacing-3;
+  padding: $space-padding-button;
+  border-radius: $radius-m;
+  height: $size-button-height;
+  cursor: pointer;
+
+  transition: color $transition-main, background-color $transition-main, border-color $transition-main,
+    fill $transition-main;
+
+  @include light-theme {
+    color: $color-foreground-inverted;
+  }
+
+  &:hover {
+    background-color: $color-primary-hover;
+  }
+
+  &:active {
+    background-color: $color-primary-active;
+  }
+}
+
+.icon {
+  color: $color-white;
+  transition: color $transition-main;
+}
+
+.inner {
+  @include element-flex(row, center, center);
+  width: 100%;
+  position: relative;
+}
+
+.loader {
+  height: 2rem;
+  position: absolute;
+  @include loading-spinner-animation;
+  color: $color-white;
+}
+
+.empty {
+  background-color: transparent;
+  border: 1px solid $color-primary;
+  color: $color-foreground;
+
+  &:hover,
+  &:active {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+}
+
+.wrapper {
+  @include element-flex(row, center, center);
+  gap: $spacing-3;
+
+  &.withSmallIcon {
+    gap: $spacing-1;
+  }
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+.label {
+  font-family: $main-font;
+  font-size: inherit;
+  font-weight: $font-light;
+}
+
+.isLoading {
+  @include disabled-ui();
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: transparent;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.small {
+  height: unset;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-s;
+}
+
+.iconOnly {
+  padding: $spacing-3;
+  height: $size-button-height;
+  min-width: $size-button-height;
+
+  &.small {
+    height: $size-button-small-height;
+    padding: $spacing-2;
+    min-width: unset;
+  }
+}
+
+.transparent {
+  border-color: transparent;
+  background-color: transparent;
+  color: $color-primary;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}

@@ -1,0 +1,86 @@
+@import 'functions';
+
+// Fonts
+$main-font: 'Raleway', sans-serif;
+
+// Font sizes - Perfect Fourth 1.333
+$base-font-size: 1.6;
+$font-ratio: 1.15;
+
+$font-size-xxxl: to-rem(calc($base-font-size * pow($font-ratio, 5)));
+$font-size-xxl: to-rem(calc($base-font-size * pow($font-ratio, 4)));
+$font-size-xl: to-rem(calc($base-font-size * pow($font-ratio, 3)));
+$font-size-l: to-rem(calc($base-font-size * pow($font-ratio, 2)));
+$font-size-m: to-rem(calc($base-font-size * $font-ratio));
+$font-size-s: to-rem(calc($base-font-size));
+$font-size-xs: to-rem(calc($base-font-size / $font-ratio));
+$font-size-xxs: to-rem(calc($base-font-size / pow($font-ratio, 2)));
+$font-size-xxxs: to-rem(calc($base-font-size / pow($font-ratio, 3)));
+
+// Letter spacing
+$letter-spacing-1: -0.05rem;
+$letter-spacing-2: -0.025rem;
+$letter-spacing-3: 0rem;
+$letter-spacing-4: 0.025rem;
+$letter-spacing-5: 0.05rem;
+$letter-spacing-6: 0.1rem;
+
+// Spacing
+$spacing-1: var(--spacing-1, 0.4rem);
+$spacing-2: var(--spacing-2, 0.8rem);
+$spacing-3: var(--spacing-3, 1.2rem);
+$spacing-4: var(--spacing-4, 1.6rem);
+$spacing-5: var(--spacing-5, 2.4rem);
+$spacing-6: var(--spacing-6, 3.2rem);
+$spacing-7: var(--spacing-7, 4rem);
+$spacing-8: var(--spacing-8, 6rem);
+$spacing-9: var(--spacing-9, 8rem);
+$spacing-10: var(--spacing-10, 12rem);
+
+// Border radius
+$radius-s: var(--radius-s, 0.8rem);
+$radius-m: var(--radius-m, 1.6rem);
+$radius-l: var(--radius-l, 2rem);
+
+// Font weights
+$font-light: 300;
+$font-regular: 400;
+$font-medium: 500;
+$font-semiBold: 600;
+$font-bold: 700;
+$font-extraBold: 800;
+$font-black: 900;
+
+// Elements sizes
+$size-button-height: var(--size-button-height, 5rem);
+$size-button-small-height: var(--size-button-small-height, 2.4rem);
+$size-input-height: var(--size-input-height, 5rem);
+$size-sidebar-width: var(--size-sidebar-width, 24.5rem);
+$size-sidebar-close-width: var(--size-sidebar-close-width, 7rem);
+$size-page-max-width: var(--size-page-max-width, 120rem);
+$size-top-navigation-height: var(--size-top-navigation-height, 8rem);
+$size-footer-height: var(--size-footer-height, 5rem);
+$size-icon: 2.4rem;
+$size-icon-small: 1.8rem;
+
+// Elements spaces
+$space-gap-section: $spacing-8;
+$space-padding-button: $spacing-2 $spacing-6;
+$space-padding-input: $spacing-3;
+$space-padding-card: $spacing-3;
+$space-padding-page-sides: max($spacing-6, calc(50% - 60rem));
+$space-padding-page: $spacing-6 max($spacing-6, calc(50% - 60rem));
+$space-padding-around-page: $spacing-6;
+$space-sidebar-page-margin: $spacing-6;
+$space-header-page-margin: $spacing-6;
+
+// Transitions
+$transition-duration-super-fast: 0.1s;
+$transition-duration-fast: 0.2s;
+$transition-duration-medium: 0.4s;
+$transition-main: $transition-duration-fast ease-in-out;
+$transition-smooth-end: $transition-duration-medium cubic-bezier(0.25, 0.4, 0.3, 1);
+
+// Reference:
+// typography Major Third -> https://typescale.com/
+// spacing -> https://uxplanet.org/spacing-guide-for-designers-5bd140afe52a

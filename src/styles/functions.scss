@@ -1,0 +1,11 @@
+@function pow($base, $exponent) {
+  $result: 1;
+  @for $i from 1 through $exponent {
+    $result: $result * $base;
+  }
+  @return $result;
+}
+
+@function to-rem($size) {
+  @return $size + 0rem;
+}

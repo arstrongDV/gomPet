@@ -1,0 +1,21 @@
+@import 'styles';
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  @include flex-center;
+  padding: $spacing-6;
+
+  @include mobileWidth {
+    width: 100%;
+    padding: $spacing-3;
+  }
+}
+
+.logo {
+  margin: 0 auto $spacing-6;
+}
+
+.main {
+  @include element-flex(column, flex-start, center);
+}

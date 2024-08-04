@@ -1,0 +1,215 @@
+@import 'vars';
+@import 'responsive';
+@import 'colors';
+
+@mixin line-height($font-size) {
+  line-height: calc($font-size * 1.5);
+}
+
+@mixin light-theme {
+  @at-root :global(.light-mode) & {
+    @content;
+  }
+}
+
+@mixin dark-theme {
+  @at-root :global(.dark-mode) & {
+    @content;
+  }
+}
+
+@mixin placeholder {
+  ::-webkit-input-placeholder {
+    @content;
+  }
+  :-moz-placeholder {
+    @content;
+  }
+  ::-moz-placeholder {
+    @content;
+  }
+  :-ms-input-placeholder {
+    @content;
+  }
+}
+
+@mixin hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: 0.8rem;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    visibility: hidden;
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+}
+
+@mixin custom-scrollbar($color-thumb: $color-background-2, $color-track: transparent) {
+  -ms-overflow-style: inherit;
+  scrollbar-width: 0.8rem;
+  scrollbar-color: $color-thumb $color-track;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    visibility: visible;
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+  &::-webkit-scrollbar-track {
+    background: $color-track;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color-thumb;
+    border-radius: 0.8rem;
+  }
+}
+
+@mixin disabled-styling {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+@mixin disabled-ui {
+  > * {
+    @include disabled-styling;
+  }
+
+  @include disabled-styling;
+}
+
+@mixin keyframe-fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@mixin loading-spinner-animation {
+  @keyframes loading-spinner {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  animation: loading-spinner 1s linear infinite;
+}
+
+@mixin appearance($value) {
+  -webkit-appearance: $value;
+  -moz-appearance: $value;
+  appearance: $value;
+}
+
+@mixin filter-to-primary {
+  filter: invert(29%) sepia(100%) saturate(603%) hue-rotate(215deg) brightness(50%) contrast(85%);
+}
+
+@mixin single-line-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+@mixin limit-lines($line-s-amount) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line-s-amount; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+@mixin trimText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin element-flex($direction, $justify: 'flex-start', $align: 'flex-start') {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: unquote($justify);
+  align-items: unquote($align);
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin title1 {
+  font-weight: $font-bold;
+  font-size: $font-size-xxl;
+  @include line-height($font-size-xxl);
+
+  @include tabletWidth {
+    font-size: calc($font-size-xxl * 0.8);
+  }
+}
+@mixin title2 {
+  font-weight: $font-bold;
+  font-size: $font-size-xl;
+  @include line-height($font-size-xl);
+
+  @include tabletWidth {
+    font-size: calc($font-size-xl * 0.8);
+  }
+}
+@mixin title3 {
+  font-weight: $font-medium;
+  font-size: $font-size-l;
+  @include line-height($font-size-l);
+}
+@mixin title4 {
+  font-weight: $font-medium;
+  font-size: $font-size-m;
+  @include line-height($font-size-m);
+}
+@mixin title5 {
+  font-weight: $font-medium;
+  font-size: $font-size-s;
+  @include line-height($font-size-s);
+}
+@mixin title6 {
+  font-weight: $font-medium;
+  font-size: $font-size-xs;
+  @include line-height($font-size-xs);
+}
+@mixin body1 {
+  font-weight: $font-regular;
+  font-size: $font-size-s;
+  @include line-height($font-size-s);
+}
+@mixin body2 {
+  font-weight: $font-regular;
+  font-size: $font-size-xs;
+  @include line-height($font-size-xs);
+}
+@mixin label {
+  font-weight: $font-regular;
+  font-size: $font-size-s;
+  line-height: 120%;
+}
+@mixin button {
+  font-weight: $font-regular;
+  font-size: $font-size-s;
+  @include line-height($font-size-s);
+  @include flex-center();
+
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  word-break: keep-all;
+}
+@mixin caption {
+  font-weight: $font-medium;
+  font-size: $font-size-xs;
+  @include line-height($font-size-xs);
+}

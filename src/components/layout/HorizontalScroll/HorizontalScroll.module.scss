@@ -1,0 +1,17 @@
+@import 'styles';
+
+.container {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-3;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+
+  @include hide-scrollbar;
+  &.withScrollbar {
+    padding-bottom: 0.8rem;
+    &:hover {
+      @include custom-scrollbar;
+    }
+  }
+}

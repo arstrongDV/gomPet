@@ -1,0 +1,56 @@
+@import 'styles';
+
+.container {
+  width: 4.2rem;
+  height: 2.4rem;
+  border-radius: 100rem;
+  background: $color-success;
+  position: relative;
+  overflow: hidden;
+  transition: background-color $transition-main;
+
+  &.themeColors {
+    background: $color-primary;
+  }
+
+  &.off {
+    background: $color-danger;
+  }
+
+  &.themeColors.off {
+    background: $color-border;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.switch {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 100rem;
+  background: $color-white;
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translate(0, -50%);
+  box-shadow: $shadow-main;
+
+  transition: transform $transition-main, background-color $transition-main;
+
+  &.off {
+    transform: translate(-1.8rem, -50%);
+  }
+}
+
+.withLabel {
+  @include element-flex(row, center, center);
+  gap: $spacing-3;
+  white-space: nowrap;
+  line-height: normal;
+
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+}
