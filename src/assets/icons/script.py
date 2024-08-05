@@ -9,15 +9,15 @@ def camel_case(name):
 
 def generate_import_line(file_name):
     camel_name = camel_case(file_name.split('.')[0])
-    return f"import {camel_name} from './{file_name}';\n"
+    return f"import {camel_name}Icon from './{file_name}';\n"
 
 def generate_js_object_line(file_name):
     camel_name = camel_case(file_name.split('.')[0])
-    return f'  {camel_name}: {camel_name},\n'
+    return f'  {camel_name}: {camel_name}Icon,\n'
 
 def generate_type_line(file_name):
     camel_name = camel_case(file_name.split('.')[0])
-    return f'  | "{camel_name}"\n'
+    return f'  | \'{camel_name}\'\n'
 
 def export_ts_files(folder_path):
     export_file_path = os.path.join(folder_path, export_file_name)
