@@ -65,7 +65,7 @@ const LibraryPage = () => {
         <Tooltip content='Tooltip content'>
           <Button
             label='Button'
-            icon='cross'
+            icon='x'
           />
         </Tooltip>
         <Button
@@ -94,12 +94,12 @@ const LibraryPage = () => {
             {
               title: 'Title 1',
               roles: ['admin'],
-              icon: 'cross'
+              icon: 'x'
             },
             {
               title: 'Title 2',
               roles: ['admin'],
-              icon: 'cross'
+              icon: 'x'
             }
           ]}
         />

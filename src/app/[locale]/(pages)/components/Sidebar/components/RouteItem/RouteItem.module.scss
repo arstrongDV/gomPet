@@ -18,6 +18,19 @@
     background: $color-background-2;
   }
 
+  &.highlighted {
+    background: $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background: $color-primary-hover;
+    }
+
+    &.active {
+      background: $color-primary;
+    }
+  }
+
   &.isClose {
     padding: unset;
     @include flex-center;

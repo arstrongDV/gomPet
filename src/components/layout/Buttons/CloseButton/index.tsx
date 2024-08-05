@@ -13,7 +13,7 @@ interface CloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const CloseButton = React.forwardRef((props: CloseButtonProps, ref: React.LegacyRef<HTMLButtonElement>) => {
-  const { isOpen = false, className, darkBackground = true, ...rest } = props;
+  const { isOpen = false, className, darkBackground = false, ...rest } = props;
 
   const buttonClasses = classNames(style.btn, className, {
     [style.btn__darkBackground]: isOpen && darkBackground,
@@ -28,7 +28,7 @@ const CloseButton = React.forwardRef((props: CloseButtonProps, ref: React.Legacy
       {...rest}
     >
       <Icon
-        name='cross'
+        name='x'
         className={style.icon}
       />
     </button>

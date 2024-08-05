@@ -12,6 +12,7 @@ export default getRequestConfig(async ({ locale }) => {
   const error = (await import(`../locales/${locale}/error.json`)).default;
   const form = (await import(`../locales/${locale}/form.json`)).default;
   const navigation = (await import(`../locales/${locale}/navigation.json`)).default;
+  const notifications = (await import(`../locales/${locale}/notifications.json`)).default;
 
   // page translations
   const landing = (await import(`../locales/${locale}/pages/landing.json`)).default;
@@ -29,6 +30,7 @@ export default getRequestConfig(async ({ locale }) => {
       error,
       form,
       navigation,
+      notifications,
       pages: {
         landing,
         auth: {

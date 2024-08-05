@@ -5,7 +5,7 @@ import { auth } from 'src/auth';
 
 import { PROTECTED_ROUTES, PUBLIC_ONLY_ROUTES, Routes } from './constants/routes';
 
-const locales = ['pl', 'en'];
+const locales = ['pl'];
 
 const intlMiddleware = createIntlMiddleware({
   locales,

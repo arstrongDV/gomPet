@@ -19,7 +19,7 @@ const ErrorBoundaryFallback = () => {
           window.location.reload();
         }}
       >
-        <Icon name={'arrowsRefresh'} />
+        <Icon name={'reload'} />
       </div>
     </div>
   );

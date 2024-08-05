@@ -42,3 +42,8 @@
   padding: $spacing-2;
   background-color: transparent;
 }
+
+.stack {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+}

@@ -1,5 +1,6 @@
 // layout
 export { default as Accordion } from './layout/Accordion';
+export { default as Avatar } from './layout/Avatar';
 export { default as Button } from './layout/Buttons/Button';
 export { default as CloseButton } from './layout/Buttons/CloseButton';
 export { default as SwitchButton } from './layout/Buttons/SwitchButton';
@@ -27,4 +28,5 @@ export { default as useIsAuth } from './hooks/useIsAuth';
 export { default as useIsMobile } from './hooks/useIsMobile';
 export { default as useIsScrollingDown } from './hooks/useIsScrollingDown';
 export { default as useIsScrollingUp } from './hooks/useIsScrollingUp';
+export { default as useWebsocket } from './hooks/useWebsocket';
 export { default as useWindowSize } from './hooks/useWindowSize';

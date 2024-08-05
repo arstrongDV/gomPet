@@ -26,7 +26,7 @@ const VerifyEmailCheckValid = () => {
         </header>
 
         <Icon
-          name='crossCircle'
+          name='circleX'
           className={style.icon}
         />
 
@@ -46,7 +46,7 @@ const VerifyEmailCheckValid = () => {
       </header>
 
       <Icon
-        name='checkCircle'
+        name='circleCheck'
         className={style.icon}
       />
 

@@ -3,15 +3,19 @@
 import React from 'react';
 import classNames from 'classnames';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
 import Logo from 'assets/images/logo.png';
-import { Icon, LanguageSwitcher, useIsMobile, useIsScrollingDown, useIsScrollingUp } from 'components';
+import { Icon, useIsMobile, useIsScrollingDown, useIsScrollingUp } from 'components';
 
+import Notifications from './components/Notifications';
 import SearchBar from './components/SearchBar';
+import UserMenu from './components/UserMenu';
 
 import style from './Header.module.scss';
 
 const Header = () => {
+  const session = useSession();
   const isMobile = useIsMobile({});
   const isScrollingUp = useIsScrollingUp();
   const isScrollingDown = useIsScrollingDown();
@@ -26,7 +30,12 @@ const Header = () => {
   const desktopContent = (
     <div className={style.inner}>
       <SearchBar />
-      <LanguageSwitcher />
+      {session.status === 'authenticated' && (
+        <div className={style.stack}>
+          <Notifications />
+          <UserMenu />
+        </div>
+      )}
     </div>
   );
 
@@ -48,7 +57,7 @@ const Header = () => {
         className={style.iconButton}
         onClick={() => console.log('Menu')}
       >
-        <Icon name='menu' />
+        <Icon name='menu2' />
       </button>
     </div>
   );

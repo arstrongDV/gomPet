@@ -1,5 +1,7 @@
 import { DefaultSession } from 'next-auth';
 
+import { IUser } from 'src/constants/types';
+
 declare module 'next-auth' {
   /**
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
@@ -7,11 +9,7 @@ declare module 'next-auth' {
   interface Session {
     access_token: string;
     refresh_token: string;
-    user: {
-      id: string;
-      email: string;
-      image: string;
-    };
+    user: IUser;
   }
 
   interface User {

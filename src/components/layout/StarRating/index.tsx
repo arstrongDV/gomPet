@@ -23,9 +23,9 @@ const Star = ({ percentage = 0, size = 24 }: StarIconProps) => {
     className: classes
   };
 
-  if (percentage <= 25) return <Icons.starBorder {...props} />;
+  if (percentage <= 25) return <Icons.star {...props} />;
   if (percentage > 25 && percentage < 100) return <Icons.starHalf {...props} />;
-  return <Icons.star {...props} />;
+  return <Icons.starFilled {...props} />;
 };
 
 type StarRatingProps = {

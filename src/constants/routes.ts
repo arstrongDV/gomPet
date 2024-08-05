@@ -1,8 +1,14 @@
 export class Routes {
   // -- PUBLIC & PROTECTED --
   static readonly LANDING = '/';
+  static readonly LIBRARY = '/library';
   static readonly DOC_STATUTE = '/documents/statute';
   static readonly DOC_PRIVACY = '/documents/privacy-policy';
+  static readonly SHELTERS = '/shelters';
+  static readonly FOUNDATIONS = '/foundations';
+  static readonly BREEDINGS = '/breedings';
+  static readonly ANIMALS = '/animals';
+  static readonly MY_ANIMALS = '/my-animals';
   static readonly OFFERS = '/offers';
   static readonly OFFER = (id: number) => `/offers/${id}`;
 
@@ -18,7 +24,7 @@ export class Routes {
 
   // -- PROTECTED --
   static readonly DASHBOARD = '/u/dashboard';
-  static readonly LIBRARY = '/library';
+  static readonly BOOKMARKS = '/bookmarks';
 
   // -- CONFIG --
   static readonly LOGIN_REDIRECT = this.LANDING;
@@ -29,9 +35,7 @@ export const PUBLIC_ONLY_ROUTES = [
   Routes.SIGNUP,
   Routes.PASSWORD_FORGET,
   Routes.PASSWORD_FORGET_RESET,
-  Routes.VERIFY_EMAIL,
-  Routes.DOC_STATUTE,
-  Routes.DOC_PRIVACY
+  Routes.VERIFY_EMAIL
 ];
 
 export const PROTECTED_ROUTES = [Routes.DASHBOARD, Routes.LIBRARY];

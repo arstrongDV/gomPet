@@ -30,7 +30,7 @@ const VisibilityButton = (props: VisibilityButtonProps) => {
         />
       ) : (
         <Icon
-          name='eyeCrossed'
+          name='eyeOff'
           noPointerEvents
         />
       )}

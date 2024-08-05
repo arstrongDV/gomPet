@@ -32,11 +32,5 @@
 
 .icon {
   pointer-events: none;
-
-  fill: currentColor;
-  color: $color-gray-500;
-
-  @include light-theme {
-    color: $color-gray-800;
-  }
+  flex-shrink: 0;
 }

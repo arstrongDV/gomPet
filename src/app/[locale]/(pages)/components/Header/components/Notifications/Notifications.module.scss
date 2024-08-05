@@ -1,0 +1,94 @@
+@import 'styles';
+
+.container {
+  position: relative;
+  @include phoneWidth {
+    position: static;
+  }
+}
+
+.button {
+  position: relative;
+  background-color: transparent;
+  cursor: pointer;
+  padding: $spacing-1;
+  width: 5rem;
+  height: 5rem;
+
+  .counter {
+    position: absolute;
+    top: -0.6rem;
+    right: -0.6rem;
+    min-width: 2.3rem;
+  }
+}
+
+.notifications {
+  @include element-flex(column, flex-start, flex-start);
+  position: absolute;
+  top: calc(100% + $spacing-2);
+  right: 0;
+  z-index: 3;
+  width: 40rem;
+  background-color: $color-background-2;
+  border: 0.1rem solid $color-border;
+  border-radius: $radius-m;
+  padding-bottom: $spacing-4;
+  box-shadow: $shadow-soft;
+  transition: opacity $transition-main, transform $transition-main;
+  opacity: 0;
+  transform: translateY(-1rem);
+  pointer-events: none;
+
+  @include phoneWidth {
+    right: $spacing-5;
+  }
+
+  &.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .header,
+  .list {
+    width: 100%;
+  }
+
+  .header {
+    @include element-flex(row, space-between, center);
+    border-bottom: 0.1rem solid $color-border;
+    padding: $spacing-4;
+
+    .title {
+      color: $color-foreground;
+    }
+  }
+
+  .list {
+    @include element-flex(column, flex-start, stretch);
+    list-style: none;
+    overflow-y: auto;
+    max-height: 30rem;
+
+    @include hide-scrollbar;
+    &:hover {
+      @include custom-scrollbar;
+    }
+
+    .empty {
+      @include body2;
+      text-align: center;
+      color: $color-foreground-dim;
+      margin: auto 0;
+      padding: $spacing-4;
+    }
+  }
+
+  .seeAllButton {
+    width: 100%;
+    text-align: center;
+    @include body2;
+    padding-top: $spacing-4;
+  }
+}

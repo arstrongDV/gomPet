@@ -16,3 +16,7 @@ export class OffersRoutes {
   static OFFERS = '/offers/';
   static OFFER = (id: number) => `/offers/${id}/`;
 }
+
+export class WebsocketRoutes {
+  static GET_NOTIFICATIONS = '/ws/notifications/';
+}

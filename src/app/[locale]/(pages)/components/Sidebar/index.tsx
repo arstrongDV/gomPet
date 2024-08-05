@@ -18,30 +18,51 @@ const Sidebar = () => {
   const t = useTranslations();
   const session = useSession();
 
+  const highlightedRoute: RouteItemType = {
+    title: t('navigation.sidebar.myAnimals'),
+    url: Routes.MY_ANIMALS,
+    icon: 'heartPlus'
+  };
+
   const topNavItems: RouteItemType[] = [
     {
-      title: t('navigation.sidebar.landing'),
-      url: Routes.LANDING,
-      icon: 'grid'
+      title: t('navigation.sidebar.animals'),
+      url: Routes.ANIMALS,
+      icon: 'paw'
     },
     {
-      title: t('navigation.sidebar.library'),
-      url: Routes.LIBRARY,
-      icon: 'designTools'
+      title: t('navigation.sidebar.shelters'),
+      url: Routes.SHELTERS,
+      icon: 'homeHeart'
     },
     {
-      title: t('navigation.sidebar.login'),
-      url: Routes.LOGIN,
-      icon: 'fileSearch'
+      title: t('navigation.sidebar.breedings'),
+      url: Routes.BREEDINGS,
+      icon: 'buildingCottage'
     },
     {
-      title: t('navigation.sidebar.offers'),
-      url: Routes.OFFERS,
-      icon: 'next'
+      title: t('navigation.sidebar.foundations'),
+      url: Routes.FOUNDATIONS,
+      icon: 'shieldHeart'
+    },
+    {
+      title: t('navigation.sidebar.bookmarks'),
+      url: Routes.BOOKMARKS,
+      icon: 'heart'
     }
   ];
 
   const bottomNavItems: RouteItemType[] = [
+    {
+      title: 'Biblioteka',
+      url: Routes.LIBRARY
+    },
+    {
+      title: t('navigation.sidebar.login'),
+      url: Routes.LOGIN,
+      icon: 'login',
+      hidden: session.status !== 'unauthenticated'
+    },
     {
       title: t('navigation.sidebar.logout'),
       onClick: () => logout(),
@@ -63,6 +84,11 @@ const Sidebar = () => {
           priority
         />
       </Link>
+
+      <RouteItem
+        item={highlightedRoute}
+        highlighted
+      />
 
       <nav className={style.nav}>
         <div className={style.topNav}>

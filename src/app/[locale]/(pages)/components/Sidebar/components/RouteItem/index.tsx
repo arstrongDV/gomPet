@@ -26,16 +26,18 @@ type RouteItemProps = {
   item: RouteItemType;
   onClick?: () => void;
   className?: string;
+  highlighted?: boolean;
 };
 
-const RouteItem = ({ item, className }: RouteItemProps) => {
+const RouteItem = ({ item, className, highlighted }: RouteItemProps) => {
   const { title, url, roles = [], permissions = [], env = [], icon, onClick, hidden = false, customItem } = item;
   const pathname = usePathname();
 
   const classes = classNames(
     style.item,
     {
-      [style.active]: pathname === url
+      [style.active]: pathname === url,
+      [style.highlighted]: highlighted
     },
     className
   );
