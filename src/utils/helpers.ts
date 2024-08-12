@@ -151,3 +151,32 @@ export const getEnvName = () => {
 };
 
 export const isServer = () => typeof window === 'undefined';
+
+export const getDaysAgo = (inputDate: string, showHours?: boolean): string => {
+  const currentDate = new Date();
+  const parsedDate = new Date(inputDate);
+
+  const diffTime = Math.abs(currentDate.getTime() - parsedDate.getTime());
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const sameDay =
+    currentDate.getDate() === parsedDate.getDate() &&
+    currentDate.getMonth() === parsedDate.getMonth() &&
+    currentDate.getFullYear() === parsedDate.getFullYear();
+
+  let formattedDate = '';
+
+  if (diffDays === 0 && sameDay) {
+    formattedDate = 'Dziś';
+  } else if (diffDays <= 1 && !sameDay) {
+    formattedDate = 'Wczoraj';
+  } else if (diffDays <= 30) {
+    formattedDate = `${diffDays} dni temu`;
+  } else {
+    formattedDate = `${parsedDate.toLocaleDateString()}`;
+  }
+
+  const hours = parsedDate.getUTCHours().toString().padStart(2, '0');
+  const minutes = parsedDate.getUTCMinutes().toString().padStart(2, '0');
+
+  return `${formattedDate}${showHours ? `, godz. ${hours}:${minutes}` : ''}`;
+};

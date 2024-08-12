@@ -24,7 +24,7 @@ const AnimalsPage = () => {
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
   const [total, setTotal] = useState<number>(1);
 

@@ -24,7 +24,7 @@ const SheltersPage = () => {
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [organizations, setOrganizations] = useState<IOrganization[]>([]);
   const [total, setTotal] = useState<number>(1);
 

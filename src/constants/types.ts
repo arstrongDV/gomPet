@@ -101,6 +101,7 @@ export interface IPost {
   id: number;
   text: string;
   image: string | null;
+  author: IUser | IOrganization;
   created_at: string;
   updated_at?: string;
   comments: Omit<IComment, 'rating'>[];

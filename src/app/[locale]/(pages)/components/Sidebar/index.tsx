@@ -27,8 +27,8 @@ const Sidebar = () => {
   const topNavItems: RouteItemType[] = [
     {
       title: t('navigation.sidebar.posts'),
-      url: `${Routes.ANIMALS}?page=1&organization_type=animal_shelter%26fund%26breeding`,
-      icon: 'plus'
+      url: Routes.POSTS,
+      icon: 'message'
     },
     {
       title: t('navigation.sidebar.animals'),

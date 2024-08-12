@@ -1,0 +1,58 @@
+@import 'styles';
+
+.post {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-5;
+  width: 100%;
+  max-width: 70rem;
+  background-color: $color-background-1;
+  padding: $spacing-6;
+  border-radius: $radius-m;
+}
+
+.header {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-4;
+
+  .author {
+    @include element-flex(row, center, center);
+    gap: $spacing-3;
+
+    .avatar {
+      width: 5rem;
+      height: 5rem;
+    }
+
+    .name {
+      @include body1;
+      color: $color-foreground;
+    }
+  }
+}
+
+.text {
+  @include body1;
+  color: $color-foreground;
+}
+
+.image {
+  margin-top: $spacing-4;
+  border-radius: $radius-m;
+}
+
+.footer {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-4;
+
+  .time {
+    @include body2;
+    color: $color-foreground-dim;
+    flex-shrink: 0;
+  }
+
+  .buttons {
+    @include element-flex(row, flex-end, center);
+    gap: $spacing-2;
+    width: 100%;
+  }
+}
