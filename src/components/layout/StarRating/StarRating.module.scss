@@ -2,6 +2,7 @@
 
 .starList {
   display: flex;
+  gap: $spacing-1;
   flex-shrink: 0;
 }
 

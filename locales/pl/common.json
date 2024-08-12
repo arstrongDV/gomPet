@@ -29,5 +29,6 @@
     "animal_shelter": "Schronisko",
     "fund": "Fundacja",
     "breeding": "Hodowla"
-  }
+  },
+  "noLocation": "Brak lokalizacji"
 }

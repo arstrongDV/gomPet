@@ -43,6 +43,16 @@
   color: $color-white;
 }
 
+.gray {
+  background-color: $color-background-2;
+  color: $color-foreground;
+
+  &:hover,
+  &:active {
+    background-color: $color-background-4;
+  }
+}
+
 .empty {
   background-color: transparent;
   border: 1px solid $color-primary;

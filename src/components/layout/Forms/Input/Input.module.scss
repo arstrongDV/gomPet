@@ -44,6 +44,10 @@
     background-color: transparent;
   }
 
+  &::placeholder {
+    color: $color-foreground-dim;
+  }
+
   @include placeholder {
     font-size: $font-size-m;
     color: $color-foreground-dim;

@@ -18,6 +18,7 @@ export { default as LabelLink } from './layout/LabelLink';
 export { default as LanguageSwitcher } from './layout/LanguageSwitcher';
 export { default as List } from './layout/List';
 export { default as Loader } from './layout/Loader';
+export { default as LocationCityPin } from './layout/LocationCityPin';
 export { default as Modal } from './layout/Modal';
 export { default as Pagination } from './layout/Pagination';
 export { default as Pill } from './layout/Pill';

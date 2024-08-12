@@ -12,18 +12,17 @@ import { Gender } from 'src/constants/types';
 import { useRouter } from 'src/navigation';
 import { toSelectOption } from 'src/utils/helpers';
 
-import style from './AnimalFilters.module.scss';
+import style from './OrganizationFilters.module.scss';
 
-type AnimalFiltersProps = {
+type OrganizationFiltersProps = {
   className?: string;
 };
 
-const AnimalFilters = ({ className }: AnimalFiltersProps) => {
+const OrganizationFilters = ({ className }: OrganizationFiltersProps) => {
   const t = useTranslations();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
-  const { characteristics } = useAnimalInfo();
 
   const organization = {
     animal_shelter: t('common.organization.animal_shelter'),
@@ -78,69 +77,31 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
       </div>
       <div className={style.inputs}>
         <Input
-          label={t('pages.animals.filters.location')}
-          placeholder={t('pages.animals.filters.locationPlaceholder')}
+          label={t('pages.organizations.filters.location')}
+          placeholder={t('pages.organizations.filters.locationPlaceholder')}
         />
         <Input
-          label={`${t('pages.animals.filters.range')} (km)`}
-          placeholder={t('pages.animals.filters.rangePlaceholder')}
-        />
-        <Input
-          label={t('pages.animals.filters.name')}
-          placeholder={t('pages.animals.filters.namePlaceholder')}
+          label={`${t('pages.organizations.filters.range')} (km)`}
+          placeholder={t('pages.organizations.filters.rangePlaceholder')}
         />
         <Select
-          label={t('pages.animals.filters.gender')}
-          options={[toSelectOption(Gender.MALE), toSelectOption(Gender.FEMALE)]}
-          value={toSelectOption(searchParams.get(Params.GENDER))}
-          onChange={(value: OptionType) => handleFilter(Params.GENDER, value ? String(value.value) : '')}
-          isClearable
-        />
-        <Select
-          label={t('pages.animals.filters.species')}
+          label={t('pages.organizations.filters.breedSpecies')}
           options={[toSelectOption('dog'), toSelectOption('cat')]}
           value={toSelectOption(searchParams.get(Params.SPECIES))}
           onChange={(value: OptionType) => handleFilter(Params.SPECIES, value ? String(value.value) : '')}
           isClearable
         />
         <Select
-          label={t('pages.animals.filters.breed')}
+          label={t('pages.organizations.filters.breedType')}
           options={[toSelectOption('dog'), toSelectOption('cat')]}
           value={toSelectOption(searchParams.get(Params.BREED))}
           onChange={(value: OptionType) => handleFilter(Params.BREED, value ? String(value.value) : '')}
           isClearable
           isSearchable
         />
-        {/* TODO: przebudować na od - do */}
-        <Select
-          label={t('pages.animals.filters.age')}
-          options={[toSelectOption(Gender.MALE), toSelectOption(Gender.FEMALE)]}
-          value={toSelectOption(searchParams.get(Params.AGE))}
-          onChange={(value: OptionType) => handleFilter(Params.AGE, value ? String(value.value) : '')}
-          isClearable
-        />
-        <Select
-          label={t('pages.animals.filters.size')}
-          options={[toSelectOption(Gender.MALE), toSelectOption(Gender.FEMALE)]}
-          value={toSelectOption(searchParams.get(Params.SIZE))}
-          onChange={(value: OptionType) => handleFilter(Params.SIZE, value ? String(value.value) : '')}
-          isClearable
-        />
-      </div>
-      <div className={style.characteristics}>
-        {Object.entries(characteristics.dog).map(([key, value]) => (
-          <Checkbox
-            key={key}
-            id={key}
-            className={style.checkbox}
-            checked={searchParams.get(Params.CHARACTERISTICS)?.split('&').includes(key)}
-            onChange={() => handleFilter(Params.CHARACTERISTICS, key, true)}
-            label={value}
-          />
-        ))}
       </div>
     </div>
   );
 };
 
-export default AnimalFilters;
+export default OrganizationFilters;

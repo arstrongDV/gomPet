@@ -17,6 +17,7 @@ export default getRequestConfig(async ({ locale }) => {
   // page translations
   const landing = (await import(`../locales/${locale}/pages/landing.json`)).default;
   const animals = (await import(`../locales/${locale}/pages/animals.json`)).default;
+  const organizations = (await import(`../locales/${locale}/pages/organizations.json`)).default;
 
   // auth page translations
   const authLogin = (await import(`../locales/${locale}/pages/auth/login.json`)).default;
@@ -37,6 +38,7 @@ export default getRequestConfig(async ({ locale }) => {
       pages: {
         landing,
         animals,
+        organizations,
         auth: {
           login: authLogin,
           signup: authSignup,

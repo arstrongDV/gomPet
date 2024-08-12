@@ -8,7 +8,7 @@ const Footer = () => {
       id='footer'
       className={style.footer}
     >
-      &copy; NextJS Template 2024
+      &copy; Gompet 2024
     </footer>
   );
 };

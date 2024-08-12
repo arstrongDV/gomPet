@@ -12,8 +12,8 @@
   height: $size-icon-small;
 }
 
-.gray {
-  color: $color-gray-500;
+.gray path {
+  stroke: $color-foreground-dim;
 }
 
 .white {
@@ -50,7 +50,5 @@
 }
 
 .currentColor {
-  path {
-    fill: currentColor;
-  }
+  fill: currentColor;
 }

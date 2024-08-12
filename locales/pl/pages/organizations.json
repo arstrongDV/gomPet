@@ -1,0 +1,16 @@
+{
+  "seeUs": "Zobacz nas",
+  "empty": "Nie znaleźliśmy żadnych organizacji",
+  "filters": {
+    "location": "Lokalizacja",
+    "locationPlaceholder": "W jakim mieście szukasz?",
+    "range": "Zasięg",
+    "rangePlaceholder": "Do ilu kilometrów?",
+    "breedSpecies": "Gatunek",
+    "breedType": "Typ hodowli"
+  },
+  "showFilters": "Pokaż filtry",
+  "hideFilters": "Ukryj filtry",
+  "showMap": "Pokaż mapę",
+  "hideMap": "Ukryj mapę"
+}
