@@ -27,6 +27,11 @@ export enum AnimalSize {
   LARGE = 'large'
 }
 
+export enum AnimalSpecies {
+  DOG = 'dog',
+  CAT = 'cat'
+}
+
 export interface IUser {
   id: number;
   email?: string;
@@ -86,7 +91,7 @@ export interface IAnimal {
   age: number;
   birth_date: string | null;
   created_at: string;
-  owner: IUser | IOrganization;
+  owner: T<IUser | IOrganization>;
   parents: IAnimal[];
   status: AnimalStatus;
   characteristics: string[];

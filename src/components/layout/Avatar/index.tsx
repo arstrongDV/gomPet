@@ -49,7 +49,6 @@ const Avatar = (props: AvatarProps) => {
     }
 
     const name = profile?.email;
-    console.log(profile);
     text = generateInitials(name || '');
 
     const index = (text.charCodeAt(0) * 2 + text.charCodeAt(1) * 3) % avatarBackgrounds.length;

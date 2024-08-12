@@ -22,17 +22,20 @@ import heartIcon from './heart.svg';
 import heartFilledIcon from './heart-filled.svg';
 import heartPlusIcon from './heart-plus.svg';
 import homeHeartIcon from './home-heart.svg';
+import infoCircleIcon from './info-circle.svg';
 import layoutGridIcon from './layout-grid.svg';
 import loaderIcon from './loader.svg';
 import loginIcon from './login.svg';
 import logoutIcon from './logout.svg';
 import mailIcon from './mail.svg';
 import mapIcon from './map.svg';
+import mapPinIcon from './map-pin.svg';
 import menu2Icon from './menu-2.svg';
 import messageIcon from './message.svg';
 import pawIcon from './paw.svg';
 import pawFilledIcon from './paw-filled.svg';
 import phoneIcon from './phone.svg';
+import plusIcon from './plus.svg';
 import refreshIcon from './refresh.svg';
 import reloadIcon from './reload.svg';
 import searchIcon from './search.svg';
@@ -65,9 +68,11 @@ export type IconNames =
   | 'eyeOff'
   | 'starHalf'
   | 'boneFilled'
+  | 'plus'
   | 'check'
   | 'shieldHeart'
   | 'loader'
+  | 'infoCircle'
   | 'reload'
   | 'refresh'
   | 'heartFilled'
@@ -81,6 +86,7 @@ export type IconNames =
   | 'eye'
   | 'share'
   | 'genderFemale'
+  | 'mapPin'
   | 'filter'
   | 'pawFilled'
   | 'buildingCottage'
@@ -109,9 +115,11 @@ export const Icons = {
   eyeOff: eyeOffIcon,
   starHalf: starHalfIcon,
   boneFilled: boneFilledIcon,
+  plus: plusIcon,
   check: checkIcon,
   shieldHeart: shieldHeartIcon,
   loader: loaderIcon,
+  infoCircle: infoCircleIcon,
   reload: reloadIcon,
   refresh: refreshIcon,
   heartFilled: heartFilledIcon,
@@ -125,6 +133,7 @@ export const Icons = {
   eye: eyeIcon,
   share: shareIcon,
   genderFemale: genderFemaleIcon,
+  mapPin: mapPinIcon,
   filter: filterIcon,
   pawFilled: pawFilledIcon,
   buildingCottage: buildingCottageIcon,

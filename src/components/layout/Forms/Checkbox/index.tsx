@@ -95,7 +95,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>((props, forwardedRe
             {...rest}
           />
           <Icon
-            name={'check'}
+            name={'pawFilled'}
             className={classNames(style.icon, { [style.checked]: checked })}
           />
         </div>

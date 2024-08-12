@@ -4,6 +4,8 @@ import IBAN from 'iban';
 import numeral from 'numeral';
 import { validatePolish } from 'validate-polish';
 
+import { OptionType } from 'src/components/layout/Forms/Select';
+
 export const getCounterLabel = (counter: number) => {
   return counter >= 100 ? '99+' : counter.toString();
 };
@@ -136,6 +138,11 @@ export const getNotificationIdFromName = (errors: string[]) => {
   }
 
   return String(sum.toFixed(0));
+};
+
+export const toSelectOption = (value: string | number | null): OptionType => {
+  if (!value) return null;
+  return { value, label: String(value) };
 };
 
 export const getEnvName = () => {

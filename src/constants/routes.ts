@@ -9,6 +9,7 @@ export class Routes {
   static readonly BREEDINGS = '/breedings';
   static readonly ANIMALS = '/animals';
   static readonly MY_ANIMALS = '/my-animals';
+  static readonly POSTS = '/posts';
   static readonly OFFERS = '/offers';
   static readonly OFFER = (id: number) => `/offers/${id}`;
 

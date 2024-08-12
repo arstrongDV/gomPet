@@ -1,0 +1,20 @@
+@import 'src/styles';
+
+.empty {
+  @include element-flex(column, center, center);
+  gap: $spacing-4;
+  padding-block: $spacing-6;
+  margin-inline: auto;
+  grid-column: 1 / -1;
+}
+
+.text {
+  @include element-flex(column, center, center);
+  gap: $spacing-2;
+  @include body2;
+  color: $color-foreground-dim;
+
+  .icon {
+    color: $color-foreground-dim;
+  }
+}

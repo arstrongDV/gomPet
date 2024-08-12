@@ -30,11 +30,6 @@
   }
 }
 
-.icon {
-  color: $color-white;
-  transition: color $transition-main;
-}
-
 .inner {
   @include element-flex(row, center, center);
   width: 100%;

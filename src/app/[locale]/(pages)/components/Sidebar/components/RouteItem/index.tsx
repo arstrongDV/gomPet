@@ -36,7 +36,7 @@ const RouteItem = ({ item, className, highlighted }: RouteItemProps) => {
   const classes = classNames(
     style.item,
     {
-      [style.active]: pathname === url,
+      [style.active]: pathname === String(url).split('?')[0],
       [style.highlighted]: highlighted
     },
     className

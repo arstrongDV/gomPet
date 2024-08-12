@@ -16,6 +16,9 @@ export default getRequestConfig(async ({ locale }) => {
 
   // page translations
   const landing = (await import(`../locales/${locale}/pages/landing.json`)).default;
+  const animals = (await import(`../locales/${locale}/pages/animals.json`)).default;
+
+  // auth page translations
   const authLogin = (await import(`../locales/${locale}/pages/auth/login.json`)).default;
   const authSignup = (await import(`../locales/${locale}/pages/auth/signup.json`)).default;
   const authPasswordForget = (await import(`../locales/${locale}/pages/auth/password-forget.json`)).default;
@@ -33,6 +36,7 @@ export default getRequestConfig(async ({ locale }) => {
       notifications,
       pages: {
         landing,
+        animals,
         auth: {
           login: authLogin,
           signup: authSignup,

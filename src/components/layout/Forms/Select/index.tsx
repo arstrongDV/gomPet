@@ -19,7 +19,7 @@ export type OptionType = {
 interface SelectProps extends InnerWrapperProps {
   options: any;
   value: OptionType;
-  onChange: Dispatch<SetStateAction<OptionType>>;
+  onChange: Dispatch<SetStateAction<OptionType>> | ((value: OptionType) => void);
   wrapperStyle?: string;
   noOptionsMessage?: string;
   isLoading?: boolean;

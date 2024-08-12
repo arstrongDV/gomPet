@@ -16,6 +16,7 @@ export { default as HorizontalScroll } from './layout/HorizontalScroll';
 export { default as Icon } from './layout/Icon';
 export { default as LabelLink } from './layout/LabelLink';
 export { default as LanguageSwitcher } from './layout/LanguageSwitcher';
+export { default as List } from './layout/List';
 export { default as Loader } from './layout/Loader';
 export { default as Modal } from './layout/Modal';
 export { default as Pagination } from './layout/Pagination';

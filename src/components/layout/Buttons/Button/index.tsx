@@ -91,7 +91,7 @@ const ButtonWrapper: React.FC<ButtonProps> = (props) => {
 };
 
 const Button = (props: ButtonProps) => {
-  const { label, isLoading = false, icon, empty, transparent, reverse = false, small } = props;
+  const { label, isLoading = false, icon, empty, transparent, reverse = true, small } = props;
 
   const content = (
     <div
@@ -105,7 +105,6 @@ const Button = (props: ButtonProps) => {
         <Icon
           name={icon}
           className={style.icon}
-          white={!empty && !transparent}
           small={small}
         />
       )}

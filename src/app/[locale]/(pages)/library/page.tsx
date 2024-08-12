@@ -6,6 +6,7 @@ import {
   Accordion,
   Button,
   Card,
+  Checkbox,
   Dropdown,
   HorizontalScroll,
   Input,
@@ -152,6 +153,7 @@ const LibraryPage = () => {
           isSearchable
           isClearable
         />
+        <Checkbox label='Checkbox' />
         <InputRadio
           id='radio-1'
           value='1'

@@ -1,0 +1,53 @@
+{
+  "gender": {
+    "male": "On",
+    "female": "Ona"
+  },
+  "size": {
+    "small": "Mały",
+    "medium": "Średni",
+    "large": "Duży"
+  },
+  "characteristics": {
+    "dog": {
+      "vaccinated": "zaszczepiony",
+      "neutered": "wykastrowany",
+      "dewormed": "odrobaczony",
+      "hasChip": "ma mikroczip",
+      "acceptsCats": "akceptuje koty",
+      "acceptsDogs": "akceptuje inne psy",
+      "clean": "nauczony czystości",
+      "hypoallergenic": "hipoalergiczny",
+      "noSeparationAnxiety": "nie ma lęku separacyjnego",
+      "suitableForApartment": "odpowiedni do mieszkania",
+      "vigorous": "energiczny",
+      "childrenFriendly": "przyjazny dzieciom",
+      "learnsFast": "łatwo się uczy",
+      "specialDiet": "specjalna dieta",
+      "calmAtHome": "spokojny w domu",
+      "canLiveInACity": "może mieszkać w mieście",
+      "needsMentalStimulation": "potrzeba mentalnej stymulacji",
+      "gentle": "łagodny",
+      "watchdog": "instynkt stróża",
+      "hasHealthBook": "książeczka zdrowia"
+    }
+  },
+  "empty": "Brak dostępnych zwierząt",
+  "filters": {
+    "location": "Lokalizacja",
+    "locationPlaceholder": "W jakim mieście szukasz?",
+    "range": "Zasięg",
+    "rangePlaceholder": "Do ilu kilometrów?",
+    "name": "Imię",
+    "namePlaceholder": "Jak się wabi?",
+    "gender": "Płeć",
+    "species": "Gatunek",
+    "breed": "Rasa",
+    "age": "Wiek",
+    "size": "Rozmiar"
+  },
+  "showFilters": "Pokaż filtry",
+  "hideFilters": "Ukryj filtry",
+  "showMap": "Pokaż mapę",
+  "hideMap": "Ukryj mapę"
+}

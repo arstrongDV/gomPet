@@ -7,6 +7,7 @@ const cssStyles = {
   colorBackground2: '#fafafa',
   colorBackground3: '#f7f7f7',
   colorPrimary: '#277d23',
+  colorAccent: '#E37500',
   colorDanger: '#d32f2f',
   colorBorder: '#dcdfd8',
   sizeInputHeight: '5rem',
@@ -52,7 +53,7 @@ export const selectStyles = (hasError: boolean) => {
           ? `0 0 0 .1rem ${cssStyles.colorDanger}`
           : `0 0 0 .1rem ${cssStyles.colorPrimary}`
         : 0,
-      border: hasError ? `.1rem solid ${cssStyles.colorDanger}` : `.1rem solid ${cssStyles.colorPrimary}`,
+      border: hasError ? `.1rem solid ${cssStyles.colorDanger}` : `.1rem solid ${cssStyles.colorBorder}`,
       '&:hover': {
         borderColor: 'none'
       }
@@ -71,7 +72,8 @@ export const selectStyles = (hasError: boolean) => {
       display: 'none'
     }),
     dropdownIndicator: (base: any) => ({
-      ...base
+      ...base,
+      color: cssStyles.colorAccent
     }),
     menu: (base: any) => ({
       ...base,

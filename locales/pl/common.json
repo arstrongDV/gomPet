@@ -20,5 +20,14 @@
     "inactive": "Nieaktywny",
     "isLoading": "Ładowanie",
     "new": "Nowe"
+  },
+  "empty": {
+    "default": "Brak danych",
+    "searchResults": "Brak wyników wyszukiwania dla \"{query}\""
+  },
+  "organization": {
+    "animal_shelter": "Schronisko",
+    "fund": "Fundacja",
+    "breeding": "Hodowla"
   }
 }
