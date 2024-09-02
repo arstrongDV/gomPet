@@ -41,12 +41,6 @@
     object-fit: contain;
   }
 
-  & .icon {
-    path {
-      fill: $color-foreground-dim;
-    }
-  }
-
   &:hover {
     background: $color-background-2;
   }

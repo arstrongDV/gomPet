@@ -52,10 +52,6 @@ const Dropdown = (props: DropdownProps) => {
     onOpenChange && onOpenChange(isOpen);
   }, [isOpen, onOpenChange]);
 
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
   return (
     <OutsideClickHandler
       onOutsideClick={() => {
@@ -82,6 +78,7 @@ const Dropdown = (props: DropdownProps) => {
               <DropdownItem
                 key={index}
                 item={item}
+                closeDropdown={() => setIsOpen(false)}
               />
             ))}
         </div>

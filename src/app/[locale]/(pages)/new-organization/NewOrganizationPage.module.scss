@@ -1,0 +1,54 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+}
+
+.section {
+  @include element-flex(column);
+  gap: $spacing-6;
+}
+
+.flexRow {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+}
+
+.basicData {
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+  gap: $spacing-4;
+  width: 100%;
+
+  @include tabletWidth {
+    grid-template-columns: 1fr;
+  }
+}
+
+.location {
+  display: grid;
+  grid-template-columns: 29.5rem 1fr;
+  gap: $spacing-6;
+  width: 100%;
+
+  @include tabletWidth {
+    grid-template-columns: 1fr;
+  }
+
+  .inputs {
+    @include element-flex(column, flex-start, stretch);
+    gap: $spacing-4;
+    width: 100%;
+  }
+}
+
+.caption {
+  @include caption;
+  color: $color-foreground-dim;
+}
+
+.submit {
+  align-self: flex-end;
+}

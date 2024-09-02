@@ -1,9 +1,17 @@
 /* AUTO-GENERATED FILE */
 
+import alignCenterIcon from './align-center.svg';
+import alignJustifiedIcon from './align-justified.svg';
+import alignLeftIcon from './align-left.svg';
+import alignRightIcon from './align-right.svg';
+import arrowBackIcon from './arrow-back.svg';
+import arrowForwardIcon from './arrow-forward.svg';
 import bellIcon from './bell.svg';
 import bellFilledIcon from './bell-filled.svg';
+import boldIcon from './bold.svg';
 import boneIcon from './bone.svg';
 import boneFilledIcon from './bone-filled.svg';
+import bookIcon from './book.svg';
 import buildingCottageIcon from './building-cottage.svg';
 import cameraIcon from './camera.svg';
 import checkIcon from './check.svg';
@@ -13,17 +21,25 @@ import chevronRightIcon from './chevron-right.svg';
 import chevronUpIcon from './chevron-up.svg';
 import circleCheckIcon from './circle-check.svg';
 import circleXIcon from './circle-x.svg';
+import codeIcon from './code.svg';
 import eyeIcon from './eye.svg';
 import eyeOffIcon from './eye-off.svg';
 import filterIcon from './filter.svg';
 import genderFemaleIcon from './gender-female.svg';
 import genderMaleIcon from './gender-male.svg';
+import h1Icon from './h-1.svg';
+import h2Icon from './h-2.svg';
+import h3Icon from './h-3.svg';
 import heartIcon from './heart.svg';
 import heartFilledIcon from './heart-filled.svg';
 import heartPlusIcon from './heart-plus.svg';
 import homeHeartIcon from './home-heart.svg';
 import infoCircleIcon from './info-circle.svg';
+import italicIcon from './italic.svg';
 import layoutGridIcon from './layout-grid.svg';
+import linkIcon from './link.svg';
+import listIcon from './list.svg';
+import listNumbersIcon from './list-numbers.svg';
 import loaderIcon from './loader.svg';
 import loginIcon from './login.svg';
 import logoutIcon from './logout.svg';
@@ -34,8 +50,11 @@ import menu2Icon from './menu-2.svg';
 import messageIcon from './message.svg';
 import pawIcon from './paw.svg';
 import pawFilledIcon from './paw-filled.svg';
+import pdfIcon from './pdf.svg';
+import pencilIcon from './pencil.svg';
 import phoneIcon from './phone.svg';
 import plusIcon from './plus.svg';
+import quoteIcon from './quote.svg';
 import refreshIcon from './refresh.svg';
 import reloadIcon from './reload.svg';
 import searchIcon from './search.svg';
@@ -44,43 +63,61 @@ import shieldHeartIcon from './shield-heart.svg';
 import starIcon from './star.svg';
 import starFilledIcon from './star-filled.svg';
 import starHalfIcon from './star-half.svg';
+import strikethroughIcon from './strikethrough.svg';
+import underlineIcon from './underline.svg';
 import xIcon from './x.svg';
 
 export type IconNames =
+  | 'underline'
   | 'search'
+  | 'list'
+  | 'arrowForward'
   | 'heartPlus'
   | 'menu2'
   | 'layoutGrid'
   | 'chevronDown'
   | 'logout'
+  | 'strikethrough'
   | 'map'
   | 'paw'
   | 'chevronUp'
   | 'x'
   | 'homeHeart'
   | 'chevronRight'
+  | 'link'
   | 'bellFilled'
   | 'mail'
   | 'login'
+  | 'book'
   | 'circleCheck'
   | 'bell'
+  | 'code'
   | 'starFilled'
   | 'eyeOff'
   | 'starHalf'
   | 'boneFilled'
+  | 'bold'
   | 'plus'
   | 'check'
   | 'shieldHeart'
   | 'loader'
   | 'infoCircle'
+  | 'h3'
   | 'reload'
   | 'refresh'
+  | 'alignRight'
   | 'heartFilled'
+  | 'h2'
   | 'genderMale'
   | 'message'
+  | 'h1'
   | 'camera'
   | 'star'
   | 'bone'
+  | 'pdf'
+  | 'arrowBack'
+  | 'listNumbers'
+  | 'pencil'
   | 'phone'
   | 'circleX'
   | 'eye'
@@ -88,46 +125,67 @@ export type IconNames =
   | 'genderFemale'
   | 'mapPin'
   | 'filter'
+  | 'italic'
   | 'pawFilled'
+  | 'alignCenter'
+  | 'alignJustified'
+  | 'quote'
   | 'buildingCottage'
   | 'chevronLeft'
+  | 'alignLeft'
   | 'heart';
 
 export const Icons = {
+  underline: underlineIcon,
   search: searchIcon,
+  list: listIcon,
+  arrowForward: arrowForwardIcon,
   heartPlus: heartPlusIcon,
   menu2: menu2Icon,
   layoutGrid: layoutGridIcon,
   chevronDown: chevronDownIcon,
   logout: logoutIcon,
+  strikethrough: strikethroughIcon,
   map: mapIcon,
   paw: pawIcon,
   chevronUp: chevronUpIcon,
   x: xIcon,
   homeHeart: homeHeartIcon,
   chevronRight: chevronRightIcon,
+  link: linkIcon,
   bellFilled: bellFilledIcon,
   mail: mailIcon,
   login: loginIcon,
+  book: bookIcon,
   circleCheck: circleCheckIcon,
   bell: bellIcon,
+  code: codeIcon,
   starFilled: starFilledIcon,
   eyeOff: eyeOffIcon,
   starHalf: starHalfIcon,
   boneFilled: boneFilledIcon,
+  bold: boldIcon,
   plus: plusIcon,
   check: checkIcon,
   shieldHeart: shieldHeartIcon,
   loader: loaderIcon,
   infoCircle: infoCircleIcon,
+  h3: h3Icon,
   reload: reloadIcon,
   refresh: refreshIcon,
+  alignRight: alignRightIcon,
   heartFilled: heartFilledIcon,
+  h2: h2Icon,
   genderMale: genderMaleIcon,
   message: messageIcon,
+  h1: h1Icon,
   camera: cameraIcon,
   star: starIcon,
   bone: boneIcon,
+  pdf: pdfIcon,
+  arrowBack: arrowBackIcon,
+  listNumbers: listNumbersIcon,
+  pencil: pencilIcon,
   phone: phoneIcon,
   circleX: circleXIcon,
   eye: eyeIcon,
@@ -135,8 +193,13 @@ export const Icons = {
   genderFemale: genderFemaleIcon,
   mapPin: mapPinIcon,
   filter: filterIcon,
+  italic: italicIcon,
   pawFilled: pawFilledIcon,
+  alignCenter: alignCenterIcon,
+  alignJustified: alignJustifiedIcon,
+  quote: quoteIcon,
   buildingCottage: buildingCottageIcon,
   chevronLeft: chevronLeftIcon,
+  alignLeft: alignLeftIcon,
   heart: heartIcon
 };

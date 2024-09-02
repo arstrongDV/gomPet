@@ -24,6 +24,7 @@ export const selectStyles = (hasError: boolean) => {
     container: (base: any) => ({
       ...base,
       width: '100%',
+      minWidth: '29.5rem',
       height: '5rem'
     }),
     placeholder: (base: any) => ({

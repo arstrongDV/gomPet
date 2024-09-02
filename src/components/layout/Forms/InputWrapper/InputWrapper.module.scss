@@ -8,8 +8,8 @@
 .label {
   display: block;
   padding-bottom: 0.5rem;
-  font-size: $font-size-s;
-  color: $color-foreground-dim;
+  @include body2;
+  color: $color-foreground;
 }
 
 .visuallyHidden {
@@ -29,14 +29,14 @@
 
 .descriptionField {
   padding-bottom: 0.6rem;
-  font-size: $font-size-s;
-  color: #ccc;
+  @include caption;
+  color: $color-foreground-dim;
 }
 
 .errorMessage {
   margin-top: 0.5rem;
+  @include caption;
   color: $color-danger;
-  font-size: $font-size-xs;
   animation: fadeIn 0.4s;
 }
 

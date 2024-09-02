@@ -1,0 +1,41 @@
+@import 'src/styles';
+
+.phoneFormatter {
+  min-width: 29.5rem;
+  padding: $space-padding-input !important;
+  height: $size-input-height;
+  border: 0.1rem solid $color-border !important;
+  border-radius: $radius-m !important;
+  transition: all $transition-duration-fast !important;
+  overflow: hidden;
+
+  & > * {
+    outline: none;
+  }
+
+  & input {
+    @include body2;
+    font-family: $main-font;
+    color: $color-foreground;
+    background-color: $color-background-1;
+    height: calc($size-button-height - $spacing-1);
+
+    &::placeholder {
+      @include body1;
+      color: $color-foreground-dim;
+    }
+  }
+
+  &:focus-within {
+    box-shadow: $shadow-input-active !important;
+  }
+
+  &.error {
+    border: $border-input-error !important;
+  }
+
+  &:focus-within.error {
+    border: $border-input-error !important;
+    box-shadow: $shadow-input-error !important;
+  }
+}

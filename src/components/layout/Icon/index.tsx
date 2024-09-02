@@ -12,6 +12,7 @@ interface IconProps extends Partial<HTMLAnchorElement> {
   small?: boolean;
   svgProps?: object;
   gray?: boolean;
+  dark?: boolean;
   white?: boolean;
   colored?: boolean;
   noPointerEvents?: boolean;
@@ -29,6 +30,7 @@ const Icon = (props: IconProps) => {
     small,
     svgProps,
     gray,
+    dark,
     white,
     colored,
     noPointerEvents,
@@ -39,6 +41,7 @@ const Icon = (props: IconProps) => {
     className: classNames(style.icon, className, {
       [style.small]: small,
       [style.gray]: gray,
+      [style.dark]: dark,
       [style.white]: white,
       [style.colored]: colored,
       [style.noPointerEvents]: noPointerEvents,

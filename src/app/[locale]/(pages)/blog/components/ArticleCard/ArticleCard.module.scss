@@ -1,0 +1,36 @@
+@import 'styles';
+
+.article {
+  border-radius: $radius-m;
+  overflow: hidden;
+  background-color: $color-background-1;
+}
+
+.cover {
+  @include flex-center;
+  width: 100%;
+  height: 15rem;
+  background-color: $color-background-4;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.body {
+  @include element-flex(column);
+  gap: $spacing-4;
+  padding: $spacing-6;
+}
+
+.title {
+  @include title3;
+  color: $color-foreground;
+}
+
+.content {
+  @include body2;
+  color: $color-foreground;
+}

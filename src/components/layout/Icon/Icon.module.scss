@@ -16,6 +16,10 @@
   stroke: $color-foreground-dim;
 }
 
+.dark path {
+  stroke: $color-foreground;
+}
+
 .white {
   color: $color-white;
   filter: brightness(10000%);

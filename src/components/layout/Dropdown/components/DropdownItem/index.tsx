@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { Icon } from 'components';
+import { Icon, Pill } from 'components';
 
 import { IconNames } from 'src/assets/icons';
 import { Link } from 'src/navigation';
@@ -25,13 +25,21 @@ export interface DropdownItemProps {
   item: DropdownItemType;
   className?: string;
   isSectionTitle?: boolean;
+  closeDropdown?: () => void;
 }
 
 const DropdownItem = (props: DropdownItemProps) => {
-  const { className, item, isSectionTitle = false } = props;
+  const { className, item, isSectionTitle = false, closeDropdown } = props;
   const { href, hrefOutside, onClick, icon, title, roles, permission, counter, disabled = false, customItem } = item;
 
-  const user = null;
+  const onClickProxy = () => {
+    if (onClick) {
+      onClick();
+    }
+    if (closeDropdown) {
+      closeDropdown();
+    }
+  };
 
   const content = (
     <>
@@ -42,7 +50,7 @@ const DropdownItem = (props: DropdownItemProps) => {
         />
       )}
       {title}
-      {/* {counter && <Pill>{counter}</Pill>} */}
+      {counter && <Pill>{counter}</Pill>}
     </>
   );
 
@@ -60,7 +68,7 @@ const DropdownItem = (props: DropdownItemProps) => {
         href={hrefOutside}
         target='_blank'
         rel='noopener noreferrer'
-        onClick={onClick}
+        onClick={onClickProxy}
         id={'dropdown' + hrefOutside}
       >
         {content}
@@ -76,7 +84,7 @@ const DropdownItem = (props: DropdownItemProps) => {
           [style.disabled]: disabled
         })}
         href={href}
-        onClick={onClick}
+        onClick={onClickProxy}
         id={'dropdown-' + href}
       >
         {content}
@@ -90,7 +98,7 @@ const DropdownItem = (props: DropdownItemProps) => {
         [style.sectionTitle]: isSectionTitle,
         [style.disabled]: disabled
       })}
-      onClick={onClick}
+      onClick={onClickProxy}
       id={'button-' + title}
     >
       {content}

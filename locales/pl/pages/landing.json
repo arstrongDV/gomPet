@@ -1,5 +1,9 @@
 {
   "title": "Paczka NextJS",
   "subtitle": "Strona w wersji {locale}",
-  "withLink": "Przejdź do <link>logowania</link>."
+  "withLink": "Przejdź do <link>logowania</link>.",
+  "animalsScroll": {
+    "title": "Poszukują <highlight>nowego</highlight> domu",
+    "seeAll": "Zobacz wszystkie"
+  }
 }

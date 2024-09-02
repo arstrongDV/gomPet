@@ -140,6 +140,15 @@ export const getNotificationIdFromName = (errors: string[]) => {
   return String(sum.toFixed(0));
 };
 
+export const getUrlFile = async (url: string) => {
+  const response = await downloadFileFromUrl(url);
+  const type = response.headers['content-type'] || 'application/pdf';
+  const filename = url.split('/').pop() || 'file.pdf';
+  const file = new File([response.data], filename, { type });
+
+  return file;
+};
+
 export const toSelectOption = (value: string | number | null): OptionType => {
   if (!value) return null;
   return { value, label: String(value) };

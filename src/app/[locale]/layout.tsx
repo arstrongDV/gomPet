@@ -13,6 +13,7 @@ import { Locale, locales } from 'src/navigation';
 import 'normalize.css';
 import 'src/styles/reset.scss';
 import 'src/styles/variables.css';
+import 'src/styles/editor.scss';
 import 'src/styles/global.scss';
 
 const raleway = Raleway({

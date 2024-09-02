@@ -54,14 +54,19 @@ const Sidebar = () => {
       title: t('navigation.sidebar.bookmarks'),
       url: Routes.BOOKMARKS,
       icon: 'heart'
+    },
+    {
+      title: t('navigation.sidebar.blog'),
+      url: Routes.BLOG,
+      icon: 'book'
     }
   ];
 
   const bottomNavItems: RouteItemType[] = [
-    {
-      title: 'Biblioteka',
-      url: Routes.LIBRARY
-    },
+    // {
+    //   title: 'Biblioteka',
+    //   url: Routes.LIBRARY
+    // },
     {
       title: t('navigation.sidebar.login'),
       url: Routes.LOGIN,
@@ -106,7 +111,7 @@ const Sidebar = () => {
         </div>
 
         <div className={style.bottomNav}>
-          {session.status === 'authenticated' && <p className={style.user}>{session.data.user.email}</p>}
+          {/* {session.status === 'authenticated' && <p className={style.user}>{session.data.user.email}</p>} */}
           {bottomNavItems.map((item, index) => (
             <RouteItem
               key={index}

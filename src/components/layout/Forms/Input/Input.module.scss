@@ -4,8 +4,9 @@
   @include appearance(none);
   font-family: $main-font;
   width: 100%;
+  min-width: 29.5rem;
   color: $color-foreground;
-  font-size: $font-size-s;
+  @include body2;
   padding: $spacing-3 $spacing-4;
   border-radius: $radius-m;
   border-width: 0.1rem;
@@ -49,7 +50,7 @@
   }
 
   @include placeholder {
-    font-size: $font-size-m;
+    @include body2;
     color: $color-foreground-dim;
   }
 }

@@ -48,3 +48,46 @@ input::placeholder {
 a {
   color: inherit;
 }
+
+mark {
+  color: $color-primary;
+  background-color: transparent;
+}
+
+.PhoneInput {
+  color: $color-foreground;
+  background-color: $color-background-1;
+}
+
+.PhoneInputCountryIcon--border {
+  border-color: $color-border;
+  outline-color: $color-border;
+  box-shadow: 0 0 0.4rem $color-border, inset 0 0 0.4rem $color-border;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.PhoneInputCountrySelect:focus + .PhoneInputCountryIcon--border {
+  box-shadow: 0 0 0.4rem $color-border, inset 0 0 0.4rem $color-border;
+}
+
+.PhoneInputInput::placeholder {
+  @include body1;
+  color: $color-foreground-dim;
+}
+
+.PhoneInputCountrySelect {
+  color: $color-foreground;
+  background-color: $color-background-2;
+}
+
+.PhoneInputCountrySelect:focus,
+.PhoneInputCountrySelect:hover {
+  background-color: $color-background-2;
+}
+
+.PhoneInputCountrySelectArrow {
+  border-color: $color-border;
+  margin-left: $spacing-2;
+  margin-top: calc($spacing-1 * -1);
+}

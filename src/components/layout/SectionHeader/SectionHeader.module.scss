@@ -1,0 +1,25 @@
+@import 'styles';
+
+.container {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-6;
+  width: 100%;
+
+  @include tabletWidth {
+    @include element-flex(column);
+  }
+
+  &.margin {
+    margin-bottom: $spacing-7;
+  }
+}
+
+.title {
+  @include title2;
+  color: $color-primary;
+}
+
+.subtitle {
+  @include body1;
+  color: $color-foreground;
+}

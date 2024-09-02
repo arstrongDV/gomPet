@@ -112,9 +112,18 @@ export interface IPost {
   }[];
 }
 
-export interface withPagination<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
+export interface IArticle {
+  id: number;
+  slug: string;
+  title: string;
+  content: string;
+  image: string | null;
+  created_at: string;
+}
+
+export interface withPagination<T = any> {
+  results: T[];
+  count: number;
+  next?: string | null;
+  previous?: string | null;
 }

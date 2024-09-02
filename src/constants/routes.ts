@@ -10,6 +10,8 @@ export class Routes {
   static readonly ANIMALS = '/animals';
   static readonly MY_ANIMALS = '/my-animals';
   static readonly POSTS = '/posts';
+  static readonly BLOG = '/blog';
+  static readonly BLOG_ARTICLE = (slug: string) => `/blog/${slug}`;
   static readonly OFFERS = '/offers';
   static readonly OFFER = (id: number) => `/offers/${id}`;
 
