@@ -416,33 +416,48 @@ pre::-webkit-scrollbar-thumb {
   max-width: 300px;
   width: 100%;
   opacity: 0;
-  background-color: #fff;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  transition: opacity 0.5s;
+  transition: opacity 0.2s;
+  box-shadow: $shadow-main;
 }
 
 .link-editor .link-input {
-  display: block;
-  width: calc(100% - 24px);
-  box-sizing: border-box;
-  margin: 8px 12px;
-  padding: 8px 12px;
-  border-radius: 15px;
-  background-color: #eee;
-  font-size: 15px;
-  color: rgb(5, 5, 5);
-  border: 0;
-  outline: 0;
-  position: relative;
-  font-family: inherit;
+  @include appearance(none);
+  font-family: $main-font;
+  width: 100%;
+  min-width: 29.5rem;
+  color: $color-foreground;
+  @include body2;
+  padding: $spacing-3 $spacing-4;
+  border-radius: $radius-m;
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: $color-border;
+  height: $size-button-height;
+  background-color: $color-background-1;
+
+  transition: border-color $transition-main, box-shadow $transition-main;
+
+  &:hover {
+    cursor: text;
+  }
+
+  &:focus {
+    box-shadow: $shadow-input-active;
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $color-foreground-dim;
+  }
+
+  @include placeholder {
+    @include body2;
+    color: $color-foreground-dim;
+  }
 }
 
 .link-editor div.link-edit {
-  /* background-image: url(images/icons/pencil-fill.svg); */
-  background-size: 16px;
-  background-position: center;
-  background-repeat: no-repeat;
+  @include element-flex(row, flex-start, center);
   width: 35px;
   vertical-align: -0.25em;
   position: absolute;
@@ -453,13 +468,14 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .link-editor .link-input a {
-  color: rgb(33, 111, 219);
+  color: $color-accent;
   text-decoration: none;
   display: block;
   white-space: nowrap;
   overflow: hidden;
   margin-right: 30px;
   text-overflow: ellipsis;
+  margin-top: 2px;
 }
 
 .link-editor .link-input a:hover {

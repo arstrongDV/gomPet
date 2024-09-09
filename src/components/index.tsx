@@ -6,10 +6,14 @@ export { default as CloseButton } from './layout/Buttons/CloseButton';
 export { default as SwitchButton } from './layout/Buttons/SwitchButton';
 export { default as VisibilityButton } from './layout/Buttons/VisibilityButton';
 export { default as Card } from './layout/Card';
+export { default as AvatarCropper } from './layout/Cropper/AvatarCropper';
+export { default as ImageCropper } from './layout/Cropper/ImageCropper';
 export { default as Dropdown } from './layout/Dropdown';
 export { default as Checkbox } from './layout/Forms/Checkbox';
+export { default as FileDropzone } from './layout/Forms/FileDropzone';
 export { default as ImageInput } from './layout/Forms/ImageInput';
 export { default as Input } from './layout/Forms/Input';
+export { default as InputPlacesAutocomplete } from './layout/Forms/InputPlacesAutocomplete';
 export { default as InputRadio } from './layout/Forms/InputRadio';
 export { default as InputWrapper } from './layout/Forms/InputWrapper';
 export { default as PhoneInput } from './layout/Forms/PhoneInput';
@@ -28,6 +32,7 @@ export { default as Pagination } from './layout/Pagination';
 export { default as Pill } from './layout/Pill';
 export { default as SectionHeader } from './layout/SectionHeader';
 export { default as StarRating } from './layout/StarRating';
+export { default as Tag } from './layout/Tag';
 export { default as Tooltip } from './layout/Tooltip';
 
 // hooks

@@ -13,4 +13,8 @@
   &.clickable {
     cursor: pointer;
   }
+
+  &.notSelected {
+    opacity: 0.5;
+  }
 }

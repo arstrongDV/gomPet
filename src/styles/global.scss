@@ -91,3 +91,13 @@ mark {
   margin-left: $spacing-2;
   margin-top: calc($spacing-1 * -1);
 }
+
+.reactEasyCrop_CropArea {
+  border-radius: $radius-s;
+}
+
+.cropAreaRound {
+  .reactEasyCrop_CropArea {
+    border-radius: 50% !important;
+  }
+}

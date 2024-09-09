@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 5001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -12,6 +12,7 @@
   "dependencies": {
     "@lexical/react": "^0.17.1",
     "@reduxjs/toolkit": "^2.2.7",
+    "@vis.gl/react-google-maps": "^1.1.3",
     "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "iban": "^0.0.14",
@@ -27,6 +28,8 @@
     "numeral": "^2.0.6",
     "react": "^19.0.0-rc-512b09b2-20240718",
     "react-dom": "^19.0.0-rc-512b09b2-20240718",
+    "react-dropzone": "^14.2.3",
+    "react-easy-crop": "^5.0.8",
     "react-hot-toast": "^2.4.1",
     "react-outside-click-handler": "^1.3.0",
     "react-phone-number-input": "^3.4.5",
@@ -34,7 +37,10 @@
     "react-select": "^5.8.0",
     "react-textarea-autosize": "^8.5.3",
     "react-use-draggable-scroll": "^0.4.7",
-    "validate-polish": "^2.1.40"
+    "swapy": "^0.2.0",
+    "use-places-autocomplete": "^4.0.1",
+    "validate-polish": "^2.1.40",
+    "veloxi": "^0.14.2"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

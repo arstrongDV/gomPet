@@ -1,0 +1,19 @@
+@import 'styles';
+
+.tag {
+  @include element-flex(row, center, center);
+  gap: $spacing-1;
+  width: fit-content;
+  flex-shrink: 0;
+  padding: $spacing-2 $spacing-3;
+  background-color: $color-background-4;
+  border-radius: $radius-l;
+  border: 1px solid $color-background-4;
+  transition: $transition-main;
+  @include body1;
+  cursor: pointer;
+
+  &.selected {
+    border-color: $color-primary;
+  }
+}

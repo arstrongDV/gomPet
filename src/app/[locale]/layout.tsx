@@ -1,5 +1,6 @@
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
+import { APIProvider } from '@vis.gl/react-google-maps';
 import { Raleway } from 'next/font/google';
 import { SessionProvider } from 'next-auth/react';
 import { NextIntlClientProvider } from 'next-intl';

@@ -14,6 +14,8 @@ export class Routes {
   static readonly BLOG_ARTICLE = (slug: string) => `/blog/${slug}`;
   static readonly OFFERS = '/offers';
   static readonly OFFER = (id: number) => `/offers/${id}`;
+  static readonly NEW_ANIMAL = '/new-animal';
+  static readonly NEW_ORGANIZATION = '/new-organization';
 
   // -- PUBLIC ONLY --
   // Auth
@@ -41,4 +43,4 @@ export const PUBLIC_ONLY_ROUTES = [
   Routes.VERIFY_EMAIL
 ];
 
-export const PROTECTED_ROUTES = [Routes.DASHBOARD, Routes.LIBRARY];
+export const PROTECTED_ROUTES = [Routes.DASHBOARD, Routes.LIBRARY, Routes.NEW_ORGANIZATION, Routes.NEW_ANIMAL];

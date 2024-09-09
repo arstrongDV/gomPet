@@ -19,6 +19,11 @@ const UserMenu = () => {
       title: 'Profile',
       href: Routes.LANDING,
       roles: []
+    },
+    {
+      title: 'Nowa organizacja',
+      href: Routes.NEW_ORGANIZATION,
+      roles: []
     }
   ];
 

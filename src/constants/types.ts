@@ -32,6 +32,15 @@ export enum AnimalSpecies {
   CAT = 'cat'
 }
 
+export type Location = {
+  city: string;
+  street: string;
+  house_number: string;
+  zip_code: string;
+  lat: string | number;
+  lng: string | number;
+};
+
 export interface IUser {
   id: number;
   email?: string;
@@ -52,16 +61,7 @@ export interface IOrganization {
   phone: string | null;
   description: string;
   rating: number;
-  address: {
-    city: string;
-    street: string;
-    house_number: string;
-    zip_code: string;
-  };
-  location: {
-    lat: number;
-    lng: number;
-  };
+  address: Location;
   // details only for BREEDING type
   details?: {
     species: string[];

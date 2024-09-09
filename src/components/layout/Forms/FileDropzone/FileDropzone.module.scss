@@ -1,0 +1,42 @@
+@import 'styles';
+
+.dropzone {
+  width: 100%;
+  min-height: 20rem;
+  padding: $spacing-6;
+  border: 1px solid $color-border;
+  border-radius: $radius-m;
+  background-color: $color-background-2;
+  @include element-flex(column, center, center);
+  gap: $spacing-2;
+  cursor: pointer;
+  transition: $transition-main;
+
+  &:hover {
+    background-color: $color-background-3;
+  }
+
+  &.dragOver {
+    border-color: $color-accent;
+    background-color: $color-background-3;
+  }
+}
+
+.text {
+  @include body2;
+  color: $color-foreground-dim;
+}
+
+.animateArrow {
+  animation: float 1.5s infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}

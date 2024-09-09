@@ -18,6 +18,7 @@ type ImageInputProps = {
   file: File | null;
   label?: string;
   setFile: (file: File | null) => void;
+  onClear?: () => void;
   disabled?: boolean;
   fileTypes?: string[];
   fileMaxSize?: number;
@@ -34,6 +35,7 @@ const ImageInput = (props: ImageInputProps) => {
     src,
     file,
     setFile,
+    onClear,
     disabled = false,
     fileTypes = DEFAULT_ALLOWED_TYPES,
     fileMaxSize = DEFAULT_MAX_SIZE
@@ -46,6 +48,7 @@ const ImageInput = (props: ImageInputProps) => {
 
   const clearFile = () => {
     setFile(null);
+    if (onClear) onClear();
     if (!fileInput.current) return;
     // fileInput.current!.files = null;
     // fileInput.current!.value = '';
@@ -138,6 +141,7 @@ const ImageInput = (props: ImageInputProps) => {
               <img
                 src={URL.createObjectURL(file)}
                 alt='image'
+                draggable={false}
               />
             </a>
           )}

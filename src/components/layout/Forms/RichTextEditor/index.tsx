@@ -1,5 +1,6 @@
 'use client';
 
+import { forwardRef } from 'react';
 import { CodeHighlightNode, CodeNode } from '@lexical/code';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { ListItemNode, ListNode } from '@lexical/list';
@@ -12,18 +13,17 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { EditorState } from 'lexical';
 
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import RichTextEditorTheme from './theme';
-import { forwardRef } from 'react';
-import { EditorState } from 'lexical';
 
 const Placeholder = ({ text = 'Napisz coś...' }) => {
   return <div className='editor-placeholder'>{text}</div>;

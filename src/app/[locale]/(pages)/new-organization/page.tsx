@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import {
+  AvatarCropper,
   Button,
   Card,
   Checkbox,
@@ -15,7 +16,9 @@ import {
   Select,
   Textarea
 } from 'src/components';
-import { OrganizationType } from 'src/constants/types';
+import { Location, OrganizationType } from 'src/constants/types';
+
+import LocationInput from './components/LocationInput';
 
 import style from './NewOrganizationPage.module.scss';
 
@@ -23,11 +26,22 @@ const NewOrganizationPage = () => {
   const t = useTranslations();
   const editorRef = useRef(null);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [fileToCrop, setFileToCrop] = useState<File | null>(null);
+
   const [type, setType] = useState<OrganizationType | null>(OrganizationType.BREEDING);
   const [logo, setLogo] = useState<File | null>(null);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [location, setLocation] = useState<Location>({
+    lat: '',
+    lng: '',
+    city: '',
+    street: '',
+    house_number: '',
+    zip_code: ''
+  });
 
   const handleSubmit = () => {
     if (editorRef.current) {
@@ -88,7 +102,8 @@ const NewOrganizationPage = () => {
             <ImageInput
               label={'Logotyp organizacji'}
               file={logo}
-              setFile={setLogo}
+              setFile={(file) => setFileToCrop(file)}
+              onClear={() => setLogo(null)}
             />
             <Input
               id='organization-name'
@@ -196,33 +211,13 @@ const NewOrganizationPage = () => {
           </h3>
 
           <span className={style.caption}>
-            Możesz wyszukać lokalizację z pomocą Google Maps lub wypełnić pola ręcznie.
+            Możesz wyszukać lokalizację z pomocą Google Maps lub wypełnij pola ręcznie.
           </span>
 
-          <div className={style.location}>
-            <div className={style.inputs}>
-              <Input
-                id='address'
-                name='address'
-                label={'Adres'}
-                placeholder={'Wpisz ulicę i numer budynku'}
-              />
-              <Input
-                id='city'
-                name='city'
-                label={'Miasto'}
-                placeholder={'Wpisz miasto'}
-                required
-              />
-              <Input
-                id='zip-code'
-                name='zip-code'
-                label={'Kod pocztowy'}
-                placeholder={'Wpisz kod pocztowy'}
-                required
-              />
-            </div>
-          </div>
+          <LocationInput
+            value={location}
+            onChange={setLocation}
+          />
         </Card>
         {/* LOCATION */}
 
@@ -232,6 +227,13 @@ const NewOrganizationPage = () => {
           onClick={handleSubmit}
         />
       </div>
+
+      <AvatarCropper
+        src={fileToCrop}
+        isOpen={!!fileToCrop}
+        closeModal={() => setFileToCrop(null)}
+        onCropSuccess={setLogo}
+      />
     </>
   );
 };

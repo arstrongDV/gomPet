@@ -5,7 +5,11 @@ import alignJustifiedIcon from './align-justified.svg';
 import alignLeftIcon from './align-left.svg';
 import alignRightIcon from './align-right.svg';
 import arrowBackIcon from './arrow-back.svg';
+import arrowDownIcon from './arrow-down.svg';
 import arrowForwardIcon from './arrow-forward.svg';
+import arrowLeftIcon from './arrow-left.svg';
+import arrowRightIcon from './arrow-right.svg';
+import arrowUpIcon from './arrow-up.svg';
 import bellIcon from './bell.svg';
 import bellFilledIcon from './bell-filled.svg';
 import boldIcon from './bold.svg';
@@ -65,11 +69,13 @@ import starFilledIcon from './star-filled.svg';
 import starHalfIcon from './star-half.svg';
 import strikethroughIcon from './strikethrough.svg';
 import underlineIcon from './underline.svg';
+import uploadIcon from './upload.svg';
 import xIcon from './x.svg';
 
 export type IconNames =
   | 'underline'
   | 'search'
+  | 'arrowDown'
   | 'list'
   | 'arrowForward'
   | 'heartPlus'
@@ -86,6 +92,7 @@ export type IconNames =
   | 'chevronRight'
   | 'link'
   | 'bellFilled'
+  | 'arrowRight'
   | 'mail'
   | 'login'
   | 'book'
@@ -122,14 +129,17 @@ export type IconNames =
   | 'circleX'
   | 'eye'
   | 'share'
+  | 'arrowUp'
   | 'genderFemale'
   | 'mapPin'
   | 'filter'
   | 'italic'
   | 'pawFilled'
+  | 'arrowLeft'
   | 'alignCenter'
   | 'alignJustified'
   | 'quote'
+  | 'upload'
   | 'buildingCottage'
   | 'chevronLeft'
   | 'alignLeft'
@@ -138,6 +148,7 @@ export type IconNames =
 export const Icons = {
   underline: underlineIcon,
   search: searchIcon,
+  arrowDown: arrowDownIcon,
   list: listIcon,
   arrowForward: arrowForwardIcon,
   heartPlus: heartPlusIcon,
@@ -154,6 +165,7 @@ export const Icons = {
   chevronRight: chevronRightIcon,
   link: linkIcon,
   bellFilled: bellFilledIcon,
+  arrowRight: arrowRightIcon,
   mail: mailIcon,
   login: loginIcon,
   book: bookIcon,
@@ -190,14 +202,17 @@ export const Icons = {
   circleX: circleXIcon,
   eye: eyeIcon,
   share: shareIcon,
+  arrowUp: arrowUpIcon,
   genderFemale: genderFemaleIcon,
   mapPin: mapPinIcon,
   filter: filterIcon,
   italic: italicIcon,
   pawFilled: pawFilledIcon,
+  arrowLeft: arrowLeftIcon,
   alignCenter: alignCenterIcon,
   alignJustified: alignJustifiedIcon,
   quote: quoteIcon,
+  upload: uploadIcon,
   buildingCottage: buildingCottageIcon,
   chevronLeft: chevronLeftIcon,
   alignLeft: alignLeftIcon,

@@ -1,0 +1,103 @@
+@import 'styles';
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  // @include element-flex(row);
+  gap: $spacing-2;
+  // flex-wrap: wrap;
+
+  [data-swapy-highlighted] {
+    background: $color-background-4;
+  }
+}
+
+.slot {
+  background: $color-background-3;
+  aspect-ratio: 4/3;
+  border-radius: $radius-m;
+  transition: $transition-main;
+  flex-shrink: 0;
+
+  &.hidden {
+    visibility: hidden;
+    display: none;
+  }
+
+  &.main {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+.item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  cursor: grab;
+
+  .badge {
+    position: absolute;
+    top: $spacing-2;
+    right: $spacing-2;
+    background-color: $color-primary;
+    border-radius: $radius-m;
+    padding: $spacing-1 $spacing-2;
+    color: $color-white;
+    @include caption;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: $radius-m;
+  }
+
+  &:hover {
+    .overlay {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: $radius-m;
+  @include element-flex(row, center, center);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: $transition-main;
+}
+
+.remove {
+  border-radius: $radius-l;
+  padding: $spacing-1;
+  border: 2px solid $color-white;
+  cursor: pointer;
+  transition: $transition-main;
+  background-color: transparent;
+
+  .icon path {
+    stroke: $color-white;
+    // transition: $transition-main;
+  }
+
+  &:hover {
+    background-color: $color-white;
+
+    .icon path {
+      stroke: $color-accent;
+    }
+  }
+}

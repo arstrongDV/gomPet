@@ -11,26 +11,29 @@
   gap: $spacing-6;
 }
 
+.genderSelect,
+.statusSelect {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-2;
+}
+
 .flexRow {
   @include element-flex(row, flex-start, center);
   gap: $spacing-4;
-  flex-wrap: wrap;
-
-  @include tabletWidth {
-    @include element-flex(column, flex-start, stretch);
-    width: 100%;
-  }
 }
 
-.basicData {
+.fullWidth {
   display: grid;
-  grid-template-columns: 15rem 1fr;
+  grid-template-columns: 1fr;
   gap: $spacing-4;
   width: 100%;
+}
 
-  @include tabletWidth {
-    grid-template-columns: 1fr;
-  }
+.characteristics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  gap: $spacing-4;
+  width: 100%;
 }
 
 .caption {

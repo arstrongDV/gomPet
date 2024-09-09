@@ -61,6 +61,18 @@ export const bytesToSize = (fileSizeInBytes: number) => {
   return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[index];
 };
 
+export const getBase64File = (file: File) => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (typeof reader.result === 'string') resolve(reader.result);
+      else reject('Cannot read file');
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 export const getDecodeBase64File = (base64: string) => {
   const binary = atob(base64.replace(/\s/g, ''));
   const len = binary.length;

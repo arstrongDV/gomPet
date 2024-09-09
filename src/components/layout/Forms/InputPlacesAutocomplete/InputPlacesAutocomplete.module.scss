@@ -1,0 +1,64 @@
+@import 'styles';
+
+.wrapper {
+  position: relative;
+  @include element-flex(column, flex-start, stretch);
+  width: 100%;
+
+  &:focus-within {
+    .input {
+      border-color: $color-primary;
+      background-color: $color-background-1;
+    }
+
+    .suggestions {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+      transform: translateY(calc($radius-m * -1));
+    }
+  }
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  right: -1px;
+  z-index: 2;
+  @include element-flex(column, flex-start, stretch);
+  padding-top: $spacing-1;
+  background-color: $color-background-1;
+  padding: $spacing-2;
+  border: 0.2rem solid $color-primary;
+  border-radius: 0 0 $radius-m $radius-m;
+  border-top: none;
+  transition: $transition-main;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(calc($radius-s * -1));
+  max-height: 40rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  @include custom-scrollbar;
+}
+
+.suggestion {
+  display: block;
+  width: 100%;
+  padding: $spacing-2;
+  border-radius: $radius-m;
+  transition: $transition-main;
+  cursor: pointer;
+  text-align: left;
+  background-color: $color-background-1;
+
+  &:hover {
+    background-color: $color-background-2;
+
+    @include dark-theme {
+      background-color: $color-background-3;
+    }
+  }
+}

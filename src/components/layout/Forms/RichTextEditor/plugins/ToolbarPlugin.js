@@ -29,8 +29,8 @@ import {
   UNDO_COMMAND
 } from 'lexical';
 
-import Icon from 'src/components/layout/Icon';
 import Dropdown from 'src/components/layout/Dropdown';
+import Icon from 'src/components/layout/Icon';
 
 const LowPriority = 1;
 
@@ -209,6 +209,7 @@ function FloatingLinkEditor({ editor }) {
             >
               {linkUrl}
             </a>
+
             <div
               className='link-edit'
               role='button'
@@ -217,7 +218,9 @@ function FloatingLinkEditor({ editor }) {
               onClick={() => {
                 setEditMode(true);
               }}
-            />
+            >
+              <Icon name='pencil' />
+            </div>
           </div>
         </>
       )}
@@ -438,70 +441,6 @@ function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockO
       }
     />
   );
-
-  return (
-    <div
-      className='dropdown'
-      ref={dropDownRef}
-    >
-      <button
-        className='item'
-        onClick={formatParagraph}
-      >
-        <Icon name={blockTypeToIcon.paragraph} />
-        <span className='text'>{blockTypeToBlockName.paragraph}</span>
-        {blockType === 'paragraph' && <span className='active' />}
-      </button>
-      <button
-        className='item'
-        onClick={formatLargeHeading}
-      >
-        <Icon name={blockTypeToIcon.h1} />
-        <span className='text'>{blockTypeToBlockName.h1}</span>
-        {blockType === 'h1' && <span className='active' />}
-      </button>
-      <button
-        className='item'
-        onClick={formatSmallHeading}
-      >
-        <Icon name={blockTypeToIcon.h2} />
-        <span className='text'>{blockTypeToBlockName.h2}</span>
-        {blockType === 'h2' && <span className='active' />}
-      </button>
-      <button
-        className='item'
-        onClick={formatBulletList}
-      >
-        <Icon name={blockTypeToIcon.ul} />
-        <span className='text'>{blockTypeToBlockName.ul}</span>
-        {blockType === 'ul' && <span className='active' />}
-      </button>
-      <button
-        className='item'
-        onClick={formatNumberedList}
-      >
-        <Icon name={blockTypeToIcon.ol} />
-        <span className='text'>{blockTypeToBlockName.ol}</span>
-        {blockType === 'ol' && <span className='active' />}
-      </button>
-      <button
-        className='item'
-        onClick={formatQuote}
-      >
-        <Icon name={blockTypeToIcon.quote} />
-        <span className='text'>{blockTypeToBlockName.quote}</span>
-        {blockType === 'quote' && <span className='active' />}
-      </button>
-      <button
-        className='item'
-        onClick={formatCode}
-      >
-        <Icon name={blockTypeToIcon.code} />
-        <span className='text'>{blockTypeToBlockName.code}</span>
-        {blockType === 'code' && <span className='active' />}
-      </button>
-    </div>
-  );
 }
 
 export default function ToolbarPlugin() {
@@ -681,32 +620,23 @@ export default function ToolbarPlugin() {
         setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
       />
       {blockType === 'code' ? (
-        <>
-          <Dropdown
-            className='toolbar-item dropdown'
-            items={codeLanguges.map((lang) => ({
-              title: lang,
-              onClick: () => {
-                editor.update(() => {
-                  if (selectedElementKey !== null) {
-                    const node = $getNodeByKey(selectedElementKey);
-                    if ($isCodeNode(node)) {
-                      node.setLanguage(lang);
-                    }
+        <Dropdown
+          className='toolbar-item dropdown'
+          items={codeLanguges.map((lang) => ({
+            title: lang,
+            onClick: () => {
+              editor.update(() => {
+                if (selectedElementKey !== null) {
+                  const node = $getNodeByKey(selectedElementKey);
+                  if ($isCodeNode(node)) {
+                    node.setLanguage(lang);
                   }
-                });
-              }
-            }))}
-            label={<span className='text'>{codeLanguage}</span>}
-          />
-          {/* <Select
-            className='toolbar-item code-language'
-            onChange={onCodeLanguageSelect}
-            options={codeLanguges}
-            value={codeLanguage}
-          />
-          <Icon name='chevronDown' /> */}
-        </>
+                }
+              });
+            }
+          }))}
+          label={<span className='text'>{codeLanguage}</span>}
+        />
       ) : (
         <>
           <button
