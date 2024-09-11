@@ -1,0 +1,57 @@
+@import 'src/styles';
+
+.container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: $spacing-4;
+}
+
+.image {
+  width: 4.8rem;
+  height: 4.8rem;
+
+  @include tabletWidth {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+.inputWrapper {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
+  flex-shrink: 0;
+
+  .textarea {
+    min-height: 8rem;
+  }
+
+  .footer {
+    @include element-flex(row);
+    gap: $spacing-4;
+    flex-wrap: wrap;
+
+    .submitButton {
+      margin-left: auto;
+    }
+  }
+}
+
+.modal {
+  max-width: 70rem;
+}
+
+.modalContainer {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+}
+
+.buttons {
+  @include element-flex(row, center, center);
+  width: 100%;
+  gap: $spacing-2;
+}
+
+.text {
+  word-break: normal;
+}

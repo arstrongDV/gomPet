@@ -53,42 +53,49 @@ const InputPlacesAutocomplete = ({
       country: ''
     };
 
-    const geocode = await getGeocode({ address: description });
-    const { lat, lng } = getLatLng(geocode[0]);
-    location = {
-      ...location,
-      lat,
-      lng
-    };
-
-    if (withDetails) {
-      const details: any = await getDetails({ placeId: suggestion.place_id, fields: ['address_components'] });
-      const city =
-        details.address_components.find((component: any) => component.types.includes('locality'))?.long_name || '';
-      const street =
-        details.address_components.find((component: any) => component.types.includes('route'))?.long_name || city || '';
-      const house_number =
-        details.address_components.find((component: any) => component.types.includes('street_number'))?.long_name ||
-        details.address_components.find((component: any) => component.types.includes('premise'))?.long_name ||
-        '';
-      const zip_code =
-        details.address_components.find((component: any) => component.types.includes('postal_code'))?.long_name || '';
-      const country =
-        details.address_components.find((component: any) => component.types.includes('country'))?.long_name || '';
-
+    try {
+      const geocode = await getGeocode({ address: description });
+      const { lat, lng } = getLatLng(geocode[0]);
       location = {
         ...location,
-        city,
-        street,
-        house_number,
-        zip_code,
-        country
+        lat,
+        lng
       };
-    }
 
-    setSelected(location);
-    setValue(description, false);
-    clearSuggestions();
+      if (withDetails) {
+        const details: any = await getDetails({ placeId: suggestion.place_id, fields: ['address_components'] });
+        const city =
+          details.address_components.find((component: any) => component.types.includes('locality'))?.long_name || '';
+        const street =
+          details.address_components.find((component: any) => component.types.includes('route'))?.long_name ||
+          city ||
+          '';
+        const house_number =
+          details.address_components.find((component: any) => component.types.includes('street_number'))?.long_name ||
+          details.address_components.find((component: any) => component.types.includes('premise'))?.long_name ||
+          '';
+        const zip_code =
+          details.address_components.find((component: any) => component.types.includes('postal_code'))?.long_name || '';
+        const country =
+          details.address_components.find((component: any) => component.types.includes('country'))?.long_name || '';
+
+        location = {
+          ...location,
+          city,
+          street,
+          house_number,
+          zip_code,
+          country
+        };
+      }
+
+      setSelected(location);
+      setValue(description, false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      clearSuggestions();
+    }
   };
 
   const getLocationByGeocode = async (geocode: { lat: number; lng: number }) => {

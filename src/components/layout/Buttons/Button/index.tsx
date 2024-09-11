@@ -14,6 +14,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   label?: React.ReactNode;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void;
   href?: string;
+  hrefOutside?: string;
   isLoading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -35,6 +36,7 @@ const ButtonWrapper: React.FC<ButtonProps> = (props) => {
     children,
     href,
     onClick,
+    hrefOutside,
     className,
     height,
     width,
@@ -65,16 +67,33 @@ const ButtonWrapper: React.FC<ButtonProps> = (props) => {
     [style.iconOnly]: !label && icon
   });
 
-  return href ? (
-    <Link
-      className={buttonClasses}
-      style={{ height, width }}
-      onClick={onClick}
-      href={href}
-    >
-      {children}
-    </Link>
-  ) : (
+  if (hrefOutside)
+    return (
+      <a
+        className={buttonClasses}
+        style={{ height, width }}
+        onClick={onClick}
+        href={hrefOutside}
+        target='_blank'
+        rel='noopener noreferrer'
+      >
+        {children}
+      </a>
+    );
+
+  if (href)
+    return (
+      <Link
+        className={buttonClasses}
+        style={{ height, width }}
+        onClick={onClick}
+        href={href}
+      >
+        {children}
+      </Link>
+    );
+
+  return (
     <button
       onClick={disabled ? undefined : onClick}
       className={buttonClasses}

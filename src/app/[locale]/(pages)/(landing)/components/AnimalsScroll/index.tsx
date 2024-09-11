@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
-import { HorizontalScroll, LabelLink } from 'src/components';
+import { HorizontalScroll, LabelLink, Loader } from 'src/components';
 import { Routes } from 'src/constants/routes';
 import { IAnimal } from 'src/constants/types';
 import { animalsMock } from 'src/mocks/animals';
@@ -49,6 +49,7 @@ const AnimalsScroll = () => {
       </header>
 
       <HorizontalScroll className={style.list}>
+        {isLoading && <Loader />}
         {animals.map((animal) => (
           <AnimalCard
             className={style.animal}

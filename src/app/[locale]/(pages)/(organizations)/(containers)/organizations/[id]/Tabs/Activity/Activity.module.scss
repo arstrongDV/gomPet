@@ -1,0 +1,28 @@
+@import 'styles';
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 50rem;
+  align-items: start;
+  gap: $spacing-6;
+
+  @include desktopWidth {
+    grid-template-columns: 1fr;
+  }
+}
+
+.post {
+  @include desktopWidth {
+    max-width: 100%;
+  }
+}
+
+.aside {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+}
+
+.list {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+}

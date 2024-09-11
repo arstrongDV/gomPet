@@ -20,4 +20,10 @@
   &__gray {
     background-color: $color-background-3;
   }
+
+  &__header {
+    @include element-flex(row, space-between, center);
+    gap: $spacing-4;
+    margin-bottom: $spacing-6;
+  }
 }

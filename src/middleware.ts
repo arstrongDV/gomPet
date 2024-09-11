@@ -28,14 +28,22 @@ const handleAuth = async (req: NextRequest, isPublicOnlyPage: boolean, isProtect
       from += req.nextUrl.search;
     }
 
-    return NextResponse.redirect(new URL(`${Routes.LOGIN}?from=${encodeURIComponent(from)}`, req.url));
+    const response = NextResponse.redirect(new URL(`${Routes.LOGIN}?from=${encodeURIComponent(from)}`, req.url));
+    response.headers.set('x-current-path', req.nextUrl.pathname);
+
+    return response;
   }
 
   if (isAuth && isPublicOnlyPage) {
-    return NextResponse.redirect(new URL(Routes.LANDING, req.nextUrl));
+    const response = NextResponse.redirect(new URL(Routes.LANDING, req.nextUrl));
+    response.headers.set('x-current-path', req.nextUrl.pathname);
+    return response;
   }
 
-  return intlMiddleware(req);
+  const response = intlMiddleware(req);
+  response.headers.set('x-current-path', req.nextUrl.pathname);
+
+  return response;
 };
 
 export default async function middleware(req: NextRequest) {

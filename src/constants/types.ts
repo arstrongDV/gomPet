@@ -15,6 +15,13 @@ export enum Gender {
   FEMALE = 'female'
 }
 
+export enum LitterStatus {
+  AVAILABLE = 'available',
+  CAN_RESERVE = 'can_reserve',
+  NO_RESERVE_SLOTS = 'no_reserve_slots',
+  ALREADY_GIVEN = 'already_given'
+}
+
 export enum AnimalStatus {
   AVAILABLE = 'available',
   HAS_OWNER = 'has_owner',
@@ -95,6 +102,18 @@ export interface IAnimal {
   parents: IAnimal[];
   status: AnimalStatus;
   characteristics: string[];
+}
+
+export interface ILitter {
+  id: number;
+  species: string;
+  breed: string;
+  title: string;
+  description: string;
+  birth_date: string;
+  status: LitterStatus;
+  owner?: IOrganization | null;
+  created_at: string;
 }
 
 export interface IPost {

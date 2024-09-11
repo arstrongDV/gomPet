@@ -16,6 +16,7 @@ export class Routes {
   static readonly OFFER = (id: number) => `/offers/${id}`;
   static readonly NEW_ANIMAL = '/new-animal';
   static readonly NEW_ORGANIZATION = '/new-organization';
+  static readonly ORGANIZATION_PROFILE = (id: string | number) => `/organizations/${id}`;
 
   // -- PUBLIC ONLY --
   // Auth

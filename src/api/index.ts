@@ -63,4 +63,8 @@ export class OffersApi {
   static getOffer(id: number) {
     return ApiClient.get(OffersRoutes.OFFER(id));
   }
+
+  static getCompany(id: number) {
+    return ApiClient.get(OffersRoutes.COMPANY(id));
+  }
 }

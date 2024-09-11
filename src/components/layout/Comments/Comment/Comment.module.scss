@@ -1,0 +1,55 @@
+@import 'src/styles';
+
+.comment {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: $spacing-2 $spacing-4;
+}
+
+.image {
+  width: 4.8rem;
+  height: 4.8rem;
+
+  @include tabletWidth {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+.header {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-3 $spacing-4;
+  flex-wrap: wrap;
+
+  .info {
+    @include element-flex(column);
+
+    .name {
+      @include body1;
+    }
+
+    .date {
+      @include body2;
+      color: $color-foreground-dim;
+    }
+  }
+}
+
+.content {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-1;
+  padding: $spacing-4;
+  border-radius: $radius-m;
+  background-color: $color-background-3;
+  grid-column: 2 / -1;
+
+  @include tabletWidth {
+    grid-column: 1 / -1;
+  }
+
+  .text {
+    @include body1;
+    color: $color-foreground;
+    white-space: pre-wrap;
+  }
+}

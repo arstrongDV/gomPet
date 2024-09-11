@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import { Avatar, Button } from 'src/components';
 import { IPost } from 'src/constants/types';
@@ -17,7 +18,7 @@ const PostCard = ({ post, className }: PostCardProps) => {
   const { id, text, created_at, image, author, reactions } = post;
 
   return (
-    <article className={style.post}>
+    <article className={classNames(style.post, className)}>
       <header className={style.header}>
         <div className={style.author}>
           <Avatar

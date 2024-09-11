@@ -15,6 +15,7 @@ export class AccountRoutes {
 export class OffersRoutes {
   static OFFERS = '/offers/';
   static OFFER = (id: number) => `/offers/${id}/`;
+  static COMPANY = (id: number) => `/accounts/company-list-all/${id}/`;
 }
 
 export class WebsocketRoutes {

@@ -8,6 +8,10 @@
     "medium": "Średni",
     "large": "Duży"
   },
+  "species": {
+    "dog": "Pies",
+    "cat": "Kot"
+  },
   "characteristics": {
     "dog": {
       "vaccinated": "zaszczepiony",

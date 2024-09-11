@@ -5,5 +5,9 @@
   "animalsScroll": {
     "title": "Poszukują <highlight>nowego</highlight> domu",
     "seeAll": "Zobacz wszystkie"
+  },
+  "organizationsScroll": {
+    "title": "Współpracujemy z",
+    "seeAll": "Zobacz wszystkie"
   }
 }

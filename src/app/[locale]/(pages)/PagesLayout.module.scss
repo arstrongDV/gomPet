@@ -19,6 +19,11 @@
       margin-left: 0;
     }
   }
+
+  &.limitedWidth .inner {
+    max-width: 120rem;
+    margin-inline: auto;
+  }
 }
 
 .page {

@@ -9,15 +9,17 @@ type SectionHeaderProps = {
   className?: string;
   children?: React.ReactNode;
   margin?: boolean;
+  fullWidth?: boolean;
 };
 
 const SectionHeader = (props: SectionHeaderProps) => {
-  const { title, subtitle, className, margin = false, children } = props;
+  const { title, subtitle, className, margin = false, fullWidth = true, children } = props;
 
   const classes = classNames(
     style.container,
     {
-      [style.margin]: margin
+      [style.margin]: margin,
+      [style.limitWidth]: !fullWidth
     },
     className
   );

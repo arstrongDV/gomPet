@@ -8,6 +8,12 @@
   z-index: 2;
   margin: $space-padding-around-page;
   transition: $transition-main;
+
+  &.limitedWidth .inner {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding-inline: $spacing-4;
+  }
 }
 
 .mobileHeader {

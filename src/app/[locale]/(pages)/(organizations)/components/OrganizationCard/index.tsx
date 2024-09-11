@@ -2,9 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 
-import { IconNames } from 'src/assets/icons';
-import { Button, Icon, LocationCityPin, StarRating } from 'src/components';
-import { IOrganization, OrganizationType } from 'src/constants/types';
+import { Button, LocationCityPin, OrganizationTypeName, StarRating } from 'src/components';
+import { Routes } from 'src/constants/routes';
+import { IOrganization } from 'src/constants/types';
+import { Link } from 'src/navigation';
 
 import style from './OrganizationCard.module.scss';
 
@@ -19,32 +20,21 @@ const OrganizationCard = ({ organization, className }: OrganizationCardProps) =>
 
   const cardClasses = classNames(style.card, className);
 
-  const organizationIcon: { [key: string]: IconNames } = {
-    [OrganizationType.ANIMAL_SHELTER]: 'homeHeart',
-    [OrganizationType.FUND]: 'shieldHeart',
-    [OrganizationType.BREEDING]: 'buildingCottage'
-  };
-
   return (
     <div className={cardClasses}>
       <div className={style.top}>
-        <header className={style.orgType}>
-          <Icon
-            name={organizationIcon[type]}
-            gray
-          />
-          <span>{t(`common.organization.${type}`)}</span>
-        </header>
-
+        <OrganizationTypeName type={type} />
         <h2 className={style.name}>{name}</h2>
 
         {image && (
-          <div className={style.logo}>
-            <img
-              src={image}
-              alt={name}
-            />
-          </div>
+          <Link href={Routes.ORGANIZATION_PROFILE(id)}>
+            <div className={style.logo}>
+              <img
+                src={image}
+                alt={name}
+              />
+            </div>
+          </Link>
         )}
       </div>
 
@@ -58,7 +48,7 @@ const OrganizationCard = ({ organization, className }: OrganizationCardProps) =>
 
         <Button
           label={t('pages.organizations.seeUs')}
-          href={`/organizations/${organization.id}`}
+          href={Routes.ORGANIZATION_PROFILE(id)}
           icon='paw'
           gray
           fullWidth

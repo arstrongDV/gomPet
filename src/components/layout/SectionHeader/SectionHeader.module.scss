@@ -12,6 +12,11 @@
   &.margin {
     margin-bottom: $spacing-7;
   }
+
+  &.limitWidth {
+    max-width: 120rem;
+    margin-inline: auto;
+  }
 }
 
 .title {

@@ -14,7 +14,11 @@ import UserMenu from './components/UserMenu';
 
 import style from './Header.module.scss';
 
-const Header = () => {
+type HeaderProps = {
+  limitedWidth?: boolean;
+};
+
+const Header = ({ limitedWidth = false }: HeaderProps) => {
   const session = useSession();
   const isMobile = useIsMobile({});
   const isScrollingUp = useIsScrollingUp();
@@ -24,7 +28,8 @@ const Header = () => {
     [style.header]: !isMobile,
     [style.mobileHeader]: isMobile,
     [style.sticky]: isScrollingUp,
-    [style.inActive]: isScrollingDown
+    [style.inActive]: isScrollingDown,
+    [style.limitedWidth]: limitedWidth
   });
 
   const desktopContent = (

@@ -17,8 +17,7 @@ type LocationInputProps = {
 const LocationInput = ({ value, onChange }: LocationInputProps) => {
   const map = useMap();
 
-  const handleSelect = (selected: any) => {
-    console.log(selected);
+  const handleSelect = (selected: Location) => {
     onChange({
       ...value,
       lat: selected.lat,
@@ -38,7 +37,7 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
       };
     }
     return null;
-  }, [value.lat, value.lng]);
+  }, [value]);
 
   return (
     <APIProvider apiKey={String(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)}>
@@ -55,8 +54,8 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
           <Map
             className={style.map}
             mapId={'location-input-map'}
-            zoom={position ? 16 : defaultMapZoom}
-            center={
+            defaultZoom={position ? 16 : defaultMapZoom}
+            defaultCenter={
               position
                 ? {
                     lat: position.lat,
@@ -64,15 +63,10 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
                   }
                 : defaultMapPosition
             }
+            zoom={position ? 16 : undefined}
+            center={position ? position : undefined}
           >
-            {position && (
-              <AdvancedMarker
-                position={position}
-                onClick={() => {
-                  console.log('marker click');
-                }}
-              />
-            )}
+            <AdvancedMarker position={position} />
           </Map>
         </div>
         <div className={style.inputs}>

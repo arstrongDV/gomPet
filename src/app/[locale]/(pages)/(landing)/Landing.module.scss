@@ -1,7 +1,9 @@
 @import 'styles';
 
 .container {
-  @include flex-center;
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-8;
+  width: 100%;
 }
 
 .card {

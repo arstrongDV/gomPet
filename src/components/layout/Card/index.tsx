@@ -11,10 +11,23 @@ type CardProps = {
   onClick?: (e: React.MouseEvent) => void;
   as?: 'div' | 'li' | 'section';
   color?: 'white' | 'gray';
+  title?: string;
+  actions?: React.ReactNode;
 };
 
 const Card = (props: CardProps) => {
-  const { as: Tag = 'div', className, children, style, onClick, shadow = false, color = 'white', ...rest } = props;
+  const {
+    as: Tag = 'div',
+    className,
+    children,
+    style,
+    onClick,
+    shadow = false,
+    color = 'white',
+    title,
+    actions,
+    ...rest
+  } = props;
 
   const cardClassName = classnames(classes.card, className, {
     [classes.card__shadow]: shadow,
@@ -28,6 +41,13 @@ const Card = (props: CardProps) => {
       onClick={onClick}
       {...rest}
     >
+      {title && (
+        <div className={classes.card__header}>
+          <h3 className={classes.card__title}>{title}</h3>
+          {actions && <div className={classes.card__actions}>{actions}</div>}
+        </div>
+      )}
+
       {children}
     </Tag>
   );

@@ -1,0 +1,93 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, space-between, stretch);
+  gap: $spacing-6;
+}
+
+.horizontal {
+  .header {
+    @include element-flex(column);
+    gap: $spacing-2;
+  }
+
+  .contact {
+    @include element-flex(column, center, flex-end);
+    gap: $spacing-2;
+
+    @include desktopWidth {
+      @include element-flex(row, flex-start, center);
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.vertical {
+  @include element-flex(column, flex-start, center);
+
+  .header {
+    @include element-flex(column, flex-start, center);
+    gap: $spacing-2;
+  }
+
+  .name {
+    text-align: center;
+  }
+
+  .contact {
+    @include element-flex(row, center, center);
+    gap: $spacing-2;
+    width: 100%;
+  }
+
+  .location {
+    margin: 0 auto;
+  }
+}
+
+.row {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-6;
+  flex-wrap: wrap;
+
+  @include desktopWidth {
+    @include element-flex(column, flex-start, flex-start);
+  }
+}
+
+.name {
+  @include title3;
+  font-weight: $font-semiBold;
+}
+
+.logo {
+  height: 10rem;
+  object-fit: contain;
+}
+
+.contact {
+  @include element-flex(column, center, flex-end);
+  gap: $spacing-2;
+
+  @include desktopWidth {
+    @include element-flex(row, flex-start, center);
+    flex-wrap: wrap;
+  }
+}
+
+.location {
+  display: inline-block;
+
+  .icon {
+    display: inline-block;
+    margin-right: $spacing-1;
+    width: 2.4rem;
+    height: 2.4rem;
+    vertical-align: top;
+  }
+
+  .text {
+    @include body2;
+    color: $color-foreground;
+  }
+}

@@ -1,0 +1,20 @@
+@import 'src/styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+}
+
+.comments {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+}
+
+.title {
+  font-weight: $font-semiBold;
+}
+
+.averageRating {
+  @include body2;
+  color: $color-foreground-dim;
+}

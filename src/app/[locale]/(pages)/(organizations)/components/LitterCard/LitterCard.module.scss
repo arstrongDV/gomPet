@@ -1,0 +1,44 @@
+@import 'styles';
+
+.litter {
+  @include element-flex(column);
+  gap: $spacing-4;
+}
+
+.group {
+  @include element-flex(column);
+
+  .label {
+    @include body1;
+    color: $color-foreground-dim;
+  }
+
+  .text {
+    @include body1;
+    color: $color-foreground;
+  }
+}
+
+.status {
+  padding: $spacing-1 $spacing-2;
+  width: fit-content;
+  color: $color-white;
+  border-radius: $radius-m;
+
+  &.can_reserve {
+    background-color: $color-primary;
+  }
+
+  &.available {
+    background-color: $color-primary;
+  }
+
+  &.no_reserve_slots {
+    background-color: $color-accent;
+  }
+
+  &.already_given {
+    color: $color-foreground;
+    background-color: $color-background-4;
+  }
+}

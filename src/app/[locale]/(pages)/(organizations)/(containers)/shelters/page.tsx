@@ -12,8 +12,8 @@ import { IOrganization } from 'src/constants/types';
 import { organizationsMock } from 'src/mocks/organizations';
 import { useRouter } from 'src/navigation';
 
-import OrganizationCard from '../components/OrganizationCard';
-import OrganizationFilters from '../components/OrganizationFilters';
+import OrganizationCard from '../../components/OrganizationCard';
+import OrganizationFilters from '../../components/OrganizationFilters';
 
 import style from './SheltersPage.module.scss';
 
