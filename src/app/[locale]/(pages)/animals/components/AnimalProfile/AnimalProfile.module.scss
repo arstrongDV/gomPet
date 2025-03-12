@@ -1,0 +1,59 @@
+.hello{
+    color: #277D23;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.head {
+    margin: 0 auto 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.name {
+    color: #a2a2a2;
+    font-size: 18px;
+}
+
+.name span {
+    color: #333; 
+    font-weight: bold;
+}
+
+.tags {
+    display: flex;
+    position: relative;
+    gap: 20px;
+    font-size: 18px;
+    cursor: pointer;
+
+    p {
+        position: relative;
+        padding-bottom: 8px;
+        transition: color 0.3s ease-in-out;
+
+        &:hover {
+            color: #277D23;
+        }
+    }
+
+    .underline {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        width: 100%;
+        transition: transform 0.4s ease-in-out;
+    }
+    
+
+    .left {
+        background: linear-gradient(to right, #277D23 50%, #a1d39f 50%);
+    }
+
+    .right {
+        background: linear-gradient(to right, #a1d39f 50%, #277D23  50%);
+    }
+}

@@ -9,6 +9,7 @@ import { Icon } from 'src/components';
 import { IAnimal } from 'src/constants/types';
 
 import style from './AnimalCard.module.scss';
+import { useRouter } from 'next/navigation';
 
 const genderIconNames: { [key: string]: IconNames } = {
   male: 'genderMale',
@@ -22,7 +23,7 @@ type AnimalCardProps = {
 
 const AnimalCard = ({ className, animal }: AnimalCardProps) => {
   const t = useTranslations('pages.animals');
-
+  const {push} = useRouter();
   const cardClasses = classNames(style.card, className);
   const cardStyles = {
     backgroundImage: `url(${animal.image})`
@@ -34,7 +35,7 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
       style={cardStyles}
     >
       <div className={style.gradient}></div>
-      <div className={style.content}>
+      <div className={style.content} onDoubleClick={() => {push(`/animals/${animal.id}`)}}>
         <div className={style.top}>
           <div className={style.about}>
             <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>
@@ -50,7 +51,7 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
           </button>
         </div>
 
-        <div className={style.hoverContent}>
+        <div className={style.hoverContent} >
           <div className={style.data}>
             <div className={classNames(style.badge, style.gender)}>
               <span>Płeć: {t(`gender.${animal.gender}`)}</span>

@@ -1,0 +1,548 @@
+@import 'styles';
+
+.mainBlock {
+    font-family: 'Raleway', sans-serif;
+}
+
+.infoWrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 20px;
+    align-items: start; 
+}
+
+
+.infoContainer {
+    flex-direction: column;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+
+.blocksContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    max-width: 50%;
+}
+
+
+.photos {
+    position: sticky;
+    top: 25px;  
+    max-width: 100%;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.mainImage img {
+    width: 100%;
+    min-width: 400px; 
+    height: auto;
+    border-radius: 16px;
+}
+
+.imagesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+    margin-top: 10px;
+    max-width: 100%;
+}
+
+.thumbnail {
+    width: 64px; 
+    height: 64px;
+    object-fit: cover; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.1); 
+    }
+}
+
+.aboutAnimalBlock {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    color: #9f9b9b;
+    flex-wrap: wrap; 
+    background-color: #fff;
+    padding: 16px;  
+    border-radius: 16px;
+    min-width: 300px; 
+}
+
+.contactsBlock {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;  
+    color: #000000;
+    flex-wrap: wrap; 
+    background-color: #fff;
+    padding: 16px;  
+    border-radius: 16px;
+    min-width: 300px; 
+}
+
+.mainInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+
+.logoFundation{
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+
+.fundation{
+    font-size: 14px;
+    color: #798177;
+}
+
+.logoHelp{
+    width: 100px;
+}
+
+.contactInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.location{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.phoneNumButton {
+    display: flex;
+    width: 100%;
+    height: 48px;
+    border-radius: 16px;
+    border: 1px solid #277D23; 
+    background-color: #fff;
+    gap: 12px;
+    padding: 24px;
+}
+
+.call{
+    font-size: 16px;
+}
+
+.phoneNumButton:hover{
+    background-color: #277D23;
+    color: #fff;
+}
+
+.characteristicsBlock{
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;  
+    color: #000000;
+    flex-wrap: wrap; 
+    background-color: #fff;
+    padding: 12px;
+    border-radius: 16px;
+    min-width: 300px;  
+}
+
+.AnimalCharacter{
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    padding: 12px;
+}
+
+.caracteristicImage{
+    display: flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid #DCDFD8; 
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.mapBlock{
+    flex: 1; 
+    display: flex;
+    flex-wrap: wrap; 
+    border-radius: 16px;
+    min-width: 300px;  
+}
+
+
+.infoTextBlock, .myFamilly {
+    width: 100%;
+    box-sizing: border-box; 
+    margin: 24px 0; 
+    background-color: #fff;
+    border-radius: 16px;
+    font-size: 15px;
+}
+
+.infoTextBlock p{
+    display: flex;
+    padding: 16px;  
+    width: 100%;
+}
+  
+
+  .infoTextBlock, .myFamilly {
+    width: 100%; 
+  }
+
+.famillyTree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    gap: 20px;
+}
+
+.animalParents {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+.mainAnimal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.animalParents img, .mainAnimal img {
+    width: 64px;  
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.noPhoto{
+    width: 64px;  
+    height: 64px;
+    border-radius: 50%;
+    background-color: #9f9b9b;
+    object-fit: cover;
+    border: 2px solid #ddd; 
+}
+
+.aboutFamilly{
+    padding: 24px;
+}
+
+.aboutFamilly h3{
+    font-size: 20px;
+}
+
+.aboutFamilly p{
+    font-size: 14px;
+    color: #798177;
+    font-weight: 400;
+}
+
+
+.opinion{
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    flex-wrap: wrap; 
+    background-color: #fff;
+    padding: 24px;  
+    border-radius: 16px;
+    min-width: 300px; 
+    color: #000000;
+}
+
+.opinionTitle{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-left: 24px;
+    color: #000;
+}
+
+.opinionTitle p{
+    color: #798177;
+}
+
+.comments{
+    padding: 12px 24px;
+}
+
+.userComInfo {
+    display: flex;
+    align-items: flex-start; 
+}
+
+.avatar{
+    margin-top: 10px;
+}
+
+.userNameData{
+    display: flex;
+    flex-direction: column;
+}
+
+.userNameData p{
+    color: #798177;
+}
+
+.comContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    padding-left: 24px;
+}
+
+.commentWrraper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.recomendation {
+    margin-left: auto;  
+}
+
+.related .title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.related .title h4{
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.related .title p{
+    color: #798177;
+}
+
+.related .title p:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+.related {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    border-radius: 16px;
+    min-width: 300px; 
+    margin-top: 20px;
+    color: #000000;
+}
+
+.relatedAnimals {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap; 
+}
+
+.relatedAnimals > * { 
+    flex: 0 0 300px; 
+    max-width: 300px;
+}
+
+.relatedAnimals::-webkit-scrollbar {
+    height: 5px;
+}
+
+.relatedAnimals::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 10px;
+}
+
+.relatedAnimals::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+
+.cardClasses {
+position: relative;
+  width: 300px;
+  height: 350px;
+  border-radius: $radius-m;
+  padding: $spacing-4;
+  transition: 'background' $transition-main;
+  background-size: cover;
+  background-position: center;
+
+  &:hover {
+    .gradient {
+      &::after {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .hoverContent {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+  }
+}
+
+.content {
+  z-index: 0;
+  position: absolute;
+  inset: $spacing-4;
+  @include element-flex(column, space-between, flex-start);
+  gap: $spacing-4;
+}
+
+.gradient {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: $radius-m;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0.55) 80%, rgba(0, 0, 0, 0.8) 100%);
+  transition: $transition-main;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-m;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition-main;
+  }
+}
+
+.top {
+  @include element-flex(row, space-between);
+  gap: $spacing-2;
+  width: 100%;
+}
+
+.about {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-1;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.badge {
+  padding: $spacing-2 $spacing-3;
+  flex-shrink: 0;
+  @include body1;
+  width: fit-content;
+  min-width: 4rem;
+  border-radius: $radius-m;
+  text-align: center;
+
+  &.title {
+    color: $color-white;
+    background-color: rgba($color: #000000, $alpha: 0.8);
+    font-weight: $font-medium;
+  }
+
+  &.age {
+    color: $color-foreground;
+    background-color: rgba($color: #e37500, $alpha: 0.8);
+    font-weight: $font-medium;
+  }
+
+  &.characteristics {
+    color: $color-white;
+    background-color: rgba($color: #277d23, $alpha: 0.8);
+  }
+
+  &.gender {
+    @include element-flex(row, center, flex-start);
+    gap: $spacing-1;
+    color: $color-foreground;
+    background-color: $color-background-3;
+  }
+
+  &.size {
+    color: $color-white;
+    background-color: rgba($color: #4e4e4e, $alpha: 0.8);
+  }
+
+  &.ageText {
+    color: $color-white;
+    background-color: rgba($color: #4e4e4e, $alpha: 0.8);
+  }
+}
+
+.hoverContent {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  @include element-flex(column, center, center);
+  gap: $spacing-4;
+  width: 100%;
+  transition: $transition-main;
+
+  .data {
+    @include element-flex(column, flex-start, center);
+    gap: $spacing-1;
+  }
+}
+
+.bottom {
+  @include element-flex(row, center, center);
+  width: 100%;
+}
+
+.location {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-1;
+  color: $color-white;
+}
+
+.addBookmark {
+  @include flex-center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: $color-background-1;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    svg {
+      fill: $color-accent;
+    }
+  }
+}
