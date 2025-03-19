@@ -22,6 +22,10 @@ import LocationInput from './components/LocationInput';
 
 import style from './NewOrganizationPage.module.scss';
 
+// type RichTextEditorRef = {
+//   getContent: () => string;
+// };
+
 const NewOrganizationPage = () => {
   const t = useTranslations();
   const editorRef = useRef(null);
@@ -43,11 +47,19 @@ const NewOrganizationPage = () => {
     zip_code: ''
   });
 
+
   const handleSubmit = () => {
     if (editorRef.current) {
       JSON.stringify(editorRef.current);
+      // const content = editorRef.current.getContent(); // Assuming getContent() gives the content from the editor
+      // SaveEditText(content);
     }
   };
+
+  const SaveEditText = (content: string) => {
+    console.log("Editor content:", content);
+  }
+
 
   return (
     <>
@@ -199,7 +211,7 @@ const NewOrganizationPage = () => {
           <h3>
             <mark>Opisz</mark> swoją działalność
           </h3>
-          <RichTextEditor placeholder={'Napisz coś...'} />
+         <RichTextEditor ref={editorRef} placeholder={'Napisz coś...'} onChange={SaveEditText} />
           <span className={style.caption}>To będzie opisem Twojego profilu.</span>
         </Card>
         {/* DESCRIPTION */}

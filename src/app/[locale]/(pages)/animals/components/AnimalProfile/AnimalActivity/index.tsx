@@ -1,7 +1,7 @@
 'use client'
-import React from 'react'
-import { IPost } from 'src/constants/types';
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 import style from './AnimalProfile.module.scss'
 import AVATAR from '../images/avatar.png'
@@ -11,15 +11,26 @@ import SHARE from '../images/share.png'
 import MASSAGE from '../images/message.png'
 
 
-type PostsProfileProps = {
-  posts: IPost[];
-};
+import { postsMock } from 'src/mocks/posts';
+import { IPost } from 'src/constants/types';
 
-const AnimalActivity = ({posts}: PostsProfileProps) => {
-  debugger
+
+const AnimalActivity = () => {
+
+  const params = useParams();
+  const animalId = Number(params.id);
+
+  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]);
+
+  useEffect(() => {
+    const filtered = postsMock.filter((post) => post.author.id === animalId);
+    setFilteredPosts(filtered); 
+  }, [animalId]); 
+
+
   return (
     <div className={style.mainPostContainer}>
-      {posts.map(p => (
+      {filteredPosts.map(p => (
         <div className={style.commentWrapper} key={p.id}>
           <div className={style.userInfo}>
             <div className={style.aboutUser}>

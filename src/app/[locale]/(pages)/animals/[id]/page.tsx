@@ -11,9 +11,10 @@ const getAnimalData = (id: number): IAnimal | undefined => {
   return animalsMock.find(animal => animal.id === id);
 };
 
-const getPostsData = (animalId: number): IPost[] => {
-  return postsMock.filter(post => post.author.id === animalId);
-};
+// const getPostsData = (animalId: number): IPost[] => {
+//   return postsMock.filter(post => post.author.id === animalId);
+// };
+
 export const generateMetadata = ({ params: { id } }: { params: { id: string } }) => {
   const animalData = getAnimalData(Number(id));
   // const postData = getPostsData(Number(id));
@@ -31,14 +32,14 @@ export const generateMetadata = ({ params: { id } }: { params: { id: string } })
 
 const AnimalDetailPage = ({ params }: { params: { id: string } }) => {
   const animal = getAnimalData(Number(params.id));
-  const posts = getPostsData(Number(params.id));
-  if (!animal || !posts) {
+  // const posts = getPostsData(Number(params.id));
+  if (!animal) {
     return <div>Animal not found</div>;
   }
   return (
 <div className={style.mainContainer}>
     <div className={style.innerContainer}>
-      <AnimalProfile animal={animal} posts={posts}/>
+      <AnimalProfile animal={animal}/> 
     </div>
 </div>
 

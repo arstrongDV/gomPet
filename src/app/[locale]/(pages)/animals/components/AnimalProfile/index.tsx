@@ -8,10 +8,10 @@ import AnimalActivity from './AnimalActivity';
 
 type AnimalCardProps = {
     animal: IAnimal;
-    posts: IPost[]; 
+    // posts: IPost[]; 
 };
 
-const AnimalProfile = ({ animal, posts }: AnimalCardProps) => {
+const AnimalProfile = ({ animal }: AnimalCardProps) => {
   const [isInfoPageActive, setActivePage] = useState(true);
   return (
     <div>
@@ -40,7 +40,7 @@ const AnimalProfile = ({ animal, posts }: AnimalCardProps) => {
     {isInfoPageActive ? (
       <AnimalInformation animal={animal} />
     ):(
-      <AnimalActivity posts={posts} />
+      <AnimalActivity />
     )}
     </div>
   )

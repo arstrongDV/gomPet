@@ -25,6 +25,8 @@ import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import RichTextEditorTheme from './theme';
 
+import { useState, useEffect } from 'react';
+
 const Placeholder = ({ text = 'Napisz coś...' }) => {
   return <div className='editor-placeholder'>{text}</div>;
 };
@@ -55,22 +57,43 @@ const editorConfig = {
 
 type RichTextEditorProps = {
   placeholder?: string;
+  initialContent?: string;
+  onChange: (content: string) => void;
 };
 
-const RichTextEditor = forwardRef<EditorState, RichTextEditorProps>((props, ref) => {
+const RichTextEditor = forwardRef<EditorState, RichTextEditorProps>(({placeholder, initialContent='{}', onChange}, ref) => {
+  const [editorStateJson, setEditorStateJson] = useState<string>(initialContent);
+
+  useEffect(() => {
+    setEditorStateJson(initialContent);
+  }, [initialContent]);
+
+  const handleChange = (editorState: EditorState) => {
+    editorState.read(() => {
+      const json = JSON.stringify(editorState.toJSON());
+      setEditorStateJson(json || '{}');
+      onChange(json); 
+    });
+  };
+
   return (
-    <LexicalComposer initialConfig={editorConfig}>
+    <LexicalComposer 
+        initialConfig={{ ...editorConfig, editorState: (editor) => {
+            try {
+              return editor.parseEditorState(editorStateJson);
+            } catch (error) {
+              console.error("Error parsing editor state:", error);
+              return null; 
+            }
+          }
+        }}>
       <div className='editor-container'>
         <ToolbarPlugin />
         <div className='editor-inner'>
-          {/* <OnChangePlugin
-            onChange={(editorState) => {
-              ref.current = editorState;
-            }}
-          /> */}
+          <OnChangePlugin onChange={handleChange}/>
           <RichTextPlugin
             contentEditable={<ContentEditable className='editor-input' />}
-            placeholder={<Placeholder text={props.placeholder} />}
+            placeholder={<Placeholder text={placeholder} />}
             ErrorBoundary={LexicalErrorBoundary}
           />
           <HistoryPlugin />
