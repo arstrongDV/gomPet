@@ -14,7 +14,7 @@
 .inputs {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
-  gap: $spacing-4;
+  gap: $spacing-4; //gap: 4.1rem;
 }
 
 .characteristics {

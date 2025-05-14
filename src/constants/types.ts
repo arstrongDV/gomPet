@@ -77,13 +77,26 @@ export interface IOrganization {
   created_at: string;
 }
 
+
 export interface IComment {
   id: number;
-  text: string;
+  comment: string;
   created_at: string;
   updated_at?: string;
+  author: IUser;
   rating: number;
-  author: IUser | IOrganization;
+}
+
+interface ICharacteristic {
+  title: string;
+  bool: boolean;
+}
+
+export interface ICategory {
+  id: number;
+  name: string;
+  image: string | null;
+  children: ICategory[];
 }
 
 export interface IAnimal {
@@ -102,6 +115,14 @@ export interface IAnimal {
   parents: IAnimal[];
   status: AnimalStatus;
   characteristics: string[];
+
+  price: number;
+  location: string;
+  images: string[];
+  characteristicBoard: ICharacteristic[];
+  comments: IComment[];
+
+  famillyTree: ICategory[];
 }
 
 export interface ILitter {

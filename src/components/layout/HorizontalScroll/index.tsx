@@ -17,7 +17,7 @@ const HorizontalScroll = (props: HorizontalScrollProps) => {
 
   const draggableRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const { events } = useDraggable(draggableRef, {
-    applyRubberBandEffect: true,
+    // applyRubberBandEffect: true,
     decayRate: 0.96,
     safeDisplacement: 10
   });

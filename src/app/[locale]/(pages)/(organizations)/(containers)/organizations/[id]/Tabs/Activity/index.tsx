@@ -57,7 +57,7 @@ const Activity = ({ organization }: ActivityProps) => {
           organization={organization}
           variant='vertical'
         />
-        <OrganizationOnMap organization={organization} />
+        <OrganizationOnMap organizations={organization} />
       </aside>
     </div>
   );

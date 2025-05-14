@@ -61,7 +61,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>((props, forwardedRe
   const labelElement = (
     <label htmlFor={id}>
       <div className={classNames(style.label, { [style.small]: smallLabel })}>
-        {label}
+        {label} 
         {required && <span className={style.star}> * </span>}
       </div>
     </label>

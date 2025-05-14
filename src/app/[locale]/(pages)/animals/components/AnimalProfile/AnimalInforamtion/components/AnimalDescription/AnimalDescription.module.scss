@@ -1,0 +1,40 @@
+@import 'styles';
+
+// .infoTextBlock{
+//   width: 100%;
+//   box-sizing: border-box; 
+//   margin: 24px 0; 
+//   border-radius: $radius-m;
+//   font-size: $font-size-xs;
+//   background-color: $color-white;
+// }
+
+.textDescription {
+  transition: all 0.3s ease;
+  // font-size: 16px;
+  display: flex;
+  padding: 16px;  
+  width: 100%;
+
+  // @media (max-width: 550px) {
+  //   font-size: 14px;
+  // }
+}
+
+
+.readMoreBtn {
+  margin-left: auto;
+  color: #fff;
+  background-color: #86c483;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 6px;
+  border-radius: $radius-s;
+  text-align: center;
+  display: none;
+  margin: 10px;
+
+  @media (max-width: 550px) {
+    display: inline;
+  }
+}

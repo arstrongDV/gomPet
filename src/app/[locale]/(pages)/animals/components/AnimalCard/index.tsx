@@ -35,7 +35,7 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
       style={cardStyles}
     >
       <div className={style.gradient}></div>
-      <div className={style.content} onDoubleClick={() => {push(`/animals/${animal.id}`)}}>
+      <div className={style.content} onClick={() => {push(`/animals/${animal.id}`)}}>
         <div className={style.top}>
           <div className={style.about}>
             <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>

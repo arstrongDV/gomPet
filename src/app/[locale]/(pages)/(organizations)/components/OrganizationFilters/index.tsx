@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -16,13 +16,20 @@ import style from './OrganizationFilters.module.scss';
 
 type OrganizationFiltersProps = {
   className?: string;
+  needFullFilters?: boolean;
 };
 
-const OrganizationFilters = ({ className }: OrganizationFiltersProps) => {
+const OrganizationFilters = ({ className, needFullFilters }: OrganizationFiltersProps) => {
+  
   const t = useTranslations();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
+
+  const [showFullFilters, setShowFullFilters] = useState(false); 
+  useEffect(() => {
+    if (needFullFilters) setShowFullFilters(true);
+  }, [needFullFilters]);
 
   const organization = {
     animal_shelter: t('common.organization.animal_shelter'),
@@ -75,7 +82,34 @@ const OrganizationFilters = ({ className }: OrganizationFiltersProps) => {
           />
         ))}
       </div>
-      <div className={style.inputs}>
+      {showFullFilters ? (
+        <div className={style.inputs}>
+          <Input
+            label={t('pages.organizations.filters.location')}
+            placeholder={t('pages.organizations.filters.locationPlaceholder')}
+          />
+          <Input
+            label={`${t('pages.organizations.filters.range')} (km)`}
+            placeholder={t('pages.organizations.filters.rangePlaceholder')}
+          />
+          <Select
+            label={t('pages.organizations.filters.breedSpecies')}
+            options={[toSelectOption('dog'), toSelectOption('cat')]}
+            value={toSelectOption(searchParams.get(Params.SPECIES))}
+            onChange={(value: OptionType) => handleFilter(Params.SPECIES, value ? String(value.value) : '')}
+            isClearable
+          />
+          <Select
+            label={t('pages.organizations.filters.breedType')}
+            options={[toSelectOption('dog'), toSelectOption('cat')]}
+            value={toSelectOption(searchParams.get(Params.BREED))}
+            onChange={(value: OptionType) => handleFilter(Params.BREED, value ? String(value.value) : '')}
+            isClearable
+            isSearchable
+          />
+        </div>
+      ) : (
+        <div className={style.inputs}>
         <Input
           label={t('pages.organizations.filters.location')}
           placeholder={t('pages.organizations.filters.locationPlaceholder')}
@@ -84,22 +118,9 @@ const OrganizationFilters = ({ className }: OrganizationFiltersProps) => {
           label={`${t('pages.organizations.filters.range')} (km)`}
           placeholder={t('pages.organizations.filters.rangePlaceholder')}
         />
-        <Select
-          label={t('pages.organizations.filters.breedSpecies')}
-          options={[toSelectOption('dog'), toSelectOption('cat')]}
-          value={toSelectOption(searchParams.get(Params.SPECIES))}
-          onChange={(value: OptionType) => handleFilter(Params.SPECIES, value ? String(value.value) : '')}
-          isClearable
-        />
-        <Select
-          label={t('pages.organizations.filters.breedType')}
-          options={[toSelectOption('dog'), toSelectOption('cat')]}
-          value={toSelectOption(searchParams.get(Params.BREED))}
-          onChange={(value: OptionType) => handleFilter(Params.BREED, value ? String(value.value) : '')}
-          isClearable
-          isSearchable
-        />
       </div>
+      )}
+
     </div>
   );
 };

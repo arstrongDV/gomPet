@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
@@ -13,6 +13,7 @@ import SearchBar from './components/SearchBar';
 import UserMenu from './components/UserMenu';
 
 import style from './Header.module.scss';
+import MobileMenu from '../MobileMenu';
 
 type HeaderProps = {
   limitedWidth?: boolean;
@@ -23,6 +24,10 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
   const isMobile = useIsMobile({});
   const isScrollingUp = useIsScrollingUp();
   const isScrollingDown = useIsScrollingDown();
+
+  const [showMenu, setShowMenu] = useState(false);
+  const toggleMenu = () => setShowMenu(prev => !prev);
+
 
   const classes = classNames({
     [style.header]: !isMobile,
@@ -59,21 +64,29 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
         height={50}
       />
       <button
-        className={style.iconButton}
-        onClick={() => console.log('Menu')}
+        className={`${style.iconButton} ${showMenu ? style.rotate : style.fade}`}
+        onClick={toggleMenu}
       >
-        <Icon name='menu2' />
+        <Icon name='menu2' /> 
       </button>
     </div>
   );
 
   return (
-    <header
-      id='header'
-      className={classes}
-    >
-      {isMobile ? mobileContent : desktopContent}
-    </header>
+    <>
+      <header
+        id='header'
+        className={classes}
+      >
+        {isMobile ? mobileContent : desktopContent}
+      </header>
+      <div className={classNames(style.mobileMenu, {
+  [style.active]: showMenu,
+  [style.inactive]: !showMenu,
+})}>
+  {isMobile && showMenu && <MobileMenu setShowMenu={setShowMenu} />}
+</div>
+    </>
   );
 };
 

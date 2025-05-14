@@ -16,6 +16,9 @@ import AnimalCard from './components/AnimalCard';
 import AnimalFilters from './components/AnimalFilters';
 
 import style from './AnimalsPage.module.scss';
+import OrganizationOnMap from '../(organizations)/components/OrganizationOnMap';
+import { IOrganization } from 'src/constants/types';
+import { organizationsMock } from 'src/mocks/organizations';
 
 const AnimalsPage = () => {
   const t = useTranslations('pages.animals');
@@ -27,6 +30,8 @@ const AnimalsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
   const [total, setTotal] = useState<number>(1);
+
+  const [organizations, setOrganizations] = useState<IOrganization[]>([]);
 
   const [showFilters, setShowFilters] = useState<boolean>(true);
   const [showMap, setShowMap] = useState<boolean>(false);
@@ -49,19 +54,42 @@ const AnimalsPage = () => {
   };
 
   useEffect(() => {
+    setOrganizations(organizationsMock);
     getAnimals();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (
+        showMap &&
+        target &&
+        !target.closest('#map') &&  
+        !target.closest('#button')   
+      ) {
+        setShowMap(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMap]);
 
   return (
     <div className={style.container}>
       <div className={style.buttons}>
         <Button
+          id='button'
           label={showFilters ? t('hideFilters') : t('showFilters')}
           onClick={() => setShowFilters((prev) => !prev)}
           empty={!showFilters}
           icon='filter'
         />
         <Button
+          id='button'
           label={showMap ? t('hideMap') : t('showMap')}
           onClick={() => setShowMap((prev) => !prev)}
           empty={!showMap}
@@ -70,6 +98,12 @@ const AnimalsPage = () => {
       </div>
 
       <AnimalFilters className={classNames(style.filters, { [style.show]: showFilters })} />
+
+        <div id='map'>
+          <OrganizationOnMap
+            organizations={organizations}
+            className={classNames(style.map, { [style.show]: showMap })}
+          />
 
       <List
         isLoading={isLoading}
@@ -90,6 +124,7 @@ const AnimalsPage = () => {
         currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
         onPageChange={changePage}
       />
+    </div>
     </div>
   );
 };

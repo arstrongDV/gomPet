@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { Button, List, Pagination } from 'src/components';
@@ -16,6 +16,7 @@ import OrganizationCard from '../../components/OrganizationCard';
 import OrganizationFilters from '../../components/OrganizationFilters';
 
 import style from './SheltersPage.module.scss';
+import OrganizationOnMap from '../../components/OrganizationOnMap';
 
 const SheltersPage = () => {
   const t = useTranslations('pages.animals');
@@ -23,6 +24,7 @@ const SheltersPage = () => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [organizations, setOrganizations] = useState<IOrganization[]>([]);
@@ -52,16 +54,42 @@ const SheltersPage = () => {
     getShelters();
   }, []);
 
+  useEffect(() => {
+    if('/shelters' !== pathname) setShowMap(false);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (
+        showMap &&
+        target &&
+        !target.closest('#map') &&  
+        !target.closest('#button')   
+      ) {
+        setShowMap(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMap]);
+
   return (
     <div className={style.container}>
       <div className={style.buttons}>
         <Button
+          id="button"
           label={showFilters ? t('hideFilters') : t('showFilters')}
           onClick={() => setShowFilters((prev) => !prev)}
           empty={!showFilters}
           icon='filter'
         />
         <Button
+          id="button"
           label={showMap ? t('hideMap') : t('showMap')}
           onClick={() => setShowMap((prev) => !prev)}
           empty={!showMap}
@@ -69,7 +97,14 @@ const SheltersPage = () => {
         />
       </div>
 
-      <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} />
+      <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} needFullFilters={true} />
+
+      <div id='map'>
+        <OrganizationOnMap
+          organizations={organizations}
+          className={classNames(style.map, { [style.show]: showMap })}
+        />
+      </div>
 
       <List
         isLoading={isLoading}

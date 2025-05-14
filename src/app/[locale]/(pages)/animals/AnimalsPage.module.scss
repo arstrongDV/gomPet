@@ -31,3 +31,22 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: $spacing-4;
 }
+
+
+.map {
+  max-height: 0;
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+
+  &.show {
+    margin-top: 100px;
+    max-height: 100rem;
+    overflow: visible;
+    visibility: visible;
+    pointer-events: all;
+    justify-content: center;
+    align-items: center;
+  }
+}
