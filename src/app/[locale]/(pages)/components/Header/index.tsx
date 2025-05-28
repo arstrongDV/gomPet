@@ -24,6 +24,7 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
   const isMobile = useIsMobile({});
   const isScrollingUp = useIsScrollingUp();
   const isScrollingDown = useIsScrollingDown();
+  const [isSearch, setIsSearch] = useState(false)
 
   const [showMenu, setShowMenu] = useState(false);
   const toggleMenu = () => setShowMenu(prev => !prev);
@@ -50,26 +51,29 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
   );
 
   const mobileContent = (
-    <div className={style.inner}>
-      <button
-        className={style.iconButton}
-        onClick={() => console.log('Search')}
-      >
-        <Icon name='search' />
-      </button>
-      <Image
-        className={style.logo}
-        src={Logo}
-        alt='Logo'
-        height={50}
-      />
-      <button
-        className={`${style.iconButton} ${showMenu ? style.rotate : style.fade}`}
-        onClick={toggleMenu}
-      >
-        <Icon name='menu2' /> 
-      </button>
-    </div>
+    <>
+      <div className={style.inner}>
+        <button
+          className={style.iconButton}
+          onClick={() => setIsSearch(prev => !prev)}
+        >
+          <Icon name='search' />
+        </button>
+        <Image
+          className={style.logo}
+          src={Logo}
+          alt='Logo'
+          height={50}
+        />
+        <button
+          className={`${style.iconButton} ${showMenu ? style.rotate : style.fade}`}
+          onClick={toggleMenu}
+        >
+          <Icon name='menu2' />
+        </button>
+      </div>
+      {isSearch && <SearchBar />}
+    </>
   );
 
   return (

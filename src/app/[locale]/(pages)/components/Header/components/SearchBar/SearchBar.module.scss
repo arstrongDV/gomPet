@@ -1,5 +1,45 @@
 @import 'styles';
 
 .searchbarWrapper {
+  position: relative;
   width: 30rem;
+}
+
+.searchbarWrapperMobile {
+  position: relative;
+  width: 100%;
+}
+
+.resultsBar {
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+  z-index: 5;
+  background: $color-background-1;
+  border: 1px solid $color-border;
+  list-style: none;
+  border-radius: $radius-m;
+  display: none;
+
+  .searchItem {
+    width: 100%;
+    margin: 5px;
+    padding: 10px;
+    border-radius: $radius-m;
+
+    &:hover{
+      background-color: #f1eded;
+    }
+  }
+}
+
+.NoSearchedItem{
+  width: 100%;
+  margin: 5px;
+  padding: 10px;
+  border-radius: $radius-m;
+}
+
+.resultsBarActive {
+  display: block;
 }

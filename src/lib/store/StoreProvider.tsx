@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect, useRef } from 'react';
 import { Provider } from 'react-redux';
 import { useSession } from 'next-auth/react';
@@ -12,48 +13,67 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
   const session = useSession();
   const storeRef = useRef<AppStore>();
 
+  // Inicjalizacja store tylko raz
   if (!storeRef.current) {
-    // Create the store instance the first time this renders
     storeRef.current = makeStore();
-
-    // If the user is authenticated, set the auth state
-    if (session.status === 'authenticated') {
-      storeRef.current.dispatch(setAuth(session.data));
-    }
-
     injectStore(storeRef.current);
   }
 
   useEffect(() => {
-    // If the user logs out, clear the auth state
-    if (storeRef.current && session.status === 'unauthenticated') {
+    const store = storeRef.current;
+    if (!store) return;
+  
+    const unsubscribe = store.subscribe(() => {
+      const state = store.getState();
+      const bookmarks = state.bookmarks.favorites;
+  
+      try {
+        localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+      } catch (err) {
+        console.error('Failed to save bookmarks to localStorage', err);
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+
+  // Ustawienie danych sesji do store
+  useEffect(() => {
+    if (!storeRef.current) return;
+
+    if (session.status === 'authenticated' && session.data) {
+      storeRef.current.dispatch(setAuth(session.data));
+    } else if (session.status === 'unauthenticated') {
       storeRef.current.dispatch(clearAuth());
     }
-  }, [session.status]);
+  }, [session.status, session.data]);
 
-  // Used for token refresh, if the access token changes in the store, update the session token
+  // Subskrybuj zmiany tokena w store i aktualizuj sesję jeśli potrzeba
   useEffect(() => {
-    const storeToken = storeRef?.current?.getState().auth.access_token;
-    const sessionToken = session.data?.access_token;
+    const store = storeRef.current;
+    if (!store || session.status !== 'authenticated') return;
 
-    const refreshToken = async () => {
-      if (storeToken !== sessionToken) {
-        if (session.status === 'authenticated') {
-          try {
-            await session.update({
-              access_token: storeToken
-            });
-          } catch (e) {
-            logout();
-          }
-        } else {
-          storeRef?.current?.dispatch(clearAuth());
-        }
+    const unsubscribe = store.subscribe(() => {
+      const state = store.getState();
+      const storeToken = state.auth.access_token;
+      const sessionToken = session.data?.access_token;
+
+      const bookmarks = state.bookmarks.favorites;
+
+      session.update({ bookmarks }).catch((err) => {
+        console.error('Failed to update session bookmarks:', err);
+      });
+
+      if (storeToken && storeToken !== sessionToken) {
+        session.update({ access_token: storeToken }).catch(() => {
+          store.dispatch(clearAuth());
+          logout();
+        });
       }
-    };
+    });
 
-    refreshToken();
-  }, [storeRef.current.getState().auth.access_token]);
+    return () => unsubscribe();
+  }, [session]);
 
   return <Provider store={storeRef.current}>{children}</Provider>;
 }

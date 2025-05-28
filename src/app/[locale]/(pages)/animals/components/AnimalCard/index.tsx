@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 
@@ -10,6 +10,9 @@ import { IAnimal } from 'src/constants/types';
 
 import style from './AnimalCard.module.scss';
 import { useRouter } from 'next/navigation';
+
+import { useAppDispatch, useAppSelector, useAppStore } from 'src/lib/store/hooks';
+import { addItemToFavorites, deleteItemFromFavorites } from '../../../bookmarks/slice';///
 
 const genderIconNames: { [key: string]: IconNames } = {
   male: 'genderMale',
@@ -22,6 +25,13 @@ type AnimalCardProps = {
 };
 
 const AnimalCard = ({ className, animal }: AnimalCardProps) => {
+
+  const dispatch = useAppDispatch();///////////////
+
+  // const {favorites, isFavorites} = useAppSelector((state) => state.bookmarks);
+  const favorites = useAppSelector((state) => state.bookmarks.favorites);
+  const isFavorite = favorites.some((fav) => fav.id === animal.id);
+
   const t = useTranslations('pages.animals');
   const {push} = useRouter();
   const cardClasses = classNames(style.card, className);
@@ -29,13 +39,43 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
     backgroundImage: `url(${animal.image})`
   };
 
+  const handleCardClick = (event: React.MouseEvent) => {
+    const target = event.target as HTMLElement;
+    // Nie przekierowuj jeśli kliknięto w button
+    if (!target.closest('button')) {
+      push(`/animals/${animal.id}`);
+    }
+  };
+
+  const toggleFavorite = () => {
+    const isFav = favorites.some((fav) => fav.id === animal.id);
+    if (isFav) {
+      dispatch(deleteItemFromFavorites(animal));
+    } else {
+      dispatch(addItemToFavorites(animal));
+    }
+  };
+
+  // useEffect(() => {
+  //   const stored = localStorage.getItem('bookmarks');
+  //   if (stored) {
+  //     const parsed = JSON.parse(stored);
+  //     parsed.forEach((animal: IAnimal) => {
+  //       dispatch(addItemToFavorites(animal));
+  //     });
+  //   }
+  // }, []);
+
+
+  console.log(useAppStore().getState().bookmarks);
+
   return (
     <div
       className={cardClasses}
       style={cardStyles}
     >
       <div className={style.gradient}></div>
-      <div className={style.content} onClick={() => {push(`/animals/${animal.id}`)}}>
+      <div className={style.content} onClick={handleCardClick}>
         <div className={style.top}>
           <div className={style.about}>
             <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>
@@ -46,7 +86,9 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
               </div>
             )}
           </div>
-          <button className={style.addBookmark}>
+          <button id='#button'   className={classNames(style.addBookmark, {
+            [style['addBookmark--active']]: isFavorite,
+          })} onClick={toggleFavorite}>
             <Icon name='heart' />
           </button>
         </div>

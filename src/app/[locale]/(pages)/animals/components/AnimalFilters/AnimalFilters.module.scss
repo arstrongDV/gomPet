@@ -9,6 +9,7 @@
   @include element-flex(row, flex-start, center);
   gap: $spacing-4;
   flex-wrap: wrap;
+  margin-top: 2rem;///
 }
 
 .inputs {
@@ -21,4 +22,16 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
   gap: $spacing-4;
+  margin-top: 2rem;///
+}
+
+@media (max-width: 570px) {
+  .filters {
+    width: 100%;
+  }
+
+  .inputs,
+  .characteristics {
+    grid-template-columns: 1fr; // 1 kolumna na wąskich ekranach
+  }
 }

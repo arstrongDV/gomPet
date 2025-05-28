@@ -19,6 +19,7 @@ import style from './AnimalsPage.module.scss';
 import OrganizationOnMap from '../(organizations)/components/OrganizationOnMap';
 import { IOrganization } from 'src/constants/types';
 import { organizationsMock } from 'src/mocks/organizations';
+import { useAppSelector } from 'src/lib/store/hooks';
 
 const AnimalsPage = () => {
   const t = useTranslations('pages.animals');

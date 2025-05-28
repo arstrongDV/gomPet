@@ -17,10 +17,16 @@
   .author {
     @include element-flex(row, center, center);
     gap: $spacing-3;
-
+    @media (max-width: 550px) {
+      gap: $spacing-2;
+    }
     .avatar {
       width: 5rem;
       height: 5rem;
+      @media (max-width: 550px) {
+        width: 4rem;
+        height: 4rem;
+      }
     }
 
     .name {
@@ -48,14 +54,22 @@
     @include body2;
     color: $color-foreground-dim;
     flex-shrink: 0;
+    
+    @media (max-width: 550px) {
+      font-size: $font-size-xxs;
+    }
   }
 
   .buttons {
     @include element-flex(row, flex-end, center);
     gap: $spacing-2;
     width: 100%;
-    @media (max-width: 550px) {
-      
+    @media (max-width: 480px) {
+      @include element-flex(row, flex-end, center);
     }
+  }
+
+  @media (max-width: 480px) {
+    @include element-flex(column, center);
   }
 }

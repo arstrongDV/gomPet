@@ -15,11 +15,12 @@ import PHONE_IMAGE from '../images/phone.png'
 import PAW_IMAGE from '../images/paw.png'
 
 import { FamilyTreeWrapper } from './components/FamilyTree/FamilyTreeWrapper';
-import { StarRating } from 'src/components';
+import { Button, StarRating } from 'src/components';
 import RelatedAnimals from './components/RelatedAnimals';
 import AnimalPhotos from './components/AnimalPhotos';
 import Comments from './components/Comments';
 import AnimalDescription from './components/AnimalDescription';
+import { useRouter } from 'next/navigation';
 
 type AnimalProfileProps = {
     animal: IAnimal & {
@@ -30,6 +31,7 @@ type AnimalProfileProps = {
 const AnimalInformation = ({ animal }: AnimalProfileProps) => {
 
     const t = useTranslations('pages.animals');
+    const router = useRouter();
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('DD.MM.YYYY, godz. HH:mm');
       };
@@ -72,9 +74,20 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                             <Image src={LOCATION_IMAGE} alt='location-image' /> <p style={{color: '#000'}}>{animal.owner.address.city}</p>
                         </div>
                         <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
-                        <button className={style.phoneNumButton}>
-                            <Image src={PHONE_IMAGE} alt='phone-image' width={18} /> <p className={style.call}>Zadzwoń i zapytaj</p>
-                        </button>
+                        {/* <a href='tel:+48213713370' className={style.phoneNumButton}> */}
+                            {/* <button> */}
+                                    {/* <Image src={PHONE_IMAGE} alt='phone-image' width={18} /> 
+                                    <p className={style.call}>Zadzwoń i zapytaj</p> */}
+                            {/* </button> */}
+                        {/* </a> */}
+                    
+                        <Button
+                            className={style.phoneNumButton}
+                            icon='phone'
+                            label={'Zadzwoń i zapytaj'}
+                            hrefOutside='tel:+48213713370'
+                        />
+
                         </div>
                     </div>
                     <div className={style.characteristicsBlock}>
@@ -149,7 +162,7 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
             <div className={style.related}>
                 <div className={style.title}>
                     <h4>Inni <span style={{color: '#277D23'}}>podopieczni</span> fundacji</h4>
-                    <p>Zobacz stronę fundacji</p>
+                    <p onClick={() => router.push(`/organizations/${animal.owner.id}`)}>Zobacz stronę fundacji</p>
                 </div>
                 <div className={style.relatedAnimals}>
                     <RelatedAnimals animal={animal} />

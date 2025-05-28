@@ -1,5 +1,11 @@
 @import 'styles';
 
+.bookmarksWrapper{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-1;
+}
+
 .card {
   position: relative;
   width: 300px;
@@ -24,12 +30,6 @@
       pointer-events: all;
     }
   }
-
-  // @media (max-width: 550px) {
-  //   width: 200px;
-  //   height: 250px;
-  //   padding: $spacing-2;
-  // }
 }
 
 .content {

@@ -1,8 +1,9 @@
 @import 'styles';
 
 .container {
+  display: flex;
   @include element-flex(column, flex-start, stretch);
-  gap: $spacing-7;
+  gap: $spacing-4;
   width: 100%;
 }
 
@@ -11,15 +12,31 @@
   gap: $spacing-4;
 }
 
+// .filters {
+//   visibility: hidden;
+//   pointer-events: none;
+//   overflow: hidden;
+//   transition: $transition-main;
+
+//   &.show {
+//     display: block;
+//     overflow: visible;
+//     visibility: visible;
+//     pointer-events: all;
+//   }
+// }
+
 .filters {
-  max-height: 0;
+  max-height: 0rem;
   visibility: hidden;
   pointer-events: none;
   overflow: hidden;
+  pointer-events: none;
   transition: $transition-main;
 
   &.show {
-    max-height: 100rem;
+    // max-height: 100rem;
+    max-height: 300rem;
     overflow: visible;
     visibility: visible;
     pointer-events: all;
@@ -30,6 +47,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: $spacing-4;
+
+  margin-bottom: 20px;
 }
 
 
@@ -50,3 +69,21 @@
     align-items: center;
   }
 }
+
+@media (max-width: 570px) {
+  .filters.show {
+    margin-bottom: $spacing-6; // give enough breathing room
+  }
+
+  .list {
+    margin-top: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%; // responsive cards
+    max-width: 100%;
+  }
+}
+
