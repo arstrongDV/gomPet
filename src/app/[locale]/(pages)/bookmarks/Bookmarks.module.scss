@@ -1,9 +1,29 @@
 @import 'styles';
 
 .bookmarksWrapper{
+    flex: 1; 
+    // grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: $spacing-1;
+    gap: $spacing-4;
+    margin: 20px 0;
+    transition: $transition-main;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+  
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-3;
+    }
+  
+    @media (max-width: 360px) {
+      grid-template-columns: 1fr;
+      justify-items: center; // <- też tu
+      gap: $spacing-2;
+    }
 }
 
 .card {
@@ -90,7 +110,7 @@
 
   &.age {
     color: $color-foreground;
-    background-color: rgba($color: #e37500, $alpha: 0.8);
+    background-color: rgba($color: #B1D800, $alpha: 0.8);
     font-weight: $font-medium;
   }
 

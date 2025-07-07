@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
@@ -28,6 +28,10 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
 
   const [showMenu, setShowMenu] = useState(false);
   const toggleMenu = () => setShowMenu(prev => !prev);
+
+  useEffect(() => {
+    document.body.style.overflow = showMenu ? 'hidden' : '';
+  }, [showMenu]);
 
 
   const classes = classNames({
@@ -84,12 +88,15 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
       >
         {isMobile ? mobileContent : desktopContent}
       </header>
+      {showMenu && (
+        <div className={style.backdrop} onClick={() => setShowMenu(false)} />
+      )}
       <div className={classNames(style.mobileMenu, {
-  [style.active]: showMenu,
-  [style.inactive]: !showMenu,
-})}>
-  {isMobile && showMenu && <MobileMenu setShowMenu={setShowMenu} />}
-</div>
+        [style.active]: showMenu,
+        [style.inactive]: !showMenu,
+      })}>
+          {isMobile && showMenu && <MobileMenu setShowMenu={setShowMenu} />}
+      </div>
     </>
   );
 };

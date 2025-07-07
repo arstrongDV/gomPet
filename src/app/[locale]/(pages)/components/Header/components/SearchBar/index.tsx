@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { Routes } from 'src/constants/routes';
+import Image from 'next/image';
 
 const SearchBar = () => {
   const [searchValues, setSearchValues] = useState("");
@@ -39,7 +40,7 @@ const SearchBar = () => {
             searched.map((item) => (
               <Link href={Routes.ORGANIZATION_PROFILE(item.id)}>
                 <li className={style.searchItem} key={item.id} onClick={() => {setIsActive(false); setSearchValues('')}}>
-                  {item.name}
+                  <Image src={item.image || ''} alt='oraganization-image' width={40} height={40} /> <p>{item.name}</p>
                 </li>
               </Link>
             ))

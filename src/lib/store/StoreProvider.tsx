@@ -26,11 +26,13 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
     const unsubscribe = store.subscribe(() => {
       const state = store.getState();
       const bookmarks = state.bookmarks.favorites;
+      const posts = state.posts.posts
   
       try {
         localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+        localStorage.setItem('posts', JSON.stringify(posts));
       } catch (err) {
-        console.error('Failed to save bookmarks to localStorage', err);
+        console.error('Failed to save localStorage', err);
       }
     });
   
@@ -59,9 +61,13 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
       const sessionToken = session.data?.access_token;
 
       const bookmarks = state.bookmarks.favorites;
+      const posts = state.posts.posts
 
       session.update({ bookmarks }).catch((err) => {
         console.error('Failed to update session bookmarks:', err);
+      });
+      session.update({ posts }).catch((err) => {
+        console.error('Failed to update session posts:', err);
       });
 
       if (storeToken && storeToken !== sessionToken) {

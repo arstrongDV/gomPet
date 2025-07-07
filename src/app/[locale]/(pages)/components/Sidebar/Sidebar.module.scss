@@ -18,6 +18,8 @@
   transition: transform $transition-smooth-end background-color $transition-smooth-end, color $transition-smooth-end;
   z-index: 3;
 
+  align-items: center; 
+
   @include mobileWidth {
     display: none;
   }

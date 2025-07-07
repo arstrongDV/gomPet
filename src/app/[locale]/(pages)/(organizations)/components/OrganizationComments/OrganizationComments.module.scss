@@ -18,3 +18,17 @@
   @include body2;
   color: $color-foreground-dim;
 }
+
+@media(max-width: 480px){
+  .container{
+    gap: $spacing-2;
+  }
+  .comments {
+    @include element-flex(column, flex-start, stretch);
+    gap: $spacing-2;
+  }
+
+  .title {
+    font-size: $font-size-s;
+  }
+}

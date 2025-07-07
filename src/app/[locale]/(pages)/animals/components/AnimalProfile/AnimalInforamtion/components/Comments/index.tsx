@@ -2,9 +2,10 @@ import React from 'react'
 import style from './Comments.module.scss';
 import Image from 'next/image';
 import { IAnimal, IComment } from 'src/constants/types';
-import AVATAR from '../../../images/avatar.png'
 import { StarRating } from 'src/components';
 import dayjs from 'dayjs';
+import { Comment } from 'components';
+import AVATAR from '../../../../../../../../../assets/gompet.png'
 
 type AnimalProfileProps = {
     animal: IAnimal & {
@@ -51,6 +52,7 @@ const Comments = ({ animal }: AnimalProfileProps) => {
                     </div>
                 </div>
             </div>
+            // <Comment key={item.id} comment={item} />
         ))}
     </div>
   )

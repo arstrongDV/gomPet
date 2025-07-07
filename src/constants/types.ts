@@ -1,3 +1,4 @@
+import { IComment } from './types';
 export enum Role {
   ADMIN = 'admin',
   USER = 'user',
@@ -144,7 +145,8 @@ export interface IPost {
   author: IUser | IOrganization;
   created_at: string;
   updated_at?: string;
-  comments: Omit<IComment, 'rating'>[];
+  // comments: Omit<IComment, 'rating'>[];
+  comments: IComment[];
   reactions: {
     author: IUser | IOrganization;
     author_type: 'user' | 'organization';

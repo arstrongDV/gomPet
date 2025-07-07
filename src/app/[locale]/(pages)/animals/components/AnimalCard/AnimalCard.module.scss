@@ -2,13 +2,14 @@
 
 .card {
   position: relative;
-  width: 300px;
+  flex: 0 0 300px; 
+  max-width: 300px;
   height: 350px;
   border-radius: $radius-m;
   padding: $spacing-4;
-  transition: 'background' $transition-main;
   background-size: cover;
   background-position: center;
+  transition: background $transition-main; 
 
   &:hover {
     .gradient {
@@ -25,12 +26,18 @@
     }
   }
 
+  @media (max-width: 48px) {
+    flex: 0 0 140px;
+    height: 180px;
+    padding: $spacing-3;
+  }
+}
+
   // @media (max-width: 550px) {
   //   width: 200px;
   //   height: 250px;
   //   padding: $spacing-2;
   // }
-}
 
 .content {
   z-index: 0;
@@ -90,7 +97,7 @@
 
   &.age {
     color: $color-foreground;
-    background-color: rgba($color: #e37500, $alpha: 0.8);
+    background-color: rgba($color: #B1D800, $alpha: 0.8);
     font-weight: $font-medium;
   }
 
@@ -114,6 +121,18 @@
   &.ageText {
     color: $color-white;
     background-color: rgba($color: #4e4e4e, $alpha: 0.8);
+  }
+
+  @media (max-width: 768px) {
+    padding: $spacing-1 $spacing-2;
+    min-width: 2rem;
+    font-size: $font-size-xs;
+  }
+
+  @media (max-width: 480px) {
+    padding: $spacing-1 $spacing-2;
+    min-width: 3rem;
+    font-size: $font-size-s;
   }
 }
 

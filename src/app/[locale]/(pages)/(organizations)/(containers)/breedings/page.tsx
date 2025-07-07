@@ -99,32 +99,34 @@ const SheltersPage = () => {
 
       <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} needFullFilters={true} />
 
-        <div id='map'>
-          <OrganizationOnMap
-            organizations={organizations}
-            className={classNames(style.map, { [style.show]: showMap })}
+      <div id='map'>
+          <div className={style.content}>
+            <List
+              isLoading={isLoading}
+              className={style.list}
+            >
+              {organizations.map((organization) => (
+                <OrganizationCard
+                  key={organization.id}
+                  organization={organization}
+                />
+              ))}
+            </List>
+
+            <OrganizationOnMap
+              organizations={organizations}
+              className={classNames(style.map, { [style.show]: showMap })}
+            />
+          </div>
+
+          <Pagination
+            className={style.pagination}
+            totalCount={total}
+            pageSize={paginationConfig.animals}
+            currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+            onPageChange={changePage}
           />
         </div>
-
-      <List
-        isLoading={isLoading}
-        className={style.list}
-      >
-        {organizations.map((organization) => (
-          <OrganizationCard
-            key={organization.id}
-            organization={organization}
-          />
-        ))}
-      </List>
-
-      <Pagination
-        className={style.pagination}
-        totalCount={total}
-        pageSize={paginationConfig.animals}
-        currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
-        onPageChange={changePage}
-      />
     </div>
   );
 };

@@ -10,15 +10,15 @@
   --color-background-3: #f7f7f7;
   --color-background-4: #f0f0f0;
 
-  --color-primary: #277d23;
-  --color-primary-hover: #0d9706;
-  --color-primary-active: #0ea306;
+  --color-primary: #B1D800;
+  --color-primary-hover: #86a307;
+  --color-primary-active: #86a307;
   --color-primary-disabled: #95d492;
 
-  --color-accent: #e37500;
-  --color-accent-hover: #ff8c00;
-  --color-accent-active: #ff9d00;
-  --color-accent-disabled: #ffbd7d;
+  --color-accent: #0EA306;
+  --color-accent-hover: #0d9706;
+  --color-accent-active: #19ba11;
+  --color-accent-disabled: #95d492;
 
   --color-secondary: #9c27b0;
   --color-secondary-dark: #7b1fa2;

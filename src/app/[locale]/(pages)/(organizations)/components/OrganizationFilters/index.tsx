@@ -13,6 +13,7 @@ import { useRouter } from 'src/navigation';
 import { toSelectOption } from 'src/utils/helpers';
 
 import style from './OrganizationFilters.module.scss';
+import { InputProps } from 'src/components/layout/Forms/Input';
 
 type OrganizationFiltersProps = {
   className?: string;
@@ -38,6 +39,7 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
   };
 
   const handleFilter = (filter: string, value: string, isArr = false) => {
+    // const params = new URLSearchParams(searchParams.toString());
     params.set(Params.PAGE, '1');
 
     if (isArr) {
@@ -68,6 +70,9 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
     router.push('?page=1');
   }, [params]);
 
+  const [locationInput, setLocationInput] = useState(searchParams.get(Params.LOCATION) ?? '')
+  const [rangeInput, setRangeInput] = useState(searchParams.get(Params.RANGE) ?? '')
+
   return (
     <div className={classNames(style.filters, className)}>
       <div className={style.row}>
@@ -87,10 +92,22 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
           <Input
             label={t('pages.organizations.filters.location')}
             placeholder={t('pages.organizations.filters.locationPlaceholder')}
+            value={locationInput}
+            onChange={(e) => setLocationInput(e.target.value)}
+            onBlur={() => {if(locationInput !== '') handleFilter(Params.LOCATION, locationInput)}}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && locationInput !== '') handleFilter(Params.LOCATION, locationInput);
+            }}
           />
           <Input
             label={`${t('pages.organizations.filters.range')} (km)`}
             placeholder={t('pages.organizations.filters.rangePlaceholder')}
+            value={rangeInput}
+            onChange={(e) => setRangeInput(e.target.value)}
+            onBlur={() => {if(rangeInput !== '') handleFilter(Params.RANGE, rangeInput)}}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && rangeInput !== '') handleFilter(Params.RANGE, rangeInput);
+            }}
           />
           <Select
             label={t('pages.organizations.filters.breedSpecies')}
@@ -110,14 +127,26 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
         </div>
       ) : (
         <div className={style.inputs}>
-        <Input
-          label={t('pages.organizations.filters.location')}
-          placeholder={t('pages.organizations.filters.locationPlaceholder')}
-        />
-        <Input
-          label={`${t('pages.organizations.filters.range')} (km)`}
-          placeholder={t('pages.organizations.filters.rangePlaceholder')}
-        />
+          <Input
+            label={t('pages.organizations.filters.location')}
+            placeholder={t('pages.organizations.filters.locationPlaceholder')}
+            value={locationInput}
+            onChange={(e) => setLocationInput(e.target.value)}
+            onBlur={() => handleFilter(Params.LOCATION, locationInput)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleFilter(Params.LOCATION, locationInput);
+            }}
+          />
+          <Input
+            label={`${t('pages.organizations.filters.range')} (km)`}
+            placeholder={t('pages.organizations.filters.rangePlaceholder')}
+            value={rangeInput}
+            onChange={(e) => setRangeInput(e.target.value)}
+            onBlur={() => handleFilter(Params.RANGE, rangeInput)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleFilter(Params.RANGE, rangeInput);
+            }}
+          />
       </div>
       )}
 

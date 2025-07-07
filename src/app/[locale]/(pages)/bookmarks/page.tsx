@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import { Icon } from 'src/components';
 import { useTranslations } from 'next-intl';
 import { IconNames } from 'src/assets/icons';
+import { IAnimal } from 'src/constants/types';
 
 const genderIconNames: { [key: string]: IconNames } = {
   male: 'genderMale',
@@ -36,7 +37,7 @@ const Bookmarks = () => {
     }
   };
 
-  const toggleFavorite = (animal: any) => {
+  const toggleFavorite = (animal: IAnimal) => {
     const isFav = favorites.some((fav) => fav.id === animal.id);
     if (isFav) {
       dispatch(deleteItemFromFavorites(animal));
@@ -63,7 +64,7 @@ const Bookmarks = () => {
             style={cardStyles}
           >
             <div className={style.gradient}></div>
-            <div className={style.content} onClick={(e) => handleCardClick(e, animal.id)}>
+            <div className={style.content} onClick={(e) => handleCardClick(e, animal.id.toString())}>
               <div className={style.top}>
                 <div className={style.about}>
                   <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>

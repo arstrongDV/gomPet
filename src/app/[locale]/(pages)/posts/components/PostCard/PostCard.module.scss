@@ -32,6 +32,10 @@
     .name {
       @include body1;
       color: $color-foreground;
+
+      @media (max-width: 480px) {
+        font-size: $font-size-s;
+      }
     }
   }
 }
@@ -39,6 +43,10 @@
 .text {
   @include body1;
   color: $color-foreground;
+
+  @media (max-width: 480px) {
+    font-size: $font-size-xs;
+  }
 }
 
 .image {
@@ -72,4 +80,13 @@
   @media (max-width: 480px) {
     @include element-flex(column, center);
   }
+}
+
+
+.backdrop {
+  position: fixed;
+  inset: 0; // shorthand for top: 0; right: 0; bottom: 0; left: 0
+  background-color: rgba(0, 0, 0, 0.4); // or your theme color
+  z-index: 9; // should be below the comment card
+  backdrop-filter: blur(2px); // optional: blur for fancy look
 }

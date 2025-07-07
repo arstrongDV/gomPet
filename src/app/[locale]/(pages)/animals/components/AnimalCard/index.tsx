@@ -26,8 +26,8 @@ type AnimalCardProps = {
 
 const AnimalCard = ({ className, animal }: AnimalCardProps) => {
 
-  const dispatch = useAppDispatch();///////////////
-
+  const dispatch = useAppDispatch();//////////////
+  
   // const {favorites, isFavorites} = useAppSelector((state) => state.bookmarks);
   const favorites = useAppSelector((state) => state.bookmarks.favorites);
   const isFavorite = favorites.some((fav) => fav.id === animal.id);

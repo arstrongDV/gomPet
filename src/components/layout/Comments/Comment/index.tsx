@@ -34,7 +34,7 @@ const Comment = ({ className, comment }: CommentProps) => {
 
       <div className={style.header}>
         <div className={style.info}>
-          <span className={style.name}>{author?.name || '-'}</span>
+          <span className={style.name}>{author?.first_name || '-'}</span> 
           <span className={style.date}>{date}</span>
         </div>
         {rating && (

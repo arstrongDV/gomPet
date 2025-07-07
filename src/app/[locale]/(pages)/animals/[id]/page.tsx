@@ -15,7 +15,6 @@ const getCommentData = (id: number): IComment | undefined => {
   return commentsMock.find(com => com.id === id);
 };
 
-
 // const getPostsData = (animalId: number): IPost[] => {
 //   return postsMock.filter(post => post.author.id === animalId);
 // };
@@ -32,8 +31,6 @@ export const generateMetadata = ({ params: { id } }: { params: { id: string } })
     },
   };
 };
-
-
 
 const AnimalDetailPage = ({ params }: { params: { id: string } }) => {
   const animal = getAnimalData(Number(params.id));

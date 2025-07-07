@@ -22,6 +22,9 @@
   display: none;
 
   .searchItem {
+    display: flex;
+    flex-direction: row;
+    gap: 0.8rem;
     width: 100%;
     margin: 5px;
     padding: 10px;

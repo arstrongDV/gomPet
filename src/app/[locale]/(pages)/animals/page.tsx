@@ -86,7 +86,7 @@ const AnimalsPage = () => {
           id='button'
           label={showFilters ? t('hideFilters') : t('showFilters')}
           onClick={() => setShowFilters((prev) => !prev)}
-          empty={!showFilters}
+          empty={showFilters}
           icon='filter'
         />
         <Button
@@ -101,31 +101,34 @@ const AnimalsPage = () => {
       <AnimalFilters className={classNames(style.filters, { [style.show]: showFilters })} />
 
         <div id='map'>
-          <OrganizationOnMap
-            organizations={organizations}
-            className={classNames(style.map, { [style.show]: showMap })}
-          />
+          <div className={style.content}>
+            <List
+                isLoading={isLoading}
+                className={classNames(style.list, {
+                  [style.fullWidthList]: !showMap
+                })}
+              >
+                {animals.map((animal) => (
+                  <AnimalCard key={animal.id} animal={animal} />
+                ))}
+            </List>
 
-      <List
-        isLoading={isLoading}
-        className={style.list}
-      >
-        {animals.map((animal) => (
-          <AnimalCard
-            key={animal.id}
-            animal={animal}
-          />
-        ))}
-      </List>
+            <OrganizationOnMap
+                organizations={organizations}
+                className={classNames(style.map, {
+                  [style.show]: showMap
+                })}
+              />
+          </div>
 
-      <Pagination
-        className={style.pagination}
-        totalCount={total}
-        pageSize={paginationConfig.animals}
-        currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
-        onPageChange={changePage}
-      />
-    </div>
+          <Pagination
+            className={style.pagination}
+            totalCount={total}
+            pageSize={paginationConfig.animals}
+            currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+            onPageChange={changePage}
+          />
+        </div> 
     </div>
   );
 };

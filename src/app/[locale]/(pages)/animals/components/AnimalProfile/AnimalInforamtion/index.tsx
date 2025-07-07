@@ -8,14 +8,8 @@ import dayjs from 'dayjs';
 
 import style from './AnimalProfile.module.scss';
 
-import ICON_FUNDATION from '../images/fundationIcon.png'
-import IMAGE_ANIMALS_HELP from '../images/AnimalsHelp.png'
-import LOCATION_IMAGE from '../images/Location.png'
-import PHONE_IMAGE from '../images/phone.png'
-import PAW_IMAGE from '../images/paw.png'
-
 import { FamilyTreeWrapper } from './components/FamilyTree/FamilyTreeWrapper';
-import { Button, StarRating } from 'src/components';
+import { Button, Icon, OrganizationTypeName, StarRating } from 'src/components';
 import RelatedAnimals from './components/RelatedAnimals';
 import AnimalPhotos from './components/AnimalPhotos';
 import Comments from './components/Comments';
@@ -56,10 +50,10 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                     <div className={style.contactsBlock}>
                         <div className={style.mainInfo}>
                             <div className={style.logoFundation}>
-                                <Image src={ICON_FUNDATION} alt='fundation-image' width={24} /> <p className={style.fundation}>Fundacja</p>
+                            <OrganizationTypeName type={animal.owner.type} />
                             </div>
                             <div className={style.logoHelp}>
-                                <Image src={IMAGE_ANIMALS_HELP} alt='animals-help-image' width={90} height={40} />
+                                <Image src={animal.owner.image} alt='animals-help-image' width={90} height={40} />
                             </div>
                             <p>Ratujemy zwierzaki</p>
                         </div>
@@ -71,7 +65,7 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                                 />
                             </div>
                         <div className={style.location}>
-                            <Image src={LOCATION_IMAGE} alt='location-image' /> <p style={{color: '#000'}}>{animal.owner.address.city}</p>
+                            <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.owner.address.city}</p>
                         </div>
                         <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
                         {/* <a href='tel:+48213713370' className={style.phoneNumButton}> */}
@@ -86,6 +80,7 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                             icon='phone'
                             label={'Zadzwoń i zapytaj'}
                             hrefOutside='tel:+48213713370'
+                            empty={true}
                         />
 
                         </div>
@@ -94,7 +89,7 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                         {animal.characteristicBoard.map(c => (
                         <div className={style.AnimalCharacter} key={c.title}>
                             <div className={style.caracteristicImage}>
-                                {c.bool ? <Image src={PAW_IMAGE} alt='paw-image' width={20} /> : <></>}
+                                {c.bool ? <Icon name={"pawFilled"} /> : <></>}
                             </div> 
                             <p className={style.caracteristicTitle}>{c.title}</p>
                         </div>

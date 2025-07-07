@@ -1,3 +1,33 @@
+// .map {
+//   position: fixed;
+//   width: 85vw; 
+//   height: 70vh;
+//   left: 50%;
+//   top: 40%;
+//   transform: translate(-50%, -50%);
+//   padding: 2rem;
+//   background-color: #ffffff;
+//   border-radius: 1.6rem;
+//   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+//   z-index: 100;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   transition: opacity 0.3s ease, transform 0.3s ease;
+//   opacity: 1;
+// }
+
+.map {
+  width: 490px; 
+  height: 780px;
+  padding: 2rem;
+  z-index: 100;
+  flex-direction: row;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 1;
+}
+
+@media (max-width: 1224px) {
 .map {
   position: fixed;
   width: 85vw; 
@@ -15,6 +45,7 @@
   align-items: center;
   transition: opacity 0.3s ease, transform 0.3s ease;
   opacity: 1;
+}
 }
 
 @media (max-width: 768px) {

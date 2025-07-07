@@ -6,7 +6,7 @@ import { List } from 'src/components';
 import { IPost } from 'src/constants/types';
 import { postsMock } from 'src/mocks/posts';
 
-import PostCard from './components/PostCard';
+import PostCard from 'src/app/[locale]/(pages)/posts/components/PostCard';
 
 import style from './PostsPage.module.scss';
 

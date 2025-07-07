@@ -91,3 +91,35 @@
     color: $color-foreground;
   }
 }
+
+@media (max-width: 480px) {
+  .container {
+    gap: $spacing-4;
+    max-width: 90%; 
+  }
+
+  .contact {
+    gap: $spacing-1;
+
+    .location .icon {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
+  .logo {
+    height: 6rem; // zmniejsz logo
+  }
+
+  .name {
+    font-size: 2rem; // lub użyj np. @include title4
+  }
+
+  .location .text {
+    font-size: 1.7rem;
+  }
+
+  .row {
+    gap: $spacing-4;
+  }
+} 

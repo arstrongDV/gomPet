@@ -6,6 +6,19 @@
   width: 100%;
 }
 
+.content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 1rem;
+
+  flex-wrap: wrap;
+}
+
+.fullWidthList {
+  width: 100%;
+}
+
 .buttons {
   @include element-flex(row, space-between, center);
   gap: $spacing-4;
@@ -26,26 +39,32 @@
   }
 }
 
-.map {
-  max-height: 0;
-  position: absolute;
-  visibility: hidden;
-  pointer-events: none;
-  overflow: hidden;
-
-  &.show {
-    margin-top: 100px;
-    max-height: 100rem;
-    overflow: visible;
-    visibility: visible;
-    pointer-events: all;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
 .list {
+  flex: 1; 
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: $spacing-4;
+  transition: $transition-main;
+  margin: 20px 0;
 }
+
+.map {
+  width: 40%;
+  min-width: 300px;
+  transition: $transition-main;
+
+  &.show {
+    visibility: visible;
+    pointer-events: all;
+    overflow: visible;
+  }
+}
+
+.map:not(.show) {
+  display: none;
+}
+// .list {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+//   gap: $spacing-4;
+// }

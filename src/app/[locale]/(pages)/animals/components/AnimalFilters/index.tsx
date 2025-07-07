@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -62,6 +62,10 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
     router.push('?page=1');
   }, [params]);
 
+  const [location, setLocation] = useState(searchParams.get(Params.LOCATION) ?? '');
+  const [range, setRange] = useState(searchParams.get(Params.RANGE) ?? '');
+  const [name, setName] = useState(searchParams.get(Params.NAME) ?? '');
+
   return (
     <div className={classNames(style.filters, className)}>
       <div className={style.row}>
@@ -80,14 +84,32 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         <Input
           label={t('pages.animals.filters.location')}
           placeholder={t('pages.animals.filters.locationPlaceholder')}
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          onBlur={() => {if(location !== '') handleFilter(Params.LOCATION, location)}}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && location !== '') handleFilter(Params.LOCATION, location);
+          }}
         />
         <Input
           label={`${t('pages.animals.filters.range')} (km)`}
           placeholder={t('pages.animals.filters.rangePlaceholder')}
+          value={range}
+          onChange={(e) => setRange(e.target.value)}
+          onBlur={() => {if(range !== '') handleFilter(Params.RANGE, range)}}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && range !== '') handleFilter(Params.RANGE, range);
+          }}
         />
         <Input
           label={t('pages.animals.filters.name')}
           placeholder={t('pages.animals.filters.namePlaceholder')}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onBlur={() => {if(name !== '') handleFilter(Params.NAME, name)}}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && name !== '') handleFilter(Params.NAME, name);
+          }}
         />
         <Select
           label={t('pages.animals.filters.gender')}
