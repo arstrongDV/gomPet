@@ -11,6 +11,7 @@ import { organizationsMock } from 'src/mocks/organizations';
 import OrganizationCard from '../../../(organizations)/components/OrganizationCard';
 
 import style from './OrganizationsScroll.module.scss';
+import { OrganizationsApi } from 'src/api';
 
 const OrganizationsScroll = () => {
   const t = useTranslations('pages.landing');
@@ -18,11 +19,13 @@ const OrganizationsScroll = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [organizations, setOrganizations] = useState<IOrganization[]>([]);
 
-  const getAnimals = async () => {
+  const fetchOrganizations = async () => {
     setIsLoading(true);
     try {
-      setOrganizations(organizationsMock);
-    } catch (error) {
+      const response = await OrganizationsApi.getLatestOrganizations(5);
+      const organizationData = response.data?.results || response.data || [];
+      setOrganizations(organizationData);
+    } catch (err) {
       setOrganizations([]);
     } finally {
       setIsLoading(false);
@@ -30,8 +33,9 @@ const OrganizationsScroll = () => {
   };
 
   useEffect(() => {
-    getAnimals();
+    fetchOrganizations();
   }, []);
+
 
   return (
     <section className={style.container}>

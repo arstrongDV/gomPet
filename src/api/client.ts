@@ -20,7 +20,7 @@ export const injectToken = (_token?: string) => {
 };
 
 const client = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,   //NEXT_PUBLIC_API_BASE_URL
   headers: {
     'Content-Type': 'application/json',
     'Accept-Language': 'en'
@@ -55,8 +55,16 @@ client.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry && error.response.data.code === 'token_not_valid') {
-      originalRequest._retry = true;
+    
+    if (!error.response) {
+      console.error('Network error:', error);
+      return Promise.reject(error);
+    }
+
+    if (error.response.status === 401 && 
+      !originalRequest._retry && 
+      error.response.data?.code === 'token_not_valid') {
+    originalRequest._retry = true;
 
       const refreshToken = store.getState().auth.refresh_token || null;
       if (!refreshToken) return;

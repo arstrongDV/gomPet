@@ -39,25 +39,26 @@ const Avatar = (props: AvatarProps) => {
 
   const getAvatar = () => {
     if (src) return;
-
+  
     let text = '?';
-
-    const profileSrc = profile?.image || null;
-    if (profileSrc) {
-      setImage(profileSrc);
+  
+    // Fallback if profile or email is undefined
+    const email = profile?.email;
+    if (!email) {
+      const avatar = generateAvatar(text, '#FFFFFF', '#2A85FF');
+      setImage(avatar);
       return;
     }
-
-    const name = profile?.email;
-    text = generateInitials(name || '');
-
-    const index = (text.charCodeAt(0) * 2 + text.charCodeAt(1) * 3) % avatarBackgrounds.length;
+  
+    text = generateInitials(email);
+    console.log("Generating avatar for email:", email);
+  
+    const index = (text.charCodeAt(0) * 2) % avatarBackgrounds.length;
     const background = avatarBackgrounds[index];
-
+  
     const avatar = generateAvatar(text, '#FFFFFF', background);
     setImage(avatar);
   };
-
   useEffect(() => {
     if (!src || !image) getAvatar();
   }, [src, profile]);

@@ -38,7 +38,7 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                 <div className={style.blocksContainer}>
                     <div className={style.aboutAnimalBlock}>
                         <p>Imię: <span style={{color: '#000'}}>{animal.name}</span></p>
-                        <p>Miasto: <span style={{color: '#000'}}>{animal.owner.address.city}</span></p>
+                        <p>Miasto: <span style={{color: '#000'}}>{animal.city}</span></p>
                         <p>Gatunek: <span style={{color: '#000'}}>{animal.species}</span></p>
                         <p>Pleć: <span style={{color: '#000'}}>{animal.gender}</span></p>
                         <p>Wiek: <span style={{color: '#000'}}>{animal.age}</span></p>
@@ -65,7 +65,7 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                                 />
                             </div>
                         <div className={style.location}>
-                            <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.owner.address.city}</p>
+                            <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.city}</p>
                         </div>
                         <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
                         {/* <a href='tel:+48213713370' className={style.phoneNumButton}> */}
@@ -86,10 +86,10 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                         </div>
                     </div>
                     <div className={style.characteristicsBlock}>
-                        {animal.characteristicBoard.map(c => (
+                    {animal.characteristicBoard?.map(c => (
                         <div className={style.AnimalCharacter} key={c.title}>
                             <div className={style.caracteristicImage}>
-                                {c.bool ? <Icon name={"pawFilled"} /> : <></>}
+                            {c.bool ? <Icon name={"pawFilled"} /> : null}
                             </div> 
                             <p className={style.caracteristicTitle}>{c.title}</p>
                         </div>
@@ -110,30 +110,6 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
 
                 </div>
                 <div className={style.infoTextBlock}>
-                    {/* <p>
-                        Lobo to około 2-3 letni samiec w typie amstaffa, który był towarzyszem Flory oraz ojcem ich potomstwa. 
-                        Lobo to około 2-3 letni samiec w typie amstaffa który był towarzyszem Flory oraz ojcem ich potomstwa. Jego stan jest nieco lepszy niż suczki, ale tylko nie wiele.
-                    </p>
-                    <p>
-                    Podobnie jak Flora będzie wymagał sporo zaangażowania od nowego opiekuna włożonego w naukę życia obok człowieka. Lobo to pies z bardzo fajnym charakterem, widać że brakowało mu człowieka i że bardzo chce nadrobić te straty. Nie ma najmniejszego problemu w poznawaniu nowych ludzi, jest łasy na uwagę i pieszczoty. Czasami w emocjach zdaży mu się podgryzać lub łapać zębami za smycz, ale skorygowany szybko odpuszcza i potrafi ostudzić emocje. Ma duży potencjał szkoleniowy i nie mniejszy sportowy. Polecamy Lobo dla osób aktywnych, nastawionych na prace z psem.
-                    </p>
-                    <p>
-                    Jeżeli uważasz że Lobo to psiak na którego właśnie czekałeś, koniecznie wypełnij ankietę adopcyjną na stronie https://amstaffyniczyje.pl
-                    </p>
-                    <p>
-                    W przypadku dodatkowych pytań zapraszamy również do kontaktu telefonicznego po 
-                    godzinie 16(uszanuj to pracujemy zawodowo) AGA 503305077 lub ADAM 661 037 223Lobo to około 2-3 
-                    letni samiec w typie amstaffa który był towarzyszem Flory oraz ojcem ich potomstwa. Jego stan jest '
-                    nieco lepszy niż suczki, ale tylko nie wiele. Podobnie jak Flora będzie wymagał sporo zaangażowania 
-                    od nowego opiekuna włożonego w naukę życia obok człowieka. Lobo to pies z bardzo fajnym charakterem, 
-                    widać że brakowało mu człowieka i że bardzo chce nadrobić te straty. Nie ma najmniejszego problemu w 
-                    poznawaniu nowych ludzi, jest łasy na uwagę i pieszczoty. Czasami w emocjach zdaży mu się podgryzać 
-                    lub łapać zębami za smycz, ale skorygowany szybko odpuszcza i potrafi ostudzić emocje. Ma duży potencjał 
-                    szkoleniowy i nie mniejszy sportowy. Polecamy Lobo dla osób aktywnych, nastawionych na prace z psem. 
-                    Jeżeli uważasz że Lobo to psiak na którego właśnie czekałeś, koniecznie wypełnij ankietę adopcyjną na 
-                    stronie https://amstaffyniczyje.pl W przypadku dodatkowych pytań zapraszamy również do kontaktu telefonicznego 
-                    po godzinie 16(uszanuj to pracujemy zawodowo) AGA 503305077 lub ADAM 661 037 223
-                    </p> */}
                     <AnimalDescription text="W przypadku dodatkowych pytań zapraszamy również do kontaktu telefonicznego po 
                     godzinie 16(uszanuj to pracujemy zawodowo) AGA 503305077 lub ADAM 661 037 223Lobo to około 2-3 
                     letni samiec w typie amstaffa który był towarzyszem Flory oraz ojcem ich potomstwa. Jego stan jest '

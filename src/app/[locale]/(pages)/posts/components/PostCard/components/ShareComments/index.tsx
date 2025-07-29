@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
-import { Card, Divider, Icon, Input } from 'components';
+import { Button, Card, Divider, Icon, Input } from 'components';
 
 import style from './ShareComments.module.scss';
 import { usePathname, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 type ShareCommentsProps = {
     className?: string;
@@ -37,11 +38,11 @@ const ShareComments = ({className, commentId}: ShareCommentsProps) => {
     <Card className={`${style.container} ${className || ''}`}>
       <Input value={postUrl} readOnly title="Click the copy icon to copy" />
       <div className={style.copyingLink}> 
-        <div className={style.iconContainer} onClick={handleCopy}>
-            <Icon className={style.iconCopy} name='link'/>
-        </div>
-        <Icon className={style.icon} name='twitter' onClick={() => openShareLink(twitterShareUrl)} />
-        <Icon className={style.icon} name='whatsApp' onClick={() => openShareLink(whatsappShareUrl)} />
+        <Button icon="link" gray onClick={handleCopy} />
+        {/* <Button icon="twitter" gray onClick={() => openShareLink(twitterShareUrl)} />
+        <Button icon="whatsApp" gray onClick={() => openShareLink(whatsappShareUrl)} /> */}
+        <img src='./icons/twitter.svg' alt='twitter-icon' className={style.icon}  onClick={() => openShareLink(twitterShareUrl)} />
+        <img src='./icons/whatsapp.svg' alt='whatsapp-icon' className={style.icon} onClick={() => openShareLink(whatsappShareUrl)} />
       </div>
     </Card>
   )

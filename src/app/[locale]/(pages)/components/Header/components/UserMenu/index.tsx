@@ -26,7 +26,7 @@ const UserMenu = () => {
       roles: []
     }
   ];
-
+  console.log("Laaaa: ", session.data)
   return (
     <Dropdown
       icon={'chevronDown'}

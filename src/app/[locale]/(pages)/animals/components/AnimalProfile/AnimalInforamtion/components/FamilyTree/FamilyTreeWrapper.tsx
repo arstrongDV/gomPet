@@ -12,9 +12,13 @@ export const FamilyTreeWrapper = ({ animal }: { animal: any }) => {
           poniższego drzewa genealogicznego
         </p>
       </div>
-        {animal.famillyTree.map((parent) => (
-            <FamilyTreePyramid key={parent.id} node={parent} depth={0} />
-        ))}
+      {Array.isArray(animal.famillyTree) && animal.famillyTree.length > 0 ? (
+        animal.famillyTree.map((parent) => (
+          <FamilyTreePyramid key={parent.id} node={parent} depth={0} />
+        ))
+      ) : (
+        <p className={styles.noFamily}>Brak dostępnych danych o rodzinie</p>
+      )}
 
     </div>
   );

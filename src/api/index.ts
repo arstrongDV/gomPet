@@ -1,6 +1,7 @@
 import ApiClient from './client';
-import { AccountRoutes, AuthRoutes, OffersRoutes } from './routes';
+import { AccountRoutes, AnimalsRouts, AuthRoutes, OffersRoutes, OrganizationsRouts } from './routes';
 import { LoginPayload, RegisterPayload, ResetPasswordPayload, ResetPasswordRequestPayload } from './types';
+import { jwtDecode } from 'jwt-decode';
 
 export class AuthApi {
   static register(payload: RegisterPayload) {
@@ -16,7 +17,10 @@ export class AuthApi {
   }
 
   static getLoginUser(token: string) {
-    return ApiClient.get(AuthRoutes.GET_LOGIN_USER, undefined, {
+    const decoded = jwtDecode(token) as { user_id: number };
+    const { user_id } = decoded;
+    const url = AuthRoutes.GET_LOGIN_USER.replace('{id}', String(user_id));
+    return ApiClient.get(url, undefined, {
       __tokenRequired: false,
       headers: {
         Authorization: `Bearer ${token}`
@@ -66,5 +70,122 @@ export class OffersApi {
 
   static getCompany(id: number) {
     return ApiClient.get(OffersRoutes.COMPANY(id));
+  }
+}
+
+export class AnimalsApi {
+  static async getAnimalProfile(id: number){
+    return ApiClient.get(AnimalsRouts.ANIAML_PROFILE.replace('{id}', String(id)))
+  }
+
+  static async getAnimalsLatest(
+    limit: number = 5,
+    filters?: {
+      species?: string[];
+      organizationType?: string[];
+      characteristics?: string[];
+    }
+  ) {
+    const params = {
+      limit,
+      ...(filters?.species && { species: filters.species.join(',') }),
+      ...(filters?.organizationType && { 'organization-type': filters.organizationType.join(',') }),
+      ...(filters?.characteristics && { characteristics: filters.characteristics.join(',') })
+    };
+
+    try {
+      const response = await ApiClient.get(AnimalsRouts.ANIAML_LATEST, params, {
+        __tokenRequired: false
+      });
+
+      const data = response.data?.results || response.data || [];
+      return { 
+        success: true,
+        data: Array.isArray(data) ? data : [],
+        error: null
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: [],
+      };
+    }
+  }
+  static async getAnimalsFilter(filters?: {
+    limit?: number;
+    species?: string[];
+    organizationType?: string[];
+    organization_id?: number[];
+    name?: string[];
+    size?: string[];
+    gender?: string[];
+    age?: number[];
+    location?: string[];
+    range?: number[];
+    breed_groups?: string[];
+    characteristics?: string[];
+  }) {
+    const params: Record<string, any> = {
+      ...(filters?.limit && { limit: filters.limit }),
+      ...(filters?.species?.length && { species: filters.species.join(',') }),
+      ...(filters?.organizationType?.length && { 'organization-type': filters.organizationType.join(',') }),
+      ...(filters?.organization_id?.length && { 'organization-id': filters.organization_id.join(',') }),
+      ...(filters?.characteristics?.length && { characteristics: filters.characteristics.join(',') }),
+      ...(filters?.name?.length && { name: filters.name.join(',') }),
+      ...(filters?.size?.length && { size: filters.size.join(',') }),
+      ...(filters?.gender?.length && { gender: filters.gender.join(',') }),
+      ...(filters?.age?.length && { age: filters.age.join(',') }),
+      ...(filters?.location?.length && { location: filters.location.join(',') }),
+      ...(filters?.range?.length && { range: filters.range.join(',') }),
+      ...(filters?.breed_groups?.length && { breed_groups: filters.breed_groups.join(',') }),
+    };
+  
+    try {
+      const response = await ApiClient.get(AnimalsRouts.ANIAML_LATEST, params, {
+        __tokenRequired: false,
+      });
+  
+      const { results, count } = response.data;
+  
+      return {
+        success: true,
+        data: Array.isArray(results) ? results : [],
+        total: count || 0,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: [],
+        total: 0,
+        error,
+      };
+    }
+  }
+  
+}
+
+
+export class OrganizationsApi {
+  static async getLatestOrganizations(limit: number, filters?: {
+    organizationType?: string[];
+  }) {
+    const params = new URLSearchParams();
+
+    if (limit) params.append('limit', String(limit));
+    if (filters?.organizationType) {
+      params.append('organization-type', filters.organizationType.join(','));
+    }
+    
+    try {
+      const response = await ApiClient.get(OrganizationsRouts.ORGANIZATION_LATEST, { __tokenRequired: false });
+      
+      if (!response.data?.results?.length && !response.data?.length) {
+        return { data: [] };
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 }

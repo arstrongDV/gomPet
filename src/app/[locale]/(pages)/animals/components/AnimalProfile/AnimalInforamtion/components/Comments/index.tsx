@@ -24,36 +24,35 @@ const Comments = ({ animal }: AnimalProfileProps) => {
             <p>średnia ocen: 4.3 na 5</p>
         </div>
         {animal.comments.map((com, i) => (
-            <div key={i} className={style.comments}>
+            com.author ? (
+                <div key={i} className={style.comments}>
                 <div className={style.userComInfo}>
                     <Image 
-                        className={style.avatar} 
-                        src={com.author.image === null ? AVATAR : com.author.image} 
-                        alt='user-icon' 
-                        width={24}
-                        height={24} 
+                    className={style.avatar} 
+                    src={com.author.image ?? AVATAR} 
+                    alt='user-icon' 
+                    width={24}
+                    height={24} 
                     />
                     <div className={style.comContainer}>
-                        <div className={style.commentWrraper}>
-                            <div className={style.userNameData}>
-                                <h4>{com.author.first_name}</h4>
-                                <p>{formatDate(com.created_at)}</p>
-                            </div>
-                            <div className={style.recomendation}>
-                                <StarRating
-                                    rating={com.rating}
-                                    readonly
-                                />
-                            </div>
+                    <div className={style.commentWrraper}>
+                        <div className={style.userNameData}>
+                        <h4>{com.author.first_name}</h4>
+                        <p>{formatDate(com.created_at)}</p>
                         </div>
-                        <div className={style.userComment}>
-                                <p>{com.comment}</p>
+                        <div className={style.recomendation}>
+                        <StarRating rating={com.rating} readonly />
                         </div>
                     </div>
+                    <div className={style.userComment}>
+                        <p>{com.comment}</p>
+                    </div>
+                    </div>
                 </div>
-            </div>
-            // <Comment key={item.id} comment={item} />
-        ))}
+                </div>
+            ) : null  // jeśli brak autora – nie renderuj
+            ))}
+
     </div>
   )
 }

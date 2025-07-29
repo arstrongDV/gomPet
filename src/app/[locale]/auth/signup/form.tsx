@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useActionState } from 'react';
+import React, { useActionState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Button, Checkbox, Input, Loader } from 'src/components';
@@ -10,9 +10,13 @@ import { Link } from 'src/navigation';
 import { signup } from './actions';
 
 import style from './SignUp.module.scss';
+import { useRouter } from 'next/navigation';
+
 
 const SignUpForm = () => {
   const t = useTranslations();
+  const router = useRouter();
+
   const [state, action, isPending] = useActionState(signup, {
     message: '',
     errors: undefined,
@@ -25,6 +29,12 @@ const SignUpForm = () => {
       statute: false
     }
   });
+  
+  useEffect(() => {
+    if (state.message === 'success') {
+      router.push('/auth/login');
+    }
+  }, [state.message, router]);
 
   return (
     <form

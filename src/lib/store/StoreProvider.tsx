@@ -15,10 +15,24 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
 
   // Inicjalizacja store tylko raz
   if (!storeRef.current) {
+    // Create the store instance the first time this renders
     storeRef.current = makeStore();
+
+    // If the user is authenticated, set the auth state
+    if (session.status === 'authenticated') {
+      storeRef.current.dispatch(setAuth(session.data));
+    }
     injectStore(storeRef.current);
   }
 
+  useEffect(() => {
+    // If the user logs out, clear the auth state
+    if (storeRef.current && session.status === 'unauthenticated') {
+      storeRef.current.dispatch(clearAuth());
+    }
+  }, [session.status]);
+
+  
   useEffect(() => {
     const store = storeRef.current;
     if (!store) return;
@@ -40,15 +54,20 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
   }, []);
 
   // Ustawienie danych sesji do store
-  useEffect(() => {
-    if (!storeRef.current) return;
+  // useEffect(() => {
+  //   if (!storeRef.current) return;
+  
+  //   if (session.status === 'authenticated' && session.data) {
+  //     storeRef.current.dispatch(setAuth({
+  //       access_token: session.data.access_token,
+  //       refresh_token: session.data.refresh_token,
+  //       user: session.data.user
+  //     }));
+  //   } else if (session.status === 'unauthenticated') {
+  //     storeRef.current.dispatch(clearAuth());
+  //   }
+  // }, [session.status, session.data]);
 
-    if (session.status === 'authenticated' && session.data) {
-      storeRef.current.dispatch(setAuth(session.data));
-    } else if (session.status === 'unauthenticated') {
-      storeRef.current.dispatch(clearAuth());
-    }
-  }, [session.status, session.data]);
 
   // Subskrybuj zmiany tokena w store i aktualizuj sesję jeśli potrzeba
   useEffect(() => {

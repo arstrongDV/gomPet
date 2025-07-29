@@ -112,6 +112,7 @@ export interface IAnimal {
   age: number;
   birth_date: string | null;
   created_at: string;
+  city: string;
   owner: T<IUser | IOrganization>;
   parents: IAnimal[];
   status: AnimalStatus;

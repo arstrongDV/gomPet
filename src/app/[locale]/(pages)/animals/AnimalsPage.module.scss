@@ -90,7 +90,7 @@
   gap: $spacing-4;
   margin: 20px 0;
   transition: $transition-main;
-  justify-content: center;
+  // justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
 
   @media (max-width: 768px) {

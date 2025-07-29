@@ -6,23 +6,25 @@ import { useTranslations } from 'next-intl';
 import { HorizontalScroll, LabelLink, Loader } from 'src/components';
 import { Routes } from 'src/constants/routes';
 import { IAnimal } from 'src/constants/types';
-import { animalsMock } from 'src/mocks/animals';
 
 import AnimalCard from '../../../animals/components/AnimalCard';
 
 import style from './AnimalsScroll.module.scss';
+import { AnimalsApi } from 'src/api';
 
 const AnimalsScroll = () => {
   const t = useTranslations('pages.landing');
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
 
-  const getAnimals = async () => {
+  const fetchAnimals = async () => {
     setIsLoading(true);
     try {
-      setAnimals(animalsMock);
-    } catch (error) {
+      const response = await AnimalsApi.getAnimalsLatest(5, {});
+      const animalsData = response.data || [];
+      setAnimals(animalsData);
+    } catch (err) {
       setAnimals([]);
     } finally {
       setIsLoading(false);
@@ -30,8 +32,16 @@ const AnimalsScroll = () => {
   };
 
   useEffect(() => {
-    getAnimals();
+    fetchAnimals();
   }, []);
+
+  if (animals === null) {
+    return (
+      <section className={style.container}>
+        <Loader />
+      </section>
+    );
+  }
 
   return (
     <section className={style.container}>

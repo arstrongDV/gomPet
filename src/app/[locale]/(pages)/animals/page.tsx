@@ -20,6 +20,7 @@ import OrganizationOnMap from '../(organizations)/components/OrganizationOnMap';
 import { IOrganization } from 'src/constants/types';
 import { organizationsMock } from 'src/mocks/organizations';
 import { useAppSelector } from 'src/lib/store/hooks';
+import { AnimalsApi } from 'src/api';
 
 const AnimalsPage = () => {
   const t = useTranslations('pages.animals');
@@ -42,21 +43,41 @@ const AnimalsPage = () => {
     router.push(`?${params.toString()}`);
   };
 
-  const getAnimals = async () => {
+  const getAnimals = React.useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
-      setAnimals(animalsMock);
-      setTotal(120);
+      const response = await AnimalsApi.getAnimalsFilter(filters);
+      console.log('API Response:', response); // Debug logging
+      setAnimals(response.data || []);
+      setTotal(response.total || 0);
     } catch (error) {
+      console.error('Error fetching animals:', error);
       setAnimals([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+  
+  useEffect(() => {
+    const filters = {
+      species: searchParams.getAll('species'),
+      organizationType: searchParams.getAll('organization-type'),
+      characteristics: searchParams.getAll('characteristics'),
+      gender: searchParams.getAll('gender'),
+      size: searchParams.getAll('size'),
+      name: searchParams.getAll('name'),
+      location: searchParams.getAll('location'),
+      age: searchParams.getAll('age').map(Number),
+      range: searchParams.getAll('range').map(Number),
+      organization_id: searchParams.getAll('organization-id').map(Number),
+      breed_groups: searchParams.getAll('breed-groups')
+    };
+    getAnimals(filters);
+  }, [searchParams, getAnimals]);
 
   useEffect(() => {
     setOrganizations(organizationsMock);
-    getAnimals();
   }, []);
 
   useEffect(() => {

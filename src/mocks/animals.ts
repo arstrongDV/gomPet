@@ -21,6 +21,7 @@ export const animalsMock: IAnimal[] = [
     status: AnimalStatus.AVAILABLE,
     characteristics: ['acceptsDogs'],
 
+    city: "Uman",
     // new Mocks
     price: 2100,
     location: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.8018508000296!2d21.01178047685647!3d52.22967547975814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc669b2e4b15%3A0x6d1c63c9c8f9f2a3!2sWarszawa!5e0!3m2!1spl!2spl!4v1683300000000!5m2!1spl!2spl",
@@ -114,7 +115,7 @@ export const animalsMock: IAnimal[] = [
     parents: [],
     status: AnimalStatus.AVAILABLE,
     characteristics: ['acceptsDogs'],
-
+    city: "Uman",
     // new Mocks
     price: 500,
     location: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.8018508000296!2d21.01178047685647!3d52.22967547975814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc669b2e4b15%3A0x6d1c63c9c8f9f2a3!2sWarszawa!5e0!3m2!1spl!2spl!4v1683300000000!5m2!1spl!2spl",
@@ -208,7 +209,7 @@ export const animalsMock: IAnimal[] = [
     parents: [],
     status: AnimalStatus.AVAILABLE,
     characteristics: ['acceptsDogs'],
-
+    city: "Uman",
     // new Mocks
     price: 800,
     location: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.8018508000296!2d21.01178047685647!3d52.22967547975814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc669b2e4b15%3A0x6d1c63c9c8f9f2a3!2sWarszawa!5e0!3m2!1spl!2spl!4v1683300000000!5m2!1spl!2spl",
@@ -302,7 +303,7 @@ export const animalsMock: IAnimal[] = [
     parents: [],
     status: AnimalStatus.AVAILABLE,
     characteristics: ['acceptsDogs'],
-
+    city: "Uman",
     // new Mocks
     price: 800,
     location: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.8018508000296!2d21.01178047685647!3d52.22967547975814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc669b2e4b15%3A0x6d1c63c9c8f9f2a3!2sWarszawa!5e0!3m2!1spl!2spl!4v1683300000000!5m2!1spl!2spl",

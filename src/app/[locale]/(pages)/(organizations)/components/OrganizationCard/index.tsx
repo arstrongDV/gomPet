@@ -44,7 +44,7 @@ const OrganizationCard = ({ organization, className }: OrganizationCardProps) =>
           readonly
         />
 
-        <LocationCityPin city={address.city} />
+        <LocationCityPin city={address} />
 
         <Button
           label={t('pages.organizations.seeUs')}

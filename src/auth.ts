@@ -24,6 +24,7 @@ const refreshAccessToken = async (refreshToken: string) => {
   }
 };
 
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     credentials({

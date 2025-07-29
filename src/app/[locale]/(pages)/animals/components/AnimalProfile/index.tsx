@@ -11,6 +11,7 @@ type AnimalCardProps = {
 };
 
 const AnimalProfile = ({ animal }: AnimalCardProps) => {
+  console.log(animal)
   const [isInfoPageActive, setActivePage] = useState(true);
   return (
     <div>
