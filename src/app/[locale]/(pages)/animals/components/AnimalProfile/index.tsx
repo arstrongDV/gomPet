@@ -1,17 +1,20 @@
 'use client'
 import React, { useState } from 'react'
 import AnimalInformation from './AnimalInforamtion'
-import { IAnimal } from 'src/constants/types';
+import { IAnimal, IComment, IPost } from 'src/constants/types';
 import style from './AnimalProfile.module.scss'
 import AnimalActivity from './AnimalActivity';
 
 
 type AnimalCardProps = {
     animal: IAnimal;
+    posts: IPost[];
+    comment: IComment;
+    familyTree: any;
 };
 
-const AnimalProfile = ({ animal }: AnimalCardProps) => {
-  console.log(animal)
+const AnimalProfile = ({ animal, posts, comment, familyTree}: AnimalCardProps) => {
+
   const [isInfoPageActive, setActivePage] = useState(true);
   return (
     <div>
@@ -37,9 +40,9 @@ const AnimalProfile = ({ animal }: AnimalCardProps) => {
         </div>
       </div>
         {isInfoPageActive ? (
-          <AnimalInformation animal={animal} />
+          <AnimalInformation animal={animal} comment={comment} familyTree={familyTree} />
         ):(
-          <AnimalActivity />
+          <AnimalActivity postsData={posts} />
         )}
     </div>
   )

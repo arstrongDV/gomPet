@@ -9,6 +9,7 @@ import { articlesMock } from 'src/mocks/articles';
 import ArticleCard from './components/ArticleCard';
 
 import style from './BlogPage.module.scss';
+import { ArticlesApi } from 'src/api';
 
 const BlogPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -17,7 +18,9 @@ const BlogPage = () => {
   const getArticles = async () => {
     setIsLoading(true);
     try {
-      setArticles(articlesMock);
+      const res = await ArticlesApi.getLatestArticles();
+      setArticles(res.data.results);
+      // setArticles(articlesMock);
     } catch (error) {
       setArticles([]);
     } finally {

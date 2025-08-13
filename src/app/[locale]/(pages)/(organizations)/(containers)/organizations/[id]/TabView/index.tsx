@@ -18,7 +18,6 @@ type TabViewProps = {
 
 const TabView = ({ data }: TabViewProps) => {
   const t = useTranslations();
-
   const menu: TabMenuItem[] = useMemo(
     () => [
       {

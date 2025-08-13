@@ -22,42 +22,12 @@ const PostCard = ({ post, className }: PostCardProps) => {
   const [showComments, setShowComments] = useState(false);
   const [showCopyLink, setShowCopyLink] = useState(false);
 
-  const { data: session, status } = useSession();
-  const myId = session?.user?.id;
-  const [postReactions, setPostReactions] = useState(reactions);
-
   useEffect(() => {
     document.body.style.overflow = showCopyLink ? 'hidden' : '';
   }, [showCopyLink]);
   useEffect(() => {
     document.body.style.overflow = showComments ? 'hidden' : '';
   }, [showComments]);
-
-  const handleReaction = (type: 'like' | 'dislike' | null) => {
-    const existing = postReactions.find(r => r.author.id === myId);
-
-    if (existing && existing.type === type) {
-      // Kliknięto tę samą reakcję — usuń
-      setPostReactions(prev => prev.filter(r => r.author.id !== myId));
-    } else if (existing) {
-      // Zmieniamy typ reakcji
-      setPostReactions(prev =>
-        prev.map(r =>
-          r.author.id === myId ? { ...r, type } : r
-        )
-      );
-    } else if (type !== null) {
-      // Dodajemy nową reakcję
-      setPostReactions(prev => [
-        ...prev,
-        {
-          type,
-          author_type: 'user',
-          author: { id: myId, name: 'You' } as any, 
-        },
-      ]);
-    }
-  };
 
   return (
     <article className={classNames(style.post, className)}>
@@ -90,8 +60,6 @@ const PostCard = ({ post, className }: PostCardProps) => {
         <div className={style.buttons}>
           <PostReactions
             postId={id}
-            reactions={postReactions}
-            onReaction={handleReaction}
           />
           <Button
             icon="message"

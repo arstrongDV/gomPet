@@ -1,5 +1,5 @@
 import ApiClient from './client';
-import { AccountRoutes, AnimalsRouts, AuthRoutes, OffersRoutes, OrganizationsRouts } from './routes';
+import { AccountRoutes, AnimalsRouts, ArticlesRouts, AuthRoutes, OffersRoutes, OrganizationsRouts } from './routes';
 import { LoginPayload, RegisterPayload, ResetPasswordPayload, ResetPasswordRequestPayload } from './types';
 import { jwtDecode } from 'jwt-decode';
 
@@ -19,7 +19,7 @@ export class AuthApi {
   static getLoginUser(token: string) {
     const decoded = jwtDecode(token) as { user_id: number };
     const { user_id } = decoded;
-    const url = AuthRoutes.GET_LOGIN_USER.replace('{id}', String(user_id));
+    const url = AuthRoutes.GET_LOGIN_USER(user_id);
     return ApiClient.get(url, undefined, {
       __tokenRequired: false,
       headers: {
@@ -75,7 +75,19 @@ export class OffersApi {
 
 export class AnimalsApi {
   static async getAnimalProfile(id: number){
-    return ApiClient.get(AnimalsRouts.ANIAML_PROFILE.replace('{id}', String(id)))
+    return ApiClient.get(AnimalsRouts.ANIAML_PROFILE(id))
+  }
+
+  static async getAnimalFamilyTree(id: number){
+    return ApiClient.get(AnimalsRouts.ANIMAL_FAMILY_TREE(id))
+  }
+
+  static async getAnimalComments(id: number){
+    return ApiClient.get(AnimalsRouts.ANIMAL_PROFILE_COMMENTS(id))
+  }
+
+  static async getAnimalPosts(id: number){
+    return ApiClient.get(AnimalsRouts.ANIMAL_ACTIVITY(id))
   }
 
   static async getAnimalsLatest(
@@ -113,6 +125,7 @@ export class AnimalsApi {
   }
   static async getAnimalsFilter(filters?: {
     limit?: number;
+    page?: number;
     species?: string[];
     organizationType?: string[];
     organization_id?: number[];
@@ -127,6 +140,7 @@ export class AnimalsApi {
   }) {
     const params: Record<string, any> = {
       ...(filters?.limit && { limit: filters.limit }),
+      ...(filters?.page ? { page: filters.page } : {page: 1}),
       ...(filters?.species?.length && { species: filters.species.join(',') }),
       ...(filters?.organizationType?.length && { 'organization-type': filters.organizationType.join(',') }),
       ...(filters?.organization_id?.length && { 'organization-id': filters.organization_id.join(',') }),
@@ -141,7 +155,7 @@ export class AnimalsApi {
     };
   
     try {
-      const response = await ApiClient.get(AnimalsRouts.ANIAML_LATEST, params, {
+      const response = await ApiClient.get(AnimalsRouts.ANIAML_FILTERING, params, {
         __tokenRequired: false,
       });
   
@@ -179,11 +193,46 @@ export class OrganizationsApi {
     
     try {
       const response = await ApiClient.get(OrganizationsRouts.ORGANIZATION_LATEST, { __tokenRequired: false });
-      
-      if (!response.data?.results?.length && !response.data?.length) {
+      // if (!response.data?.results?.length && !response.data?.length) {
+      //   return { data: [] };
+      // }
+      const {results, count} = response?.data;
+      return {
+        success: true,
+        data: Array.isArray(results) ? results : [],
+        total: count || 0,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: [],
+        total: 0,
+        error,
+      };
+    }
+  }
+}
+
+export class ArticlesApi {
+  static async getLatestArticles(limit?: number, author?: string) {
+    const params: Record<string, any> = {};
+    
+    if (limit) params.limit = limit;
+    if (author) params.author = author;
+
+    try {
+      const res = await ApiClient.get(
+        ArticlesRouts.ARTICLES_LATEST,
+        params, // Pass as plain object
+        { __tokenRequired: false }
+      );
+
+      if (!res.data?.results?.length && !res.data?.length) {
         return { data: [] };
       }
-      return response;
+
+      return res;
     } catch (error) {
       throw error;
     }

@@ -32,24 +32,26 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
     }
   }, [session.status]);
 
-  
+
   useEffect(() => {
     const store = storeRef.current;
     if (!store) return;
-  
+
     const unsubscribe = store.subscribe(() => {
       const state = store.getState();
       const bookmarks = state.bookmarks.favorites;
       const posts = state.posts.posts
-  
+      const comments = state.comments.comments
+
       try {
         localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
         localStorage.setItem('posts', JSON.stringify(posts));
+        localStorage.setItem('comments', JSON.stringify(comments));
       } catch (err) {
         console.error('Failed to save localStorage', err);
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
 
@@ -81,6 +83,7 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
 
       const bookmarks = state.bookmarks.favorites;
       const posts = state.posts.posts
+      const comments = state.comments.comments
 
       session.update({ bookmarks }).catch((err) => {
         console.error('Failed to update session bookmarks:', err);
@@ -88,6 +91,10 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
       session.update({ posts }).catch((err) => {
         console.error('Failed to update session posts:', err);
       });
+      session.update({ comments }).catch((err) => {
+        console.error('Failed to update session posts:', err);
+      });
+
 
       if (storeToken && storeToken !== sessionToken) {
         session.update({ access_token: storeToken }).catch(() => {

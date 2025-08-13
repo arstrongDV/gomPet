@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +26,6 @@ const PostReactions = ({ postId }: PostReactionsProps) => {
 
   const isLikedByMe = useMemo(() => {
     if (session.status !== 'authenticated') return false;
-
     return reactions.some((reaction) =>
       isOrgAuth
         ? reaction.author_type === 'organization' && reaction.author.id === organization.id
@@ -37,14 +35,12 @@ const PostReactions = ({ postId }: PostReactionsProps) => {
 
   const handleReaction = () => {
     const isLoggedInUser = session.status === 'authenticated' && !!myId;
-    const isLoggedInOrg = isOrgAuth && !!organization.id;
-  
-    if (!isLoggedInUser && !isLoggedInOrg) {
-      // opcjonalnie: pokaż komunikat
+    // const isLoggedInOrg = isOrgAuth && !!organization.id;
+    debugger
+    if (!isLoggedInUser ) {  // && !isLoggedInOrg
       alert('Musisz być zalogowany, aby polubić post.');
       return;
     }
-  
 
     dispatch(
       addReaction({

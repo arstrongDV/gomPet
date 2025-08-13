@@ -43,8 +43,14 @@
 .comments{
     padding: $spacing-3 $spacing-6;
 
-    .userComInfo{
-        @include element-flex(flex, flex-start);
+    .userComInfo {
+      display: flex;
+      align-items: flex-start;
+      gap: $spacing-4; 
+    
+      @media (max-width: 600px) {
+        gap: $spacing-2;
+      }
     }
 
     @media (max-width: 600px) {
@@ -83,7 +89,7 @@
 }
 
 .commentWrraper{
-    @include element-flex(flex, center, row);
+    @include element-flex(flex, row);
     width: 100%;
     gap: $spacing-4;
 }

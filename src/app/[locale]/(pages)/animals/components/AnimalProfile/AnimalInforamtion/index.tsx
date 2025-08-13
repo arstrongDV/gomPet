@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image';
-import { IAnimal } from 'src/constants/types';
+import { IAnimal, IComment } from 'src/constants/types';
 import { useTranslations } from 'next-intl';
 import dayjs from 'dayjs';
 
@@ -17,15 +17,19 @@ import AnimalDescription from './components/AnimalDescription';
 import { useRouter } from 'next/navigation';
 
 type AnimalProfileProps = {
-    animal: IAnimal & {
-      characteristicBoard: { title: string; bool: boolean }[];
-    }
+    animal: IAnimal;
+    comment: IComment;
+    familyTree: any;
+    // & {
+    // characteristics: { title: string; bool: boolean }[];
+    // }
 }
 
-const AnimalInformation = ({ animal }: AnimalProfileProps) => {
+const AnimalInformation = ({ animal, comment, familyTree }: AnimalProfileProps) => {
 
     const t = useTranslations('pages.animals');
     const router = useRouter();
+
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('DD.MM.YYYY, godz. HH:mm');
       };
@@ -37,15 +41,19 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
             <div className={style.infoContainer}>
                 <div className={style.blocksContainer}>
                     <div className={style.aboutAnimalBlock}>
-                        <p>Imię: <span style={{color: '#000'}}>{animal.name}</span></p>
-                        <p>Miasto: <span style={{color: '#000'}}>{animal.city}</span></p>
-                        <p>Gatunek: <span style={{color: '#000'}}>{animal.species}</span></p>
-                        <p>Pleć: <span style={{color: '#000'}}>{animal.gender}</span></p>
-                        <p>Wiek: <span style={{color: '#000'}}>{animal.age}</span></p>
-                        <p>Wielkość: <span style={{color: '#000'}}>{animal.size}</span></p>
-                        <p>Status: <span style={{color: '#000'}}>{animal.status}</span></p>
-                        <p>Rasa: <span style={{color: '#000'}}>{animal.breed}</span></p>
-                        <p>Dodany dnia: <span style={{color: '#000'}}>{formatDate(`${animal.created_at}`)}</span></p>
+                    <div className={style.aboutAnimalBlock}>
+                        <p>Imię: <span style={{color: '#000'}}>{animal?.name ?? "Brak danych"}</span></p>
+                        <p>Miasto: <span style={{color: '#000'}}>{animal?.city ?? "Brak danych"}</span></p>
+                        <p>Gatunek: <span style={{color: '#000'}}>{animal?.species ?? "Brak danych"}</span></p>
+                        <p>Płeć: <span style={{color: '#000'}}>{animal?.gender ?? "Brak danych"}</span></p>
+                        <p>Wiek: <span style={{color: '#000'}}>{animal?.age ?? "Brak danych"}</span></p>
+                        <p>Wielkość: <span style={{color: '#000'}}>{animal?.size ?? "Brak danych"}</span></p>
+                        <p>Status: <span style={{color: '#000'}}>{animal?.status ?? "Brak danych"}</span></p>
+                        <p>Rasa: <span style={{color: '#000'}}>{animal?.breed ?? "Nieznana"}</span></p>
+                        <p>Dodany dnia: <span style={{color: '#000'}}>
+                            {animal?.created_at ? formatDate(`${animal.created_at}`) : "Brak danych"}
+                        </span></p>
+                        </div>
                     </div>
                     <div className={style.contactsBlock}>
                         <div className={style.mainInfo}>
@@ -86,27 +94,33 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                         </div>
                     </div>
                     <div className={style.characteristicsBlock}>
-                    {animal.characteristicBoard?.map(c => (
-                        <div className={style.AnimalCharacter} key={c.title}>
-                            <div className={style.caracteristicImage}>
-                            {c.bool ? <Icon name={"pawFilled"} /> : null}
-                            </div> 
-                            <p className={style.caracteristicTitle}>{c.title}</p>
-                        </div>
-                        ))}
+                        {animal.characteristics?.length ? (
+                            animal.characteristics.map(c => (
+                            <div className={style.AnimalCharacter} key={c.title}>
+                                <div className={style.caracteristicImage}>
+                                {c.bool ? <Icon name={"pawFilled"} /> : null}
+                                </div> 
+                                <p className={style.caracteristicTitle}>{c.title}</p>
+                            </div>
+                            ))
+                        ) : (
+                            <div>No info</div>
+                        )}
                     </div>
-                    <div className={style.mapBlock}>
+                    {animal.location?.coordinates ? (
                         <iframe
-                            src={animal.location}
                             width="600"
                             height="450"
                             className={style.mapBlock}
-                            allowFullScreen={false}
+                            style={{ border: 0 }}
                             loading="lazy"
-                            referrerPolicy='no-referrer-when-downgrade'
-                            >
-                        </iframe>
-                    </div>
+                            allowFullScreen={false}
+                            referrerPolicy="no-referrer-when-downgrade"
+                            src={`https://www.google.com/maps?q=${animal.location.coordinates[1]},${animal.location.coordinates[0]}&output=embed`}
+                        />
+                        ) : (
+                        <div>Map location not available</div>
+                        )}
 
                 </div>
                 <div className={style.infoTextBlock}>
@@ -124,23 +138,19 @@ const AnimalInformation = ({ animal }: AnimalProfileProps) => {
                     po godzinie 16(uszanuj to pracujemy zawodowo) AGA 503305077 lub ADAM 661 037 223" maxLines={5} />
                 </div>
                 <div className={style.myFamilly}>
-                    <FamilyTreeWrapper animal={animal} />
+                    <FamilyTreeWrapper familyTree={familyTree} />
                 </div>
             </div>
         </div>
         <div className={style.bottomContainer}>
-            <Comments animal={animal}/>
+            <Comments comment={comment}/>
             <div className={style.related}>
                 <div className={style.title}>
                     <h4>Inni <span style={{color: '#277D23'}}>podopieczni</span> fundacji</h4>
                     <p onClick={() => router.push(`/organizations/${animal.owner.id}`)}>Zobacz stronę fundacji</p>
                 </div>
                 <div className={style.relatedAnimals}>
-                    <RelatedAnimals animal={animal} />
-                    <RelatedAnimals animal={animal} />
-                    <RelatedAnimals animal={animal} />
-                    <RelatedAnimals animal={animal} />
-                    <RelatedAnimals animal={animal} />
+                    <RelatedAnimals />
                 </div>
             </div>
         </div>

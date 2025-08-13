@@ -32,7 +32,11 @@
     background: transparent;
 }
 
-
+.list {
+  @include element-flex(row, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
+}
 
 .cardClasses {
   position: relative;

@@ -9,7 +9,7 @@ interface Props {
 
 export const FamilyTreePyramid: React.FC<Props> = ({ node, depth }) => {
   if (!node) return null;
-
+  console.log(node.name)
   return (
     <div className={styles.level}>
       {node.children && node.children.length > 0 && (

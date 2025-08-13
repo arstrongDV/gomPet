@@ -43,11 +43,14 @@ const AnimalsPage = () => {
     router.push(`?${params.toString()}`);
   };
 
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const itemsPerPage = 10; 
+
   const getAnimals = React.useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
       const response = await AnimalsApi.getAnimalsFilter(filters);
-      console.log('API Response:', response); // Debug logging
+      console.log('API Response:', response); 
       setAnimals(response.data || []);
       setTotal(response.total || 0);
     } catch (error) {
@@ -61,6 +64,8 @@ const AnimalsPage = () => {
   
   useEffect(() => {
     const filters = {
+      limit: itemsPerPage,
+      page: currentPage,
       species: searchParams.getAll('species'),
       organizationType: searchParams.getAll('organization-type'),
       characteristics: searchParams.getAll('characteristics'),

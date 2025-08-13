@@ -1,28 +1,52 @@
-import classNames from 'classnames';
-import { Icon } from 'src/components';
+'use client'
 import { IAnimal, IComment } from 'src/constants/types';
-import style from './RelatedAnimals.module.scss';
-import { IconNames } from 'src/assets/icons';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import AnimalCard from '../../../../AnimalCard';
+import { AnimalsApi } from 'src/api';
+import { useEffect, useState } from 'react';
+import { HorizontalScroll, Loader } from 'src/components';
+import style from './RelatedAnimals.module.scss'
 
 
-type AnimalProfileProps = {
-    animal: IAnimal & {
-      comments: IComment[]; 
-      images: string[];
-      characteristicBoard: { title: string; bool: boolean }[];
+const RelatedAnimals = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [animals, setAnimals] = useState<IAnimal[]>([]);
+
+  const fetchAnimals = async () => {
+    setIsLoading(true);
+    try {
+      const response = await AnimalsApi.getAnimalsLatest(5, {});
+      const animalsData = response.data || [];
+      setAnimals(animalsData);
+    } catch (err) {
+      setAnimals([]);
+    } finally {
+      setIsLoading(false);
     }
-}
+  };
 
-const RelatedAnimals = ({ animal }: AnimalProfileProps) => {
+  useEffect(() => {
+    fetchAnimals();
+  }, []);
+
+  if (animals === null) {
+    return (
+      <section>
+        <Loader />
+      </section>
+    );
+  }
 
     return(
-        <AnimalCard
-          key={animal.id}
-          animal={animal}
-        />
+      <HorizontalScroll className={style.list}>
+        {isLoading && <Loader />}
+        {animals.map((animal) => (
+          <AnimalCard
+            className={style.animal}
+            key={animal.id}
+            animal={animal}
+          />
+        ))}
+      </HorizontalScroll>
     )
   }
 

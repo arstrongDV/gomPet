@@ -15,9 +15,12 @@ import style from './OrganizationPage.module.scss';
 const getData = cache(async (id: number) => {
   const session = await auth();
   injectToken(session?.access_token);
-  const { data } = await OffersApi.getOffer(6);
-
-  return data;
+  try {
+    const { data } = await OffersApi.getOffer(id);
+    return data;
+  } catch (error) {
+    throw error;
+  }
 });
 
 export const generateMetadata = async ({ params: { id } }: { params: { id: string } }) => {
@@ -36,8 +39,8 @@ export const generateMetadata = async ({ params: { id } }: { params: { id: strin
 const OrganizationPage = async ({ params: { locale, id } }: Readonly<{ params: { locale: Locale; id: string } }>) => {
   unstable_setRequestLocale(locale);
   const session = await auth();
-  // const data = await getData(+id);
-  const data = organizationsMock[0];
+  const data = await getData(+id);
+  // const data = organizationsMock[0];
 
   if (!data) return <Loader />;
   return <TabView data={data} />;

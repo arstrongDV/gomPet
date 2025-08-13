@@ -8,7 +8,7 @@ import { Checkbox, Input, Select } from 'src/components';
 import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
 import { OptionType } from 'src/components/layout/Forms/Select';
 import { Params } from 'src/constants/params';
-import { Gender } from 'src/constants/types';
+import { AnimalAge, AnimalSize, AnimalSpecies, BREED, Gender } from 'src/constants/types';
 import { useRouter } from 'src/navigation';
 import { toSelectOption } from 'src/utils/helpers';
 
@@ -120,14 +120,14 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         />
         <Select
           label={t('pages.animals.filters.species')}
-          options={[toSelectOption('dog'), toSelectOption('cat')]}
+          options={[toSelectOption(AnimalSpecies.DOG), toSelectOption(AnimalSpecies.CAT)]}
           value={toSelectOption(searchParams.get(Params.SPECIES))}
           onChange={(value: OptionType) => handleFilter(Params.SPECIES, value ? String(value.value) : '')}
           isClearable
         />
         <Select
           label={t('pages.animals.filters.breed')}
-          options={[toSelectOption('dog'), toSelectOption('cat')]}
+          options={[toSelectOption(BREED.TERRIERS)]}
           value={toSelectOption(searchParams.get(Params.BREED))}
           onChange={(value: OptionType) => handleFilter(Params.BREED, value ? String(value.value) : '')}
           isClearable
@@ -136,14 +136,14 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         {/* TODO: przebudować na od - do */}
         <Select
           label={t('pages.animals.filters.age')}
-          options={[toSelectOption(Gender.MALE), toSelectOption(Gender.FEMALE)]}
+          options={[toSelectOption(AnimalAge.OLD), toSelectOption(AnimalAge.YOUNG)]}
           value={toSelectOption(searchParams.get(Params.AGE))}
           onChange={(value: OptionType) => handleFilter(Params.AGE, value ? String(value.value) : '')}
           isClearable
         />
         <Select
           label={t('pages.animals.filters.size')}
-          options={[toSelectOption(Gender.MALE), toSelectOption(Gender.FEMALE)]}
+          options={[toSelectOption(AnimalSize.SMALL), toSelectOption(AnimalSize.MEDIUM), toSelectOption(AnimalSize.LARGE)]}
           value={toSelectOption(searchParams.get(Params.SIZE))}
           onChange={(value: OptionType) => handleFilter(Params.SIZE, value ? String(value.value) : '')}
           isClearable

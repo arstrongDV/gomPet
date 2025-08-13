@@ -9,6 +9,10 @@ import { CommentSubmitData } from 'src/components/layout/Comments/CommentInput';
 import style from './OrganizationComments.module.scss';
 import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { addComment, setComments } from '../slice';
+import { RootState } from 'src/lib/store';
+import { useSession } from 'next-auth/react';
 
 type OrganizationCommentsProps = {
   className?: string;
@@ -27,15 +31,38 @@ const OrganizationComments = ({
 }: OrganizationCommentsProps) => {
   const t = useTranslations();
 
-  const [comments, setComments] = useState<any[]>([]);
+  // const [comments, setComments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const createComment = async ({ id, text, rating }: CommentSubmitData): Promise<void> => {
+  const dispatch = useDispatch();
+  const comments = useSelector((state: RootState) => state.comments.comments);
+  const session = useSession();
+  const createComment = async ({ id, text, rating=0 }: CommentSubmitData): Promise<void> => {
     try {
       setIsLoading(true);
-      if (id) {
-      } else {
-      }
+      // if (id) {
+        
+      // } else {
+      // }
+
+      dispatch(addComment({
+        id: Date.now(),
+        text,
+        rating,
+        createdAt: new Date().toISOString(),
+        author: session.status === 'authenticated'
+        ? {
+            id: session.data?.user.id,
+            first_name: session.data?.user.first_name,
+            email: session.data?.user.email,
+            image: session.data?.user.image
+          }
+        : {
+            id: 1,
+            first_name: 'Anonim',
+            image: null
+          }
+    }));
 
       getComments();
       onComment && onComment();

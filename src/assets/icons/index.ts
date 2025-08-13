@@ -72,8 +72,8 @@ import underlineIcon from './underline.svg';
 import uploadIcon from './upload.svg';
 import xIcon from './x.svg';
 
-import twitterIcon from '../../app/[locale]/(pages)/posts/components/PostCard/components/ShareComments/icons/twitter.svg'
-import whatsAppIcon from '../../app/[locale]/(pages)/posts/components/PostCard/components/ShareComments/icons/whatsapp.svg'
+// import twitterIcon from '../../app/[locale]/(pages)/posts/components/PostCard/components/ShareComments/icons/twitter.svg'
+// import whatsAppIcon from '../../app/[locale]/(pages)/posts/components/PostCard/components/ShareComments/icons/whatsapp.svg'
 
 export type IconNames =
   | 'underline'
@@ -146,10 +146,10 @@ export type IconNames =
   | 'buildingCottage'
   | 'chevronLeft'
   | 'alignLeft'
-  | 'heart'
+  | 'heart';
 
-  | 'twitter'
-  | 'whatsApp';
+  // | 'twitter'
+  // | 'whatsApp';
 
 export const Icons = {
   underline: underlineIcon,
@@ -224,6 +224,6 @@ export const Icons = {
   alignLeft: alignLeftIcon,
   heart: heartIcon,
 
-  twitter: twitterIcon,
-  whatsApp: whatsAppIcon
+  // twitter: twitterIcon,
+  // whatsApp: whatsAppIcon
 };

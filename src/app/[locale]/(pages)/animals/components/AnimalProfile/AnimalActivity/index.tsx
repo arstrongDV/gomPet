@@ -1,46 +1,33 @@
 'use client';
-
-import React, { useEffect, useState } from 'react';
-
+import React from 'react';
 import { List } from 'src/components';
 import { IPost } from 'src/constants/types';
-import { postsMock } from 'src/mocks/posts';
-
 import PostCard from 'src/app/[locale]/(pages)/posts/components/PostCard';
-
 import style from './PostsPage.module.scss';
 
-const AnimalActivity = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [posts, setPosts] = useState<IPost[]>([]);
+type AnimalActivityProps = {
+  postsData?: IPost[];
+};
 
-  const getPosts = async () => {
-    setIsLoading(true);
-    try {
-      setPosts(postsMock);
-    } catch (error) {
-      setPosts([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getPosts();
-  }, []);
+const AnimalActivity = ({ postsData = [] }: AnimalActivityProps) => {
+  console.log("Posts data:", postsData);
 
   return (
     <div className={style.container}>
       <List
-        isLoading={isLoading}
+        isLoading={false}
         className={style.list}
       >
-        {posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-          />
-        ))}
+        {Array.isArray(postsData) && postsData.length > 0 ? (
+          postsData.map((post) => (
+            <PostCard
+              key={post.id}
+              post={post}
+            />
+          ))
+        ) : (
+          <div>No posts available</div>
+        )}
       </List>
     </div>
   );

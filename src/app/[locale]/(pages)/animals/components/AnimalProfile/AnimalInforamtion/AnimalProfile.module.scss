@@ -218,6 +218,7 @@
     @include info-blocks();
     color: #000000;
     height: auto;
+
     padding: 12px;
     @media (max-width: 550px) {
         font-size: $font-size-xxs;
@@ -272,6 +273,7 @@
     display: flex;
     flex-wrap: wrap; 
     height: auto;
+    min-height: 350px; //
     width: 100%;
     min-width: 0px;  
     flex: 1 1 0;

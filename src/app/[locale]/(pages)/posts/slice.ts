@@ -22,7 +22,7 @@ export const loadPostsFromStorage = () => {
     posts: typeof window !== 'undefined' ? loadPostsFromStorage() : postsMock,
   };
 
-export const commentSlice = createSlice({
+export const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
@@ -56,5 +56,5 @@ export const commentSlice = createSlice({
   },
 });
 
-export const { addComment, addReaction } = commentSlice.actions;
-export default commentSlice.reducer;
+export const { addComment, addReaction } = postsSlice.actions;
+export default postsSlice.reducer;

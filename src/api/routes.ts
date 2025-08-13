@@ -1,7 +1,7 @@
 export class AuthRoutes {
   static REGISTER = '/users/users/'; //  
   static LOGIN = '/users/auth/token/'; ///accounts/login/
-  static GET_LOGIN_USER = '/users/users/{id}/'; ///accounts/user-data
+  static GET_LOGIN_USER = (id: number) => `/users/users/${id}/`; ///accounts/user-data
   static REFRESH_TOKEN = '/accounts/refresh-token/';
   static REQUEST_PASSWORD_RESET = '/accounts/reset-password/request/';
   static RESET_PASSWORD = '/accounts/reset-password/submit/';
@@ -14,7 +14,7 @@ export class AccountRoutes {
 
 export class OffersRoutes {
   static OFFERS = '/offers/';
-  static OFFER = (id: number) => `/offers/${id}/`;
+  static OFFER = (id: number) => `/users/organization-filtering/${id}/`; // /users/organizations/{id}/
   static COMPANY = (id: number) => `/accounts/company-list-all/${id}/`;
 }
 
@@ -24,10 +24,25 @@ export class WebsocketRoutes {
 
 export class AnimalsRouts {
   static ANIAML_LATEST = '/animals/latest/';
+
   static ANIAML_FILTERING = '/animals/filtering/';
-  static ANIAML_PROFILE = '/animals/animals/{id}/';
+  static ANIAML_FILTERING_ID = (id: number) => `/animals/filtering/${id}`;
+
+  static ANIAML_PROFILE = (id: number) => `/animals/animals/${id}/`;
+  static ANIMAL_FAMILY_TREE = (id: number) => `/animals/family-tree/${id}/`
+
+  static ANIMAL_PROFILE_COMMENTS  = (id: number) =>  `/common/comments/${id}/`
+
+  static ANIMAL_ACTIVITY = (id: number) => `posts/posts/${id}` //`posts/?animal-id=${id}`
 }
 
 export class OrganizationsRouts {
   static ORGANIZATION_LATEST = '/users/organization-latest/';
+  // static ORGANIZATION_PROFILE_ID = '/users/organizations/{id}/'
+
+  static ORGANIZATION_PROFILE = '/users/organizations/'
+}
+
+export class ArticlesRouts{
+  static ARTICLES_LATEST = '/articles/articles-latest/';
 }

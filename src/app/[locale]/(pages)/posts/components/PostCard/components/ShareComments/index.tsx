@@ -41,8 +41,22 @@ const ShareComments = ({className, commentId}: ShareCommentsProps) => {
         <Button icon="link" gray onClick={handleCopy} />
         {/* <Button icon="twitter" gray onClick={() => openShareLink(twitterShareUrl)} />
         <Button icon="whatsApp" gray onClick={() => openShareLink(whatsappShareUrl)} /> */}
-        <img src='./icons/twitter.svg' alt='twitter-icon' className={style.icon}  onClick={() => openShareLink(twitterShareUrl)} />
-        <img src='./icons/whatsapp.svg' alt='whatsapp-icon' className={style.icon} onClick={() => openShareLink(whatsappShareUrl)} />
+        <Image 
+          src="/icons/default/twitter.svg" 
+          alt="twitter-icon" 
+          width={24}  // Set appropriate dimensions
+          height={24}
+          className={style.icon}
+          onClick={() => openShareLink(twitterShareUrl)}
+        />
+        <Image 
+          src="/icons/default/whatsapp.svg" 
+          alt="whatsapp-icon" 
+          width={24}  // Set appropriate dimensions
+          height={24}
+          className={style.icon}
+          onClick={() => openShareLink(whatsappShareUrl)}
+        />
       </div>
     </Card>
   )

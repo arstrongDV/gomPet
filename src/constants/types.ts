@@ -1,4 +1,5 @@
 import { IComment } from './types';
+
 export enum Role {
   ADMIN = 'admin',
   USER = 'user',
@@ -38,6 +39,15 @@ export enum AnimalSize {
 export enum AnimalSpecies {
   DOG = 'dog',
   CAT = 'cat'
+}
+
+export enum BREED {
+  TERRIERS = 'terriers'
+}
+
+export enum AnimalAge {
+  OLD = 'old',
+  YOUNG = 'young'
 }
 
 export type Location = {
@@ -81,7 +91,7 @@ export interface IOrganization {
 
 export interface IComment {
   id: number;
-  comment: string;
+  body: string; // comment
   created_at: string;
   updated_at?: string;
   author: IUser;
@@ -119,7 +129,10 @@ export interface IAnimal {
   characteristics: string[];
 
   price: number;
-  location: string;
+  location: {
+    type: 'Point';
+    coordinates: [number, number]; // longitude, latitude
+  } | null;
   images: string[];
   characteristicBoard: ICharacteristic[];
   comments: IComment[];
