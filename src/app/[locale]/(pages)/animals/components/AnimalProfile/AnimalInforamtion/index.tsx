@@ -34,6 +34,8 @@ const AnimalInformation = ({ animal, comment, familyTree }: AnimalProfileProps) 
         return dayjs(dateString).format('DD.MM.YYYY, godz. HH:mm');
       };
 
+    console.log("animal::::", animal);
+
   return (
     <div className={style.mainBlock}>
         <div className={style.infoWrapper}>
@@ -94,8 +96,8 @@ const AnimalInformation = ({ animal, comment, familyTree }: AnimalProfileProps) 
                         </div>
                     </div>
                     <div className={style.characteristicsBlock}>
-                        {animal.characteristics?.length ? (
-                            animal.characteristics.map(c => (
+                        {animal.characteristicBoard?.length ? (
+                            animal.characteristicBoard.map(c => (
                             <div className={style.AnimalCharacter} key={c.title}>
                                 <div className={style.caracteristicImage}>
                                 {c.bool ? <Icon name={"pawFilled"} /> : null}
@@ -124,21 +126,10 @@ const AnimalInformation = ({ animal, comment, familyTree }: AnimalProfileProps) 
 
                 </div>
                 <div className={style.infoTextBlock}>
-                    <AnimalDescription text="W przypadku dodatkowych pytań zapraszamy również do kontaktu telefonicznego po 
-                    godzinie 16(uszanuj to pracujemy zawodowo) AGA 503305077 lub ADAM 661 037 223Lobo to około 2-3 
-                    letni samiec w typie amstaffa który był towarzyszem Flory oraz ojcem ich potomstwa. Jego stan jest '
-                    nieco lepszy niż suczki, ale tylko nie wiele. Podobnie jak Flora będzie wymagał sporo zaangażowania 
-                    od nowego opiekuna włożonego w naukę życia obok człowieka. Lobo to pies z bardzo fajnym charakterem, 
-                    widać że brakowało mu człowieka i że bardzo chce nadrobić te straty. Nie ma najmniejszego problemu w 
-                    poznawaniu nowych ludzi, jest łasy na uwagę i pieszczoty. Czasami w emocjach zdaży mu się podgryzać 
-                    lub łapać zębami za smycz, ale skorygowany szybko odpuszcza i potrafi ostudzić emocje. Ma duży potencjał 
-                    szkoleniowy i nie mniejszy sportowy. Polecamy Lobo dla osób aktywnych, nastawionych na prace z psem. 
-                    Jeżeli uważasz że Lobo to psiak na którego właśnie czekałeś, koniecznie wypełnij ankietę adopcyjną na 
-                    stronie https://amstaffyniczyje.pl W przypadku dodatkowych pytań zapraszamy również do kontaktu telefonicznego 
-                    po godzinie 16(uszanuj to pracujemy zawodowo) AGA 503305077 lub ADAM 661 037 223" maxLines={5} />
+                    <AnimalDescription text={animal.discription} maxLines={5} />
                 </div>
                 <div className={style.myFamilly}>
-                    <FamilyTreeWrapper familyTree={familyTree} />
+                    <FamilyTreeWrapper familyTree={animal.famillyTree} />
                 </div>
             </div>
         </div>

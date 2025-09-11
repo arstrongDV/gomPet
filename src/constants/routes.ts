@@ -9,12 +9,12 @@ export class Routes {
   static readonly BREEDINGS = '/breedings';
   static readonly ANIMALS = '/animals';
   static readonly MY_ANIMALS = '/my-animals';
+  static readonly NEW_ANIMAL = '/new-animal';
   static readonly POSTS = '/posts';
   static readonly BLOG = '/blog';
   static readonly BLOG_ARTICLE = (slug: string) => `/blog/${slug}`;
   static readonly OFFERS = '/offers';
   static readonly OFFER = (id: number) => `/offers/${id}`;
-  static readonly NEW_ANIMAL = '/new-animal';
   static readonly NEW_ORGANIZATION = '/new-organization';
   static readonly ORGANIZATION_PROFILE = (id: string | number) => `/organizations/${id}`;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -17,6 +17,7 @@ import OrganizationFilters from '../../components/OrganizationFilters';
 
 import style from './SheltersPage.module.scss';
 import OrganizationOnMap from '../../components/OrganizationOnMap';
+import { OrganizationsApi } from 'src/api';
 
 const FundationPage = () => {
   const t = useTranslations('pages.animals');
@@ -37,25 +38,48 @@ const FundationPage = () => {
     params.set(Params.PAGE, page.toString());
     router.push(`?${params.toString()}`);
   };
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const itemsPerPage = 10; 
 
-  const getShelters = async () => {
+
+  const getFoundations = useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
-      setOrganizations(organizationsMock);
-      setTotal(120);
+      const res = await OrganizationsApi.getOrganizations(filters);
+      const organizationData = res.data?.results || [];
+      setOrganizations(organizationData);
+      setTotal(res.data?.count || 0);
     } catch (error) {
       setOrganizations([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    getShelters();
   }, []);
 
   useEffect(() => {
-    if('/shelters' !== pathname) setShowMap(false);
+    const filters: Record<string, string> = {};
+  
+    filters.limit = String(itemsPerPage);
+    filters.page = String(currentPage);
+    filters['organization-type'] = ''; 
+  
+    searchParams.forEach((value, key) => {
+      if (key !== Params.PAGE) {
+        // якщо параметр вже є (наприклад organization-type), то додаємо через кому
+        if (filters[key]) {
+          filters[key] = `${filters[key]},${value}`;
+        } else {
+          filters[key] = value;
+        }
+      }
+    });
+  
+    getFoundations(filters);
+  }, [searchParams, getFoundations]);
+
+  useEffect(() => {
+    if('/foundations' !== pathname) setShowMap(false);
   }, []);
 
   useEffect(() => {
@@ -94,6 +118,7 @@ const FundationPage = () => {
           onClick={() => setShowMap((prev) => !prev)}
           empty={!showMap}
           icon='map'
+          disabled={organizations.every(o => o.address === null)}
         />
       </div>
 

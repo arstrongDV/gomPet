@@ -67,7 +67,7 @@ export const animalsMock: IAnimal[] = [
             id: 2,
             name: 'Lobo 2.0',
             image: '',
-            children: [
+            parent: [
               {
                 id: 4,
                 name: 'Lobo 2.1',
@@ -86,7 +86,7 @@ export const animalsMock: IAnimal[] = [
             id: 3,
             name: 'Lobo 2.1',
             image: '',
-            children: [
+            parent: [
               {
                 id: 6,
                 name: 'Lobo 2.1',

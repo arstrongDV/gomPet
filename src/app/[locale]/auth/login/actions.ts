@@ -1,5 +1,6 @@
 'use server';
 
+import toast from 'react-hot-toast';
 import { signIn } from 'src/auth';
 
 type Fields = {
@@ -7,11 +8,23 @@ type Fields = {
   password: string;
 };
 
+type ErrorData = {
+  error?: {
+    message?: string;
+    errors?: {
+      email?: string;
+      password?: string;
+    };
+  };
+};
+
 export type LoginFormState = {
+  errorData?: ErrorData;
   message: string;
   errors: Record<keyof Fields, string> | undefined;
   fields: Fields;
 };
+
 
 export const login = async (
   _prevState: LoginFormState,
@@ -45,6 +58,7 @@ export const login = async (
       try {
         const errorData = JSON.parse(result.error);
         return {
+          errorData,
           message: errorData.error?.message || 'Invalid credentials',
           errors: {
             email: errorData.error?.errors?.email || '',
@@ -63,7 +77,6 @@ export const login = async (
         };
       }
     }
-
     return {
       message: 'success',
       errors: undefined,
@@ -73,7 +86,6 @@ export const login = async (
       }
     };
   } catch (error: any) {
-    console.error('Login error:', error);
     
     return {
       message: 'Something went wrong',

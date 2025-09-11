@@ -33,9 +33,9 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
   }, [needFullFilters]);
 
   const organization = {
-    animal_shelter: t('common.organization.animal_shelter'),
+    SHELTER: t('common.organization.SHELTER'),
     fund: t('common.organization.fund'),
-    breeding: t('common.organization.breeding')
+    BREEDER: t('common.organization.BREEDER')
   };
 
   const handleFilter = (filter: string, value: string, isArr = false) => {

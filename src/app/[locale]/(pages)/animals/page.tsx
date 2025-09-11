@@ -9,7 +9,7 @@ import { Button, List, Pagination } from 'src/components';
 import { paginationConfig } from 'src/config/pagination';
 import { Params } from 'src/constants/params';
 import { IAnimal } from 'src/constants/types';
-import { animalsMock } from 'src/mocks/animals';
+// import { animalsMock } from 'src/mocks/animals';
 import { useRouter } from 'src/navigation';
 
 import AnimalCard from './components/AnimalCard';
@@ -21,6 +21,7 @@ import { IOrganization } from 'src/constants/types';
 import { organizationsMock } from 'src/mocks/organizations';
 import { useAppSelector } from 'src/lib/store/hooks';
 import { AnimalsApi } from 'src/api';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 const AnimalsPage = () => {
   const t = useTranslations('pages.animals');
@@ -85,38 +86,16 @@ const AnimalsPage = () => {
     setOrganizations(organizationsMock);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (
-        showMap &&
-        target &&
-        !target.closest('#map') &&  
-        !target.closest('#button')   
-      ) {
-        setShowMap(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMap]);
-
   return (
     <div className={style.container}>
       <div className={style.buttons}>
         <Button
-          id='button'
           label={showFilters ? t('hideFilters') : t('showFilters')}
           onClick={() => setShowFilters((prev) => !prev)}
           empty={showFilters}
           icon='filter'
         />
         <Button
-          id='button'
           label={showMap ? t('hideMap') : t('showMap')}
           onClick={() => setShowMap((prev) => !prev)}
           empty={!showMap}
@@ -126,7 +105,7 @@ const AnimalsPage = () => {
 
       <AnimalFilters className={classNames(style.filters, { [style.show]: showFilters })} />
 
-        <div id='map'>
+        <div>
           <div className={style.content}>
             <List
                 isLoading={isLoading}

@@ -1,5 +1,5 @@
 import ApiClient from './client';
-import { AccountRoutes, AnimalsRouts, ArticlesRouts, AuthRoutes, OffersRoutes, OrganizationsRouts } from './routes';
+import { AccountRoutes, AnimalsRouts, ArticlesRouts, AuthRoutes, OffersRoutes, OrganizationsRouts, PostsRouts } from './routes';
 import { LoginPayload, RegisterPayload, ResetPasswordPayload, ResetPasswordRequestPayload } from './types';
 import { jwtDecode } from 'jwt-decode';
 
@@ -74,9 +74,24 @@ export class OffersApi {
 }
 
 export class AnimalsApi {
+  static async getMyAnimals(){
+    return ApiClient.get(AnimalsRouts.NEW_ANIMAL, {
+      __tokenRequired: true 
+    })
+  }
+
   static async getAnimalProfile(id: number){
     return ApiClient.get(AnimalsRouts.ANIAML_PROFILE(id))
   }
+
+static async createNewAnimal(formData: FormData) {
+  return ApiClient.post(AnimalsRouts.NEW_ANIMAL, formData, {
+    __tokenRequired: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
 
   static async getAnimalFamilyTree(id: number){
     return ApiClient.get(AnimalsRouts.ANIMAL_FAMILY_TREE(id))
@@ -86,8 +101,15 @@ export class AnimalsApi {
     return ApiClient.get(AnimalsRouts.ANIMAL_PROFILE_COMMENTS(id))
   }
 
-  static async getAnimalPosts(id: number){
-    return ApiClient.get(AnimalsRouts.ANIMAL_ACTIVITY(id))
+static async getAnimalPosts(animalId: number) {
+    try {
+      // backend oczekuje: GET /posts/?animal-id=<id>
+      const response = await ApiClient.get(AnimalsRouts.ANIMAL_ACTIVITY(animalId));
+      return response.data; // zwraca dane postów
+    } catch (error) {
+      console.error('Error fetching animal posts:', error);
+      throw error; // dalej rzucamy błąd, żeby front mógł go obsłużyć
+    }
   }
 
   static async getAnimalsLatest(
@@ -193,9 +215,6 @@ export class OrganizationsApi {
     
     try {
       const response = await ApiClient.get(OrganizationsRouts.ORGANIZATION_LATEST, { __tokenRequired: false });
-      // if (!response.data?.results?.length && !response.data?.length) {
-      //   return { data: [] };
-      // }
       const {results, count} = response?.data;
       return {
         success: true,
@@ -211,6 +230,14 @@ export class OrganizationsApi {
         error,
       };
     }
+  }
+
+  static async getOrganizations(params?: object){
+    return ApiClient.get(
+      OrganizationsRouts.ORGANIZATION_PROFILE,
+      params,
+      { __tokenRequired: false }
+    );
   }
 }
 
@@ -236,5 +263,12 @@ export class ArticlesApi {
     } catch (error) {
       throw error;
     }
+  }
+}
+
+export class PostsApi {
+  static getPostsList() {
+    return ApiClient.get(PostsRouts.POSTS_LIST, 
+      { __tokenRequired: true })
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -17,6 +17,7 @@ import OrganizationFilters from '../../components/OrganizationFilters';
 
 import style from './SheltersPage.module.scss';
 import OrganizationOnMap from '../../components/OrganizationOnMap';
+import { OrganizationsApi } from 'src/api';
 
 const SheltersPage = () => {
   const t = useTranslations('pages.animals');
@@ -38,24 +39,46 @@ const SheltersPage = () => {
     router.push(`?${params.toString()}`);
   };
 
-  const getShelters = async () => {
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const itemsPerPage = 10; 
+
+  const getBreedings = useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
-      setOrganizations(organizationsMock);
-      setTotal(120);
+      const res = await OrganizationsApi.getOrganizations(filters);
+      const organizationData = res.data?.results || [];
+      setOrganizations(organizationData);
+      setTotal(res.data?.count || 0);
     } catch (error) {
       setOrganizations([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    getShelters();
   }, []);
 
   useEffect(() => {
-    if('/shelters' !== pathname) setShowMap(false);
+    const filters: Record<string, string> = {};
+  
+    filters.limit = String(itemsPerPage);
+    filters.page = String(currentPage);
+    filters['organization-type'] = 'BREEDER'; 
+  
+    searchParams.forEach((value, key) => {
+      if (key !== Params.PAGE) {
+        if (filters[key]) {
+          filters[key] = `${filters[key]},${value}`;
+        } else {
+          filters[key] = value;
+        }
+      }
+    });
+  
+    getBreedings(filters);
+  }, [searchParams, getBreedings]);
+
+  useEffect(() => {
+    if('/breedings' !== pathname) setShowMap(false);
   }, []);
 
   useEffect(() => {
@@ -94,6 +117,7 @@ const SheltersPage = () => {
           onClick={() => setShowMap((prev) => !prev)}
           empty={!showMap}
           icon='map'
+          disabled={organizations.every(o => o.address === null)}
         />
       </div>
 

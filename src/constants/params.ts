@@ -7,7 +7,7 @@ export class Params {
   static readonly PAGE = 'page';
 
   // Filters
-  static readonly ORGANIZATION_TYPE = 'organization_type';
+  static readonly ORGANIZATION_TYPE = 'organization-type'; // 'organization_type'
   static readonly GENDER = 'gender';
   static readonly SPECIES = 'species';
   static readonly AGE = 'age';

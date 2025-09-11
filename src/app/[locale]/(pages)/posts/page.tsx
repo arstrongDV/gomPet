@@ -9,6 +9,7 @@ import { postsMock } from 'src/mocks/posts';
 import PostCard from './components/PostCard';
 
 import style from './PostsPage.module.scss';
+import { PostsApi } from 'src/api';
 
 const PostsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -17,7 +18,9 @@ const PostsPage = () => {
   const getPosts = async () => {
     setIsLoading(true);
     try {
-      setPosts(postsMock);
+      const res = await PostsApi.getPostsList();
+      setPosts(res.data?.results);
+      // console.log("posts:", res?.results)
     } catch (error) {
       setPosts([]);
     } finally {
@@ -35,12 +38,16 @@ const PostsPage = () => {
         isLoading={isLoading}
         className={style.list}
       >
-        {posts.map((post) => (
+      {posts && posts.length > 0 ? (
+        posts.map((post) => (
           <PostCard
             key={post.id}
             post={post}
           />
-        ))}
+        ))
+      ) : (
+        <div>No posts available.</div>
+      )}
       </List>
     </div>
   );

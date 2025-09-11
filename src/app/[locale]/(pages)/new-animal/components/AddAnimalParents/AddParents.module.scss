@@ -1,0 +1,35 @@
+@import 'styles';
+
+.container {
+    @include element-flex(column, flex-start, stretch);
+    gap: $spacing-6;
+    width: 100%;
+  }
+  
+  .section {
+    @include element-flex(column);
+    gap: $spacing-6;
+  }
+  
+  .genderSelect,
+  .statusSelect {
+    @include element-flex(row, flex-start, center);
+    gap: $spacing-2;
+  }
+  
+  .flexRow {
+    @include element-flex(row, flex-start, center);
+    gap: $spacing-4;
+  }
+  
+  .fullWidth {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-4;
+    width: 100%;
+  }
+
+  .buttonAdd{
+    width: 150px;
+    align-self: flex-end;
+  }

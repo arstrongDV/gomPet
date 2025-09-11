@@ -28,21 +28,26 @@ export class AnimalsRouts {
   static ANIAML_FILTERING = '/animals/filtering/';
   static ANIAML_FILTERING_ID = (id: number) => `/animals/filtering/${id}`;
 
+  static NEW_ANIMAL = '/animals/animals/';
+
   static ANIAML_PROFILE = (id: number) => `/animals/animals/${id}/`;
   static ANIMAL_FAMILY_TREE = (id: number) => `/animals/family-tree/${id}/`
-
   static ANIMAL_PROFILE_COMMENTS  = (id: number) =>  `/common/comments/${id}/`
-
-  static ANIMAL_ACTIVITY = (id: number) => `posts/posts/${id}` //`posts/?animal-id=${id}`
+  static ANIMAL_ACTIVITY = (id: number) => `posts/posts/?animal-id=${id}` // `posts/posts/${id}`
 }
 
 export class OrganizationsRouts {
   static ORGANIZATION_LATEST = '/users/organization-latest/';
+  // static ORGANIZATION_PROFILE = '/users/organizations/';
   // static ORGANIZATION_PROFILE_ID = '/users/organizations/{id}/'
+  static ORGANIZATION_PROFILE = '/users/organization-filtering/'
 
-  static ORGANIZATION_PROFILE = '/users/organizations/'
 }
 
 export class ArticlesRouts{
   static ARTICLES_LATEST = '/articles/articles-latest/';
+}
+
+export class PostsRouts{
+  static POSTS_LIST = '/posts/posts/';
 }

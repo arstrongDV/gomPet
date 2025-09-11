@@ -12,6 +12,7 @@ import { useSession } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment } from '../../../../slice';
 import { RootState } from 'src/lib/store';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 type PostCommentsProps = {
   postId: number;
@@ -28,6 +29,11 @@ const PostComments = ({ postId, className }: PostCommentsProps) => {
     const post = state.posts.posts.find((p) => p.id === postId);
     return post?.comments || [];
   });
+
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const handleNotificationClick = () => {
+  //   setIsOpen((prev) => !prev);
+  // };
 
   const handleSubmit = async ({ text, rating }: CommentSubmitData): Promise<void> => {
     try {
@@ -63,23 +69,25 @@ const PostComments = ({ postId, className }: PostCommentsProps) => {
   };
 
   return (
-    <Card className={`${style.container} ${className || ''}`}>
-      <CommentInput onSubmit={handleSubmit} />
+    // <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
+      <Card className={`${style.container} ${className || ''}`}>
+        <CommentInput onSubmit={handleSubmit} />
 
-      <div className={style.dividerWrapper}>
-        <Divider />
-      </div>
+        <div className={style.dividerWrapper}>
+          <Divider />
+        </div>
 
-      <List
-        className={style.comments}
-        isLoading={isLoading}
-        emptyText="Brak komentarzy"
-      >
-        {comments.map((comment: any) => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
-      </List>
-    </Card>
+        <List
+          className={style.comments}
+          isLoading={isLoading}
+          emptyText="Brak komentarzy"
+        >
+          {comments.map((comment: any) => (
+            <Comment key={comment.id} comment={comment} />
+          ))}
+        </List>
+      </Card>
+    // </OutsideClickHandler>
   );
 };
 

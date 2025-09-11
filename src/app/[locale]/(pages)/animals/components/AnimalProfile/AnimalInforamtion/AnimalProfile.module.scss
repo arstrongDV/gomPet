@@ -83,7 +83,6 @@
       }
   }
   
-
 //About Animal Block
 .aboutAnimalBlock {
     @include info-blocks();
@@ -214,22 +213,37 @@
 
 
 //Characteristics Block
-.characteristicsBlock{
-    @include info-blocks();
-    color: #000000;
-    height: auto;
+.characteristicsBlock {
+  @include info-blocks();
+  color: #000000;
+  padding: 12px;
 
-    padding: 12px;
-    @media (max-width: 550px) {
-        font-size: $font-size-xxs;
-    }
-    // @media (max-width: 480px) {
-    //     font-size: $font-size-xxxs;
-    // }
-    @media (max-width: 480px) {
-        font-size: $font-size-s;
-    }
+  // тут задаємо висоту
+  max-height: 350px; // можна міняти під дизайн
+  overflow-y: auto;  
+
+  @media (max-width: 550px) {
+    font-size: $font-size-xxs;
+    // max-height: 160px; // адаптивна висота для мобілок
+  }
+
+  @media (max-width: 480px) {
+    font-size: $font-size-s;
+    // max-height: 140px;
+  }
+
+  scrollbar-width: thin; 
+  scrollbar-color: #aaa transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 4px;
+  }
 }
+
 .AnimalCharacter{
     @include element-flex(flex, row);
     gap: 6px;

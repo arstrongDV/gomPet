@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -17,6 +17,7 @@ import OrganizationFilters from '../../components/OrganizationFilters';
 
 import style from './SheltersPage.module.scss';
 import OrganizationOnMap from '../../components/OrganizationOnMap';
+import { OrganizationsApi } from 'src/api';
 
 const SheltersPage = () => {
   const t = useTranslations('pages.animals');
@@ -38,68 +39,79 @@ const SheltersPage = () => {
     router.push(`?${params.toString()}`);
   };
 
-  const getShelters = async () => {
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const itemsPerPage = 10; 
+
+  const getShelters = useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
-      setOrganizations(organizationsMock);
-      setTotal(120);
+      const res = await OrganizationsApi.getOrganizations(filters);
+      const organizationData = res.data?.results || [];
+      // const organizationData = res.data?.results.filter(o => o.type == "Shalters")
+      setOrganizations(organizationData);
+      setTotal(res.data?.count || 0);
     } catch (error) {
       setOrganizations([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    getShelters();
   }, []);
 
-  useEffect(() => {
-    if('/shelters' !== pathname) setShowMap(false);
-  }, []);
+  // useEffect(() => {
+  //   const page = Number(searchParams.get(Params.PAGE)) || 1;
+  //   getShelters(page);
+  // }, [searchParams]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (
-        showMap &&
-        target &&
-        !target.closest('#map') &&  
-        !target.closest('#button')   
-      ) {
-        setShowMap(false);
+    const filters: Record<string, string> = {};
+  
+    filters.limit = String(itemsPerPage);
+    filters.page = String(currentPage);
+    filters['organization-type'] = 'SHELTER'; 
+  
+    searchParams.forEach((value, key) => {
+      if (key !== Params.PAGE) {
+        // якщо параметр вже є (наприклад organization-type), то додаємо через кому
+        if (filters[key]) {
+          filters[key] = `${filters[key]},${value}`;
+        } else {
+          filters[key] = value;
+        }
       }
-    };
+    });
+  
+    getShelters(filters);
+  }, [searchParams, getShelters]);
+  
 
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMap]);
-
+  useEffect(() => {
+    if (pathname !== '/shelters') {
+      setShowMap(false);
+    }
+  }, [pathname]);
+  
   return (
     <div className={style.container}>
       <div className={style.buttons}>
         <Button
-          id="button"
           label={showFilters ? t('hideFilters') : t('showFilters')}
           onClick={() => setShowFilters((prev) => !prev)}
           empty={!showFilters}
           icon='filter'
         />
         <Button
-          id="button"
           label={showMap ? t('hideMap') : t('showMap')}
           onClick={() => setShowMap((prev) => !prev)}
           empty={!showMap}
           icon='map'
+          disabled={organizations.every(o => o.address === null)}
         />
       </div>
 
       <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} needFullFilters={true} />
 
-        <div id='map'>
+        <div>
           <div className={style.content}>
             <List
               isLoading={isLoading}
@@ -126,10 +138,10 @@ const SheltersPage = () => {
           <Pagination
             className={style.pagination}
             totalCount={total}
-            pageSize={paginationConfig.animals}
+            pageSize={paginationConfig.shelteres}
             currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
             onPageChange={changePage}
-          /> 
+          />
         </div>
     </div>
   );

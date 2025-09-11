@@ -36,9 +36,9 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
   const {push} = useRouter();
   const cardClasses = classNames(style.card, className);
   const cardStyles = {
-    backgroundImage: `url(${animal.image})`
+    backgroundImage: `url(${animal.image})`,
   };
-
+  console.log('image:', animal.image);
   const handleCardClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
     // Nie przekierowuj jeśli kliknięto w button
@@ -80,7 +80,7 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
           <div className={style.about}>
             <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>
             <div className={classNames(style.badge, style.age)}>+{animal.age}</div>
-            {animal.characteristics.length > 0 && (
+            {animal.characteristics?.length > 0 && (
               <div className={classNames(style.badge, style.characteristics)}>
                 {t(`characteristics.${animal.species}.${animal.characteristics[0]}`)}
               </div>
@@ -96,7 +96,7 @@ const AnimalCard = ({ className, animal }: AnimalCardProps) => {
         <div className={style.hoverContent} >
           <div className={style.data}>
             <div className={classNames(style.badge, style.gender)}>
-              <span>Płeć: {t(`gender.${animal.gender}`)}</span>
+              <span>Płeć:  {t(`gender.${animal.gender}`)}</span>
               <Icon name={genderIconNames[animal.gender]} />
             </div>
             <div className={classNames(style.badge, style.size)}>Wielkość: {t(`size.${animal.size}`)}</div>

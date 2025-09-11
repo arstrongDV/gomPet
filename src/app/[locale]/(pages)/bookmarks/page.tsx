@@ -102,7 +102,7 @@ const Bookmarks = () => {
               <div className={style.bottom}>
                 <div className={style.location}>
                   <Icon name='mapPin' />
-                  <span>{animal.owner.address.city}</span>
+                  <span>{animal.city}</span>
                 </div>
               </div>
             </div>

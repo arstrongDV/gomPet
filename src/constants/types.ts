@@ -126,7 +126,8 @@ export interface IAnimal {
   owner: T<IUser | IOrganization>;
   parents: IAnimal[];
   status: AnimalStatus;
-  characteristics: string[];
+  discription: string;
+  characteristicsBoard: string[];
 
   price: number;
   location: {

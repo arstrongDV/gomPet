@@ -81,16 +81,14 @@
   flex-wrap: wrap;
 }
 
-
 .list {
   flex: 1; 
   // grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-
   display: grid;
   gap: $spacing-4;
   margin: 20px 0;
   transition: $transition-main;
-  // justify-content: center;
+  justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
 
   @media (max-width: 768px) {
@@ -104,7 +102,7 @@
 
   @media (max-width: 360px) {
     grid-template-columns: 1fr;
-    justify-items: center; // <- też tu
+    justify-items: center;
     gap: $spacing-2;
   }
 }

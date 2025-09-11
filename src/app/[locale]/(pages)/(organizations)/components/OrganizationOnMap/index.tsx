@@ -9,6 +9,7 @@ import { IOrganization } from 'src/constants/types';
 import classNames from 'classnames';
 import style from './OrganizationOnMap.module.scss';
 import { Pin } from '@vis.gl/react-google-maps';
+import toast from 'react-hot-toast';
 
 type OrganizationOnMapProps = {
   className?: string;
@@ -17,7 +18,7 @@ type OrganizationOnMapProps = {
 
 const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapProps) => {
 
-  if (!organizations.length || !organizations[0].address) return null;
+  if (!organizations.length || !organizations[0].address) return null
 
   const center = {
     lat: +organizations[0].address.lat,
