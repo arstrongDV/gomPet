@@ -34,7 +34,7 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
 
   const organization = {
     SHELTER: t('common.organization.SHELTER'),
-    fund: t('common.organization.fund'),
+    FUND: t('common.organization.FUND'),
     BREEDER: t('common.organization.BREEDER')
   };
 

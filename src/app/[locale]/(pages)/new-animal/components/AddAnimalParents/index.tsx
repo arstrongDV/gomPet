@@ -1,32 +1,23 @@
 'use client'
 import style from './AddParents.module.scss'
-import { useState } from "react"
-import { Gender } from 'src/constants/types';
+import { useEffect, useState, useCallback, useRef } from "react"
+import { Gender, IAnimal } from 'src/constants/types';
 import { OptionType } from 'src/components/layout/Forms/Select';
-import PhotosOrganizer from '../PhotosOrganizer';
 import { 
     Card, 
     Input, 
     Select, 
-    InputWrapper, 
-    Tag, 
-    Icon, 
-    Checkbox, 
-    FileDropzone,
     Button
 } from "src/components"
-
-type ParentsOfParent = {
-    name: string;
-    photo: File;
-    parentsOfWho: string;
-}
+import { AnimalsApi } from 'src/api';
+import debounce from 'lodash/debounce';
+import toast from 'react-hot-toast';
 
 type Parent = {
+    id: number;
     name: string;
-    gender: Gender;
-    photos: File[];
-    grandparents?: ParentsOfParent[];
+    relation?: string | OptionType;
+    photo?: string;
 };
 
 type AnimalAddParentsProps = {
@@ -37,65 +28,145 @@ type AnimalAddParentsProps = {
 };
 
 type AnimalKey = string;
+const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+    dog: [
+      { value: 'beagle', label: 'Beagle' },
+      { value: 'terrier', label: 'Terrier' }
+    ],
+    cat: [
+      { value: 'british', label: 'British' }
+    ]
+};
 
-const AddAnimalParents = ({ className, onAddParent, selectSpeciesValue, parents }: AnimalAddParentsProps) => {
-    const [name, setName] = useState<string>('');
-    const [gender, setGender] = useState<Gender>(Gender.MALE);
-    const [hasMetrics, setHasMetrics] = useState<boolean>(false);
-    const [photos, setPhotos] = useState<File[]>([]);
+const animalsRelation = [
+    { value: 'MOTHER', label: 'Matka' },
+    { value: 'FATHER', label: 'Ojciec' },
+]
+
+const animalSpecies = [
+    {
+      value: 'dog',
+      label: 'Pies'
+    },
+    {
+      value: 'cat',
+      label: 'Kot'
+    }
+]
+
+const AddAnimalParents = ({ className, onAddParent }: AnimalAddParentsProps) => {
+    const [searchName, setSearchName] = useState<string>('');
+    const [relation, setRelation] = useState<OptionType | null>(null);
+    const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
     const [selectRaceValue, setSelectRaceValue] = useState<OptionType>(null);
+    
+    const [selectedAnimal, setSelectedAnimal] = useState<IAnimal | null>(null);
+    const [previouslySelectedAnimals, setPreviouslySelectedAnimals] = useState<IAnimal[]>([]);
 
-    const [parentsOfWho, setParentsOfWho] = useState<OptionType | null>(null);
-    const [animalParents, setAnimalParents] = useState<ParentsOfParent[]>([]);
+    const [animals, setAnimals] = useState<IAnimal[]>([]); // Fixed: changed to array
+    const [loading, setLoading] = useState(false);
 
-    const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-        dog: [
-            { value: 'beagle', label: 'Beagle' },
-            { value: 'terrier', label: 'Terrier' }
-        ],
-        cat: [
-            { value: 'british', label: 'British' }
-        ]
-    };
+    // Debounced search function
+    const debouncedSearch = useCallback(
+        debounce(async (filters: { name?: string; species?: string; breed?: string }) => {
+            try {
+                setLoading(true);
+                const res = await AnimalsApi.getAnimals(filters);
+                setAnimals(res.data?.results ?? []);
+            } catch (e) {
+                console.error('Error fetching animals:', e);
+            } finally {
+                setLoading(false);
+            }
+        }, 500),
+        []
+    );
 
     const filteredRaceOpt = selectSpeciesValue
-        ? (animalRace[`${selectSpeciesValue.value}`] || []).filter(
-            (opt) => opt.value !== selectRaceValue?.value
-        )
+        ? animalRace[selectSpeciesValue.value] || []
         : [];
 
-    const handleAdd = () => {
-        if (!name || (parents?.length ?? 0) >= 6) return;
+    const buttonDisableWhen = [
+        !selectedAnimal,
+        !relation?.value,
+    ];
+      
+    const isButtonDisabled = buttonDisableWhen.some(Boolean);
+
+    // Effect for filtering
+    useEffect(() => {
+        const filters: any = {};
         
+        if (searchName) {
+            filters.name = searchName;
+        }
+        
+        if (selectSpeciesValue?.value) {
+            filters.species = [selectSpeciesValue.value];
+        }
+        
+        if (selectRaceValue?.value) {
+            filters.breed = [selectRaceValue.value];
+        }
+        
+        debouncedSearch(filters);
+    }, [searchName, selectSpeciesValue, selectRaceValue, debouncedSearch]);
+
+    const handleAdd = () => {
+        if (!selectedAnimal) return;
+
         const newParent: Parent = {
-            name,
-            gender,
-            photos,
-            grandparents: []
+            id: selectedAnimal.id,
+            name: selectedAnimal.name,
+            relation: relation?.value,
+            photo: selectedAnimal.image ?? undefined
         };
 
-        // If we're adding grandparents (parents already exist)
-        if (parentsOfWho && (parents?.length ?? 0) >= 2) {
-            const newGrandparent: ParentsOfParent = {
-                name,
-                photo: photos[0] || null,
-                parentsOfWho: String(parentsOfWho.value)
-            };
-            
-            // Update the animalParents array
-            const updatedAnimalParents = [...animalParents, newGrandparent];
-            setAnimalParents(updatedAnimalParents);
-            
-            // Add to the parent's parentsOfParent array
-            newParent.grandparents = updatedAnimalParents.filter(n => n.parentsOfWho === String(parentsOfWho.value));
+        if (relation?.value == null) {
+            toast.error("Musisz wybrać relację!");
+            return;
         }
 
+        if (
+            (selectedAnimal.gender === "MALE" && relation.value === "MOTHER") ||
+            (selectedAnimal.gender === "FEMALE" && relation.value === "FATHER")
+        ) {
+            toast.error("Relacja nie zgadza się z płcią zwierzęcia!");
+            return;
+        }
+        
         onAddParent(newParent);
-        setName('');
-        setGender(Gender.MALE);
-        setHasMetrics(false);
-        setPhotos([]);
-        setParentsOfWho(null);
+
+        // Add to previously selected
+        setPreviouslySelectedAnimals(prev => [...prev, selectedAnimal]);
+        
+        // Reset form
+        setSelectedAnimal(null);
+        setSearchName(''); 
+        setSelectSpeciesValue(null);
+        setSelectRaceValue(null);
+        setRelation(null);
+    };
+
+    const handleAnimalSelect = (animal: IAnimal) => {
+        // Check if animal was previously selected
+        if (previouslySelectedAnimals.some(prevAnimal => prevAnimal.id === animal.id)) {
+            toast.error("To zwierzę zostało już wybrane poprzednio");
+            return;
+        }
+
+        if (previouslySelectedAnimals.some(prevAnimal => prevAnimal.gender === animal.gender)) {
+            toast.error("Nie moze byc dwa zwierza z jednym płciem");
+            return;
+        }
+        
+        // Check if animal is currently selected
+        // if (selectedAnimal?.id === animal.id) {
+        //     toast.error("To samo zwierzę zostało kliknięte");
+        //     return;
+        // }
+        
+        setSelectedAnimal(animal);
     };
 
     return (
@@ -104,87 +175,92 @@ const AddAnimalParents = ({ className, onAddParent, selectSpeciesValue, parents 
                 Dodawanie <mark>rodziny</mark>
             </h3>
 
-            <div className={style.fullWidth}>
-                <Input
-                    id='animal-name'
-                    name='animal-name'
-                    label={'Nazwij zwierzaka'}
-                    placeholder={'Jak się wabi?'}
-                    value={name}
-                    onChangeText={setName}
-                    required
-                />
-            </div>
+            <Input
+                id='search-animal'
+                name='search-animal'
+                label={'Wyszukaj zwierzę'}
+                placeholder={'Wpisz nazwę...'}
+                value={searchName}
+                onChangeText={setSearchName}
+            />
 
             <div className={style.flexRow}>
                 <Select
-                    label={'Rasa'}
-                    options={filteredRaceOpt}
-                    onChange={setSelectRaceValue}
-                    value={selectRaceValue}
+                    label={'Gatunek'}
+                    options={animalSpecies}
+                    onChange={setSelectSpeciesValue}
+                    value={selectSpeciesValue}
+                    isClearable
                 />
 
-                {(parents?.length ?? 0) >= 2 && (
-                    <Select
-                        label={'Czyj rodzic'}
-                        options={parents?.slice(0, 2).map((p) => ({ value: p.name, label: p.name })) ?? []}
-                        onChange={setParentsOfWho}
-                        value={parentsOfWho}
-                    />
-                )}
-
-                <InputWrapper label={'Płeć'}>
-                    <div className={style.genderSelect}>
-                        <Tag
-                            selected={gender === Gender.MALE}
-                            onClick={() => setGender(Gender.MALE)}
-                        >
-                            {(parents?.length ?? 0) <= 1 ? 'Ojciec' : 'Dziadek'}
-                            <Icon name='genderMale' />
-                        </Tag>
-                        <Tag
-                            selected={gender === Gender.FEMALE}
-                            onClick={() => setGender(Gender.FEMALE)}
-                        >
-                            {(parents?.length ?? 0) <= 1 ? 'Matka' : 'Babcia'}
-                            <Icon name='genderFemale' />
-                        </Tag>
-                    </div>
-                </InputWrapper>
+                <Select
+                    label={'Rasa'}
+                    options={filteredRaceOpt} 
+                    onChange={setSelectRaceValue}
+                    value={selectRaceValue}
+                    isClearable
+                />
             </div>
 
-            <Checkbox
-                id='animal-has-metrics'
-                label={'Czy zwierzak ma metrykę?'}
-                checked={hasMetrics}
-                onClick={() => setHasMetrics((prev) => !prev)}
-            />
-
-            <h3>
-                Zaprezentuj <mark>zdjęcia</mark>
-            </h3>
-
-            <FileDropzone
-                files={photos}
-                setFiles={setPhotos}
-            />
-
-            <PhotosOrganizer
-                photos={photos}
-                setPhotos={setPhotos}
-            />
-
-            <span className={style.caption}>
-                Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
-                formaty to .png, .jpg, .jpeg
-            </span>
-
-            <Button 
-                className={style.buttonAdd} 
-                icon='plus' 
-                label="Dodaj" 
-                onClick={handleAdd} 
-            />
+            {/* Lista zwierząt */}
+            <div className={style.animalsList}>
+                <h4>Dostępne zwierzęta:</h4>
+                
+                {loading ? (
+                    <p>Ładowanie...</p>
+                ) : animals.length === 0 ? (
+                    <p>Brak zwierząt spełniających kryteria</p>
+                ) : (
+                    <div className={style.animalsGrid}>
+                        {animals.map(animal => (
+                            <div
+                                key={animal.id}
+                                className={`${style.animalItem} ${selectedAnimal?.id === animal.id ? style.selected : ''}`}
+                                onClick={() => handleAnimalSelect(animal)}
+                            >
+                                <img
+                                    src={animal.image || '/images/no-photo.png'}
+                                    className={style.animalPhoto}
+                                    // onError={(e) => {
+                                    //     e.currentTarget.src = '/images/no-photo.png';
+                                    // }}
+                                />
+                                <div className={style.animalInfo}>
+                                    <h5>{animal.name}</h5>
+                                    <p>{animal.species} • {animal.breed}</p>
+                                    <p>Płeć: {animal.gender}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+            
+            <div className={style.bottom}>
+                <Button 
+                    className={style.buttonAdd} 
+                    icon='plus' 
+                    label="Dodaj jako rodzica" 
+                    onClick={handleAdd} 
+                    disabled={isButtonDisabled}
+                />
+                
+                {selectedAnimal && (
+                    <div className={style.animalParent}>
+                        <Select
+                            options={animalsRelation}
+                            onChange={setRelation}
+                            value={relation}
+                            isClearable
+                            placeholder="Wybierz relację"
+                        />
+                        <div className={style.selectedAnimal}>
+                            <h4>Wybrane zwierzę:</h4>
+                            <p><strong>{selectedAnimal.name}</strong> ({selectedAnimal.species}, {selectedAnimal.breed})</p>
+                        </div>
+                    </div>
+                )}
+            </div>
         </Card>
     )
 }

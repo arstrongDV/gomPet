@@ -44,4 +44,4 @@ export const PUBLIC_ONLY_ROUTES = [
   Routes.VERIFY_EMAIL
 ];
 
-export const PROTECTED_ROUTES = [Routes.DASHBOARD, Routes.LIBRARY, Routes.NEW_ORGANIZATION, Routes.NEW_ANIMAL];
+export const PROTECTED_ROUTES = [Routes.DASHBOARD, Routes.LIBRARY, Routes.NEW_ORGANIZATION, Routes.NEW_ANIMAL, Routes.MY_ANIMALS];

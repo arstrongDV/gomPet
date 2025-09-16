@@ -70,7 +70,8 @@ const PhotosOrganizer = ({ photos, setPhotos }: PhotosOrganizerProps) => {
   useEffect(() => {
     const container = document.querySelector('.container')!;
     swapyRef.current = createSwapy(container, {
-      manualSwap: true
+      manualSwap: true,
+      plugins: ["Swapy"],
     });
 
     swapyRef.current.onSwap(({ data }: any) => {

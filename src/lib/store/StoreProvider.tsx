@@ -56,19 +56,19 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
   }, []);
 
   // Ustawienie danych sesji do store
-  // useEffect(() => {
-  //   if (!storeRef.current) return;
+  useEffect(() => {
+    if (!storeRef.current) return;
   
-  //   if (session.status === 'authenticated' && session.data) {
-  //     storeRef.current.dispatch(setAuth({
-  //       access_token: session.data.access_token,
-  //       refresh_token: session.data.refresh_token,
-  //       user: session.data.user
-  //     }));
-  //   } else if (session.status === 'unauthenticated') {
-  //     storeRef.current.dispatch(clearAuth());
-  //   }
-  // }, [session.status, session.data]);
+    if (session.status === 'authenticated' && session.data) {
+      storeRef.current.dispatch(setAuth({
+        access_token: session.data.access_token,
+        refresh_token: session.data.refresh_token,
+        user: session.data.user
+      }));
+    } else if (session.status === 'unauthenticated') {
+      storeRef.current.dispatch(clearAuth());
+    }
+  }, [session.status, session.data]);
 
 
   // Subskrybuj zmiany tokena w store i aktualizuj sesję jeśli potrzeba

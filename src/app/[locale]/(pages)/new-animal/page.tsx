@@ -32,23 +32,32 @@ import AddAnimalParents from './components/AddAnimalParents';
 import classNames from 'classnames';
 import toast from 'react-hot-toast';
 
-type ParentOfParent = {
-  name: string;
-  photo: File;
-  parentsOfWho: string;
-}
+// type ParentOfParent = {
+//   name: string;
+//   photo: File;
+//   parentsOfWho: string;
+// }
 
 type Parent = {
   name: string;
-  gender: Gender;
-  photos: File[];
-  grandparents?: ParentOfParent[];
+  // gender: Gender;
+  id: number
+  relation: OptionType | string;
+  photo?: string;
 };
+
+type AddParents = {
+  // animal: number;
+  parent: number;
+  relation?: string | OptionType;
+}
 
 type Characteristic = {
   title: string,
   bool: boolean
 }
+
+type AnimalKey = string;
 
 const NewAnimalPage = () => {
   const t = useTranslations();
@@ -67,12 +76,7 @@ const NewAnimalPage = () => {
   const [descriptions, setDescriptions] = useState<string>("")
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
-  const [newParents, setNewParents] = useState<Parent[]>([]);
-
-  const [characteristicsBoard, setCharacteristicsBoard] = useState<Characteristic[]>([]);
-
-
-
+  const [newParents, setNewParents] = useState<AddParents[]>([]);
 
   useEffect(() => {
     document.body.style.overflow = isParentsAdd ? 'hidden' : '';
@@ -88,14 +92,30 @@ const NewAnimalPage = () => {
         label: 'Kot'
       }
   ]
+  
   const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
     dog: [
       { value: 'beagle', label: 'Beagle' },
-      { value: 'terrier', label: 'Terrier' }
+      { value: 'terrier', label: 'Terrier' },
+      { value: 'labrador', label: 'Labrador' },
     ],
     cat: [
-      { value: 'british', label: 'British' }
-    ]
+      { value: 'british', label: 'British Shorthair' },
+      { value: 'siamese', label: 'Siamese' },
+      { value: 'persian', label: 'Persian' },
+    ],
+    other: [
+      { value: 'other', label: 'Other' },
+    ],
+  };
+  const genderMap: Record<string, string> = {
+    male: 'MALE',
+    female: 'FEMALE'
+  };
+  const statusMap: Record<string, string> = {
+    'Do adopcji': 'AVAILABLE',
+    'Ma właściciela': 'ADOPTED',
+    'Kwarantanna': 'RESERVED'
   };
 
   const filteredSpeciesOpt = animalSpecies.filter(opt => opt.value !== selectSpeciesValue?.value)
@@ -104,56 +124,6 @@ const NewAnimalPage = () => {
       (opt) => opt.value !== selectRaceValue?.value
     )
   : [];
-
-  useEffect(() => {
-    const mappedParents: Parent[] = [
-      // First main parent
-      {
-        name: parents[0]?.name || '',
-        gender: parents[0]?.gender || Gender.MALE,
-        photos: parents[0]?.photos || [],
-        grandparents: []
-      },
-      // Second main parent  
-      {
-        name: parents[1]?.name || '',
-        gender: parents[1]?.gender || Gender.MALE,
-        photos: parents[1]?.photos || [],
-        grandparents: []
-      }
-    ].filter(parent => parent.name);
-  
-    // Add grandparents WITHOUT duplicates
-    parents.forEach((potentialGrandparent, index) => {
-      // Skip first two parents (they're the main parents)
-      if (index < 2) return;
-  
-      // Check if this is actually a grandparent with parent info
-      if (potentialGrandparent.grandparents && potentialGrandparent.grandparents.length > 0) {
-        potentialGrandparent.grandparents.forEach(gp => {
-          const mainParentIndex = mappedParents.findIndex(p => p.name === gp.parentsOfWho);
-          
-          if (mainParentIndex !== -1) {
-            // Check if this grandparent already exists to avoid duplicates
-            const grandparentExists = mappedParents[mainParentIndex].grandparents!.some(
-              existingGp => existingGp.name === potentialGrandparent.name
-            );
-            
-            if (!grandparentExists) {
-              mappedParents[mainParentIndex].grandparents!.push({
-                name: potentialGrandparent.name,
-                photo: potentialGrandparent.photos[0] || new File([], ''),
-                parentsOfWho: gp.parentsOfWho
-              });
-            }
-          }
-        });
-      }
-    });
-  
-    setNewParents(mappedParents);
-  }, [parents]);
-
 
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -167,43 +137,7 @@ const NewAnimalPage = () => {
 
   const handleSubmit = async () => {
     try {
-      // Gender mapping
-      const genderMap: Record<string, string> = {
-        male: 'MALE',
-        female: 'FEMALE'
-      };
-      const statusMap: Record<string, string> = {
-        'Do adopcji': 'AVAILABLE',
-        'Ma właściciela': 'ADOPTED',
-        'Kwarantanna': 'RESERVED'
-      };
-  
-      // Tworzymy FormData
       const formData = new FormData();
-      
-      // Dodajemy podstawowe dane
-      formData.append('name', name);
-      formData.append('species', String(selectSpeciesValue?.value ?? ''));
-      formData.append('breed', String(selectRaceValue?.value ?? ''));
-      formData.append('gender', genderMap[gender]);
-      formData.append('size', 'SMALL');
-      formData.append('birth_date', '2019-05-19');
-      formData.append('status', statusMap[status]);
-      formData.append('price', "2100");
-      formData.append('descriptions', descriptions);
-      formData.append('city', "Krakow");
-      formData.append('location', JSON.stringify({
-        type: "Point",
-        coordinates: [20.673144511006825, 51.59228169182775]
-      }));
-  
-      // Główne zdjęcie
-      if (photos.length > 0) {
-        const base64 = await fileToBase64(photos[0]);
-        formData.append('image', base64);
-      }
-  
-      // Galeria zdjęć - TABLICA OBIEKTÓW Z BASE64 (BEZ JSON.stringify!)
       const galleryWithBase64 = await Promise.all(
         photos.map(async (photo) => {
           const base64 = await fileToBase64(photo);
@@ -213,39 +147,94 @@ const NewAnimalPage = () => {
         })
       );
   
-      // Dodaj galerię jako ARRAY (nie string!)
+      formData.append('name', name);
+      formData.append('species', String(selectSpeciesValue?.value ?? ''));
+      formData.append('breed', String(selectRaceValue?.value ?? ''));
+      formData.append('gender', genderMap[gender]);
+      formData.append('size', 'SMALL');
+      formData.append('birth_date', '2025-05-19');
+      formData.append('status', statusMap[status]);
+      formData.append('price', "2100");
+      formData.append('descriptions', descriptions);
+      formData.append('city', "Krakow");
+      formData.append('location', JSON.stringify({
+        type: "Point",
+        coordinates: [20.673144511006825, 51.59228169182775]
+      }));
+      if (photos.length > 0) {
+        const base64 = await fileToBase64(photos[0]);
+        formData.append('image', base64);
+      }
       galleryWithBase64.forEach((item, index) => {
         formData.append(`gallery[${index}][image]`, item.image);
       });
-  
-      // Dodajemy charakterystyki - jako ARRAY
+
       const characteristicsBoard = Object.entries(characteristics.dog).map(
         ([key, value]) => ({
           title: value,
           bool: selectedCharacteristics.includes(key)
         })
       );
-  
       characteristicsBoard.forEach((char, index) => {
         formData.append(`characteristicBoard[${index}][title]`, char.title);
         formData.append(`characteristicBoard[${index}][bool]`, char.bool.toString());
       });
+
   
-      // Dodajemy rodziców (jeśli istnieją) - jako JSON string (jeśli backend tego oczekuje)
-      if (newParents.length > 0) {
-        formData.append('parents', JSON.stringify(newParents));
+      console.log([...formData.entries()]);
+      console.log("descriptions: ", descriptions);
+      console.log("newParents: ", JSON.stringify(newParents))
+      
+
+      // if (newParents.length > 0) {
+      //   formData.append('parents', JSON.stringify(newParents));
+      // }
+      
+      const animals_res = await AnimalsApi.createNewAnimal(formData);
+      console.log("animals_res: ", animals_res);
+      // console.log("parents_res: ", parents_res);
+
+
+
+      if (animals_res.status === 201 || animals_res.statusText === "Created") {
+        const animalId = animals_res.data?.id;
+        
+        if (animalId && parents.length > 0) {
+          const parentsToAdd = parents.slice(0, 2);
+          let successCount = 0;
+          
+          for (const [index, parent] of parentsToAdd.entries()) {
+            try {
+              const parentData = {
+                animal: animalId,
+                parent: parent.id,
+                relation: typeof parent.relation === 'object' ? parent.relation?.value : parent.relation
+              };
+              
+              console.log(`Adding parent ${index + 1}:`, parentData);
+              
+              await AnimalsApi.addAnimalParents(parentData);
+              successCount++;
+              console.log(`Parent ${index + 1} added successfully`);
+              
+            } catch (parentError) {
+              console.error(`Failed to add parent ${index + 1}:`, parentError);
+              toast.error("Failed to add parent")
+            }
+          }
+          
+          if (successCount === 0) {
+            toast.error("Animal created but failed to add any parents");
+          } else if (successCount < parentsToAdd.length) {
+            toast.error(`Animal created, added ${successCount} of ${parentsToAdd.length} parents`);
+          } else {
+            toast.success("Animal created with all parents");
+          }
+        }
       }
   
-      // DEBUG: Sprawdź strukturę
-      console.log('Gallery data:', galleryWithBase64);
-      console.log('Characteristics data:', characteristicsBoard);
-  
-      // Wywołanie API z FormData
-      const res = await AnimalsApi.createNewAnimal(formData);
-      console.log('New animal created:', res);
+
       toast.success("Animal created");
-  
-      // Resetowanie formularza
       setName('');
       setGender(Gender.MALE);
       setStatus('');
@@ -258,7 +247,6 @@ const NewAnimalPage = () => {
       setNewParents([]);
       setIsParentsAdd(false);
       setDescriptions('');
-      
     } catch (err: any) {
       console.error('Failed to create animal:', err.response?.data || err);
       toast.error("Failed to create animal");
@@ -441,9 +429,11 @@ const NewAnimalPage = () => {
           </h3>
 
           <div className={style.familyTreeBlock}>
-            <div className={style.addParents} onClick={() => setIsParentsAdd((prev) => !prev)}>
+
+            <div className={style.addParents} onClick={() => setIsParentsAdd((prev) => !prev)} aria-disabled={parents.length == 2}>
               <Icon name='plus' />
             </div>
+
             {parents.map((p, index) => (
               <div key={index} className={style.parent}>
                 <Icon 
@@ -455,7 +445,7 @@ const NewAnimalPage = () => {
                 />
                 <img 
                   className={style.image}
-                  src={p.photos && p.photos.length > 0 ? URL.createObjectURL(p.photos[0]) : ''} 
+                  src={p.photo ? p.photo : ''} 
                   draggable={false} 
                   alt="parent_photo"
                 />
@@ -466,7 +456,6 @@ const NewAnimalPage = () => {
 
             <AddAnimalParents 
               className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
-              parents={parents}
               selectSpeciesValue={selectSpeciesValue}
               onAddParent={(parent) => {
                 setParents((prev) => [...prev, parent]);
@@ -488,103 +477,3 @@ const NewAnimalPage = () => {
 };
 
 export default NewAnimalPage;
-
-
-  // const handleSubmit = async () => {
-  
-  //   console.log('Mapped parents:', newParents);
-  //   try {
-  //     // Gender mapping
-  //     const genderMap: Record<string, string> = {
-  //       male: 'MALE',
-  //       female: 'FEMALE'
-  //     };
-  //     const statusMap: Record<string, string> = {
-  //       'Do adopcji': 'AVAILABLE',
-  //       'Ma właściciela': 'ADOPTED',
-  //       'Kwarantanna': 'RESERVED'
-  //     };
-
-  //     const base64Gallery = await Promise.all(photos.map(fileToBase64));
-
-  //     const base64GalleryWithOrder = base64Gallery.map((img) => ({
-  //       image: img,
-  //     }));
-  
-
-  //     const characteristicsBoard: Characteristic[] = Object.entries(characteristics.dog).map(
-  //       ([key, value]) => ({
-  //         title: value, // наприклад "Akceptuje koty"
-  //         bool: selectedCharacteristics.includes(key) // true якщо юзер вибрав
-  //       })
-  //     );
-  //     console.log("image: ", photos[0])
-  //     console.log("gallery: ", photos)
-
-  //     const res = await AnimalsApi.createNewAnimal({
-  //       name: name,
-  //       image: photos[0],
-  //       gallery: photos,
-  //       species: String(selectSpeciesValue?.value ?? ''),
-  //       breed: String(selectRaceValue?.value ?? ''),
-  //       gender: genderMap[gender],
-  //       size: 'SMALL',
-  //       birth_date: '2019-05-19',
-  //       status: statusMap[status],
-  //       price: "2100",
-  //       descriptions: descriptions, 
-  //       city: "Krakow",
-  //       location: {
-  //         type: "Point",
-  //         coordinates: [
-  //             20.673144511006825,
-  //             51.59228169182775
-  //         ]
-  //       },
-  //       characteristicBoard: characteristicsBoard,
-  //       parents: newParents
-  //     });
-  //     console.log({
-  //       name: name,
-  //       image: base64Gallery[0],
-  //       gallery: base64GalleryWithOrder,
-  //       species: String(selectSpeciesValue?.value ?? ''),
-  //       breed: String(selectRaceValue?.value ?? ''),
-  //       gender: genderMap[gender],
-  //       size: 'SMALL',
-  //       birth_date: '2019-05-19',
-  //       status: statusMap[status],
-  //       price: "2100",
-  //       descriptions: descriptions, 
-  //       city: "Krakow",
-  //       location: {
-  //         type: "Point",
-  //         coordinates: [
-  //             20.673144511006825,
-  //             51.59228169182775
-  //         ]
-  //       },
-  //       characteristicBoard: characteristicsBoard,
-  //       parents: newParents
-  //     })
-  //     console.log('New animal created:', res);
-  //     toast.success("Animal created")
-
-  //     setName('');
-  //     setGender(Gender.MALE);
-  //     setStatus('');
-  //     setHasMetrics(false);
-  //     setPhotos([]);
-  //     setSelectSpeciesValue(null);
-  //     setSelectRaceValue(null);
-  //     setSelectedCharacteristics([]);
-  //     setParents([])
-  //     setNewParents([])
-  //     setIsParentsAdd(false)
-  //     setDescriptions('')
-      
-  //   } catch (err: any) {
-  //     console.error('Failed to create animal:', err.response?.data || err);
-  //     toast.error("Failed to create animal")
-  //   }
-  // };

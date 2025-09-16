@@ -1,187 +1,175 @@
-@import 'styles';
-
-.animalParents {
+.myFamilly {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: 100px;
-
-    @media (max-width: 1400px) {
-        gap: 40px;
-      }
-    
-    @media (max-width: 1024px) {
-        gap: 20px;
-    }
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-      gap: 40px;
-    }
-
-    @media (max-width: 550px) {
-        gap: 30px;
-      }
-  
+    width: 100%;
+    padding: 1.5rem;
   }
   
-.mainAnimal {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.animalParents img, .mainAnimal img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-
-    @media (max-width: 1400px) {
-        width: 50px;
-        height: 50px;
-    }
-
-    @media (max-width: 1024px) {
-        width: 48px;
-        height: 48px;
-    }
-
-    @media (max-width: 768px) {
-        width: 50px;
-        height: 50px;
-      }
-
-    @media (max-width: 550px) {
-        width: 40px;
-        height: 40px;
-    }
-}
-
-.aboutFamilly {
-    padding: 24px;
-
-}
-
-.aboutFamilly h3 {
-    font-size: $font-size-l;
-    @media (max-width: 550px) {
-        font-size: $font-size-m;
-    }
-}
-
-.aboutFamilly p {
-    font-size: $font-size-xs;
-    color: #798177;
-    font-weight: $font-regular;
-    @media (max-width: 550px) {
-        font-size: $font-size-xxs;
-    }
-}
-
-.mainAnimal img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-top: 16px;  
-    margin-bottom: 16px;
-
-    @media (max-width: 768px) {
-        width: 50px;
-        height: 50px;
-    }
-    @media (max-width: 1024px) {
-        width: 48px;
-        height: 48px;
-    }
-    @media (max-width: 1400px) {
-        width: 50px;
-        height: 50px;
-    }
-
-    @media (max-width: 550px) {
-        width: 40px;
-        height: 40px;
-    }
-}
-
-.level {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.parents {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2rem;
-    gap: 100px;
-
-    @media (max-width: 1400px) {
-        gap: 80px;
-    }
-
-    @media (max-width: 1024px) {
-        gap: 70px;
-    }
-
-    @media (max-width: 768px) {
-        gap: 80px;
-      }
-
-    @media (max-width: 550px) {
-        gap: 40px;
-    }
-}
-
-.node {
+  .aboutFamilly {
+    padding-bottom: 1rem;
     text-align: center;
-    margin-top: 8px;
-    margin-bottom: 8px;
-}
-
-.node img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-
-      @media (max-width: 550px) {
-        width: 40px;
-        height: 40px;
+  }
+  
+  .pyramidWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Każdy poziom drzewa */
+  .level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    /* Wiersz rodziców */
+    .parents {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 15px;
+      width: 100%;
+      flex-wrap: wrap; /* pozwala na zawijanie przy węższych ekranach */
+      margin-bottom: 15px;
+  
+      @media (max-width: 1024px) {
+        gap: 12px;
       }
-}
-
-
-.node p {
-    font-size: $font-size-xs;
-
-      @media (max-width: 550px) {
-        font-size: $font-size-xxs;
+  
+      @media (max-width: 768px) {
+        gap: 10px;
+        flex-wrap: wrap;
       }
-}
-
-.noPhoto {
-    width: 64px;
-    height: 64px;
-    background: #ddd;
-    border-radius: 50%;
-
-    @media (max-width: 1400px) {
-        width: 50px;
-        height: 50px;
+  
+      @media (max-width: 550px) {
+        gap: 8px;
+        flex-direction: column;
+        align-items: center;
+      }
     }
-
-      @media (max-width: 550px) {
-        width: 40px;
-        height: 40px;
+  
+    /* Węzeł (rodzic, dziadek) */
+    .node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 5px 0;
+  
+      img {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: transform 0.2s;
+  
+        &:hover {
+          transform: scale(1.1);
+        }
+  
+        @media (max-width: 1024px) {
+          width: 50px;
+          height: 50px;
+        }
+  
+        @media (max-width: 768px) {
+          width: 48px;
+          height: 48px;
+        }
+  
+        @media (max-width: 550px) {
+          width: 40px;
+          height: 40px;
+        }
       }
-}
-
-.noFamily{
-    padding: 24px;
-    font-size: 16px;
-}
+  
+      p {
+        margin-top: 6px;
+        font-size: 12px;
+        word-break: break-word;
+  
+        @media (max-width: 768px) {
+          font-size: 11px;
+        }
+  
+        @media (max-width: 550px) {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+  
+  /* Główne zwierzę (dziecko/root) na dole */
+  .rootNode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+  
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform 0.2s;
+  
+      &:hover {
+        transform: scale(1.05);
+      }
+  
+      @media (max-width: 1024px) {
+        width: 80px;
+        height: 80px;
+      }
+  
+      @media (max-width: 768px) {
+        width: 70px;
+        height: 70px;
+      }
+  
+      @media (max-width: 550px) {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  
+    p {
+      margin-top: 8px;
+      font-weight: bold;
+      font-size: 14px;
+  
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
+  
+      @media (max-width: 550px) {
+        font-size: 11px;
+      }
+    }
+  }
+  
+  /* Placeholder dla brakujących zdjęć */
+  .noPhoto {
+    background: #ccc;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+  
+    @media (max-width: 1024px) {
+      width: 50px;
+      height: 50px;
+    }
+  
+    @media (max-width: 768px) {
+      width: 48px;
+      height: 48px;
+    }
+  
+    @media (max-width: 550px) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  

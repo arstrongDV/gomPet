@@ -26,9 +26,9 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
   const { characteristics } = useAnimalInfo();
 
   const organization = {
-    animal_shelter: t('common.organization.animal_shelter'),
-    fund: t('common.organization.fund'),
-    breeding: t('common.organization.breeding')
+    SHELTER: t('common.organization.SHELTER'),
+    FUND: t('common.organization.FUND'),
+    BREEDER: t('common.organization.BREEDER')
   };
 
   const handleFilter = (filter: string, value: string, isArr = false) => {
@@ -88,7 +88,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
           onChange={(e) => setLocation(e.target.value)}
           onBlur={() => {if(location !== '') handleFilter(Params.LOCATION, location)}}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && location !== '') handleFilter(Params.LOCATION, location);
+            if (e.key === 'Enter') handleFilter(Params.LOCATION, location);
           }}
         />
         <Input
@@ -98,7 +98,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
           onChange={(e) => setRange(e.target.value)}
           onBlur={() => {if(range !== '') handleFilter(Params.RANGE, range)}}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && range !== '') handleFilter(Params.RANGE, range);
+            if (e.key === 'Enter') handleFilter(Params.RANGE, range);
           }}
         />
         <Input
@@ -108,14 +108,14 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
           onChange={(e) => setName(e.target.value)}
           onBlur={() => {if(name !== '') handleFilter(Params.NAME, name)}}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && name !== '') handleFilter(Params.NAME, name);
+            if (e.key === 'Enter') handleFilter(Params.NAME, name);
           }}
         />
         <Select
           label={t('pages.animals.filters.gender')}
           options={[toSelectOption(Gender.MALE), toSelectOption(Gender.FEMALE)]}
           value={toSelectOption(searchParams.get(Params.GENDER))}
-          onChange={(value: OptionType) => handleFilter(Params.GENDER, value ? String(value.value) : '')}
+          onChange={(value: OptionType) => handleFilter(Params.GENDER, value ? String(value.value).toUpperCase() : '')}
           isClearable
         />
         <Select
@@ -145,7 +145,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
           label={t('pages.animals.filters.size')}
           options={[toSelectOption(AnimalSize.SMALL), toSelectOption(AnimalSize.MEDIUM), toSelectOption(AnimalSize.LARGE)]}
           value={toSelectOption(searchParams.get(Params.SIZE))}
-          onChange={(value: OptionType) => handleFilter(Params.SIZE, value ? String(value.value) : '')}
+          onChange={(value: OptionType) => handleFilter(Params.SIZE, value ? String(value.value).toUpperCase() : '')}
           isClearable
         />
       </div>

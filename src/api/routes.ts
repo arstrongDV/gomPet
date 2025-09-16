@@ -25,10 +25,13 @@ export class WebsocketRoutes {
 export class AnimalsRouts {
   static ANIAML_LATEST = '/animals/latest/';
 
+  static ANIMAL_ID = (id: number) => `/animals/animals/${id}/`;
+
   static ANIAML_FILTERING = '/animals/filtering/';
   static ANIAML_FILTERING_ID = (id: number) => `/animals/filtering/${id}`;
 
-  static NEW_ANIMAL = '/animals/animals/';
+  static ANIMALS_ANIMALS = '/animals/animals/';
+  static ANIMAL_PARENTS = '/animals/parents/';
 
   static ANIAML_PROFILE = (id: number) => `/animals/animals/${id}/`;
   static ANIMAL_FAMILY_TREE = (id: number) => `/animals/family-tree/${id}/`

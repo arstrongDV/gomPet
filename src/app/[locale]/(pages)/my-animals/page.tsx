@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import style from './myAnimals.module.scss'
 import { paginationConfig } from "src/config/pagination";
 import { Routes } from "src/constants/routes";
+import toast from "react-hot-toast";
 
 const MyAnimals = () => {
     const searchParams = useSearchParams();
@@ -24,27 +25,32 @@ const MyAnimals = () => {
     const [animals, setAnimals] = useState<IAnimal[]>([])
     const [total, setTotal] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [openedCardId, setOpenedCardId] = useState<string | null>(null);
+
+    const handleToggleSettings = (id: string) => {
+      setOpenedCardId((prev) => (prev === id ? null : id));
+    };
 
     const changePage = (page: number) => {
         params.set(Params.PAGE, page.toString());
         router.push(`?${params.toString()}`);
       };
 
-      const getMyAnimals = async () => {
+      const getMyAnimals = async (page: number = 1) => {
         setIsLoading(true);
         try {
-          const response = await AnimalsApi.getMyAnimals();
-          console.log("Raw API response:", response.data);
-      
+          const response = await AnimalsApi.getAnimals({
+            page: page,
+            pageSize: paginationConfig.animals
+          });
+          
           const animalsData: IAnimal[] = response.data.results || [];
-      
           const myAnimals = animalsData.filter((res: IAnimal) => {
             return String(res.owner) === String(auth.data?.user?.id);
           });
           
           setAnimals(myAnimals);
           setTotal(response.data.count || myAnimals.length);
-          console.log("myAnimals:", myAnimals);
         } catch (error) {
           console.error("Error fetching animals:", error);
           setAnimals([]);
@@ -57,6 +63,34 @@ const MyAnimals = () => {
     useEffect(() => {
         getMyAnimals();
     }, []);
+
+    useEffect(() => {
+      const currentPage = params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1;
+      getMyAnimals(currentPage);
+    }, [params.get(Params.PAGE)]); // Add page as dependency
+
+    const handleDeleteAnimal = async (id: number) => {
+      try {
+        // Optimistic update: remove from UI first
+        setAnimals(prevAnimals => prevAnimals.filter(animal => animal.id !== id));
+        setTotal(prevTotal => prevTotal - 1);
+        
+        const res = await AnimalsApi.deleteAnimal(id);
+        console.log(res)
+        if (res.status == 204) {
+          // If API call fails, revert the UI change
+          toast.success("Animal deleted!");
+        } else {
+          await getMyAnimals(params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1);
+          toast.error("Failed to delete animal");
+        }
+      } catch (err) {
+        // Revert on error
+        await getMyAnimals(params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1);
+        console.log(err);
+        toast.error("Failed to delete animal");
+      }
+    };
 
     return(
         <div className={style.container}>
@@ -72,9 +106,16 @@ const MyAnimals = () => {
                     className={style.list}
                     isLoading={isLoading}
                 >
-                    {animals.map(animal => (
-                    <AnimalCard key={animal.id} animal={animal} />
-                    ))}
+                {animals.map((animal) => (
+                  <AnimalCard
+                    key={animal.id}
+                    animal={animal}
+                    isSettingsOpen={openedCardId === animal.id}
+                    onToggleSettings={() => handleToggleSettings(animal.id)}
+                    onDelete={handleDeleteAnimal} 
+                    setOpenedCardId={setOpenedCardId}
+                  />
+                ))}
                 </List>
             </div>
             

@@ -69,9 +69,9 @@ const Bookmarks = () => {
                 <div className={style.about}>
                   <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>
                   <div className={classNames(style.badge, style.age)}>+{animal.age}</div>
-                  {animal.characteristics.length > 0 && (
+                  {animal.characteristicsBoard?.length > 0 && (
                     <div className={classNames(style.badge, style.characteristics)}>
-                      {t(`characteristics.${animal.species}.${animal.characteristics[0]}`)}
+                      {t(`characteristics.${animal.species}.${animal.characteristicsBoard[0]}`)}
                     </div>
                   )}
                 </div>

@@ -27,7 +27,7 @@
   },
   "organization": {
     "SHELTER": "Schronisko",
-    "fund": "Fundacja",
+    "FUND": "Fundacja",
     "BREEDER": "Hodowla"
   },
   "noLocation": "Brak lokalizacji"

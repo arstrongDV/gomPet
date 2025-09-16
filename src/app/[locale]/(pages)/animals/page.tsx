@@ -33,7 +33,6 @@ const AnimalsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
   const [total, setTotal] = useState<number>(1);
-
   const [organizations, setOrganizations] = useState<IOrganization[]>([]);
 
   const [showFilters, setShowFilters] = useState<boolean>(true);
@@ -46,7 +45,7 @@ const AnimalsPage = () => {
 
   const currentPage = Number(searchParams.get('page')) || 1;
   const itemsPerPage = 10; 
-
+  console.log(searchParams);
   const getAnimals = React.useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
@@ -114,7 +113,7 @@ const AnimalsPage = () => {
                 })}
               >
                 {animals.map((animal) => (
-                  <AnimalCard key={animal.id} animal={animal} />
+                  <AnimalCard key={animal.id} animal={animal}/>
                 ))}
             </List>
 

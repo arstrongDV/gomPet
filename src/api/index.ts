@@ -74,24 +74,96 @@ export class OffersApi {
 }
 
 export class AnimalsApi {
-  static async getMyAnimals(){
-    return ApiClient.get(AnimalsRouts.NEW_ANIMAL, {
-      __tokenRequired: true 
-    })
-  }
 
+  static async getAnimals(filters: {
+    organizationType?: string[];
+    organizationId?: string[];
+    gender?: string[];
+    species?: string[];
+    breed?: string[];
+    location?: string[];
+    name?: string;
+    range?: number;
+  } = {}) {
+
+    const queryParams: Record<string, string> = {};
+    if (filters.organizationType?.length) {
+      queryParams['organization-type'] = filters.organizationType.join('&');
+    }
+  
+    if (filters.organizationId?.length) {
+      queryParams['organization-id'] = filters.organizationId.join('&');
+    }
+  
+    if (filters.gender?.length) {
+      queryParams['gender'] = filters.gender.join('&');
+    }
+  
+    if (filters.species?.length) {
+      queryParams['species'] = filters.species.join('&');
+    }
+  
+    if (filters.breed?.length) {
+      queryParams['breed'] = filters.breed.join('&');
+    }
+  
+    if (filters.location?.length) {
+      queryParams['location'] = filters.location.join('&');
+    }
+
+    if (filters.name) {
+      queryParams['name'] = filters.name;
+    }
+  
+    if (filters.range) {
+      queryParams['range'] = filters.range.toString();
+    }
+  
+    return ApiClient.get(AnimalsRouts.ANIMALS_ANIMALS, queryParams , {
+      __tokenRequired: true,
+    });
+  }
   static async getAnimalProfile(id: number){
     return ApiClient.get(AnimalsRouts.ANIAML_PROFILE(id))
   }
+  static async createNewAnimal(formData: FormData) {
+    return ApiClient.post(AnimalsRouts.ANIMALS_ANIMALS, formData, {
+      __tokenRequired: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+  static async updateAnimal(id: number, data: any) {
+    return ApiClient.put(AnimalsRouts.ANIMAL_ID(id), data, {
+      __tokenRequired: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+  static async deleteAnimal(id: number){
+    return ApiClient.delete(AnimalsRouts.ANIMAL_ID(id), {
+      __tokenRequired: true,
+    });
+  }
+  static async addAnimalParents(parents: any){
+    return ApiClient.post(AnimalsRouts.ANIMAL_PARENTS, parents, {
+      __tokenRequired: true,
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+    })
+  }
 
-static async createNewAnimal(formData: FormData) {
-  return ApiClient.post(AnimalsRouts.NEW_ANIMAL, formData, {
-    __tokenRequired: true,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-}
+  static async postAnimalsParents(payload: any) {
+    return ApiClient.post(AnimalsRouts.ANIMAL_PARENTS, payload, {
+      __tokenRequired: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+  }
 
   static async getAnimalFamilyTree(id: number){
     return ApiClient.get(AnimalsRouts.ANIMAL_FAMILY_TREE(id))
@@ -110,7 +182,7 @@ static async getAnimalPosts(animalId: number) {
       console.error('Error fetching animal posts:', error);
       throw error; // dalej rzucamy błąd, żeby front mógł go obsłużyć
     }
-  }
+}
 
   static async getAnimalsLatest(
     limit: number = 5,

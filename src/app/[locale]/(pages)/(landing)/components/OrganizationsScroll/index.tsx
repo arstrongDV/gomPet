@@ -23,7 +23,7 @@ const OrganizationsScroll = () => {
     setIsLoading(true);
     try {
       const response = await OrganizationsApi.getLatestOrganizations(5);
-      const organizationData = response.data?.results || response.data || [];
+      const organizationData = response.data || []; //response.data?.results
       setOrganizations(organizationData);
     } catch (err) {
       setOrganizations([]);

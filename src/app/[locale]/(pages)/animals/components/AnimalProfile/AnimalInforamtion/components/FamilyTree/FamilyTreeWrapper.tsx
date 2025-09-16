@@ -1,26 +1,58 @@
+'use client';
 import React from 'react';
 import styles from './FamilyTree.module.scss';
 import { FamilyTreePyramid } from './FamilyTreePyramid';
 
-export const FamilyTreeWrapper = ({ familyTree }: { familyTree: any }) => {
-  debugger
+interface FamilyTreeWrapperProps {
+  familyTree: any[];
+  rootName: string;
+  rootImages?: string[];
+}
+// Przykładowa funkcja do konwersji
+const normalizeFamilyTree = (parents: any[]) => {
+  return parents.map(parent => ({
+    id: parent.id,
+    name: parent.name,
+    image: parent.photos,
+    children: parent.grandparents?.map(gp => ({
+      id: gp.id,
+      name: gp.name,
+      image: gp.photos,
+      children: [] // dziadkowie nie mają już wyższych poziomów
+    })) || []
+  }));
+};
+
+export const FamilyTreeWrapper: React.FC<FamilyTreeWrapperProps> = ({ familyTree, rootName, rootImages }) => {
+  const normalizedTree = normalizeFamilyTree(familyTree);
+
   return (
     <div className={styles.myFamilly}>
       <div className={styles.aboutFamilly}>
         <h3>Poznaj moją rodzinę</h3>
-        <p>
-          Aby poznać dalszych przodków, poruszaj się pomiędzy profilami zwierząt z
-          poniższego drzewa genealogicznego
-        </p>
+        <p>Aby poznać dalszych przodków, poruszaj się pomiędzy profilami zwierząt z poniższego drzewa genealogicznego</p>
       </div>
-      {Array.isArray(familyTree) && familyTree.length > 0 ? (
-        familyTree.map((parent) => (
-          <FamilyTreePyramid key={parent.id} node={parent} depth={0} />
-        ))
-      ) : (
-        <div className={styles.noFamily}>Brak dostępnych danych o rodzinie</div>
-      )}
 
+      <div className={styles.pyramidWrapper}>
+        {normalizedTree.length > 0 ? (
+          <>
+            {/* Rodzice i dziadkowie */}
+            <FamilyTreePyramid node={{ children: normalizedTree }} depth={0} />
+
+            {/* Główne zwierzę na dole */}
+            <div className={styles.rootNode}>
+              {rootImages?.[0] ? (
+                <img src={rootImages} alt={rootName} />
+              ) : (
+                <div className={styles.noPhoto} />
+              )}
+              <p>{rootName}</p>
+            </div>
+          </>
+        ) : (
+          <div className={styles.noFamily}>Brak dostępnych danych o rodzinie</div>
+        )}
+      </div>
     </div>
   );
 };

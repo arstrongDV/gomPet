@@ -31,9 +31,9 @@ export enum AnimalStatus {
 }
 
 export enum AnimalSize {
-  SMALL = 'small',
-  MEDIUM = 'medium',
-  LARGE = 'large'
+  SMALL = 'SMALL',
+  MEDIUM = 'MEDIUM',
+  LARGE = 'LARGE'
 }
 
 export enum AnimalSpecies {
@@ -126,7 +126,7 @@ export interface IAnimal {
   owner: T<IUser | IOrganization>;
   parents: IAnimal[];
   status: AnimalStatus;
-  discription: string;
+  descriptions: string;
   characteristicsBoard: string[];
 
   price: number;

@@ -1,0 +1,147 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+}
+
+.section {
+  @include element-flex(column);
+  gap: $spacing-6;
+}
+
+.genderSelect,
+.statusSelect {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-2;
+}
+
+.flexRow {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+}
+
+.fullWidth {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-4;
+  width: 100%;
+}
+
+.characteristics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  gap: $spacing-4;
+  width: 100%;
+}
+
+.caption {
+  @include body2;
+  color: $color-foreground-dim;
+}
+
+.submit {
+  align-self: flex-end;
+}
+
+.familyTreeBlock{
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+}
+
+.addParents {
+  @include element-flex(row, center, center);
+  width: 150px;
+  height: 150px;
+  background-color: #FAFAFA;
+  border-radius: 16px;
+  transition: all 0.4s ease-in-out; 
+
+  &:hover {
+    background-color: #ededed;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0; // shorthand for top: 0; right: 0; bottom: 0; left: 0
+  background-color: rgba(0, 0, 0, 0.4); // or your theme color
+  z-index: 9; // should be below the comment card
+  backdrop-filter: blur(2px); // optional: blur for fancy look
+}
+
+.cardAddParents {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh; // zawsze ma stałą wysokość
+  background: $color-white;
+  color: $color-black;
+  padding: $spacing-6;
+  border-radius: $radius-l;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+
+  // przewijanie tylko wewnątrz
+  overflow-y: auto;
+
+  gap: $spacing-3;
+
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $transition-main ease;
+
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+
+.parent {
+  @include element-flex(column, center, center);
+  position: relative; // ważne - kontekst dla absolute
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.deleteIcon {
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  // padding: 4px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+  }
+}

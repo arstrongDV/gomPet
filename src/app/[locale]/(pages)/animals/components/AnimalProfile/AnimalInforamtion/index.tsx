@@ -126,10 +126,14 @@ const AnimalInformation = ({ animal, comment, familyTree }: AnimalProfileProps) 
 
                 </div>
                 <div className={style.infoTextBlock}>
-                    <AnimalDescription text={animal.discription} maxLines={5} />
+                    <AnimalDescription text={animal.descriptions} maxLines={5} />
                 </div>
                 <div className={style.myFamilly}>
-                    <FamilyTreeWrapper familyTree={animal.famillyTree} />
+                <FamilyTreeWrapper 
+                    familyTree={animal.parents} 
+                    rootName={animal.name} 
+                    rootImages={animal.image} 
+                />
                 </div>
             </div>
         </div>
