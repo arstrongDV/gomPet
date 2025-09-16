@@ -146,27 +146,28 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    console.log(formData.gender)
-
+  
     try {
       const submitData = new FormData();
-
+  
+      // Add all form data EXCEPT descriptions (we'll add the updated one separately)
       Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null && value !== undefined) {
+        if (key !== 'descriptions' && value !== null && value !== undefined) {
           submitData.append(key, value.toString());
         }
       });    
-
+  
+      // Append the UPDATED description (not the one from formData)
+      submitData.append('descriptions', description);
+  
       // Append characteristics
       characteristics.forEach((char, index) => {
         submitData.append(`characteristicBoard[${index}][title]`, char.title);
         submitData.append(`characteristicBoard[${index}][bool]`, char.bool.toString());
       });
-
-      submitData.append('descriptions', description);
-      console.log("descriptionzNew: ", description);
-
+  
+      console.log("descriptionNew: ", description);
+  
       await AnimalsApi.updateAnimal(animal.id, submitData);
       
       toast.success('Animal updated successfully!');
