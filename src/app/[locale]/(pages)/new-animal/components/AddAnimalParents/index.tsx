@@ -17,7 +17,7 @@ type Parent = {
     id: number;
     name: string;
     relation?: string | OptionType;
-    photo?: string;
+    photos?: string;
 };
 
 type AnimalAddParentsProps = {
@@ -116,10 +116,10 @@ const AddAnimalParents = ({ className, onAddParent }: AnimalAddParentsProps) => 
         if (!selectedAnimal) return;
 
         const newParent: Parent = {
-            id: selectedAnimal.id,
+            animal_id: selectedAnimal.id,  //////// id
             name: selectedAnimal.name,
             relation: relation?.value,
-            photo: selectedAnimal.image ?? undefined
+            photos: selectedAnimal.image ?? undefined
         };
 
         if (relation?.value == null) {

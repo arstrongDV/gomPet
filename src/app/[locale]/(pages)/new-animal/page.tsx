@@ -43,7 +43,7 @@ type Parent = {
   // gender: Gender;
   id: number
   relation: OptionType | string;
-  photo?: string;
+  photos?: string;
 };
 
 type AddParents = {
@@ -161,6 +161,7 @@ const NewAnimalPage = () => {
         type: "Point",
         coordinates: [20.673144511006825, 51.59228169182775]
       }));
+
       if (photos.length > 0) {
         const base64 = await fileToBase64(photos[0]);
         formData.append('image', base64);
@@ -194,11 +195,10 @@ const NewAnimalPage = () => {
       console.log("animals_res: ", animals_res);
       // console.log("parents_res: ", parents_res);
 
-
+      console.log("parents: ", parents)
 
       if (animals_res.status === 201 || animals_res.statusText === "Created") {
         const animalId = animals_res.data?.id;
-        
         if (animalId && parents.length > 0) {
           const parentsToAdd = parents.slice(0, 2);
           let successCount = 0;
@@ -208,9 +208,9 @@ const NewAnimalPage = () => {
               const parentData = {
                 animal: animalId,
                 parent: parent.id,
-                relation: typeof parent.relation === 'object' ? parent.relation?.value : parent.relation
+                relation: parent.relation
               };
-              
+              console.log(`parent.relation: `, parent);
               console.log(`Adding parent ${index + 1}:`, parentData);
               
               await AnimalsApi.addAnimalParents(parentData);
@@ -445,7 +445,7 @@ const NewAnimalPage = () => {
                 />
                 <img 
                   className={style.image}
-                  src={p.photo ? p.photo : ''} 
+                  src={p.photos ? p.photos : ''} 
                   draggable={false} 
                   alt="parent_photo"
                 />
@@ -464,7 +464,6 @@ const NewAnimalPage = () => {
           />
           <span className={style.caption}>Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.</span>
         </Card>
-        {/* STATUS */}
 
         <Button
           className={style.submit}

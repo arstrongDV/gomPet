@@ -134,12 +134,30 @@ export class AnimalsApi {
       },
     });
   }
+  static async getAnimalParents(){
+    return ApiClient.get(AnimalsRouts.ANIMAL_PARENTS, {
+      __tokenRequired: true,
+    })
+  }
   static async updateAnimal(id: number, data: any) {
     return ApiClient.put(AnimalsRouts.ANIMAL_ID(id), data, {
       __tokenRequired: true,
       headers: {
         "Content-Type": "application/json",
       },
+    });
+  }
+  static async clearAnimalParents(id: number){
+    return ApiClient.delete(AnimalsRouts.ANIMAL_PARENTS_ID(id), {
+      __tokenRequired: true,
+    });
+  }
+  static async updateAnimalParents(id: number, data: any) {
+    return ApiClient.put(AnimalsRouts.ANIMAL_PARENTS_ID(id), data, {
+      __tokenRequired: true,
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
     });
   }
   static async deleteAnimal(id: number){
@@ -150,9 +168,9 @@ export class AnimalsApi {
   static async addAnimalParents(parents: any){
     return ApiClient.post(AnimalsRouts.ANIMAL_PARENTS, parents, {
       __tokenRequired: true,
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
   }
 

@@ -26,6 +26,7 @@ export class AnimalsRouts {
   static ANIAML_LATEST = '/animals/latest/';
 
   static ANIMAL_ID = (id: number) => `/animals/animals/${id}/`;
+  static ANIMAL_PARENTS_ID = (id: number) => `/animals/parents/${id}/`;
 
   static ANIAML_FILTERING = '/animals/filtering/';
   static ANIAML_FILTERING_ID = (id: number) => `/animals/filtering/${id}`;

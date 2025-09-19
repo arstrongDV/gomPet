@@ -186,7 +186,6 @@ const AnimalDescription = ({ text, maxLines = 5 }: Props) => {
                 }
               }
 
-              // Inline code highlight
               if (node.type === "code-highlight") {
                 return (
                   <code key={index} className={style.inlineCode}>
@@ -195,7 +194,6 @@ const AnimalDescription = ({ text, maxLines = 5 }: Props) => {
                 );
               }
 
-              // Pusta linia
               if (node.type === "paragraph" && (!node.children || node.children.length === 0)) {
                 return <br key={index} />;
               }
@@ -223,8 +221,6 @@ const AnimalDescription = ({ text, maxLines = 5 }: Props) => {
       } catch (error) {
         console.error('Error parsing rich text:', error);
       }
-      
-      // Fallback: zwykły tekst - safely handle non-string values
       setFormattedText(
         <div className={style.plainText}>
           {typeof textContent === 'string' ? textContent.replace(/<[^>]*>/g, '') : String(textContent)}
