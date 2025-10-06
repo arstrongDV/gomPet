@@ -6,7 +6,7 @@ import BusinessCard from 'src/app/[locale]/(pages)/(organizations)/components/Bu
 import OrganizationAnimals from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationAnimals';
 import OrganizationComments from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationComments';
 import OrganizationOnMap from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationOnMap';
-import PostCard from 'src/app/[locale]/(pages)/posts/components/PostCard';
+import PostCard from 'src/app/[locale]/(pages)/articles/components/PostCard';
 import { List } from 'src/components';
 import { IOrganization, IPost } from 'src/constants/types';
 import { postsMock } from 'src/mocks/posts';

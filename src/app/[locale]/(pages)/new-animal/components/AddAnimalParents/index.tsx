@@ -14,7 +14,7 @@ import debounce from 'lodash/debounce';
 import toast from 'react-hot-toast';
 
 type Parent = {
-    id: number;
+    animal_id: number;
     name: string;
     relation?: string | OptionType;
     photos?: string;
@@ -22,10 +22,10 @@ type Parent = {
 
 type AnimalAddParentsProps = {
     className?: string;
-    onAddParent: (parent: Parent) => void;
-    selectSpeciesValue?: OptionType;
     parents?: Parent[];
-};
+    onAddParent: (parent: Parent) => void;
+    childAnimal?: IAnimal; 
+  };
 
 type AnimalKey = string;
 const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
@@ -54,7 +54,7 @@ const animalSpecies = [
     }
 ]
 
-const AddAnimalParents = ({ className, onAddParent }: AnimalAddParentsProps) => {
+const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: AnimalAddParentsProps) => {
     const [searchName, setSearchName] = useState<string>('');
     const [relation, setRelation] = useState<OptionType | null>(null);
     const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
@@ -68,7 +68,7 @@ const AddAnimalParents = ({ className, onAddParent }: AnimalAddParentsProps) => 
 
     // Debounced search function
     const debouncedSearch = useCallback(
-        debounce(async (filters: { name?: string; species?: string; breed?: string }) => {
+        debounce(async (filters: { name?: string; species?: string[]; breed?: string[] }) => {
             try {
                 setLoading(true);
                 const res = await AnimalsApi.getAnimals(filters);
@@ -134,13 +134,10 @@ const AddAnimalParents = ({ className, onAddParent }: AnimalAddParentsProps) => 
             toast.error("Relacja nie zgadza się z płcią zwierzęcia!");
             return;
         }
-        
-        onAddParent(newParent);
 
-        // Add to previously selected
+        onAddParent(newParent);
         setPreviouslySelectedAnimals(prev => [...prev, selectedAnimal]);
         
-        // Reset form
         setSelectedAnimal(null);
         setSearchName(''); 
         setSelectSpeciesValue(null);
@@ -149,22 +146,31 @@ const AddAnimalParents = ({ className, onAddParent }: AnimalAddParentsProps) => 
     };
 
     const handleAnimalSelect = (animal: IAnimal) => {
-        // Check if animal was previously selected
         if (previouslySelectedAnimals.some(prevAnimal => prevAnimal.id === animal.id)) {
             toast.error("To zwierzę zostało już wybrane poprzednio");
             return;
         }
-
+        if (parents.some(prevAnimal => prevAnimal.id === animal.id)) {
+            toast.error("To zwierzę zostało już wybrane poprzednio");
+            return;
+        }
         if (previouslySelectedAnimals.some(prevAnimal => prevAnimal.gender === animal.gender)) {
             toast.error("Nie moze byc dwa zwierza z jednym płciem");
             return;
         }
+        if (parents.some(prevAnimal => prevAnimal.gender === animal.gender)) {
+            toast.error("Nie moze byc dwa zwierza z jednym płciem");
+            return;
+        }
+        if (animal.id === childAnimal.id) {
+            toast.error("Wybrane zwierzę nie może być rodzicem samego siebie");
+            return;
+        }
         
-        // Check if animal is currently selected
-        // if (selectedAnimal?.id === animal.id) {
-        //     toast.error("To samo zwierzę zostało kliknięte");
-        //     return;
-        // }
+        if (animal.age <= childAnimal.age) {
+            toast.error("Rodzic musi być starszy");
+            return;
+        }
         
         setSelectedAnimal(animal);
     };
@@ -221,9 +227,6 @@ const AddAnimalParents = ({ className, onAddParent }: AnimalAddParentsProps) => 
                                 <img
                                     src={animal.image || '/images/no-photo.png'}
                                     className={style.animalPhoto}
-                                    // onError={(e) => {
-                                    //     e.currentTarget.src = '/images/no-photo.png';
-                                    // }}
                                 />
                                 <div className={style.animalInfo}>
                                     <h5>{animal.name}</h5>

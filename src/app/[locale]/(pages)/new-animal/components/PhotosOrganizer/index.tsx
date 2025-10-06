@@ -15,7 +15,7 @@ type PhotosOrganizerProps = {
 };
 
 const PhotosOrganizer = ({ photos, setPhotos }: PhotosOrganizerProps) => {
-  // const swapyRef = useRef<Swapy | null>(null);
+  const swapyRef = useRef<Swapy | null>(null);
 
   const items = useMemo(
     () => [
@@ -64,14 +64,13 @@ const PhotosOrganizer = ({ photos, setPhotos }: PhotosOrganizerProps) => {
     const updatedSlotItemsMap = [...withoutRemovedItems, ...newItems];
 
     setSlotItemsMap(updatedSlotItemsMap);
-    // swapyRef.current?.setData({ array: updatedSlotItemsMap });
+    swapyRef.current?.setData({ array: updatedSlotItemsMap });
   }, [items]);
 
   // useEffect(() => {
   //   const container = document.querySelector('.container')!;
   //   swapyRef.current = createSwapy(container, {
-  //     manualSwap: true,
-  //     // plugins: ["Swapy"],
+  //     manualSwap: true
   //   });
 
   //   swapyRef.current.onSwap(({ data }: any) => {

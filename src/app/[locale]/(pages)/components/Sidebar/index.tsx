@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
@@ -18,6 +18,26 @@ const Sidebar = () => {
   const t = useTranslations();
   const session = useSession();
 
+  // const [showLogin, setShowLogin] = useState<boolean>()
+  // const [showLoginOut, setShowLoginOut] = useState<boolean>()
+
+  // useEffect(() => {
+  //   if(session.status !== 'unauthenticated' && session.status === 'authenticated'){
+  //     setShowLogin(true)
+  //     setShowLoginOut(false)
+  //   }
+  //   else{
+  //     setShowLogin(false)
+  //     setShowLoginOut(true)
+  //   }
+  //   // if(session.status !== 'authenticated'){
+  //   //   setShowLoginOut(true)
+  //   // }
+  //   // else{
+  //   //   setShowLoginOut(false)
+  //   // }
+  // })
+
   const highlightedRoute: RouteItemType = {
     title: t('navigation.sidebar.myAnimals'),
     url: Routes.MY_ANIMALS,
@@ -27,7 +47,7 @@ const Sidebar = () => {
   const topNavItems: RouteItemType[] = [
     {
       title: t('navigation.sidebar.posts'),
-      url: Routes.POSTS,
+      url: Routes.ARTICLES,
       icon: 'message'
     },
     {
@@ -71,13 +91,13 @@ const Sidebar = () => {
       title: t('navigation.sidebar.login'),
       url: Routes.LOGIN,
       icon: 'login',
-      hidden: session.status !== 'unauthenticated'
+      hidden:  session.status !== 'unauthenticated' //showLogin
     },
     {
       title: t('navigation.sidebar.logout'),
       onClick: () => logout(),
       icon: 'logout',
-      hidden: session.status !== 'authenticated'
+      hidden:  session.status !== 'authenticated' //showLoginOut
     }
   ];
 

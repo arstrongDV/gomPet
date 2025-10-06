@@ -17,7 +17,6 @@
   gap: $spacing-2;
 }
 
-
 .flexRow {
   @include element-flex(row, flex-start, center);
   gap: $spacing-4;
@@ -145,4 +144,9 @@
   &:hover {
     background: rgba(255, 255, 255, 1);
   }
+}
+
+.formActions{
+  @include element-flex(row, flex-end, center);
+  gap: $spacing-4;
 }

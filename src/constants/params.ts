@@ -11,11 +11,13 @@ export class Params {
   static readonly GENDER = 'gender';
   static readonly SPECIES = 'species';
   static readonly AGE = 'age';
+  static readonly AGE_MIN = 'age-min';
+  static readonly AGE_MAX = 'age-max';
   static readonly SIZE = 'size';
   static readonly BREED = 'breed';
   static readonly CHARACTERISTICS = 'characteristics';
 
-  static readonly LOCATION = 'location'; /////////////
+  static readonly LOCATION = 'city'; /////////////
   static readonly RANGE = 'range'; /////////////
   static readonly NAME = 'name'; /////////////
 }

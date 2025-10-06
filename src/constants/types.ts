@@ -1,4 +1,4 @@
-import { IComment } from './types';
+// import { IComment } from './types';
 
 export enum Role {
   ADMIN = 'admin',
@@ -160,6 +160,10 @@ export interface IPost {
   author: IUser | IOrganization;
   created_at: string;
   updated_at?: string;
+  full_name?: string;
+  slug?: string;
+  title?: string; 
+  content?: string;
   // comments: Omit<IComment, 'rating'>[];
   comments: IComment[];
   reactions: {

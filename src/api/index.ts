@@ -1,5 +1,6 @@
+import { Params } from 'src/constants/params';
 import ApiClient from './client';
-import { AccountRoutes, AnimalsRouts, ArticlesRouts, AuthRoutes, OffersRoutes, OrganizationsRouts, PostsRouts } from './routes';
+import { AccountRoutes, AnimalsRouts, ArticlesRouts, AuthRoutes, OffersRoutes, OrganizationsRouts, PostsRouts, WebsocketRoutes } from './routes';
 import { LoginPayload, RegisterPayload, ResetPasswordPayload, ResetPasswordRequestPayload } from './types';
 import { jwtDecode } from 'jwt-decode';
 
@@ -77,6 +78,8 @@ export class AnimalsApi {
 
   static async getAnimals(filters: {
     organizationType?: string[];
+    limit?: number;
+    page?: number;
     organizationId?: string[];
     gender?: string[];
     species?: string[];
@@ -86,40 +89,53 @@ export class AnimalsApi {
     range?: number;
   } = {}) {
 
-    const queryParams: Record<string, string> = {};
-    if (filters.organizationType?.length) {
-      queryParams['organization-type'] = filters.organizationType.join('&');
-    }
-  
-    if (filters.organizationId?.length) {
-      queryParams['organization-id'] = filters.organizationId.join('&');
-    }
-  
-    if (filters.gender?.length) {
-      queryParams['gender'] = filters.gender.join('&');
-    }
-  
-    if (filters.species?.length) {
-      queryParams['species'] = filters.species.join('&');
-    }
-  
-    if (filters.breed?.length) {
-      queryParams['breed'] = filters.breed.join('&');
-    }
-  
-    if (filters.location?.length) {
-      queryParams['location'] = filters.location.join('&');
-    }
+    const params = {
+      ...(filters?.limit && { limit: filters.limit }),
+      ...(filters?.page ? { page: filters.page } : {page: 1}),
+      ...(filters?.organizationType && { 'organization-type': filters.organizationType.join('&') }),
+      ...(filters?.organizationId && { 'organization-id': filters.organizationId.join('&') }),
+      ...(filters?.gender && { gender: filters.gender.join('&') }),
+      ...(filters?.breed && { breed: filters.breed.join('&') }),
+      ...(filters?.location && { location: filters.location.join('&') }),
+      ...(filters?.species && { species: filters.species.join('&') }),
+      ...(filters?.range && { range: filters.range }), /// join('&')
+      ...(filters?.name && { name: filters.name }),/// join('&')
+    };
 
-    if (filters.name) {
-      queryParams['name'] = filters.name;
-    }
+    // const queryParams: Record<string, string> = {};
+    // if (filters.organizationType?.length) {
+    //   queryParams['organization-type'] = filters.organizationType.join('&');
+    // }
   
-    if (filters.range) {
-      queryParams['range'] = filters.range.toString();
-    }
+    // if (filters.organizationId?.length) {
+    //   queryParams['organization-id'] = filters.organizationId.join('&');
+    // }
   
-    return ApiClient.get(AnimalsRouts.ANIMALS_ANIMALS, queryParams , {
+    // if (filters.gender?.length) {
+    //   queryParams['gender'] = filters.gender.join('&');
+    // }
+  
+    // if (filters.species?.length) {
+    //   queryParams['species'] = filters.species.join('&');
+    // }
+  
+    // if (filters.breed?.length) {
+    //   queryParams['breed'] = filters.breed.join('&');
+    // }
+  
+    // if (filters.location?.length) {
+    //   queryParams['location'] = filters.location.join('&');
+    // }
+
+    // if (filters.name) {
+    //   queryParams['name'] = filters.name;
+    // }
+  
+    // if (filters.range) {
+    //   queryParams['range'] = filters.range.toString();
+    // }
+  
+    return ApiClient.get(AnimalsRouts.ANIMALS_ANIMALS, params , {
       __tokenRequired: true,
     });
   }
@@ -191,17 +207,6 @@ export class AnimalsApi {
     return ApiClient.get(AnimalsRouts.ANIMAL_PROFILE_COMMENTS(id))
   }
 
-static async getAnimalPosts(animalId: number) {
-    try {
-      // backend oczekuje: GET /posts/?animal-id=<id>
-      const response = await ApiClient.get(AnimalsRouts.ANIMAL_ACTIVITY(animalId));
-      return response.data; // zwraca dane postów
-    } catch (error) {
-      console.error('Error fetching animal posts:', error);
-      throw error; // dalej rzucamy błąd, żeby front mógł go obsłużyć
-    }
-}
-
   static async getAnimalsLatest(
     limit: number = 5,
     filters?: {
@@ -239,13 +244,16 @@ static async getAnimalPosts(animalId: number) {
     limit?: number;
     page?: number;
     species?: string[];
+    breed?: string[];
     organizationType?: string[];
     organization_id?: number[];
     name?: string[];
     size?: string[];
     gender?: string[];
-    age?: number[];
-    location?: string[];
+    // age?: number[];
+    minAge?: number[];
+    maxAge?: number[];
+    city?: string[];
     range?: number[];
     breed_groups?: string[];
     characteristics?: string[];
@@ -254,20 +262,23 @@ static async getAnimalPosts(animalId: number) {
       ...(filters?.limit && { limit: filters.limit }),
       ...(filters?.page ? { page: filters.page } : {page: 1}),
       ...(filters?.species?.length && { species: filters.species.join(',') }),
+      ...(filters?.breed?.length && { breed: filters.breed.join(',') }),
       ...(filters?.organizationType?.length && { 'organization-type': filters.organizationType.join(',') }),
       ...(filters?.organization_id?.length && { 'organization-id': filters.organization_id.join(',') }),
       ...(filters?.characteristics?.length && { characteristics: filters.characteristics.join(',') }),
       ...(filters?.name?.length && { name: filters.name.join(',') }),
       ...(filters?.size?.length && { size: filters.size.join(',') }),
       ...(filters?.gender?.length && { gender: filters.gender.join(',') }),
-      ...(filters?.age?.length && { age: filters.age.join(',') }),
-      ...(filters?.location?.length && { location: filters.location.join(',') }),
+      // ...(filters?.age?.length && { age: filters.age.join(',') }),
+      ...(filters?.minAge?.length && { 'age-min': filters.minAge.join(',') }),
+      ...(filters?.maxAge?.length && { 'age-max': filters.maxAge.join(',') }),
+      ...(filters?.city?.length && { city: filters.city.join(',') }),
       ...(filters?.range?.length && { range: filters.range.join(',') }),
       ...(filters?.breed_groups?.length && { breed_groups: filters.breed_groups.join(',') }),
     };
   
     try {
-      const response = await ApiClient.get(AnimalsRouts.ANIAML_FILTERING, params, {
+      const response = await ApiClient.get(AnimalsRouts.ANIMALS_ANIMALS, params, {
         __tokenRequired: false,
       });
   
@@ -354,11 +365,88 @@ export class ArticlesApi {
       throw error;
     }
   }
+  static getArticlesList() {
+    return ApiClient.get(ArticlesRouts.ARTICLES_LIST, {
+      __tokenRequired: false,
+    })
+  }
+
+
+  static AddNewReaction(payload: any) {
+    return ApiClient.post(ArticlesRouts.REACTIONS, payload, {
+      __tokenRequired: true,
+    })
+  }
+  static deleteReaction(id: number) {
+    return ApiClient.delete(ArticlesRouts.REACTIONS_ID(id), {
+      __tokenRequired: true,
+    })
+  }
+  static verifyReactions(reactable_type: string, reactable_id: number){
+    return ApiClient.get(ArticlesRouts.HAS_REACTION(reactable_type, reactable_id), {
+      __tokenRequired: true,
+    })
+  }
+
 }
 
 export class PostsApi {
-  static getPostsList() {
-    return ApiClient.get(PostsRouts.POSTS_LIST, 
-      { __tokenRequired: true })
+  static async getAnimalPosts(animalId: number) {
+    try {
+      const response = await ApiClient.get(PostsRouts.ANIMAL_ACTIVITY(animalId), {
+        __tokenRequired: false,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static deletePost(id: number){
+    return ApiClient.delete(PostsRouts.POSTS_LIST_ID(id), {
+      __tokenRequired: true,
+    })
+  }
+
+  static updatePost(id: number, payload: any){
+    return ApiClient.put(PostsRouts.POSTS_LIST_ID(id), payload, {
+      __tokenRequired: true,
+    })
+  }
+
+  static addNewAnimalPost({payload}: any) {
+    return ApiClient.post(PostsRouts.POSTS_LIST, payload, {
+      __tokenRequired: true,
+    })
+  }
+
+  //Comments
+  static async getComments(PostId: number, content_type: string) {
+    try {
+      const response = await ApiClient.get(PostsRouts.COMMENTS_ID(PostId, content_type), {
+        __tokenRequired: false,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async addNewComments({ content_type, object_id, body }: { content_type: string; object_id: number; body: string }) {
+    const response = await ApiClient.post(
+      PostsRouts.COMMENTS_LIST,
+      { content_type, object_id, body },
+      { __tokenRequired: true }
+    );
+    return response.data;
+  }
+  static async deleteComment(id: number){
+    return ApiClient.delete(PostsRouts.COMMENTS_LIST_ID(id), {
+       __tokenRequired: true 
+    })
+  }
+  static async updateComment(id: number, data: { body: string }){
+    return ApiClient.patch(PostsRouts.COMMENTS_LIST_ID(id), data, {
+      __tokenRequired: true 
+    })
   }
 }

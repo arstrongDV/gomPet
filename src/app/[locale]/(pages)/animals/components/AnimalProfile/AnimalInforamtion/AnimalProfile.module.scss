@@ -364,6 +364,32 @@
     }
 }
 
+.comments {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;  
+  overflow-y: auto;
+  padding-right: $spacing-2;
+  gap: $spacing-5;
+
+  @media (max-width: 600px) {
+    max-height: 25vh;
+  }
+
+  @media (max-width: 480px) {
+    max-height: 20vh;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+}
+
 .relatedAnimals {
     display: flex;
     flex-direction: row;

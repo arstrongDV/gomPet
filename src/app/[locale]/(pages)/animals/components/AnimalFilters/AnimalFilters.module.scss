@@ -14,8 +14,14 @@
 
 .inputs {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(23rem, 1fr));
   gap: $spacing-4; //gap: 4.1rem;
+}
+
+.ageInputs{
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-2;
 }
 
 .characteristics {

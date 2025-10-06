@@ -4,7 +4,7 @@ import React from 'react'
 import style from './Comments.module.scss';
 import Image from 'next/image';
 import { IAnimal, IComment } from 'src/constants/types';
-import { StarRating } from 'src/components';
+import { Avatar, StarRating } from 'src/components';
 import dayjs from 'dayjs';
 import { Comment } from 'components';
 import AVATAR from '../../../../../../../../../assets/gompet.png'
@@ -34,13 +34,14 @@ const Comments = ({ comment }: AnimalProfileProps) => {
             commentsArray.map((com, i) => (
             <div key={i} className={style.comments}>
                 <div className={style.userComInfo}>
-                    <Image 
+                    {/* <Image 
                         className={style.avatar} 
                         src={com.author?.image ?? AVATAR} 
                         alt='user-icon' 
                         width={24}
                         height={24} 
-                    />
+                    /> */}
+                    <Avatar profile={comment.author} />
                     <div className={style.comContainer}>
                         <div className={style.commentWrraper}>
                             <div className={style.userNameData}>

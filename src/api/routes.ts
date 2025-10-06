@@ -20,6 +20,7 @@ export class OffersRoutes {
 
 export class WebsocketRoutes {
   static GET_NOTIFICATIONS = '/ws/notifications/';
+  static GET_REACTIONS_LIST = (reactable_type: string, reactable_id: number) => `/ws/reactable/${reactable_type}/${reactable_id}/`
 }
 
 export class AnimalsRouts {
@@ -37,7 +38,6 @@ export class AnimalsRouts {
   static ANIAML_PROFILE = (id: number) => `/animals/animals/${id}/`;
   static ANIMAL_FAMILY_TREE = (id: number) => `/animals/family-tree/${id}/`
   static ANIMAL_PROFILE_COMMENTS  = (id: number) =>  `/common/comments/${id}/`
-  static ANIMAL_ACTIVITY = (id: number) => `posts/posts/?animal-id=${id}` // `posts/posts/${id}`
 }
 
 export class OrganizationsRouts {
@@ -50,8 +50,24 @@ export class OrganizationsRouts {
 
 export class ArticlesRouts{
   static ARTICLES_LATEST = '/articles/articles-latest/';
+  static ARTICLES_LIST = '/articles/articles/';
+  static ARTICLES_LIST_id = (id: number) => `/articles/articles/${id}`;
+
+  static REACTIONS = '/common/reactions/'
+  static REACTIONS_ID = (id: number) => `/common/reactions/${id}/`
+  static HAS_REACTION = (reactable_type: string, reactable_id: number) => `/common/reactions/has-reaction/?reactable_type=${reactable_type}&reactable_id=${reactable_id}`
 }
 
 export class PostsRouts{
   static POSTS_LIST = '/posts/posts/';
+  static POSTS_LIST_ID = (id: number) => `/posts/posts/${id}/`;
+
+  static ANIMAL_ACTIVITY = (id: number) => `posts/posts/?animal-id=${id}`
+
+  static COMMENTS_LIST = '/common/comments/';
+  static COMMENTS_LIST_ID = (id: number) => `/common/comments/${id}/`;
+
+  static COMMENTS_ID = (id: number, content_type: string) => `/common/comments/?object_id=${id}&content_type=${content_type}`
+
+  static REACTIONS_LIST = '/common/reaction/'; 
 }

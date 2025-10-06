@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import style from './AnimalProfile.module.scss';
 
 import { FamilyTreeWrapper } from './components/FamilyTree/FamilyTreeWrapper';
-import { Button, Icon, OrganizationTypeName, StarRating } from 'src/components';
+import { Button, Icon, List, Comment, OrganizationTypeName, StarRating } from 'src/components';
 import RelatedAnimals from './components/RelatedAnimals';
 import AnimalPhotos from './components/AnimalPhotos';
 import Comments from './components/Comments';
@@ -18,14 +18,14 @@ import { useRouter } from 'next/navigation';
 
 type AnimalProfileProps = {
     animal: IAnimal;
-    comment: IComment;
+    comments: IComment[];
     familyTree: any;
     // & {
     // characteristics: { title: string; bool: boolean }[];
     // }
 }
 
-const AnimalInformation = ({ animal, comment, familyTree }: AnimalProfileProps) => {
+const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
 
     const t = useTranslations('pages.animals');
     const router = useRouter();
@@ -138,7 +138,16 @@ const AnimalInformation = ({ animal, comment, familyTree }: AnimalProfileProps) 
             </div>
         </div>
         <div className={style.bottomContainer}>
-            <Comments comment={comment}/>
+            <List
+                className={style.comments}
+                // isLoading={isLoading}
+                emptyText="Brak komentarzy"
+            >
+                {animal.comments.map((comment: any) => (
+                    <Comment key={comment.id} comment={comment} /> 
+                ))}
+            </List>
+            {/* <Comments comment={comment}/> */}
             <div className={style.related}>
                 <div className={style.title}>
                     <h4>Inni <span style={{color: '#277D23'}}>podopieczni</span> fundacji</h4>

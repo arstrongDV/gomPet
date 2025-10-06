@@ -18,6 +18,24 @@ type AnimalFiltersProps = {
   className?: string;
 };
 
+type AnimalKey = string;
+
+const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+  dog: [
+    { value: 'beagle', label: 'Beagle' },
+    { value: 'terrier', label: 'Terrier' },
+    { value: 'labrador', label: 'Labrador' },
+  ],
+  cat: [
+    { value: 'british', label: 'British Shorthair' },
+    { value: 'siamese', label: 'Siamese' },
+    { value: 'persian', label: 'Persian' },
+  ],
+  other: [
+    { value: 'other', label: 'Other' },
+  ]
+};
+
 const AnimalFilters = ({ className }: AnimalFiltersProps) => {
   const t = useTranslations();
   const searchParams = useSearchParams();
@@ -35,17 +53,18 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
     params.set(Params.PAGE, '1');
 
     if (isArr) {
-      const arr = params.get(filter)?.split('&') || [];
+      // Zmiana: używamy przecinka zamiast &
+      const arr = params.get(filter)?.split(',') || [];
       if (arr.includes(value)) {
         arr.splice(arr.indexOf(value), 1);
         if (arr.length === 0) {
           params.delete(filter);
         } else {
-          params.set(filter, arr.join('&'));
+          params.set(filter, arr.join(',')); // Zmiana: join z przecinkiem
         }
       } else {
         arr.push(value);
-        params.set(filter, arr.join('&'));
+        params.set(filter, arr.join(',')); // Zmiana: join z przecinkiem
       }
     } else {
       if (params.get(filter) === value || !value || value === '0') {
@@ -54,7 +73,6 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         params.set(filter, value);
       }
     }
-
     router.push(`?${params.toString()}`);
   };
 
@@ -62,9 +80,11 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
     router.push('?page=1');
   }, [params]);
 
-  const [location, setLocation] = useState(searchParams.get(Params.LOCATION) ?? '');
+  const [city, setCity] = useState(searchParams.get(Params.LOCATION) ?? '');
   const [range, setRange] = useState(searchParams.get(Params.RANGE) ?? '');
   const [name, setName] = useState(searchParams.get(Params.NAME) ?? '');
+  const [minAge, setMinAge] = useState(searchParams.get(Params.AGE_MIN) ?? '');
+  const [maxAge, setMaxAge] = useState(searchParams.get(Params.AGE_MAX) ?? '');
 
   return (
     <div className={classNames(style.filters, className)}>
@@ -74,7 +94,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
             key={key}
             id={key}
             className={style.checkbox}
-            checked={searchParams.get(Params.ORGANIZATION_TYPE)?.split('&').includes(key)}
+            checked={searchParams.get(Params.ORGANIZATION_TYPE)?.split(',').includes(key)}
             onChange={() => handleFilter(Params.ORGANIZATION_TYPE, key, true)}
             label={value}
           />
@@ -84,11 +104,11 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         <Input
           label={t('pages.animals.filters.location')}
           placeholder={t('pages.animals.filters.locationPlaceholder')}
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          onBlur={() => {if(location !== '') handleFilter(Params.LOCATION, location)}}
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          onBlur={() => {if(city !== '') handleFilter(Params.LOCATION, city)}}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') handleFilter(Params.LOCATION, location);
+            if (e.key === 'Enter') handleFilter(Params.LOCATION, city);
           }}
         />
         <Input
@@ -127,20 +147,49 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         />
         <Select
           label={t('pages.animals.filters.breed')}
-          options={[toSelectOption(BREED.TERRIERS)]}
-          value={toSelectOption(searchParams.get(Params.BREED))}
+          options={animalRace.dog}  // <-- pass directly
+          value={animalRace.dog.find(opt => opt.value === searchParams.get(Params.BREED)) || null}
           onChange={(value: OptionType) => handleFilter(Params.BREED, value ? String(value.value) : '')}
           isClearable
           isSearchable
         />
         {/* TODO: przebudować na od - do */}
-        <Select
+        <section className={style.ageInputs}>
+          <Input 
+            type="number"
+            label={`${t('pages.animals.filters.age')} (min)`}
+            placeholder='0'
+            value={minAge}
+            onChange={(e) => setMinAge(e.target.value)}
+            onBlur={() => {
+              if(minAge !== '') handleFilter(Params.AGE_MIN, minAge);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleFilter(Params.AGE_MIN, minAge);
+            }}
+          />
+          <Input 
+            type="number"
+            label={`${t('pages.animals.filters.age')} (max)`}
+            placeholder='100'
+            value={maxAge}
+            onChange={(e) => setMaxAge(e.target.value)}
+            onBlur={() => {
+              if(maxAge !== '') handleFilter(Params.AGE_MAX, maxAge);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleFilter(Params.AGE_MAX, maxAge);
+            }}
+          />
+        </section>
+        {/* <Select
           label={t('pages.animals.filters.age')}
           options={[toSelectOption(AnimalAge.OLD), toSelectOption(AnimalAge.YOUNG)]}
           value={toSelectOption(searchParams.get(Params.AGE))}
           onChange={(value: OptionType) => handleFilter(Params.AGE, value ? String(value.value) : '')}
           isClearable
-        />
+        /> */}
+
         <Select
           label={t('pages.animals.filters.size')}
           options={[toSelectOption(AnimalSize.SMALL), toSelectOption(AnimalSize.MEDIUM), toSelectOption(AnimalSize.LARGE)]}
@@ -155,8 +204,9 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
             key={key}
             id={key}
             className={style.checkbox}
-            checked={searchParams.get(Params.CHARACTERISTICS)?.split('&').includes(key)}
-            onChange={() => handleFilter(Params.CHARACTERISTICS, key, true)}
+            // POPRAWKA: split(',') zamiast split('&')
+            checked={searchParams.get(Params.CHARACTERISTICS)?.split(',').includes(value)}
+            onChange={() => handleFilter(Params.CHARACTERISTICS, value, true)}
             label={value}
           />
         ))}

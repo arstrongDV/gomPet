@@ -57,6 +57,7 @@ export const login = async (
     if (result?.error) {
       try {
         const errorData = JSON.parse(result.error);
+        toast.error(errorData.error?.message);
         return {
           errorData,
           message: errorData.error?.message || 'Invalid credentials',
@@ -67,6 +68,7 @@ export const login = async (
           fields
         };
       } catch (e) {
+        toast.error(result.error);
         return {
           message: result.error,
           errors: {
@@ -86,7 +88,6 @@ export const login = async (
       }
     };
   } catch (error: any) {
-    
     return {
       message: 'Something went wrong',
       errors: {

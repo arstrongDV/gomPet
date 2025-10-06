@@ -28,7 +28,7 @@ const MobileMenu = ({setShowMenu}: MenuProps) => {
   const topNavItems: RouteItemType[] = [
     {
       title: t('navigation.sidebar.posts'),
-      url: Routes.POSTS,
+      url: Routes.ARTICLES,
       icon: 'message'
     },
     {

@@ -42,18 +42,39 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
     // const params = new URLSearchParams(searchParams.toString());
     params.set(Params.PAGE, '1');
 
+    // if (isArr) {
+    //   const arr = params.get(filter)?.split('&') || [];
+    //   if (arr.includes(value)) {
+    //     arr.splice(arr.indexOf(value), 1);
+    //     if (arr.length === 0) {
+    //       params.delete(filter);
+    //     } else {
+    //       params.set(filter, arr.join('&'));
+    //     }
+    //   } else {
+    //     arr.push(value);
+    //     params.set(filter, arr.join('&'));
+    //   }
+    // } else {
+    //   if (params.get(filter) === value || !value || value === '0') {
+    //     params.delete(filter);
+    //   } else {
+    //     params.set(filter, value);
+    //   }
+    // }
+
     if (isArr) {
-      const arr = params.get(filter)?.split('&') || [];
+      const arr = params.get(filter)?.split(',') || [];
       if (arr.includes(value)) {
         arr.splice(arr.indexOf(value), 1);
         if (arr.length === 0) {
           params.delete(filter);
         } else {
-          params.set(filter, arr.join('&'));
+          params.set(filter, arr.join(',')); 
         }
       } else {
         arr.push(value);
-        params.set(filter, arr.join('&'));
+        params.set(filter, arr.join(',')); 
       }
     } else {
       if (params.get(filter) === value || !value || value === '0') {
@@ -81,7 +102,8 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
             key={key}
             id={key}
             className={style.checkbox}
-            checked={searchParams.get(Params.ORGANIZATION_TYPE)?.split('&').includes(key)}
+            // checked={searchParams.get(Params.ORGANIZATION_TYPE)?.split('&').includes(key)}
+            checked={searchParams.get(Params.ORGANIZATION_TYPE)?.split(',').includes(key)}
             onChange={() => handleFilter(Params.ORGANIZATION_TYPE, key, true)}
             label={value}
           />

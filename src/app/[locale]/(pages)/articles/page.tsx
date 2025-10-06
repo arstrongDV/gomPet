@@ -9,7 +9,7 @@ import { postsMock } from 'src/mocks/posts';
 import PostCard from './components/PostCard';
 
 import style from './PostsPage.module.scss';
-import { PostsApi } from 'src/api';
+import { ArticlesApi } from 'src/api';
 
 const PostsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -18,7 +18,7 @@ const PostsPage = () => {
   const getPosts = async () => {
     setIsLoading(true);
     try {
-      const res = await PostsApi.getPostsList();
+      const res = await ArticlesApi.getArticlesList();
       setPosts(res.data?.results);
       // console.log("posts:", res?.results)
     } catch (error) {

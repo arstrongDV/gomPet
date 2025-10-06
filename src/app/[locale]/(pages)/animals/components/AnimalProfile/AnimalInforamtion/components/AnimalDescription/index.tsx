@@ -23,7 +23,7 @@ const AnimalDescription = ({ text, maxLines = 5 }: Props) => {
   // Safely convert text to string
   const textContent = useMemo(() => {
     if (typeof text === 'string') return text;
-    if (text === null || text === undefined) return '';
+    if (text === null || text === '') return '';
     if (typeof text === 'object') return text; // Allow object input
     try {
       return String(text);
@@ -33,6 +33,10 @@ const AnimalDescription = ({ text, maxLines = 5 }: Props) => {
   }, [text]);
 
   console.log("text: ", textContent);
+
+  if(textContent == ''){
+    return "No text there"
+  }
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 550);

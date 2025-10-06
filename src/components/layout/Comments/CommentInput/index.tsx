@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
@@ -20,14 +20,23 @@ type CommentInputProps = {
   placeholder?: string;
   onSubmit: (payload: CommentSubmitData) => Promise<void>;
   withRating?: boolean;
+
+  value?: string;
 };
 
-const CommentInput = ({ className, onSubmit, placeholder, withRating = false }: CommentInputProps) => {
+const CommentInput = ({ className, onSubmit, placeholder, withRating = false, value }: CommentInputProps) => {
   const t = useTranslations();
   const session = useSession();
 
   const [text, setText] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
+
+  // useEffect(() => {
+  //   if(value) setText(value);
+  // }, [value])
+  useEffect(() => {
+    setText(value ?? '');
+  }, [value]);
 
   const clearForm = () => {
     setText('');

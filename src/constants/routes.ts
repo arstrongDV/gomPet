@@ -8,9 +8,11 @@ export class Routes {
   static readonly FOUNDATIONS = '/foundations';
   static readonly BREEDINGS = '/breedings';
   static readonly ANIMALS = '/animals';
+  static readonly EDIT = (id: number) => `/animals/${id}/edit`
   static readonly MY_ANIMALS = '/my-animals';
   static readonly NEW_ANIMAL = '/new-animal';
-  static readonly POSTS = '/posts';
+  // static readonly POSTS = '/posts';
+  static readonly ARTICLES = '/articles';
   static readonly BLOG = '/blog';
   static readonly BLOG_ARTICLE = (slug: string) => `/blog/${slug}`;
   static readonly OFFERS = '/offers';

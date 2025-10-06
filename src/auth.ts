@@ -15,6 +15,15 @@ import { AuthApi } from './api';
 //   }
 // };
 
+// const refreshAccessToken = async (refreshToken: string) => {
+//   try {
+//     const { data } = await AuthApi.refreshAuthToken({ refresh: refreshToken });
+//     return data.access;
+//   } catch (e) {
+//     return null;
+//   }
+// };
+
 const isTokenValid = (token: string) => {
   try {
     const { exp } = jwtDecode(token) as { exp: number };
@@ -96,51 +105,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
     //   return token;
     // },
-    async jwt({ token, trigger, user, session }) {
-      // Initial sign in
-      if (user) {
-        return {
-          ...token,
-          access_token: user.access_token,
-          refresh_token: user.refresh_token,
-          user: user,
-          accessTokenExpires: Date.now() + 15 * 60 * 1000, // 15 minutes
-        };
-      }
-    
-      // Return previous token if it's still valid
-      if (Date.now() < (token.accessTokenExpires as number)) {
-        return token;
-      }
-    
-      // Token expired, try to refresh it
-      try {
-        const refreshedToken = await refreshAccessToken(token.refresh_token as string);
-        
-        if (refreshedToken) {
-          return {
-            ...token,
-            access_token: refreshedToken,
-            accessTokenExpires: Date.now() + 15 * 60 * 1000, // 15 minutes
-          };
-        } else {
-          // Refresh failed, clear the token
-          return {
-            ...token,
-            access_token: null,
-            refresh_token: null,
-            error: "RefreshAccessTokenError",
-          };
-        }
-      } catch (error) {
-        return {
-          ...token,
-          access_token: null,
-          refresh_token: null,
-          error: "RefreshAccessTokenError",
-        };
-      }
-    },
     // async session({ token, session }) {
     //   const user: AdapterUser = token.user as AdapterUser;
 
@@ -162,15 +126,55 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     //     }
     //   };
     // }
+    async jwt({ token, trigger, user, session }) {
+      if (user) {
+        return {
+          ...token,
+          access_token: user.access_token,
+          refresh_token: user.refresh_token,
+          user: user,
+          accessTokenExpires: Date.now() + 15 * 60 * 10000, 
+        };
+      }
+    
+      if (Date.now() < (token.accessTokenExpires as number)) {
+        return token;
+      }
+    
+      try {
+        const refreshedToken = await refreshAccessToken(token.refresh_token as string);
+        
+        if (refreshedToken) {
+          return {
+            ...token,
+            access_token: refreshedToken,
+            accessTokenExpires: Date.now() + 15 * 60 * 10000,
+          };
+        } else {
+          return {
+            ...token,
+            access_token: null,
+            refresh_token: null,
+            error: "RefreshAccessTokenError",
+          };
+        }
+      } catch (error) {
+        return {
+          ...token,
+          access_token: null,
+          refresh_token: null,
+          error: "RefreshAccessTokenError",
+        };
+      }
+    },
+
     async session({ token, session }) {
       if (token.error) {
-        // Token refresh failed, force logout
         throw new Error("RefreshAccessTokenError");
       }
     
       const user: AdapterUser = token.user as AdapterUser;
     
-      // Don't delete these from token, they're needed for refresh
       // delete user.access_token;
       // delete user.refresh_token;
     
@@ -180,7 +184,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         refresh_token: token.refresh_token,
         user: {
           ...user,
-          // Keep access_token and refresh_token in user if needed
           access_token: token.access_token,
           refresh_token: token.refresh_token,
         },

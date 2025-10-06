@@ -17,31 +17,22 @@ import {
   Icon,
   Checkbox,
   InputWrapper,
-  RichTextEditor
+  RichTextEditor,
+  SectionHeader
 } from 'src/components';
 import PhotosOrganizer from '../../../new-animal/components/PhotosOrganizer';
 import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
 import AddAnimalParents from '../../../new-animal/components/AddAnimalParents';
 import classNames from 'classnames';
 
-// type Parent = {
-//   id: number;
-//   animal_id?: number;
-//   name: string;
-//   relation?: string | OptionType;
-//   image?: string;
-//   isNew?: boolean;
-// };
-
 type Parent = {
-  id: number;          // id zwierzaka (rodzica)
-  animal_id?: number; // id relacji z backendu
+  id: number;
+  animal_id?: number;
   name: string;
   relation?: string;
   photos?: string;
   isNew?: boolean;
 }
-
 
 interface AnimalUpdateFormProps {
   animal: IAnimal;
@@ -53,18 +44,6 @@ interface CharacteristicItem {
   title: string;
   bool: boolean;
 }
-
-type AddParents = {
-  // animal: number;
-  parent: number;
-  relation?: string | OptionType;
-}
-
-
-type PhotosOrganizerProps = {
-  photos: File[];            
-  setPhotos: (photos: File[]) => void;
-};
 
 const speciesOptions = [
   { value: 'dog', label: 'Dog' },
@@ -87,17 +66,6 @@ const breedOptions = {
     { value: 'other', label: 'Other' },
   ],
 };
-// const statusOptions = [
-//   { value: 'AVAILABLE', label: 'Available' },
-//   { value: 'ADOPTED', label: 'Adopted' },
-//   { value: 'RESERVED', label: 'Reserved' },
-// ];
-
-// const statusMap: Record<string, string> = {
-//   'Do adopcji': 'AVAILABLE',
-//   'Ma właściciela': 'ADOPTED',
-//   'Kwarantanna': 'RESERVED'
-// };
 
 const urlToFile = async (url: string, filename: string): Promise<File> => {
   try {
@@ -113,7 +81,6 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
   }
 };
 
-
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -122,7 +89,6 @@ const fileToBase64 = (file: File): Promise<string> => {
     reader.onerror = (error) => reject(error);
   });
 }
-
 
 const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({ 
   animal, 
@@ -145,17 +111,14 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
     parents: [],
     price: 0,
   });
+
   const [photos, setPhotos] = useState<File[]>([]);
   const [characteristics, setCharacteristics] = useState<CharacteristicItem[]>([]);
   const { characteristics: animalCharacteristics } = useAnimalInfo();
   const [description, setDescriptions] = useState<string>('');
-
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
   const [oldParents, setOldParents] = useState<Parent[]>([]);
-  // const [newParents, setNewParents] = useState<AddParents[]>([]);
-
-  const [selectSpeciesValue, setSelectSpeciesValue] = useState<string | undefined>('');
 
   useEffect(() => {
       if (animal) {
@@ -290,28 +253,26 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
       console.log("parents: ", parents)
       console.log("animal: ", animal)
       if (animals_res.status === 200) {
-
-            try {
-              for (const p of oldParents) {
-                await AnimalsApi.clearAnimalParents(p.id);
-              }
-              if (parents.length > 0) {
-              for (const parent of parents) {
-                const parentData = {
-                  animal: animal.id,  
-                  parent: parent.animal_id,  
-                  relation: parent.relation ? parent.relation : (parent.gender == "FEMALE" ? "MOTHER" : "FATHER")
-                };
-                console.log("Adding parent:", parentData);
-                await AnimalsApi.addAnimalParents(parentData);
-              }
+        try {
+          for (const p of oldParents) {
+            await AnimalsApi.clearAnimalParents(p.id);
+          }
+          if (parents.length > 0) {
+            for (const parent of parents) {
+              const parentData = {
+                animal: animal.id,  
+                parent: parent.animal_id,  
+                relation: parent.relation ? parent.relation : (parent.gender == "FEMALE" ? "MOTHER" : "FATHER")
+              };
+              console.log("Adding parent:", parentData);
+              await AnimalsApi.addAnimalParents(parentData);
             }
-            } catch (err) {
-              console.error("Failed to update parents", err);
-              toast.error("Failed to update parents");
-            }
+          }
+        } catch (err) {
+          console.error("Failed to update parents", err);
+          toast.error("Failed to update parents");
+        }
       }
-      
       toast.success('Animal updated successfully!');
       onSuccess?.(); 
       router.refresh();
@@ -344,29 +305,25 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   }
   return (
     <div className={style.animalUpdateForm}>
-        <div className={style.formHeader}>
-          <h2>Update Animal Information</h2>
-          <p>Edit the details for {animal.name}</p>
-        </div>
-          <div className={style.formSection}>    
-            <div className={style.formRow}>
-              <div className={style.fullWidth}>
-                <Input
-                  label="Name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  required
-                />
-              </div>
-              
+        <SectionHeader
+          title={'Update Animal Information'}
+          subtitle={`Edit the details for ${animal.name}`}
+          margin
+        />
+        <div className={style.container}>
+          <Card className={style.section}>
+            <h3>
+              Informacje <mark>podstawowe</mark>
+            </h3>
+            <div className={style.fullWidth}>
               <Input
-                label="Birth date"
-                type="date"
-                value={formData.birth_date}
-                onChange={(e) => handleInputChange('birth_date', e.target.value)}
+                label="Name"
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                required
               />
             </div>
-
+              
             <div className={style.flexRow}>
               <Select
                 label="Species"
@@ -374,7 +331,6 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
                 value={speciesOptions.find(opt => opt.value === formData.species) || null}
                 onChange={(option: OptionType | null) => {
                   handleInputChange('species', option?.value || '')
-                  setSelectSpeciesValue(option?.value)
                 }
                 }
               />
@@ -386,6 +342,22 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
                 onChange={(option: OptionType | null) => 
                   handleInputChange('breed', option?.value || '')
                 }
+              />
+
+              <Input
+                label="Birth date"
+                type="date"
+                value={formData.birth_date}
+                onChange={(e) => handleInputChange('birth_date', e.target.value)}
+              />
+            </div>
+
+            <div className={style.formRow}>
+              <Input
+                label="City"
+                value={formData.city}
+                onChange={(e) => handleInputChange('city', e.target.value)}
+                required
               />
             </div>
 
@@ -408,78 +380,92 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
               </div>
             </InputWrapper>
 
-            <Card className={style.section}>
+            <InputWrapper label={'Rozmiar'}>
+              <div className={style.genderSelect}>
+                <Tag
+                  selected={formData.size === AnimalSize.SMALL}
+                  onClick={() => handleInputChange('size', AnimalSize.SMALL)}
+                >
+                  Mały
+                </Tag>
+                <Tag
+                  selected={formData.size === AnimalSize.MEDIUM}
+                  onClick={() => handleInputChange('size', AnimalSize.MEDIUM)}
+                >
+                  Średni
+                </Tag>
+                <Tag
+                  selected={formData.size === AnimalSize.LARGE}
+                  onClick={() => handleInputChange('size', AnimalSize.LARGE)}
+                >
+                  Duży
+                </Tag>
+              </div>
+            </InputWrapper>
+
+            <Input
+              id='animal-price'
+              name='animal-price'
+              label={'Cena'}
+              placeholder='Napisz cennę...'
+              type="number"
+              value={formData.price}
+              onChange={(e) => handleInputChange('price', parseInt(e.target.value) || 0)}
+              min="1"
+            />
+          </Card> 
+
+          <Card className={style.section}>
+            <h3>
+              Zaprezentuj <mark>zdjęcia</mark>
+            </h3>
+
+            <FileDropzone
+              files={photos}
+              setFiles={setPhotos}
+            />
+            <PhotosOrganizer
+              photos={photos}        
+              setPhotos={setPhotos}  
+            />
+
+            <span className={style.caption}>
+              Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
+              formaty to .png, .jpg, .jpeg
+            </span>
+          </Card>
+          <Card className={style.section}>
+            <h3>
+              <mark>Cechy</mark> charakterystyczne
+            </h3>
+              <div className={style.characteristics}>
+                {characteristics.map((char) => (
+                  <Checkbox
+                    key={char.title}
+                    id={`char-${char.title}`}
+                    label={char.title}
+                    checked={char.bool}
+                    onChange={(e) => handleCharacteristicChange(char.title, e.target.checked)}
+                  />
+                ))}
+              </div>
+          </Card>
+          <Card className={style.section}>
+            <h3>
+              <mark>Opisz</mark> zwierzaka
+            </h3>
+            <RichTextEditor
+              initialContent={description}
+              placeholder="Napisz coś..."
+              onChange={setDescriptions}
+            />
+            <span className={style.caption}>Opis będzie widoczny w jego profilu.</span>
+          </Card>
+        
+        <Card className={style.section}>
           <h3>
-            Zaprezentuj <mark>zdjęcia</mark>
+            Aktualny <mark>status</mark>
           </h3>
-
-          <FileDropzone
-            files={photos}
-            setFiles={setPhotos}
-          />
-          <PhotosOrganizer
-            photos={photos}        
-            setPhotos={setPhotos}  
-          />
-
-          <span className={style.caption}>
-            Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
-            formaty to .png, .jpg, .jpeg
-          </span>
-        </Card>
-
-              <div className={style.formSection}>
-                <h3>Characteristics</h3>
-                <div className={style.characteristicsGrid}>
-                  {characteristics.map((char) => (
-                    <Checkbox
-                      key={char.title}
-                      id={`char-${char.title}`}
-                      label={char.title}
-                      checked={char.bool}
-                      onChange={(e) => handleCharacteristicChange(char.title, e.target.checked)}
-                    />
-                  ))}
-                </div>
-            </div>
-
-            <Card className={style.section}>
-              <h3>
-                <mark>Opisz</mark> zwierzaka
-              </h3>
-              <RichTextEditor
-                initialContent={description}
-                placeholder="Napisz coś..."
-                onChange={setDescriptions}
-              />
-              <span className={style.caption}>Opis będzie widoczny w jego profilu.</span>
-            </Card>
-          <div className={style.formRow}>
-              <Input
-                label="City"
-                value={formData.city}
-                onChange={(e) => handleInputChange('city', e.target.value)}
-                required
-              />
-              
-              <Input
-                label="Price (€)"
-                type="number"
-                value={formData.price}
-                onChange={(e) => handleInputChange('price', parseInt(e.target.value) || 0)}
-                min="0"
-              />
-          </div>
-
-          {/* <Select
-            label="Status"
-            options={statusOptions}
-            value={statusOptions.find(opt => opt.value === formData.status) || null}
-            onChange={(option: OptionType | null) => 
-              handleInputChange('status', option?.value || '')
-            }
-          /> */}
-          
           <div className={style.statusSelect}>
             <Tag
               selected={formData.status === "ADOPTED"}
@@ -502,27 +488,15 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
               Do adopcji
             </Tag>
           </div>
-
-        </div>
+        </Card>
         <Card className={style.section}>
           <h3>
             Znajdź <mark>rodzinę</mark> zwierzaka
           </h3>
-
           <div className={style.familyTreeBlock}>
-
             <div 
               className={style.addParents} 
               onClick={() => setIsParentsAdd((prev) => !prev)} aria-disabled={parents.length == 2}
-              // onClick={() => {
-              //   setParents(prev =>
-              //     prev.map((p, i) =>
-              //       i === index
-              //         ? (p.isNew ? null : { ...p, toDelete: true })
-              //         : p
-              //     ).filter(Boolean) 
-              //   );
-              // }}
             >
               <Icon name='plus' />
             </div>
@@ -551,34 +525,36 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
 
           <AddAnimalParents 
             className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
-            selectSpeciesValue={selectSpeciesValue}
+            parents={parents}
+            childAnimal={animal}
             onAddParent={(parent) => {
-              // Mark new parents as isNew: true
               const newParent = { ...parent, isNew: true };
-              setParents((prev) => [...prev, newParent]);
+              setParents((prev) => [...prev, newParent as Parent]);
               setIsParentsAdd(false); 
             }}
           />
           <span className={style.caption}>Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.</span>
         </Card>
-      <form onSubmit={handleSubmit} className={style.formContainer}>
-          <div className={style.formActions}>
-            <Button
-              type="button"
-              className={style.submit}
-              onClick={onCancel}
-              disabled={loading}
-              label="Cancel"
-            />
-              
-            <Button
-              type="submit"
-              className={style.submit}
-              disabled={loading}
-              label="Update Animal"
-            />
-          </div>
-        </form>
+
+        <form onSubmit={handleSubmit} className={style.formContainer}>
+            <div className={style.formActions}>
+              <Button
+                type="button"
+                className={style.submit}
+                onClick={onCancel}
+                disabled={loading}
+                label="Cancel"
+              />
+                
+              <Button
+                type="submit"
+                className={style.submit}
+                disabled={loading}
+                label="Update Animal"
+              />
+            </div>
+          </form>
+        </div>
     </div>
   );
 };

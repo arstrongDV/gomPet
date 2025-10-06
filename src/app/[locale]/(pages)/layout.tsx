@@ -11,7 +11,7 @@ import Sidebar from './components/Sidebar';
 
 import style from './PagesLayout.module.scss';
 
-const limitedWidthRoutes = [Routes.POSTS, Routes.ORGANIZATION_PROFILE(''), Routes.NEW_ANIMAL, Routes.NEW_ORGANIZATION];
+const limitedWidthRoutes = [Routes.ARTICLES, Routes.ORGANIZATION_PROFILE(''), Routes.NEW_ANIMAL, Routes.NEW_ORGANIZATION];
 
 const PagesLayout = ({
   children

@@ -82,25 +82,42 @@
 }
 
 .list {
-  flex: 1; 
-  // grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  flex: 1;
   display: grid;
+  // flex-wrap: wrap;
   gap: $spacing-4;
   margin: 20px 0;
   transition: $transition-main;
   justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+  grid-template-columns: repeat(4, 1fr);
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  // duże ekrany
+  @include desktopWidth {
+    grid-template-columns: repeat(4, 1fr);
   }
 
-  @media (max-width: 480px) {
+  // <= 1024px
+  @include mobileWidth {
+    grid-template-columns: repeat(4, 1fr);
+
+    &.withMap {
+      grid-template-columns: repeat(3, 1fr); // 👈 zmiana tylko jeśli mapa włączona
+    }
+  }
+
+  // <= 768px
+  @include tabletWidth {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  // <= 480px
+  @include phoneWidth {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: $spacing-3;
   }
 
-  @media (max-width: 360px) {
+  // <= 320px
+  @include smPhoneWidth {
     grid-template-columns: 1fr;
     justify-items: center;
     gap: $spacing-2;
@@ -108,6 +125,8 @@
 }
 
 .map {
+  position: sticky;
+  top: 0;
   width: 40%;
   min-width: 300px;
   transition: $transition-main;

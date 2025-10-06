@@ -24,43 +24,45 @@
     flex-direction: column;
     align-items: center;
   
-    /* Wiersz rodziców */
     .parents {
       display: flex;
-      justify-content: center;
+      justify-content: space-between; 
       align-items: flex-end;
-      gap: 15px;
       width: 100%;
-      flex-wrap: wrap; /* pozwala na zawijanie przy węższych ekranach */
-      margin-bottom: 15px;
-  
-      @media (max-width: 1024px) {
-        gap: 12px;
+      margin-bottom: 30px;
+      
+      * > {
+        flex: 1 1 0;  
+        display: flex;
+        justify-content: center;
       }
-  
-      @media (max-width: 768px) {
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-  
-      @media (max-width: 550px) {
-        gap: 8px;
-        flex-direction: column;
-        align-items: center;
-      }
+    
+      gap: clamp(16px, 5vw, 80px);
+    
+      @media (max-width: 1024px) { gap: clamp(12px, 4vw, 60px); }
+      @media (max-width: 768px) { gap: clamp(8px, 3vw, 40px); }
+      @media (max-width: 550px) { gap: clamp(6px, 2vw, 24px); }
+    
+      // &.parentsLevel{
+      //   flex: 1 1 0;      // parents row still spreads evenly
+      //   display: flex;
+      //   justify-content: center;
+      // }
+    
+
     }
   
-    /* Węzeł (rodzic, dziadek) */
     .node {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
+      flex: 0 1 auto; 
       margin: 5px 0;
   
       img {
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
         object-fit: cover;
         transition: transform 0.2s;
@@ -68,38 +70,16 @@
         &:hover {
           transform: scale(1.1);
         }
-  
-        @media (max-width: 1024px) {
-          width: 50px;
-          height: 50px;
-        }
-  
-        @media (max-width: 768px) {
-          width: 48px;
-          height: 48px;
-        }
-  
-        @media (max-width: 550px) {
-          width: 40px;
-          height: 40px;
-        }
       }
   
       p {
         margin-top: 6px;
-        font-size: 12px;
+        font-size: 13px;
         word-break: break-word;
-  
-        @media (max-width: 768px) {
-          font-size: 11px;
-        }
-  
-        @media (max-width: 550px) {
-          font-size: 10px;
-        }
       }
     }
   }
+  
   
   /* Główne zwierzę (dziecko/root) na dole */
   .rootNode {
@@ -109,8 +89,8 @@
     margin-top: 25px;
   
     img {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       object-fit: cover;
       transition: transform 0.2s;
@@ -172,4 +152,5 @@
       height: 40px;
     }
   }
+  
   

@@ -9,19 +9,15 @@ import {
   Checkbox,
   FileDropzone,
   Icon,
-  ImageInput,
   Input,
   InputWrapper,
-  PhoneInput,
-  Pill,
   RichTextEditor,
   SectionHeader,
   Select,
   Tag,
-  Textarea
 } from 'src/components';
 import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
-import { Gender, OrganizationType } from 'src/constants/types';
+import { AnimalSize, Gender, OrganizationType } from 'src/constants/types';
 
 import PhotosOrganizer from './components/PhotosOrganizer';
 
@@ -32,41 +28,63 @@ import AddAnimalParents from './components/AddAnimalParents';
 import classNames from 'classnames';
 import toast from 'react-hot-toast';
 
-// type ParentOfParent = {
-//   name: string;
-//   photo: File;
-//   parentsOfWho: string;
-// }
-
 type Parent = {
   name: string;
-  // gender: Gender;
-  id: number
+  animal_id: number
   relation: OptionType | string;
   photos?: string;
 };
 
-type AddParents = {
-  // animal: number;
-  parent: number;
-  relation?: string | OptionType;
-}
+const animalSpecies = [
+  {
+    value: 'dog',
+    label: 'Pies'
+  },
+  {
+    value: 'cat',
+    label: 'Kot'
+  }
+]
+const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+  dog: [
+    { value: 'beagle', label: 'Beagle' },
+    { value: 'terrier', label: 'Terrier' },
+    { value: 'labrador', label: 'Labrador' },
+  ],
+  cat: [
+    { value: 'british', label: 'British Shorthair' },
+    { value: 'siamese', label: 'Siamese' },
+    { value: 'persian', label: 'Persian' },
+  ],
+  other: [
+    { value: 'other', label: 'Other' },
+  ]
+};
 
-type Characteristic = {
-  title: string,
-  bool: boolean
-}
+const genderMap: Record<string, string> = {
+  male: 'MALE',
+  female: 'FEMALE'
+};
+
+const statusMap: Record<string, string> = {
+  'Do adopcji': 'AVAILABLE',
+  'Ma właściciela': 'ADOPTED',
+  'Kwarantanna': 'RESERVED'
+};
 
 type AnimalKey = string;
 
 const NewAnimalPage = () => {
   const t = useTranslations();
-  const editorRef = useRef(null);
+  // const editorRef = useRef(null);
   const { characteristics } = useAnimalInfo();
 
-  const [type, setType] = useState<OrganizationType | null>(OrganizationType.BREEDING);
+  // const [type, setType] = useState<OrganizationType | null>(OrganizationType.BREEDING);
   const [name, setName] = useState<string>('');
   const [gender, setGender] = useState<Gender>(Gender.MALE);
+  const [size, setSize] = useState<AnimalSize>(AnimalSize.SMALL);
+  const [price, setPrice] = useState<string>('');
+  const [birthDate, setBirthDate] = useState<string>('');
   const [status, setStatus] = useState<string>('Do adopcji');
   const [hasMetrics, setHasMetrics] = useState<boolean>(false);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -76,47 +94,10 @@ const NewAnimalPage = () => {
   const [descriptions, setDescriptions] = useState<string>("")
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
-  const [newParents, setNewParents] = useState<AddParents[]>([]);
 
   useEffect(() => {
     document.body.style.overflow = isParentsAdd ? 'hidden' : '';
   }, [isParentsAdd]);
-
-  const animalSpecies = [
-      {
-        value: 'dog',
-        label: 'Pies'
-      },
-      {
-        value: 'cat',
-        label: 'Kot'
-      }
-  ]
-  
-  const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-    dog: [
-      { value: 'beagle', label: 'Beagle' },
-      { value: 'terrier', label: 'Terrier' },
-      { value: 'labrador', label: 'Labrador' },
-    ],
-    cat: [
-      { value: 'british', label: 'British Shorthair' },
-      { value: 'siamese', label: 'Siamese' },
-      { value: 'persian', label: 'Persian' },
-    ],
-    other: [
-      { value: 'other', label: 'Other' },
-    ],
-  };
-  const genderMap: Record<string, string> = {
-    male: 'MALE',
-    female: 'FEMALE'
-  };
-  const statusMap: Record<string, string> = {
-    'Do adopcji': 'AVAILABLE',
-    'Ma właściciela': 'ADOPTED',
-    'Kwarantanna': 'RESERVED'
-  };
 
   const filteredSpeciesOpt = animalSpecies.filter(opt => opt.value !== selectSpeciesValue?.value)
   const filteredRaceOpt = selectSpeciesValue
@@ -128,12 +109,11 @@ const NewAnimalPage = () => {
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(file); // np. "data:image/jpeg;base64,/9j/4AAQSk..."
+      reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = (error) => reject(error);
     });
   }
-
 
   const handleSubmit = async () => {
     try {
@@ -151,10 +131,10 @@ const NewAnimalPage = () => {
       formData.append('species', String(selectSpeciesValue?.value ?? ''));
       formData.append('breed', String(selectRaceValue?.value ?? ''));
       formData.append('gender', genderMap[gender]);
-      formData.append('size', 'SMALL');
-      formData.append('birth_date', '2025-05-19');
+      formData.append('size', size);
+      formData.append('birth_date', birthDate);
       formData.append('status', statusMap[status]);
-      formData.append('price', "2100");
+      formData.append('price', price);
       formData.append('descriptions', descriptions);
       formData.append('city', "Krakow");
       formData.append('location', JSON.stringify({
@@ -180,20 +160,9 @@ const NewAnimalPage = () => {
         formData.append(`characteristicBoard[${index}][title]`, char.title);
         formData.append(`characteristicBoard[${index}][bool]`, char.bool.toString());
       });
-
-  
-      console.log([...formData.entries()]);
-      console.log("descriptions: ", descriptions);
-      console.log("newParents: ", JSON.stringify(newParents))
-      
-
-      // if (newParents.length > 0) {
-      //   formData.append('parents', JSON.stringify(newParents));
-      // }
       
       const animals_res = await AnimalsApi.createNewAnimal(formData);
       console.log("animals_res: ", animals_res);
-      // console.log("parents_res: ", parents_res);
 
       console.log("parents: ", parents)
 
@@ -207,7 +176,7 @@ const NewAnimalPage = () => {
             try {
               const parentData = {
                 animal: animalId,
-                parent: parent.id,
+                parent: parent.animal_id,
                 relation: parent.relation
               };
               console.log(`parent.relation: `, parent);
@@ -233,10 +202,12 @@ const NewAnimalPage = () => {
         }
       }
   
-
       toast.success("Animal created");
       setName('');
       setGender(Gender.MALE);
+      setSize(AnimalSize.SMALL);
+      setBirthDate('');
+      setPrice('');
       setStatus('');
       setHasMetrics(false);
       setPhotos([]);
@@ -244,7 +215,6 @@ const NewAnimalPage = () => {
       setSelectRaceValue(null);
       setSelectedCharacteristics([]);
       setParents([]);
-      setNewParents([]);
       setIsParentsAdd(false);
       setDescriptions('');
     } catch (err: any) {
@@ -290,7 +260,7 @@ const NewAnimalPage = () => {
               options={filteredSpeciesOpt}
               onChange={setSelectSpeciesValue}
               value={selectSpeciesValue}
-              // isClearable
+              isClearable
             />
 
             <Select
@@ -298,7 +268,14 @@ const NewAnimalPage = () => {
               options={filteredRaceOpt}
               onChange={setSelectRaceValue}
               value={selectRaceValue}
-              // isClearable
+              isClearable
+            />
+
+            <Input
+              label="Birth date"
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
             />
           </div>
 
@@ -320,6 +297,40 @@ const NewAnimalPage = () => {
               </Tag>
             </div>
           </InputWrapper>
+
+          <InputWrapper label={'Rozmiar'}>
+            <div className={style.genderSelect}>
+              <Tag
+                selected={size === AnimalSize.SMALL}
+                onClick={() => setSize(AnimalSize.SMALL)}
+              >
+                Mały
+              </Tag>
+              <Tag
+                selected={size === AnimalSize.MEDIUM}
+                onClick={() => setSize(AnimalSize.MEDIUM)}
+              >
+                Średni
+              </Tag>
+              <Tag
+                selected={size === AnimalSize.LARGE}
+                onClick={() => setSize(AnimalSize.LARGE)}
+              >
+                Duży
+              </Tag>
+            </div>
+          </InputWrapper>
+
+          <Input
+            id='animal-price'
+            name='animal-price'
+            label={'Cena'}
+            placeholder='Napisz cennę...'
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            min="1"
+          />
 
           <Checkbox
             id='animal-has-metrics'
@@ -456,9 +467,9 @@ const NewAnimalPage = () => {
 
             <AddAnimalParents 
               className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
-              selectSpeciesValue={selectSpeciesValue}
+              // selectSpeciesValue={selectSpeciesValue}
               onAddParent={(parent) => {
-                setParents((prev) => [...prev, parent]);
+                setParents((prev) => [...prev, parent as Parent]);
                 setIsParentsAdd(false); 
               }}
           />

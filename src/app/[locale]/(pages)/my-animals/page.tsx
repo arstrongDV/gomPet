@@ -41,16 +41,17 @@ const MyAnimals = () => {
         try {
           const response = await AnimalsApi.getAnimals({
             page: page,
-            pageSize: paginationConfig.animals
+            limit: paginationConfig.animals
           });
-          
+
           const animalsData: IAnimal[] = response.data.results || [];
           const myAnimals = animalsData.filter((res: IAnimal) => {
             return String(res.owner) === String(auth.data?.user?.id);
           });
-          
+          console.log("myAnimals:::", myAnimals)
           setAnimals(myAnimals);
-          setTotal(response.data.count || myAnimals.length);
+          console.log("response:::", response)
+          setTotal(myAnimals.length);
         } catch (error) {
           console.error("Error fetching animals:", error);
           setAnimals([]);
@@ -119,12 +120,19 @@ const MyAnimals = () => {
                 </List>
             </div>
             
-            <Pagination              
+            {/* <Pagination              
                 className={style.pagination}
                 totalCount={total}
                 pageSize={paginationConfig.animals}
                 currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
                 onPageChange={changePage} 
+            /> */}
+            <Pagination
+              className={style.pagination}
+              totalCount={total}
+              pageSize={paginationConfig.animals}
+              currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+              onPageChange={changePage}
             />
         </div>
     )

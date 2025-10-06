@@ -3,7 +3,7 @@ import { commentsSlice } from 'src/app/[locale]/(pages)/(organizations)/componen
 
 import { bookmarksSlice } from 'src/app/[locale]/(pages)/bookmarks/slice';
 import { searchSlice } from 'src/app/[locale]/(pages)/components/Header/components/SearchBar/slice';
-import { postsSlice } from 'src/app/[locale]/(pages)/posts/slice';
+import { postsSlice } from 'src/app/[locale]/(pages)/articles/slice';
 
 import { authSlice } from 'src/app/[locale]/auth/slice';
 

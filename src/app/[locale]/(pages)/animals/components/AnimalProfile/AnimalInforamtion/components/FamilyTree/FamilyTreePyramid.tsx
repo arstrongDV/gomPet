@@ -12,12 +12,18 @@ export const FamilyTreePyramid: React.FC<Props> = ({ node, depth }) => {
   if (!node) return null;
   const router = useRouter();
   const hasChildren = node.children && node.children.length > 0;
-
+  console.log(node)
+  const levelClass =
+  depth === 1
+    ? styles.parentsLevel
+    : depth === 2
+    ? styles.grandparents
+    : '';
   return (
-    <div className={styles.level}>
+    <div className={`${styles.level} ${levelClass}`}>
       {hasChildren && (
         <div
-          className={styles.parents}
+          className={`${styles.parents} ${levelClass}`}
           style={{
             display: 'flex',
             justifyContent: node.children.length === 1 ? 'center' : 'space-between',

@@ -67,13 +67,16 @@ const AnimalsPage = () => {
       limit: itemsPerPage,
       page: currentPage,
       species: searchParams.getAll('species'),
+      breed: searchParams.getAll('breed'),
       organizationType: searchParams.getAll('organization-type'),
       characteristics: searchParams.getAll('characteristics'),
       gender: searchParams.getAll('gender'),
       size: searchParams.getAll('size'),
       name: searchParams.getAll('name'),
-      location: searchParams.getAll('location'),
-      age: searchParams.getAll('age').map(Number),
+      city: searchParams.getAll('city'),
+      // age: searchParams.getAll('age').map(Number),
+      minAge: searchParams.getAll('age-min').map(Number),
+      maxAge: searchParams.getAll('age-max').map(Number),
       range: searchParams.getAll('range').map(Number),
       organization_id: searchParams.getAll('organization-id').map(Number),
       breed_groups: searchParams.getAll('breed-groups')
@@ -106,12 +109,13 @@ const AnimalsPage = () => {
 
         <div>
           <div className={style.content}>
-            <List
-                isLoading={isLoading}
-                className={classNames(style.list, {
-                  [style.fullWidthList]: !showMap
-                })}
-              >
+          <List
+            isLoading={isLoading}
+            className={classNames(style.list, {
+              [style.fullWidthList]: !showMap,
+              [style.withMap]: showMap, // ⬅️ dodajemy
+            })}
+          >
                 {animals.map((animal) => (
                   <AnimalCard key={animal.id} animal={animal}/>
                 ))}

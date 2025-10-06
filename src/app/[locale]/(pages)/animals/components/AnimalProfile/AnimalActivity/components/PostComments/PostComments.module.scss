@@ -20,6 +20,17 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   z-index: 10;
 
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+
   @media (max-width: 1300px) {
     max-height: 70vh;
     max-width: 90%;
@@ -68,4 +79,28 @@
 .image {
   width: 5rem;
   height: 5rem;
+}
+
+.editBanner {
+  background: #f1f5ff;
+  color: #2a4de8;
+  padding: 0.8rem 1rem;
+  border-radius: 0.6rem;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    border: none;
+    background: transparent;
+    color: #2a4de8;
+    cursor: pointer;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

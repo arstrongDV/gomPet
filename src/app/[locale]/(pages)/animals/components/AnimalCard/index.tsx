@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 
 import { IconNames } from 'src/assets/icons';
-import { Icon } from 'src/components';
+import { CloseButton, Icon } from 'src/components';
 import { IAnimal } from 'src/constants/types';
 
 import style from './AnimalCard.module.scss';
@@ -14,18 +14,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector, useAppStore } from 'src/lib/store/hooks';
 import { addItemToFavorites, deleteItemFromFavorites } from '../../../bookmarks/slice';///
 import OutsideClickHandler from 'react-outside-click-handler';
-import { AnimalsApi } from 'src/api';
 import toast from 'react-hot-toast';
+import { Routes } from 'src/constants/routes';
+import SettingsButton from 'src/components/layout/Settings';
 
 const genderIconNames: { [key: string]: IconNames } = {
   male: 'genderMale',
   female: 'genderFemale'
 };
-
-// type AnimalCardProps = {
-//   className?: string;
-//   animal: IAnimal;
-// };
 
 type AnimalCardProps = {
   className?: string;
@@ -36,7 +32,7 @@ type AnimalCardProps = {
   onDelete?: (id: number) => void;
 };
 
-const AnimalCard = ({ className, animal, isSettingsOpen, onToggleSettings, setOpenedCardId, onDelete }: AnimalCardProps) => {
+const AnimalCard = ({ className, animal, setOpenedCardId, onDelete }: AnimalCardProps) => {
 
   const dispatch = useAppDispatch();
   const pathname = usePathname();
@@ -52,7 +48,6 @@ const AnimalCard = ({ className, animal, isSettingsOpen, onToggleSettings, setOp
   };
   const handleCardClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
-    // Nie przekierowuj jeśli kliknięto w button
     if (!target.closest('button')) {
       push(`/animals/${animal.id}`);
     }
@@ -68,34 +63,12 @@ const AnimalCard = ({ className, animal, isSettingsOpen, onToggleSettings, setOp
   };
 
   const handleUpdateClick = () => {
-    push(`/animals/${animal.id}/edit`);
-    setOpenedCardId?.(null); // Close settings
+    push(Routes.EDIT(animal.id))
+    setOpenedCardId?.(null);
   };
 
-  console.log("animalll: ", animal)
   return (
     <div className={cardClasses} style={cardStyles}>
-      {isSettingsOpen && (
-        <OutsideClickHandler onOutsideClick={() => setOpenedCardId?.(null)}>
-          <div className={style.settings}>
-            <button 
-              className={style.settingsBtn}
-              onClick={handleUpdateClick}
-            >
-              Update
-            </button>
-            <button
-              className={style.settingsBtn}
-              onClick={() => {
-                onDelete?.(animal.id);
-                setOpenedCardId?.(null); // close settings
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        </OutsideClickHandler>
-      )}
       <div className={style.gradient}></div>
       <div className={style.content} onClick={handleCardClick}>
         <div className={style.top}>
@@ -112,19 +85,31 @@ const AnimalCard = ({ className, animal, isSettingsOpen, onToggleSettings, setOp
               </div>
             )}
           </div>
-          <button id='#button'   className={classNames(style.addBookmark, {
+          <button id='#button' className={classNames(style.addBookmark, {
             [style['addBookmark--active']]: isFavorite,
           })} onClick={toggleFavorite}>
             <Icon name='heart' />
           </button>
-          
+
           {pathname == '/my-animals' && (
-            <button
-              className={style.addBookmark}
-              onClick={onToggleSettings}
-            >
-              <Icon name="x" />
-            </button>
+            <div onClick={(e) => e.stopPropagation()} className={style.addBookmark}>
+              <SettingsButton
+                // className={style.settingsWrapper}
+                authId={animal.owner}
+                onEdit={handleUpdateClick}
+                onDelete={() => {
+                  onDelete?.(animal.id);
+                  setOpenedCardId?.(null); 
+              }} 
+              />
+              {/* <button
+                className={style.addBookmark}
+                onClick={handleNotificationClick}
+              >
+                <Icon name="list" />
+            </button> */}
+            </div>
+
           )}
 
         </div>

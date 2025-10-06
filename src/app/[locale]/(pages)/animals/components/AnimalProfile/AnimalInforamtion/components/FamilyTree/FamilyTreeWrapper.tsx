@@ -10,13 +10,13 @@ interface FamilyTreeWrapperProps {
 }
 // Przykładowa funkcja do konwersji
 const normalizeFamilyTree = (parents: any[]) => {
-  console.log(parents)
+  console.log("parents:::", parents);
   return parents.map(parent => ({
     id: parent.animal_id,
     name: parent.name,
     image: parent.photos,
     children: parent.grandparents?.map(gp => ({
-      id: gp.id,
+      id: gp.animal_id,
       name: gp.name,
       image: gp.photos,
       children: [] // dziadkowie nie mają już wyższych poziomów

@@ -2,8 +2,8 @@ import { IAnimal, IPost } from 'src/constants/types';
 import { IComment } from 'src/constants/types';
 import { commentsMock } from 'src/mocks/comments';
 import style from './AnimalProfile.module.scss';
-import AnimalProfile from '../components/AnimalProfile';
-import { AnimalsApi } from 'src/api';
+import { AnimalsApi, PostsApi } from 'src/api';
+import TabView from '../components/AnimalProfile/TabView';
 
 const getAnimalData = async (id: number): Promise<IAnimal | undefined> => {
   try {
@@ -25,14 +25,14 @@ const getAnimalFamilyTree = async (id: number): Promise<IAnimal | undefined> => 
   }
 };
 
-const getAnimalPosts = async (id: number): Promise<IPost | undefined> => {
-  try{
-    const animalPosts = await AnimalsApi.getAnimalPosts(id);
-    return animalPosts.data
-  }catch(error){
-    throw error
-  }
-}
+// const getAnimalPosts = async (id: number): Promise<IPost | undefined> => {
+//   try{
+//     const animalPosts = await PostsApi.getAnimalPosts(id);
+//     return animalPosts.results
+//   }catch(error){
+//     throw error
+//   }
+// }
 
 const getCommentData = async (id: number): Promise<IComment | undefined> => {
   try {
@@ -59,21 +59,21 @@ export const generateMetadata = async ({ params: { id } }: { params: { id: strin
 const AnimalDetailPage = async ({ params }: { params: { id: string } }) => {
   const animal = await getAnimalData(Number(params.id));
   const familyTree = await getAnimalFamilyTree(Number(params.id))
-  const comment = await getCommentData(Number(params.id));
-  const posts = await getAnimalPosts(Number(params.id))
+  const comments = await getCommentData(Number(params.id));
+  // const posts = await getAnimalPosts(Number(params.id))
 
   if (!animal) {
     return <div className={style.notFound}>Animal not found</div>;
   }
-
+//posts={posts}
   return (
     <div className={style.mainContainer}>
       <div className={style.innerContainer}>
-        <AnimalProfile animal={animal} comment={comment} posts={posts} familyTree={familyTree} /> 
+        {/* <AnimalProfile animal={animal} comment={comment} posts={posts} familyTree={familyTree} />  */}
+        <TabView animal={animal} comments={comments}  familyTree={familyTree} /> 
       </div>
     </div>
   );
 };
-
 
 export default AnimalDetailPage;
