@@ -66,7 +66,7 @@ export class OffersApi {
   }
 
   static getOffer(id: number) {
-    return ApiClient.get(OffersRoutes.OFFER(id));
+    return ApiClient.get(OrganizationsRouts.ORGANIZATION_PROFILE_ID(id)); //OffersRoutes.OFFER
   }
 
   static getCompany(id: number) {
@@ -299,7 +299,18 @@ export class AnimalsApi {
       };
     }
   }
-  
+
+
+  static async getAnimalsSpecies(){
+    return ApiClient.get(AnimalsRouts.ANIMAL_SPECIES, {
+      __tokenRequired: false
+    })
+  }
+  static async getAnimalsBreeds(){
+    return ApiClient.get(AnimalsRouts.ANIMAL_BREEDS, {
+      __tokenRequired: false
+    })
+  }
 }
 
 
@@ -313,7 +324,7 @@ export class OrganizationsApi {
     if (filters?.organizationType) {
       params.append('organization-type', filters.organizationType.join(','));
     }
-    
+  
     try {
       const response = await ApiClient.get(OrganizationsRouts.ORGANIZATION_LATEST, { __tokenRequired: false });
       const {results, count} = response?.data;
@@ -335,10 +346,71 @@ export class OrganizationsApi {
 
   static async getOrganizations(params?: object){
     return ApiClient.get(
-      OrganizationsRouts.ORGANIZATION_PROFILE,
+      OrganizationsRouts.ORGANIZATIONS, //ORGANIZATION_PROFILE
       params,
       { __tokenRequired: false }
     );
+  }
+
+  static async getOrganizationProfile(id: number){
+    return ApiClient.get(OrganizationsRouts.ORGANIZATION_PROFILE_ID(id), {
+      __tokenRequired: true
+    })
+  }
+
+  static async deleteOrganizationProfile(id: number){
+    return ApiClient.delete(OrganizationsRouts.ORGANIZATION_PROFILE_ID(id), {
+      __tokenRequired: true
+    })
+  }
+
+  static async updateOrganizationProfile(id: number, payload: any){
+    return ApiClient.patch(OrganizationsRouts.ORGANIZATION_PROFILE_ID(id), payload, {
+      __tokenRequired: true
+    })
+  }
+
+  static async addNewOrganization(payload: object){
+    return ApiClient.post(OrganizationsRouts.ORGANIZATIONS, payload, {
+      __tokenRequired: true
+    })
+  }
+
+  static async getOrganizationAnimals(id: number){
+    return ApiClient.get(OrganizationsRouts.ORGANIZATION_ANIMALS(id), {
+      __tokenRequired: false
+    })
+  }
+  static async getOrganizationLitters(id: number){
+    return ApiClient.get(OrganizationsRouts.ORGANIZATION_LITTERS(id), {
+      __tokenRequired: false
+    })
+  }
+  static async postOrganizationLitters(payload:any){
+    return ApiClient.post(OrganizationsRouts.ORGANIZATION_LITTERS_POST, payload, {
+      __tokenRequired: true
+    })
+  }
+  static async getOrganizationPosts(id: number){
+    return ApiClient.get(OrganizationsRouts.ORGANIZATION_POSTS(id), {
+      __tokenRequired: false
+    })
+  }
+
+  static async getLitter(id: number){
+    return ApiClient.get(OrganizationsRouts.LITTERS_ID(id), {
+      __tokenRequired: true
+    })
+  }
+  static async deleteOrganizationLitters(id: number){
+    return ApiClient.delete(OrganizationsRouts.LITTERS_ID(id), {
+      __tokenRequired: true
+    })
+  }
+  static async updateOrganizationLitters(id: number, payload: any){
+    return ApiClient.patch(OrganizationsRouts.LITTERS_ID(id), payload, {
+      __tokenRequired: true
+    })
   }
 }
 
@@ -365,9 +437,18 @@ export class ArticlesApi {
       throw error;
     }
   }
-  static getArticlesList() {
-    return ApiClient.get(ArticlesRouts.ARTICLES_LIST, {
+  static getArticlesList(currentPage: number) {
+    const params: Record<string, any> = {
+      page: currentPage || 1,
+    };
+    return ApiClient.get(ArticlesRouts.ARTICLES_LIST, params, {
       __tokenRequired: false,
+    });
+  }
+
+  static postNewArticle(payload: any) {
+    return ApiClient.post(ArticlesRouts.ARTICLES_LIST, payload, {
+      __tokenRequired: true,
     })
   }
 
@@ -391,6 +472,8 @@ export class ArticlesApi {
 }
 
 export class PostsApi {
+
+  //Animals
   static async getAnimalPosts(animalId: number) {
     try {
       const response = await ApiClient.get(PostsRouts.ANIMAL_ACTIVITY(animalId), {
@@ -420,6 +503,13 @@ export class PostsApi {
     })
   }
 
+  //Organization
+  static async postOrganizationPosts(payload:any){
+    return ApiClient.post(PostsRouts.POSTS_LIST, payload, {
+      __tokenRequired: true
+    })
+  }
+
   //Comments
   static async getComments(PostId: number, content_type: string) {
     try {
@@ -431,10 +521,10 @@ export class PostsApi {
       throw error;
     }
   }
-  static async addNewComments({ content_type, object_id, body }: { content_type: string; object_id: number; body: string }) {
+  static async addNewComments({ content_type, object_id, body, rating }: { content_type: string; object_id: number; body: string; rating?:number }) {
     const response = await ApiClient.post(
       PostsRouts.COMMENTS_LIST,
-      { content_type, object_id, body },
+      { content_type, object_id, body, rating },
       { __tokenRequired: true }
     );
     return response.data;
@@ -444,7 +534,7 @@ export class PostsApi {
        __tokenRequired: true 
     })
   }
-  static async updateComment(id: number, data: { body: string }){
+  static async updateComment(id: number, data: { body: string; rating?: number }){
     return ApiClient.patch(PostsRouts.COMMENTS_LIST_ID(id), data, {
       __tokenRequired: true 
     })

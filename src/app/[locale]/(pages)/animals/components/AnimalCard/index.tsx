@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 
 import { IconNames } from 'src/assets/icons';
-import { CloseButton, Icon } from 'src/components';
+import { Button, Icon } from 'src/components';
 import { IAnimal } from 'src/constants/types';
 
 import style from './AnimalCard.module.scss';
@@ -46,12 +46,6 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete }: AnimalCard
   const cardStyles = {
     backgroundImage: `url(${animal.image})`,
   };
-  const handleCardClick = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    if (!target.closest('button')) {
-      push(`/animals/${animal.id}`);
-    }
-  };
 
   const toggleFavorite = () => {
     const isFav = favorites.some((fav) => fav.id === animal.id);
@@ -70,11 +64,13 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete }: AnimalCard
   return (
     <div className={cardClasses} style={cardStyles}>
       <div className={style.gradient}></div>
-      <div className={style.content} onClick={handleCardClick}>
+      <div className={style.content}>
         <div className={style.top}>
           <div className={style.about}>
             <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>
-            <div className={classNames(style.badge, style.age)}>+{animal.age}</div>
+            {/* {animal.age && ( */}
+              <div className={classNames(style.badge, style.age)}>{animal.age >= 1 ? (`${animal.age}+`) : '< 1 rok'}</div>
+            {/* )} */}
             {animal.characteristicBoard.find(item => item.bool === true) && (
               <div className={classNames(style.badge, style.characteristics)}>
                 {/* {t(`characteristics.${animal.species}.${animal.characteristicBoard[0].title}`)} */}
@@ -85,7 +81,7 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete }: AnimalCard
               </div>
             )}
           </div>
-          <button id='#button' className={classNames(style.addBookmark, {
+          <button className={classNames(style.addBookmark, {
             [style['addBookmark--active']]: isFavorite,
           })} onClick={toggleFavorite}>
             <Icon name='heart' />
@@ -123,6 +119,11 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete }: AnimalCard
             <div className={classNames(style.badge, style.size)}>Wielkość: {t(`size.${animal.size.toLowerCase()}`)}</div>
             <div className={classNames(style.badge, style.ageText)}>Wiek: Dorosły</div>
           </div>
+          <Button 
+            className={style.buttonCard} 
+            label="Poznaj szczegóły" 
+            onClick={() => push(`/animals/${animal.id}`)} 
+          />
         </div>
 
         <div className={style.bottom}>

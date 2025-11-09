@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react'
+import React, { useRef } from 'react'
 import Image from 'next/image';
 import { IAnimal, IComment } from 'src/constants/types';
 import { useTranslations } from 'next-intl';
@@ -13,8 +13,9 @@ import { Button, Icon, List, Comment, OrganizationTypeName, StarRating } from 's
 import RelatedAnimals from './components/RelatedAnimals';
 import AnimalPhotos from './components/AnimalPhotos';
 import Comments from './components/Comments';
-import AnimalDescription from './components/AnimalDescription';
+import DescriptionTranslate from './components/AnimalDescription';
 import { useRouter } from 'next/navigation';
+import CharacteristicsBlock from './components/AnimalCharacteristics';
 
 type AnimalProfileProps = {
     animal: IAnimal;
@@ -35,6 +36,7 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
       };
 
     console.log("animal::::", animal);
+
 
   return (
     <div className={style.mainBlock}>
@@ -77,7 +79,11 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
                         <div className={style.location}>
                             <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.city}</p>
                         </div>
-                        <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
+                        {String(animal.price) !== '0.00' ? (
+                            <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
+                        ) : (
+                            <p style={{color: '#798177'}}>Oddam w dobre rece!</p>
+                        )}
                         {/* <a href='tel:+48213713370' className={style.phoneNumButton}> */}
                             {/* <button> */}
                                     {/* <Image src={PHONE_IMAGE} alt='phone-image' width={18} /> 
@@ -95,20 +101,26 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
 
                         </div>
                     </div>
-                    <div className={style.characteristicsBlock}>
-                        {animal.characteristicBoard?.length ? (
-                            animal.characteristicBoard.map(c => (
-                            <div className={style.AnimalCharacter} key={c.title}>
-                                <div className={style.caracteristicImage}>
-                                {c.bool ? <Icon name={"pawFilled"} /> : null}
-                                </div> 
-                                <p className={style.caracteristicTitle}>{c.title}</p>
-                            </div>
-                            ))
-                        ) : (
-                            <div>No info</div>
-                        )}
-                    </div>
+                    {/* <div className={style.characteristicsBlock}> */}
+                        {/* <div className={style.characteristicContent}>
+                            {animal.characteristicBoard?.length ? (
+                                animal.characteristicBoard.map(c => (
+                                <div className={style.AnimalCharacter} key={c.title}>
+                                    <div className={style.caracteristicImage}>
+                                    {c.bool ? <Icon name={"pawFilled"} /> : null}
+                                    </div> 
+                                    <p className={style.caracteristicTitle}>{c.title}</p>
+                                </div>
+                                ))
+                            ) : (
+                                <div>No info</div>
+                            )}
+                        </div>
+                        <div className={style.customScrollbar}>
+                            <div className={style.customThumb}></div>
+                        </div> */}
+                        <CharacteristicsBlock animal={animal} />
+                    {/* </div> */}
                     {animal.location?.coordinates ? (
                         <iframe
                             width="600"
@@ -126,7 +138,7 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
 
                 </div>
                 <div className={style.infoTextBlock}>
-                    <AnimalDescription text={animal.descriptions} maxLines={5} />
+                    <DescriptionTranslate text={animal.descriptions} maxLines={5} />
                 </div>
                 <div className={style.myFamilly}>
                 <FamilyTreeWrapper 

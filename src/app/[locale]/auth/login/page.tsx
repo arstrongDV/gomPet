@@ -6,6 +6,7 @@ import { Routes } from 'src/constants/routes';
 import { Locale } from 'src/navigation';
 
 import LoginForm from './form';
+import backgroundImage from '../../../../assets/gompet.png'
 
 import style from './Login.module.scss';
 

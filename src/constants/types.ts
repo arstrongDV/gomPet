@@ -55,8 +55,13 @@ export type Location = {
   street: string;
   house_number: string;
   zip_code: string;
-  lat: string | number;
-  lng: string | number;
+  lat: string;
+  lng: string;
+
+  location?: {
+    type: string,
+    coordinates: [lng: string | number, lat: string | number]
+  }
 };
 
 export interface IUser {
@@ -72,6 +77,7 @@ export interface IUser {
 
 export interface IOrganization {
   id: number;
+  user: number;
   type: OrganizationType;
   name: string;
   email: string;
@@ -80,11 +86,10 @@ export interface IOrganization {
   description: string;
   rating: number;
   address: Location;
+  location: Location;
   // details only for BREEDING type
-  details?: {
-    species: string[];
-    breeds: string[];
-  };
+  race: string;
+  breed: string;
   created_at: string;
 }
 

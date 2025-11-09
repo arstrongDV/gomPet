@@ -150,7 +150,7 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
             toast.error("To zwierzę zostało już wybrane poprzednio");
             return;
         }
-        if (parents.some(prevAnimal => prevAnimal.id === animal.id)) {
+        if (parents?.some(prevAnimal => prevAnimal?.id === animal.id)) {
             toast.error("To zwierzę zostało już wybrane poprzednio");
             return;
         }
@@ -158,16 +158,16 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
             toast.error("Nie moze byc dwa zwierza z jednym płciem");
             return;
         }
-        if (parents.some(prevAnimal => prevAnimal.gender === animal.gender)) {
+        if (parents?.some(prevAnimal => prevAnimal?.gender === animal.gender)) {
             toast.error("Nie moze byc dwa zwierza z jednym płciem");
             return;
         }
-        if (animal.id === childAnimal.id) {
+        if (animal.id === childAnimal?.id) {
             toast.error("Wybrane zwierzę nie może być rodzicem samego siebie");
             return;
         }
         
-        if (animal.age <= childAnimal.age) {
+        if (animal.age <= childAnimal?.age) {
             toast.error("Rodzic musi być starszy");
             return;
         }

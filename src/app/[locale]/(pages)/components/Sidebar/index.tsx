@@ -76,8 +76,8 @@ const Sidebar = () => {
       icon: 'heart'
     },
     {
-      title: t('navigation.sidebar.blog'),
-      url: Routes.BLOG,
+      title: t('navigation.sidebar.knowledge'),
+      url: Routes.KNOWLEDGE,
       icon: 'book'
     }
   ];

@@ -1,7 +1,7 @@
 import React, { cache } from 'react';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
-import { OffersApi } from 'src/api';
+import { OffersApi, OrganizationsApi } from 'src/api';
 import { injectToken } from 'src/api/client';
 import { auth } from 'src/auth';
 import { Loader } from 'src/components';

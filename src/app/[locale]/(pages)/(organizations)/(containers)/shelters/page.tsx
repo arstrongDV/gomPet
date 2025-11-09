@@ -50,6 +50,7 @@ const SheltersPage = () => {
       // const organizationData = res.data?.results.filter(o => o.type == "Shalters")
       setOrganizations(organizationData);
       setTotal(res.data?.count || 0);
+      console.log("organizationData::", organizationData)
     } catch (error) {
       setOrganizations([]);
       setTotal(0);

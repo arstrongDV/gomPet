@@ -6,15 +6,21 @@ import PostCard from './components/PostCard';
 import style from './PostsPage.module.scss';
 import AddPost from './components/AddPost';
 import { PostsApi } from 'src/api';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 type AnimalActivityProps = {
   postsData?: IPost[];
   animalId: number;
+  animalOwnerId?: number;
 };
 
-const AnimalActivity = ({ animalId }: AnimalActivityProps) => {
+const AnimalActivity = ({ animalId, animalOwnerId }: AnimalActivityProps) => {
   const [showAddPost, setShowAddPost] = useState<boolean>(false);
   const [animalPosts, setAnimalPosts] = useState<IPost[]>([]);
+
+  const session = useSession()
+  const myId = session.data?.user.id;
 
   const getAnimalPosts = async (animalId: number): Promise<void> => {
     try {
@@ -27,10 +33,18 @@ const AnimalActivity = ({ animalId }: AnimalActivityProps) => {
   };
 
   const deletePosts = (postId: number) => {
+    if(myId != animalOwner){
+      toast.error("Bled operacji")
+      return null;
+    }
     setAnimalPosts(prev => prev.filter(post => post.id !== postId));
   };
 
   const updatePosts = (updatedPost: IPost) => {
+    if(myId != animalOwner){
+      toast.error("Bled operacji")
+      return null;
+    }
     setAnimalPosts(prev =>
       prev.map(post =>
         post.id === updatedPost.id ? { ...post, ...updatedPost } : post
@@ -42,19 +56,20 @@ const AnimalActivity = ({ animalId }: AnimalActivityProps) => {
   //   await getAnimalPosts(animalId);
   // };
 
-
   useEffect(() => {
     getAnimalPosts(animalId);
   }, [animalId]);
 
   return (
     <div className={style.container}>
-      <Button
-        icon="plus"
-        label="Dodaj post"
-        width="200px"
-        onClick={() => setShowAddPost(true)}
-      />
+      {myId == animalOwnerId && (
+        <Button
+          icon="plus"
+          label="Dodaj post"
+          width="200px"
+          onClick={() => setShowAddPost(true)}
+        />
+      )}
 
       <List isLoading={false} className={style.list}>
         {animalPosts.length > 0 ? (
@@ -66,7 +81,8 @@ const AnimalActivity = ({ animalId }: AnimalActivityProps) => {
         )}
       </List>
 
-      {showAddPost && (
+
+      {myId == animalOwnerId && showAddPost && (
         <AddPost
           animalId={animalId}
           setShowAddPost={setShowAddPost}

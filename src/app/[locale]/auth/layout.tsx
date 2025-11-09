@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 
 import Logo from 'assets/images/logo.png';
+import Pattern from 'src/assets/gompetPattern.png';
 
 import { Routes } from 'src/constants/routes';
 import { Link } from 'src/navigation';
@@ -14,16 +15,22 @@ const PagesLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className={style.container}>
-      <main
-        id='main'
-        className={style.main}
-      >
+    <div
+      className={style.container}
+      style={{
+        backgroundImage: `
+          url(${Pattern.src}),
+          url(${Pattern.src})
+        `,
+        backgroundRepeat: 'repeat',
+      }}
+    >
+      <main id="main" className={style.main}>
         <Link href={Routes.LANDING}>
           <Image
             className={style.logo}
             src={Logo}
-            alt='Logo'
+            alt="Logo"
             height={60}
             priority
           />

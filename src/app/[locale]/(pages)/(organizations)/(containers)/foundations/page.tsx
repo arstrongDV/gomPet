@@ -62,7 +62,7 @@ const FundationPage = () => {
   
     filters.limit = String(itemsPerPage);
     filters.page = String(currentPage);
-    filters['organization-type'] = ''; 
+    filters['organization-type'] = 'FUND'; 
   
     searchParams.forEach((value, key) => {
       if (key !== Params.PAGE) {

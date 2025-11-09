@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { Icon, useOrganization } from 'src/components';
 import style from './PostReactions.module.scss';
 import { ArticlesApi } from 'src/api';
+import toast from 'react-hot-toast';
 
 type PostReactionsProps = {
   postId: number;
@@ -45,7 +46,7 @@ const PostReactions = ({ postId, reactionsCount }: PostReactionsProps) => {
   const handleReaction = async () => {
     const isLoggedInUser = session.status === 'authenticated' && !!myId;
     if (!isLoggedInUser) {
-      alert('Musisz być zalogowany, aby polubić post.');
+      toast.error('Musisz być zalogowany, aby polubić post.');
       return;
     }
 

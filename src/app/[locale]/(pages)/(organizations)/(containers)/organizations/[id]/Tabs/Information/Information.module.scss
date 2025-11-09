@@ -15,3 +15,18 @@
 .description {
   white-space: pre-wrap;
 }
+
+.actionButtons{
+  @include element-flex(row, flex-end, stretch);
+  gap: $spacing-2;
+}
+.editBtn{
+  width: 150px;
+}
+.delBtn{
+  width: 150px;
+  background-color: $color-danger;
+  &:hover{
+    background-color: $color-danger-dark;
+  }
+}

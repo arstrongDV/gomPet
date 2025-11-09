@@ -1,3 +1,4 @@
+import { OffersApi } from 'src/api';
 export class AuthRoutes {
   static REGISTER = '/users/users/'; //  
   static LOGIN = '/users/auth/token/'; ///accounts/login/
@@ -38,14 +39,25 @@ export class AnimalsRouts {
   static ANIAML_PROFILE = (id: number) => `/animals/animals/${id}/`;
   static ANIMAL_FAMILY_TREE = (id: number) => `/animals/family-tree/${id}/`
   static ANIMAL_PROFILE_COMMENTS  = (id: number) =>  `/common/comments/${id}/`
+
+  
+  static ANIMAL_SPECIES = "/users/species/"
+  static ANIMAL_BREEDS = "/animals/animal-breed/"
 }
 
 export class OrganizationsRouts {
   static ORGANIZATION_LATEST = '/users/organization-latest/';
   // static ORGANIZATION_PROFILE = '/users/organizations/';
-  // static ORGANIZATION_PROFILE_ID = '/users/organizations/{id}/'
-  static ORGANIZATION_PROFILE = '/users/organization-filtering/'
 
+  static ORGANIZATION_PROFILE_ID = (id: number) => `/users/organizations/${id}/`
+  static ORGANIZATION_PROFILE = '/users/organization-filtering/'
+  static ORGANIZATIONS = '/users/organizations/'
+
+  static ORGANIZATION_ANIMALS = (id: number) => `/animals/animals/?organization-id=${id}`
+  static ORGANIZATION_LITTERS = (id: number) => `/litters/litters/?organization-id=${id}`
+  static ORGANIZATION_LITTERS_POST ='/litters/litters/'
+  static ORGANIZATION_POSTS = (id: number) => `/posts/posts/?organization-id=${id}`
+  static LITTERS_ID = (id: number) => `/litters/litters/${id}/`
 }
 
 export class ArticlesRouts{

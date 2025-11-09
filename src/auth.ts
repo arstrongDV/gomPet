@@ -49,7 +49,6 @@ const refreshAccessToken = async (refreshToken: string) => {
   }
 };
 
-
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     credentials({
@@ -143,7 +142,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     
       try {
         const refreshedToken = await refreshAccessToken(token.refresh_token as string);
-        
         if (refreshedToken) {
           return {
             ...token,
@@ -190,5 +188,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         error: token.error,
       };
     }
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60 * 24 // 1 day
   }
 });

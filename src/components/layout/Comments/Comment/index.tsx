@@ -31,7 +31,9 @@ const TEXT_LIMIT = 300;
 const Comment = ({ className, comment, commentDel, setUpdateId }: CommentProps) => {
   const { id, body, created_at, author, rating } = comment;   //text
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isDisable, setIsDisable]= useState<boolean>(false);
 
+  console.log("commentcomment: ", comment)
   const date = getDaysAgo(created_at, true);
   const [showMore, setShowMore] = useState(false);
 
@@ -77,14 +79,17 @@ const Comment = ({ className, comment, commentDel, setUpdateId }: CommentProps) 
           {showMore ? body : body?.substring(0, TEXT_LIMIT)}
           {!showMore && body?.length > TEXT_LIMIT && '...'}
           
+
           <SettingsButton 
             onEdit={() => {
               setUpdateId?.(comment.id);
               setIsOpen(false);
-            }} 
+              // setIsDisable(true);
+            }}
             onDelete={deleteComment}
             authId={author.id}
-            align="left"
+            isDisabled={isDisable}
+            align="right"
           />
           {/* {myId === author.id && (
             <div className={style.settingsWrapper}>

@@ -1,6 +1,7 @@
 @import 'styles';
 
 .litter {
+  position: relative;
   @include element-flex(column);
   gap: $spacing-4;
 }
@@ -41,4 +42,13 @@
     color: $color-foreground;
     background-color: $color-background-4;
   }
+}
+
+.settingsBtn{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -120,6 +120,9 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   const [parents, setParents] = useState<Parent[]>([]);
   const [oldParents, setOldParents] = useState<Parent[]>([]);
 
+  const [price, setPrice] = useState<string>('');
+  const [hasPrice, setHasPrice] = useState<boolean>(false);
+
   useEffect(() => {
       if (animal) {
         setFormData({
@@ -131,12 +134,20 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
           size: animal.size ?? AnimalSize.SMALL,
           status: animal.status ?? 'AVAILABLE',
           city: animal.city ?? '',
-          price: animal.price ? animal.price : 0,
+          price: animal.price !== '0.00' ? animal.price : '',
           descriptions: animal.descriptions ?? '',
           parents: animal.parents ?? [],
         });
-  
+
         setDescriptions(animal.descriptions ?? '');
+
+        if (animal.price !== '0.00') {
+          setHasPrice(true);
+          setPrice(animal.price);
+        } else {
+          setHasPrice(false);
+          setPrice(''); 
+        }
 
       const loadExistingImages = async () => {
         const imageFiles: File[] = [];
@@ -221,10 +232,10 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
       const submitData = new FormData();
   
       Object.entries(formData).forEach(([key, value]) => {
-        if (key !== 'descriptions' && value !== null && value !== undefined) {
+        if (key !== 'descriptions' && key !== 'price' && value !== null && value !== undefined) {
           submitData.append(key, value.toString());
         }
-      });    
+      });  
   
       submitData.append('descriptions', description);
 
@@ -239,6 +250,12 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
         submitData.append('image', base64);
       }
 
+      if (!hasPrice) {
+        setPrice('0');
+        submitData.append('price', '0'); 
+      } else {
+        submitData.append('price', price);
+      }
       galleryWithBase64.forEach((item, index) => {
         submitData.append(`gallery[${index}][image]`, item.image);
       });
@@ -323,7 +340,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
                 required
               />
             </div>
-              
+
             <div className={style.flexRow}>
               <Select
                 label="Species"
@@ -403,7 +420,27 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
               </div>
             </InputWrapper>
 
+            <Checkbox
+            id='animal-has-prise'
+            label={'Ustawic cennę?'}
+            checked={hasPrice}
+            onClick={() => setHasPrice((prev) => !prev)}
+          />
+
+          {hasPrice && (
             <Input
+              id='animal-price'
+              name='animal-price'
+              label={'Cena'}
+              placeholder='Napisz cennę...'
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              min="1"
+            />
+          )}
+
+            {/* <Input
               id='animal-price'
               name='animal-price'
               label={'Cena'}
@@ -412,7 +449,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
               value={formData.price}
               onChange={(e) => handleInputChange('price', parseInt(e.target.value) || 0)}
               min="1"
-            />
+            /> */}
           </Card> 
 
           <Card className={style.section}>

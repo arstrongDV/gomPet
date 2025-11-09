@@ -19,7 +19,8 @@ import {
 import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
 import { AnimalSize, Gender, OrganizationType } from 'src/constants/types';
 
-import PhotosOrganizer from './components/PhotosOrganizer';
+// import PhotosOrganizer from './components/PhotosOrganizer';
+import PhotosOrganizer from 'src/components/layout/Forms/PhotosOrganizer';
 
 import style from './NewAnimalPage.module.scss';
 import { OptionType } from 'src/components/layout/Forms/Select';
@@ -27,6 +28,9 @@ import { AnimalsApi } from 'src/api';
 import AddAnimalParents from './components/AddAnimalParents';
 import classNames from 'classnames';
 import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { Routes } from 'src/constants/routes';
 
 type Parent = {
   name: string;
@@ -87,6 +91,7 @@ const NewAnimalPage = () => {
   const [birthDate, setBirthDate] = useState<string>('');
   const [status, setStatus] = useState<string>('Do adopcji');
   const [hasMetrics, setHasMetrics] = useState<boolean>(false);
+  const [hasPrice, setHasPrice] = useState<boolean>(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
   const [selectRaceValue, setSelectRaceValue] = useState<OptionType>(null);
@@ -94,6 +99,9 @@ const NewAnimalPage = () => {
   const [descriptions, setDescriptions] = useState<string>("")
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
+
+  const router = useRouter()
+  const { push } = router;
 
   useEffect(() => {
     document.body.style.overflow = isParentsAdd ? 'hidden' : '';
@@ -134,13 +142,20 @@ const NewAnimalPage = () => {
       formData.append('size', size);
       formData.append('birth_date', birthDate);
       formData.append('status', statusMap[status]);
-      formData.append('price', price);
       formData.append('descriptions', descriptions);
       formData.append('city', "Krakow");
       formData.append('location', JSON.stringify({
         type: "Point",
         coordinates: [20.673144511006825, 51.59228169182775]
       }));
+
+      if(!hasPrice){
+        setPrice('0');
+        formData.append('price', '0');
+      }
+      else{
+        formData.append('price', price);
+      }
 
       if (photos.length > 0) {
         const base64 = await fileToBase64(photos[0]);
@@ -201,7 +216,7 @@ const NewAnimalPage = () => {
           }
         }
       }
-  
+      push(Routes.ANIMAL_PROFILE(animals_res.data.id));
       toast.success("Animal created");
       setName('');
       setGender(Gender.MALE);
@@ -321,16 +336,25 @@ const NewAnimalPage = () => {
             </div>
           </InputWrapper>
 
-          <Input
-            id='animal-price'
-            name='animal-price'
-            label={'Cena'}
-            placeholder='Napisz cennę...'
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            min="1"
+          <Checkbox
+            id='animal-has-prise'
+            label={'Ustawic cennę?'}
+            checked={hasPrice}
+            onClick={() => setHasPrice((prev) => !prev)}
           />
+
+          {hasPrice && (
+            <Input
+              id='animal-price'
+              name='animal-price'
+              label={'Cena'}
+              placeholder='Napisz cennę...'
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              min="1"
+            />
+          )}
 
           <Checkbox
             id='animal-has-metrics'

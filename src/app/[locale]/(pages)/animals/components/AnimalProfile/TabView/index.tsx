@@ -51,7 +51,7 @@ const TabView = ({ animal, posts, comments, familyTree}: TabViewProps) => {
       </SectionHeader>
 
       {tab.id === 'main' && <AnimalInformation animal={animal} comments={comments} familyTree={familyTree}  />}
-      {tab.id === 'activity' && <AnimalActivity postsData={posts} animalId={animal.id} />}
+      {tab.id === 'activity' && <AnimalActivity postsData={posts} animalId={animal.id} animalOwnerId={animal.owner} />}
     </>
   );
 };

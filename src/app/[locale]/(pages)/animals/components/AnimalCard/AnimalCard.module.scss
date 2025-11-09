@@ -169,6 +169,12 @@
   }
 }
 
+.buttonCard{
+  max-width: 16rem;
+  height: 4.3rem;
+  color: #000;
+}
+
 .bottom {
   @include element-flex(row, center, center);
   width: 100%;

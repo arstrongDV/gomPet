@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import {
@@ -23,15 +23,54 @@ import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
 import { Gender, OrganizationType } from 'src/constants/types';
 
 import style from './NewLitterPage.module.scss';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { OrganizationsApi } from 'src/api';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import { OptionType } from 'dayjs';
+import toast from 'react-hot-toast';
+import { Routes } from 'src/constants/routes';
+
+const statusOptions = [
+  { value: 'ACTIVE', label: 'Active' },
+  { value: 'CLOSED', label: 'Closed' },
+  { value: 'DRAFT', label: 'Draft' },
+];
 
 const NewLitterPage = () => {
   const t = useTranslations();
+  const searchParams = useSearchParams();
+  const orgId = searchParams.get('orgId');
+  const router = useRouter();
 
-  const [description, setDescription] = useState<string>('');
-  const [date, setDate] = useState<string>('');
+  const [litterForm, setLitterForm] = useState({
+    title: '',
+    birth_date: '',
+    description: '',
+    species: '',
+    breed: '',
+    status: '',
+    organization: orgId
+  });
 
-  const handleSubmit = () => {
-    console.log('submit');
+  const handleChange = (field: string, value: string) => {
+    setLitterForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      console.log(litterForm);
+      const res = await OrganizationsApi.postOrganizationLitters(litterForm);
+      console.log(res);
+      toast.success("Nowy miot dodany");
+
+      if (orgId) {
+        router.push(Routes.ORGANIZATION_PROFILE(orgId));
+      }
+      router.back()
+    } catch (err) {
+      console.log(err);
+      toast.error("Błąd z dodawaniem miotu");
+    }
   };
 
   return (
@@ -48,9 +87,9 @@ const NewLitterPage = () => {
           <h3>
             Informacje <mark>podstawowe</mark>
           </h3>
-
-          <div className={style.flexRow}>
-            <Select
+          <AnimalSelect handleChange={handleChange} />
+          {/* <div className={style.flexRow}> */}
+            {/* <Select
               label={'Gatunek'}
               options={[
                 {
@@ -78,8 +117,8 @@ const NewLitterPage = () => {
                 value: 'beagle',
                 label: 'Beagle'
               }}
-            />
-          </div>
+            /> */}
+          {/* </div> */}
           <span className={style.caption}>Gatunek i rasa, którą obejmuje ten miot.</span>
         </Card>
         {/* BASIC DATA */}
@@ -87,15 +126,28 @@ const NewLitterPage = () => {
         {/* DESCRIPTION */}
         <Card className={style.section}>
           <h3>
+            Krótki <mark>Tytul</mark> 
+          </h3>
+          <Input
+            id="title"
+            name="title"
+            className={style.titleInput}
+            label="Tytul"
+            placeholder="Wpisz tytuł"
+            value={litterForm.title}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('title', e.target.value)}
+            required
+          />
+
+          <h3>
             Krótki <mark>opis</mark> miotu
           </h3>
-
           <Textarea
             className={style.textarea}
             label='Krótki opis (opcjonalnie)'
             placeholder={'Opisz krótko miot...'}
-            value={description}
-            onChangeText={setDescription}
+            value={litterForm.description}
+            onChangeText={(value: string) => handleChange('description', value)}
           />
         </Card>
         {/* DESCRIPTION */}
@@ -110,8 +162,8 @@ const NewLitterPage = () => {
             type='date'
             label='Kiedy pojawi się miot?'
             placeholder={'Opisz krótko miot...'}
-            value={date}
-            onChangeText={setDate}
+            value={litterForm.birth_date}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('birth_date', e.target.value)}
           />
         </Card>
         {/* DATE */}
@@ -122,7 +174,7 @@ const NewLitterPage = () => {
             Aktualny <mark>status</mark>
           </h3>
 
-          <div className={style.statusSelect}>
+          {/* <div className={style.statusSelect}>
             <Tag
               onClick={() => {}}
               selected={false}
@@ -147,7 +199,14 @@ const NewLitterPage = () => {
             >
               Brak miejsc do rezerwacji
             </Tag>
-          </div>
+          </div> */}
+
+          <Select 
+              label="Status"
+              options={statusOptions}
+              value={statusOptions.find(opt => opt.value === litterForm.status) || null}
+              onChange={(option: OptionType | null) => handleChange('status', option?.value || '')}
+          />
 
           <span className={style.caption}>Status jest widoczny w widoku profilu hodowli w zakładce “Mioty”.</span>
         </Card>

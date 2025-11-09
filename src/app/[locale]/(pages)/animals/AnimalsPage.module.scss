@@ -89,19 +89,22 @@
   margin: 20px 0;
   transition: $transition-main;
   justify-content: center;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
+  &.withMap {
+    grid-template-columns: repeat(2, 1fr); // 👈 zmiana tylko jeśli mapa włączona
+  }
   // duże ekrany
   @include desktopWidth {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   // <= 1024px
   @include mobileWidth {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     &.withMap {
-      grid-template-columns: repeat(3, 1fr); // 👈 zmiana tylko jeśli mapa włączona
+      grid-template-columns: repeat(2, 1fr); // 👈 zmiana tylko jeśli mapa włączona
     }
   }
 

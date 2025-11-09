@@ -58,7 +58,7 @@ const MobileMenu = ({setShowMenu}: MenuProps) => {
     },
     {
       title: t('navigation.sidebar.blog'),
-      url: Routes.BLOG,
+      url: Routes.KNOWLEDGE,
       icon: 'book'
     }
   ];

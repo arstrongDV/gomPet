@@ -12,6 +12,7 @@ import { IOrganization, IPost } from 'src/constants/types';
 import { postsMock } from 'src/mocks/posts';
 
 import style from './Activity.module.scss';
+import { OrganizationsApi } from 'src/api';
 
 type ActivityProps = {
   organization: IOrganization;
@@ -24,7 +25,8 @@ const Activity = ({ organization }: ActivityProps) => {
   const getPosts = async () => {
     try {
       setIsLoading(true);
-      setPosts(postsMock);
+      const res_organzationPosts = await OrganizationsApi.getOrganizationPosts(organization.id);
+      setPosts(res_organzationPosts.data.results);
     } catch (error) {
       setPosts([]);
     } finally {

@@ -16,89 +16,71 @@ type PostCommentsProps = {
   comments: IComment[];
   className?: string;
 
-  setComments?: () => void; ////////
+  setComments?: (obj: object) => void; ////////
 };
 
 const PostComments = ({ postId, className, comments, setComments }: PostCommentsProps) => {
   const dispatch = useDispatch();
   const session = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [updateId, setUpdateId] = useState<number | null>(null);
 
   const myId = session.data?.user?.id;
 
-  // const comments = useSelector((state: RootState) => {
-  //   const post = state.posts.posts.find((p) => p.id === postId);
-  //   return post?.comments || [];
-  // });
-
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const handleNotificationClick = () => {
-  //   setIsOpen((prev) => !prev);
-  // };
-  console.log("postId:::", postId)
   const handleSubmit = async ({ text, rating }: CommentSubmitData): Promise<void> => {
-
-    const isLoggedInUser = session.status === 'authenticated' && !!myId;
-    if (!isLoggedInUser) {
-      toast.error('Musisz być zalogowany, aby napisac comentarz.');
-      return;
-    }
-
     try {
       setIsLoading(true);
-      const res = await PostsApi.addNewComments({
-        content_type: "articles.article",
-        object_id: postId,
-        body: text
-      });
-      setComments(prev => [res, ...prev]); /////////
-      console.log("res:::", res);
-      toast.success('Komentarz został dodany');
+      if (updateId) {
+        if(text !== comments.find(coment => updateId === coment.id)?.body){
+          const res_update = await PostsApi.updateComment(updateId, { body: text });
+          toast.success("Komentarz zaktualizowany!");
+          setUpdateId(null);
+          setComments?.((prev: any) =>
+            prev.map((c: any) =>
+              c.id === updateId ? { ...c, body: text } : c
+            )
+          );
+        }
+        else{
+          setUpdateId(null);
+        }
+      } else {
+        const res = await PostsApi.addNewComments({
+          content_type: "articles.article",
+          object_id: postId,
+          body: text
+        });
+        setComments?.((prev: any) => [res, ...prev]);
+        toast.success('Komentarz został dodany');
+      }
+  
       return Promise.resolve();
     } catch (error) {
       toast.error('Nie udało się dodać komentarza');
-      console.log("error: ", error)
       return Promise.reject();
     } finally {
       setIsLoading(false);
     }
+  };
 
-    // try {
-    //   setIsLoading(true);
-    //   const newComment: IComment = {
-    //     id: Date.now(),
-    //     text,
-    //     created_at: new Date().toISOString(),
-    //     updated_at: new Date().toISOString(),
-    //     author: session.status === 'authenticated'
-    //       ? {
-    //           id: session.data?.user.id,
-    //           first_name: session.data?.user.first_name,
-    //           email: session.data?.user.email,
-    //           image: session.data?.user.image
-    //         }
-    //       : {
-    //           id: 1,
-    //           first_name: 'Anonim',
-    //           image: null
-    //         }
-    //   };
-
-    //   dispatch(addComment({ postId, comment: newComment }));
-    //   toast.success('Komentarz został dodany');
-    //   return Promise.resolve();
-    // } catch (error) {
-    //   toast.error('Nie udało się dodać komentarza');
-    //   return Promise.reject();
-    // } finally {
-    //   setIsLoading(false);
-    // }
+  const deleteComment = (commentId: number) => {
+    setComments((prev: any) => prev.filter((comment: any) => comment.id !== commentId));
+    setUpdateId(null);
   };
 
   return (
     // <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
       <Card className={`${style.container} ${className || ''}`}>
-        <CommentInput onSubmit={handleSubmit} />
+        {updateId && (
+          <div className={style.editBanner}>
+            <span>✏️ Edytujesz swój komentarz</span>
+            <button onClick={() => setUpdateId(null)}>Anuluj</button>
+          </div>
+        )}
+        <CommentInput 
+            onSubmit={handleSubmit} 
+            value={updateId ? comments.find(c => c.id === updateId)?.body || '' : ''}
+          />
         <div className={style.dividerWrapper}>
           <Divider />
         </div>
@@ -109,7 +91,12 @@ const PostComments = ({ postId, className, comments, setComments }: PostComments
           emptyText="Brak komentarzy"
         >
           {comments.map((comment: any) => (
-           <Comment key={comment.id} comment={comment} /> 
+            <Comment 
+              key={comment.id} 
+              comment={comment} 
+              commentDel={deleteComment} 
+              setUpdateId={setUpdateId} 
+            />
           ))}
         </List>
       </Card>

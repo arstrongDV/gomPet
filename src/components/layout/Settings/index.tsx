@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import Card from "../Card";
 import Icon from "../Icon";
 import style from './Settings.module.scss';
@@ -14,50 +13,24 @@ type SettingsButtonProps = {
   onDelete?: () => void;
   authId?: number;
   align?: "left" | "right";
+  isDisabled?: boolean;
 };
 
 export default function SettingsButton({
   className,
   onEdit,
   onDelete,
+  isDisabled,
   authId,
   align = "right",
 }: SettingsButtonProps) {
-
   const [isOpen, setIsOpen] = useState(false);
   const toggleRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
-
-  const [coords, setCoords] = useState<{ 
-    top: number; 
-    left: number; 
-    align: "left" | "right"; 
-    placement: "above" | "below";
-  } | null>(null);
-
   const session = useSession();
-
   const myId = Number(session.data?.user?.id);
 
   if (authId !== undefined && myId !== authId) return null;
-
-  const toggle = () => {
-    if (!toggleRef.current) {
-      setIsOpen(prev => !prev);
-      return;
-    }
-    const r = toggleRef.current.getBoundingClientRect();
-
-    // domyślnie nad przyciskiem
-    setCoords({
-      top: r.top,
-      left: align === "right" ? r.right : r.left,
-      align,
-      placement: "above",
-    });
-
-    setIsOpen(prev => !prev);
-  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -67,51 +40,44 @@ export default function SettingsButton({
       setIsOpen(false);
     };
     document.addEventListener('mousedown', onDocClick);
-    return () => {
-      document.removeEventListener('mousedown', onDocClick);
-    };
+    return () => document.removeEventListener('mousedown', onDocClick);
   }, [isOpen]);
 
   return (
     <div className={style.settingsWrapper}>
-      <div 
-        ref={toggleRef} 
-        className={style.settingsToggle} 
-        onClick={(e) => { e.stopPropagation(); toggle(); }}
+      <div
+        ref={toggleRef}
+        className={classNames(style.settingsToggle, { [style.disabledBtn]: isDisabled })}
+        onClick={(e) => {
+          if (isDisabled) return;
+          e.stopPropagation();
+          setIsOpen(prev => !prev);
+        }}
       >
         <Icon name="list" />
       </div>
 
-      {isOpen && coords && typeof document !== 'undefined' && createPortal(
+      {isOpen && (
         <div
           ref={menuRef}
-          style={{
-            position: 'fixed',
-            top: coords.placement === 'above'
-              ? coords.top - (menuRef.current?.offsetHeight ?? 0) - 4
-              : coords.top + 4,
-            left: coords.align === 'right'
-              ? coords.left - (menuRef.current?.offsetWidth ?? 0) + 50
-              : coords.left - 50,
-            zIndex: 9999,
-          }}
+          className={classNames(style.settings, className, {
+            [style.rightSide]: align === "right",
+            [style.leftSide]: align === "left",
+          })}
         >
-          <Card className={classNames(style.settings, className)}>
-            <button
-              className={style.settingsBtn}
-              onClick={() => { onEdit?.(); setIsOpen(false); }}
-            >
-              Edytuj
-            </button>
-            <button
-              className={style.settingsBtn}
-              onClick={() => { onDelete?.(); setIsOpen(false); }}
-            >
-              Usuń
-            </button>
-          </Card>
-        </div>,
-        document.body
+          <button
+            className={style.settingsBtn}
+            onClick={() => { onEdit?.(); setIsOpen(false); }}
+          >
+            Edytuj
+          </button>
+          <button
+            className={style.settingsBtn}
+            onClick={() => { onDelete?.(); setIsOpen(false); }}
+          >
+            Usuń
+          </button>
+        </div>
       )}
     </div>
   );

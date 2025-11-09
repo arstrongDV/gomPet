@@ -135,10 +135,13 @@ useEffect(() => {
         />
       )}
 
-        {content || text}
-        {image && (
-          <img className={style.image} src={image} alt={text} width={300} height={400} />
-        )}
+        <div className={style.postContent}>
+          {content || text}
+
+          {image && (
+            <img className={style.image} src={image} alt={text} width={300} height={400} />
+          )}
+        </div>
       </p>
 
       <footer className={style.footer}>

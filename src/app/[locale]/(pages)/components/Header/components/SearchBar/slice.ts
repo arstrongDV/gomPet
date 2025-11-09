@@ -4,11 +4,11 @@ import { organizationsMock } from "src/mocks/organizations";
 
 interface SearchState {
     searchedOrganizations: IOrganization[];
-  }
+}
   
-  const initialState: SearchState = {
+const initialState: SearchState = {
     searchedOrganizations: []
-  };
+};
 
 export const searchSlice = createSlice({
     name: 'search',

@@ -40,6 +40,11 @@
   }
 }
 
+.postContent{
+  @include element-flex(column);
+  gap: $spacing-2;
+}
+
 .text {
   @include body1;
   color: $color-foreground;
