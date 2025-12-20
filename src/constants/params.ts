@@ -17,7 +17,8 @@ export class Params {
   static readonly BREED = 'breed';
   static readonly CHARACTERISTICS = 'characteristics';
 
-  static readonly LOCATION = 'city'; /////////////
+  static readonly CITY = 'city'; /////////////
+  static readonly LOCATION = 'location'; /////////////
   static readonly RANGE = 'range'; /////////////
   static readonly NAME = 'name'; /////////////
 }

@@ -16,8 +16,8 @@
     gap: $spacing-2;
 
     @include desktopWidth {
-      @include element-flex(row, flex-start, center);
-      flex-wrap: wrap;
+      @include element-flex(column, flex-start, center);  //row
+      // flex-wrap: wrap;
     }
   }
 }
@@ -50,9 +50,9 @@
   gap: $spacing-6;
   flex-wrap: wrap;
 
-  @include desktopWidth {
-    @include element-flex(column, flex-start, flex-start);
-  }
+  // @include desktopWidth {
+  //   @include element-flex(column, flex-start, flex-start);
+  // }
 }
 
 .name {

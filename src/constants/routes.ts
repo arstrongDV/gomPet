@@ -13,6 +13,7 @@ export class Routes {
   static readonly ORGANIZATION_EDIT= (id: number) => `/organizations/${id}/edit`
   static readonly MY_ANIMALS = '/my-animals';
   static readonly NEW_ANIMAL = '/new-animal';
+  static readonly PROFILE = '/profile'
   // static readonly POSTS = '/posts';
   static readonly ARTICLES = '/articles';
   static readonly KNOWLEDGE = '/knowledge';

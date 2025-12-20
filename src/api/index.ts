@@ -55,8 +55,23 @@ export class AuthApi {
 }
 
 export class AccountsApi {
-  static getUserData() {
-    return ApiClient.get(AccountRoutes.USER_DATA);
+  static getUserData(id: number) {
+    return ApiClient.get(AccountRoutes.USER_DATA(id), {
+      __tokenRequired: true,
+    });
+  }
+
+  static updateUserData(id: number, data: any) {
+    return ApiClient.put(AccountRoutes.USER_DATA(id), data, {
+      __tokenRequired: true,
+      // headers: { "Content-Type": "multipart/form-data" },
+    });
+  }
+
+  static deleteUserData(id: number) {
+    return ApiClient.delete(AccountRoutes.USER_DELETE, {
+      __tokenRequired: true,
+    });
   }
 }
 
@@ -96,45 +111,11 @@ export class AnimalsApi {
       ...(filters?.organizationId && { 'organization-id': filters.organizationId.join('&') }),
       ...(filters?.gender && { gender: filters.gender.join('&') }),
       ...(filters?.breed && { breed: filters.breed.join('&') }),
-      ...(filters?.location && { location: filters.location.join('&') }),
       ...(filters?.species && { species: filters.species.join('&') }),
-      ...(filters?.range && { range: filters.range }), /// join('&')
+      ...(filters.location && { location: filters.location }),
+      ...(filters.range && { range: filters.range }),
       ...(filters?.name && { name: filters.name }),/// join('&')
     };
-
-    // const queryParams: Record<string, string> = {};
-    // if (filters.organizationType?.length) {
-    //   queryParams['organization-type'] = filters.organizationType.join('&');
-    // }
-  
-    // if (filters.organizationId?.length) {
-    //   queryParams['organization-id'] = filters.organizationId.join('&');
-    // }
-  
-    // if (filters.gender?.length) {
-    //   queryParams['gender'] = filters.gender.join('&');
-    // }
-  
-    // if (filters.species?.length) {
-    //   queryParams['species'] = filters.species.join('&');
-    // }
-  
-    // if (filters.breed?.length) {
-    //   queryParams['breed'] = filters.breed.join('&');
-    // }
-  
-    // if (filters.location?.length) {
-    //   queryParams['location'] = filters.location.join('&');
-    // }
-
-    // if (filters.name) {
-    //   queryParams['name'] = filters.name;
-    // }
-  
-    // if (filters.range) {
-    //   queryParams['range'] = filters.range.toString();
-    // }
-  
     return ApiClient.get(AnimalsRouts.ANIMALS_ANIMALS, params , {
       __tokenRequired: true,
     });
@@ -254,7 +235,8 @@ export class AnimalsApi {
     minAge?: number[];
     maxAge?: number[];
     city?: string[];
-    range?: number[];
+    location?: string;
+    range?: number;
     breed_groups?: string[];
     characteristics?: string[];
   }) {
@@ -272,8 +254,9 @@ export class AnimalsApi {
       // ...(filters?.age?.length && { age: filters.age.join(',') }),
       ...(filters?.minAge?.length && { 'age-min': filters.minAge.join(',') }),
       ...(filters?.maxAge?.length && { 'age-max': filters.maxAge.join(',') }),
+      ...(filters?.location && { location: filters.location }),
+      ...(filters?.range && { range: filters.range }),
       ...(filters?.city?.length && { city: filters.city.join(',') }),
-      ...(filters?.range?.length && { range: filters.range.join(',') }),
       ...(filters?.breed_groups?.length && { breed_groups: filters.breed_groups.join(',') }),
     };
   
@@ -391,8 +374,9 @@ export class OrganizationsApi {
       __tokenRequired: true
     })
   }
+
   static async getOrganizationPosts(id: number){
-    return ApiClient.get(OrganizationsRouts.ORGANIZATION_POSTS(id), {
+    return ApiClient.get(PostsRouts.ORGANIZATION_POSTS(id), {
       __tokenRequired: false
     })
   }
@@ -454,17 +438,17 @@ export class ArticlesApi {
 
 
   static AddNewReaction(payload: any) {
-    return ApiClient.post(ArticlesRouts.REACTIONS, payload, {
+    return ApiClient.post(PostsRouts.REACTIONS, payload, {
       __tokenRequired: true,
     })
   }
   static deleteReaction(id: number) {
-    return ApiClient.delete(ArticlesRouts.REACTIONS_ID(id), {
+    return ApiClient.delete(PostsRouts.REACTIONS_ID(id), {
       __tokenRequired: true,
     })
   }
   static verifyReactions(reactable_type: string, reactable_id: number){
-    return ApiClient.get(ArticlesRouts.HAS_REACTION(reactable_type, reactable_id), {
+    return ApiClient.get(PostsRouts.HAS_REACTION(reactable_type, reactable_id), {
       __tokenRequired: true,
     })
   }
@@ -504,7 +488,7 @@ export class PostsApi {
   }
 
   //Organization
-  static async postOrganizationPosts(payload:any){
+  static async addNewOrganizationPost(payload:any){
     return ApiClient.post(PostsRouts.POSTS_LIST, payload, {
       __tokenRequired: true
     })

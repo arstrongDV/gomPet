@@ -2,26 +2,25 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
-import { Avatar, Button, Icon, SectionHeader, useWebsocket } from 'src/components';
-import { IPost } from 'src/constants/types';
+import { Avatar, Button, SectionHeader, useWebsocket } from 'src/components';
+import { IComment, IPost } from 'src/constants/types';
 import { getDaysAgo } from 'src/utils/helpers';
 
-import PostReactions from '../PostReactions';
-import PostComments from '../PostComments';
-import ShareComments from '../ShareComments';
+import PostReactions from './components/PostReactions';
+import PostComments from './components/PostComments';
+import ShareComments from './components/ShareComments';
 import { useSession } from 'next-auth/react';
 import style from './PostCard.module.scss';
 
-import { ArticlesApi, PostsApi } from 'src/api';
+import { PostsApi } from 'src/api';
 import { WebsocketRoutes } from 'src/api/routes';
-import OutsideClickHandler from 'react-outside-click-handler';
-import UpdatePostCard from './components';
+import UpdatePostCard from './components/UpdatePost';
 import SettingsButton from 'src/components/layout/Settings';
 
 type PostCardProps = {
   className?: string;
   post: IPost;
-  updatePosts?: () => void;
+  updatePosts?: (value: any) => void ; //// 
   deletePosts?: (id: number) => void
 };
 
@@ -36,21 +35,19 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
     updated_at,
     image, 
     author, 
-  } = post;  //comments
+  } = post;  
 
   console.log("post:::", post)
   const [showComments, setShowComments] = useState<boolean>(false);
   const [showCopyLink, setShowCopyLink] = useState<boolean>(false);
-  const [comments, setComments] = useState<File[]>([]);
+  const [comments, setComments] = useState<IComment[]>([]);
   const [reactions, setReactions] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showUpdateCard, SetShowUpdateCard] = useState<boolean>(false);
 
   const session = useSession();
   const myId = Number(session.data?.user.id);
-  console.log("myId type:", typeof myId, myId);
-  console.log("MyId::: ", myId)
-  console.log("author.id type:", typeof post.author.id, post.author.id);
+
   useEffect(() => {
     document.body.style.overflow = showCopyLink ? 'hidden' : '';
   }, [showCopyLink]);
@@ -62,7 +59,7 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
     if(myId === post.author.id){
       try{
         const delete_res = await PostsApi.deletePost(id);
-        deletePosts(id);
+        if(deletePosts) deletePosts(id);
         console.log("delete_res:: ", delete_res)
         setIsOpen(false)
       }catch(err){
@@ -93,10 +90,6 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
     fetchComments();
   }, []);
 
-  // const commentsUpdate = async() => {
-  //   await PostsApi.getComments(id, "posts.post");
-  // }
-
   useEffect(() => {
     if (val) {
       try {
@@ -122,27 +115,18 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
     }
   }, [val]);
 
-useEffect(() => {
-  if (ready && send) {
-    
-    const subscriptionMessage = {
-      action: 'subscribe_instance',
-      pk: id,
-      request_id: Date.now()
-    };
-    
-    send(JSON.stringify(subscriptionMessage));
-  }
-}, [ready, send, id]); 
-
-  // useEffect(() => {
-  //   console.log("=== WebSocket Debug ===");
-  //   console.log("Ready:", ready);
-  //   console.log("Value:", val);
-  //   console.log("Value type:", typeof val);
-  //   console.log("=======================");
-  // }, [ready, val]);
-  // dotsVertical
+    useEffect(() => {
+    if (ready && send) {
+        
+        const subscriptionMessage = {
+        action: 'subscribe_instance',
+        pk: id,
+        request_id: Date.now()
+        };
+        
+        send(JSON.stringify(subscriptionMessage));
+    }
+    }, [ready, send, id]); 
   return (
     <article className={classNames(style.post, className)}>
       {showComments && (
@@ -158,28 +142,16 @@ useEffect(() => {
           <h3 className={style.name}>{author.full_name}</h3>
         </div>
         <div className={style.headerContent}>
-          <Button icon="starFilled" label={'Obserwujesz'} gray />
+
+        {myId == author.id ? (
           <SettingsButton 
             onEdit={updatePost} 
             onDelete={deletePost}
             authId={author.id}
           />
-            {/* {myId === post.author.id && (
-            <div className={style.settingsWrapper}>
-              <div onClick={() => setIsOpen(prev => !prev)}>
-                <Icon name="x" /> 
-              </div>
-
-              {isOpen && (
-                <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
-                  <div className={style.settings}>
-                    <button className={style.settingsBtn} onClick={updatePost}>Update</button>
-                    <button className={style.settingsBtn} onClick={deletePost}>Delete</button>
-                  </div>
-                </OutsideClickHandler>
-              )}
-            </div>
-          )} */}
+          ) : (
+            <Button icon="starFilled" label={'Obserwujesz'} gray />
+        )}
         </div>
       </header>
 
@@ -202,15 +174,17 @@ useEffect(() => {
         </div>
       </p>
       <footer className={style.footer}>
-        {getDaysAgo(created_at, true).toLowerCase() == getDaysAgo(updated_at, true).toLowerCase() ? (
-          <span className={style.time}>
-            Opublikowane <time>{getDaysAgo(created_at, true).toLowerCase()}</time>
-          </span>
-        ) : (
-          <span className={style.time}>
-            Aktualizowane <time>{getDaysAgo(updated_at, true).toLowerCase()}</time>
-          </span>
-        )}
+        {created_at && updated_at ? (
+          getDaysAgo(created_at, true).toLowerCase() == getDaysAgo(updated_at, true).toLowerCase() ? (
+            <span className={style.time}>
+              Opublikowane <time>{getDaysAgo(created_at, true).toLowerCase()}</time>
+            </span>
+          ) : (
+            <span className={style.time}>
+              Aktualizowane <time>{getDaysAgo(updated_at, true).toLowerCase()}</time>
+            </span>
+          )
+        ) : <div>----</div>}
         <div className={style.buttons}>
           <PostReactions
             postId={id}
@@ -226,9 +200,9 @@ useEffect(() => {
       </footer>
       {showUpdateCard && <UpdatePostCard SetShowUpdateCard={SetShowUpdateCard} post={post} updatePosts={updatePosts} />}
       {showCopyLink && <ShareComments commentId={id} />}
-      {showComments && <PostComments slug={slug}  postId={id} comments={comments} setComments={setComments}  />}
+      {showComments && <PostComments postId={id} comments={comments} setComments={setComments}  />} 
     </article>
   );
 };
-
+//slug={slug} 
 export default PostCard;

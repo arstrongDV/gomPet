@@ -5,7 +5,7 @@
   grid-template-columns: 1fr 29.5rem;
   gap: $spacing-6;
   width: 100%;
-
+  z-index: 1;
   @include smDesktopWidth {
     grid-template-columns: 1fr;
   }
@@ -32,7 +32,7 @@
   gap: $spacing-4;
   width: 100%;
   position: relative;
-  z-index: 1000;
+  z-index: 1;
   // z-index: 0;
   .map {
     width: 100%;

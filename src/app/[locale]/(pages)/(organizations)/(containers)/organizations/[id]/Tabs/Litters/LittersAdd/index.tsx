@@ -135,8 +135,8 @@ const AddLitters = ({ setAddLitter, organization, onLitterAdded }: AddLittersPro
     <Select 
         label="Status"
         options={statusOptions}
-        value={statusOptions.find(opt => opt.value === litterForm.status) || null}
-        onChange={(option: OptionType | null) => handleChange('status', option?.value || '')}
+        value={statusOptions.find((opt: any) => opt.value === litterForm.status) || null}
+        onChange={(option: any) => handleChange('status', option?.value || '')}
     />
 
       <Button label="Dodaj" width="200px" onClick={handleSubmit} />

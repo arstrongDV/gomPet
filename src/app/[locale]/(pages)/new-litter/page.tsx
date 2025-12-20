@@ -2,26 +2,14 @@
 
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-
 import {
   Button,
   Card,
-  Checkbox,
-  Icon,
-  ImageInput,
   Input,
-  InputWrapper,
-  PhoneInput,
-  Pill,
-  RichTextEditor,
   SectionHeader,
   Select,
-  Tag,
   Textarea
 } from 'src/components';
-import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
-import { Gender, OrganizationType } from 'src/constants/types';
-
 import style from './NewLitterPage.module.scss';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { OrganizationsApi } from 'src/api';
@@ -147,7 +135,7 @@ const NewLitterPage = () => {
             label='Krótki opis (opcjonalnie)'
             placeholder={'Opisz krótko miot...'}
             value={litterForm.description}
-            onChangeText={(value: string) => handleChange('description', value)}
+            onChangeText={(value: any) => handleChange('description', value)}
           />
         </Card>
         {/* DESCRIPTION */}
@@ -205,7 +193,7 @@ const NewLitterPage = () => {
               label="Status"
               options={statusOptions}
               value={statusOptions.find(opt => opt.value === litterForm.status) || null}
-              onChange={(option: OptionType | null) => handleChange('status', option?.value || '')}
+              onChange={(option: any) => handleChange('status', option?.value || '')}
           />
 
           <span className={style.caption}>Status jest widoczny w widoku profilu hodowli w zakładce “Mioty”.</span>

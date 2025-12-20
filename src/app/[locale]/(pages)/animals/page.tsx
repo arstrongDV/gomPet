@@ -16,12 +16,13 @@ import AnimalCard from './components/AnimalCard';
 import AnimalFilters from './components/AnimalFilters';
 
 import style from './AnimalsPage.module.scss';
-import OrganizationOnMap from '../(organizations)/components/OrganizationOnMap';
+
 import { IOrganization } from 'src/constants/types';
 import { organizationsMock } from 'src/mocks/organizations';
 import { useAppSelector } from 'src/lib/store/hooks';
 import { AnimalsApi } from 'src/api';
 import OutsideClickHandler from 'react-outside-click-handler';
+import OrganizationOnMap from '../(organizations)/components/OrganizationOnMap';
 
 const AnimalsPage = () => {
   const t = useTranslations('pages.animals');
@@ -73,11 +74,17 @@ const AnimalsPage = () => {
       gender: searchParams.getAll('gender'),
       size: searchParams.getAll('size'),
       name: searchParams.getAll('name'),
+
       city: searchParams.getAll('city'),
       // age: searchParams.getAll('age').map(Number),
       minAge: searchParams.getAll('age-min').map(Number),
       maxAge: searchParams.getAll('age-max').map(Number),
-      range: searchParams.getAll('range').map(Number),
+
+      location: searchParams.get('location') || undefined,
+      range: searchParams.get('range')
+        ? Number(searchParams.get('range'))
+        : undefined,
+
       organization_id: searchParams.getAll('organization-id').map(Number),
       breed_groups: searchParams.getAll('breed-groups')
     };
@@ -109,13 +116,13 @@ const AnimalsPage = () => {
 
         <div>
           <div className={style.content}>
-          <List
-            isLoading={isLoading}
-            className={classNames(style.list, {
-              [style.fullWidthList]: !showMap,
-              [style.withMap]: showMap, // ⬅️ dodajemy
-            })}
-          >
+            <List
+              isLoading={isLoading}
+              className={classNames(style.list, {
+                [style.fullWidthList]: !showMap,
+                [style.withMap]: showMap,
+              })}
+            >
                 {animals.map((animal) => (
                   <AnimalCard key={animal.id} animal={animal}/>
                 ))}

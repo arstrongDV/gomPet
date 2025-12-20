@@ -55,9 +55,9 @@ export type Location = {
   street: string;
   house_number: string;
   zip_code: string;
-  lat: string;
-  lng: string;
-
+  lat: string | number;
+  lng: string | number;
+  coordinates: [lng: string | number, lat: string | number]
   location?: {
     type: string,
     coordinates: [lng: string | number, lat: string | number]
@@ -69,10 +69,13 @@ export interface IUser {
   email?: string;
   image: string | null;
   first_name: string;
+  full_name?: string;
   last_name: string;
   phone: string | null;
   role: Role;
   created_at: string;
+
+  location: Location;
 }
 
 export interface IOrganization {
@@ -80,6 +83,7 @@ export interface IOrganization {
   user: number;
   type: OrganizationType;
   name: string;
+  full_name?: string;
   email: string;
   image: string | null;
   phone: string | null;
@@ -122,7 +126,7 @@ export interface IAnimal {
   gallery: string[];
   species: string;
   breed: string;
-  gender: Gender;
+  gender: Gender | string;
   size: AnimalSize;
   age: number;
   birth_date: string | null;
@@ -148,8 +152,16 @@ export interface IAnimal {
 
 export interface ILitter {
   id: number;
-  species: string;
-  breed: string;
+  // species: string;
+  // breed: string;
+  species: {
+    label: string;
+    value: string;
+  };
+  breed: {
+    label: string;
+    value: string;
+  };
   title: string;
   description: string;
   birth_date: string;
@@ -163,8 +175,8 @@ export interface IPost {
   text: string;
   image: string | null;
   author: IUser | IOrganization;
-  created_at: string;
-  updated_at?: string;
+  created_at: string | undefined;
+  updated_at?: string | undefined;
   full_name?: string;
   slug?: string;
   title?: string; 

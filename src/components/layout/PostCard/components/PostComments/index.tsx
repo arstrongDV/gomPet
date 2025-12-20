@@ -14,18 +14,18 @@ type PostCommentsProps = {
   postId: number;
   comments: IComment[];
   className?: string;
-  setComments?: () => void;
+  setComments?: (e: any) => void;
 };
 
 const PostComments = ({ postId, className, comments, setComments }: PostCommentsProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [updateId, setUpdateId] = useState<number | null>(null);
-
+  
   const handleSubmit = async ({ text, rating }: CommentSubmitData): Promise<void> => {
     try {
       setIsLoading(true);
       if (updateId) {
-        if(text !== comments.find(coment => updateId === coment.id)?.body){
+        if(text !== comments.find((coment: any) => updateId === coment.id)?.body){
           const res_update = await PostsApi.updateComment(updateId, { body: text });
           toast.success("Komentarz zaktualizowany!");
           setUpdateId(null);
@@ -58,7 +58,7 @@ const PostComments = ({ postId, className, comments, setComments }: PostComments
   };
 
   const deleteComment = (commentId: number) => {
-    setComments(prev => prev.filter(comment => comment.id !== commentId));
+    setComments && setComments((prev: any) => prev.filter((comment: IComment) => comment.id !== commentId));
   };
 
   return (

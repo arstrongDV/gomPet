@@ -14,9 +14,11 @@ import debounce from 'lodash/debounce';
 import toast from 'react-hot-toast';
 
 type Parent = {
+    id?: number;
     animal_id: number;
     name: string;
-    relation?: string | OptionType;
+    gender?: string;
+    relation?: string | number | undefined;
     photos?: string;
 };
 
@@ -24,7 +26,7 @@ type AnimalAddParentsProps = {
     className?: string;
     parents?: Parent[];
     onAddParent: (parent: Parent) => void;
-    childAnimal?: IAnimal; 
+    childAnimal: IAnimal; 
   };
 
 type AnimalKey = string;

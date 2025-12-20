@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, List } from 'src/components';
 import { IPost } from 'src/constants/types';
-import PostCard from './components/PostCard';
+import PostCard from 'src/components/layout/PostCard';
 import style from './PostsPage.module.scss';
 import AddPost from './components/AddPost';
 import { PostsApi } from 'src/api';
@@ -33,7 +33,7 @@ const AnimalActivity = ({ animalId, animalOwnerId }: AnimalActivityProps) => {
   };
 
   const deletePosts = (postId: number) => {
-    if(myId != animalOwner){
+    if(myId != animalOwnerId){
       toast.error("Bled operacji")
       return null;
     }
@@ -41,7 +41,7 @@ const AnimalActivity = ({ animalId, animalOwnerId }: AnimalActivityProps) => {
   };
 
   const updatePosts = (updatedPost: IPost) => {
-    if(myId != animalOwner){
+    if(myId != animalOwnerId){
       toast.error("Bled operacji")
       return null;
     }

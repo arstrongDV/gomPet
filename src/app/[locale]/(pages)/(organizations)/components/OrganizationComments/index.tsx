@@ -36,44 +36,8 @@ const OrganizationComments = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [updateId, setUpdateId] = useState<number | null>(null);
 
-  // const dispatch = useDispatch();
-  // const comments = useSelector((state: RootState) => state.comments.comments);
-      //   dispatch(addComment({
-    //     id: Date.now(),
-    //     text,
-    //     rating,
-    //     createdAt: new Date().toISOString(),
-    //     author: session.status === 'authenticated'
-    //     ? {
-    //         id: session.data?.user.id,
-    //         first_name: session.data?.user.first_name,
-    //         email: session.data?.user.email,
-    //         image: session.data?.user.image
-    //       }
-    //     : {
-    //         id: 1,
-    //         first_name: 'Anonim',
-    //         image: null
-    //       }
-    // }));
   const session = useSession();
   const createComment = async ({ id, text, rating=0 }: CommentSubmitData): Promise<void> => {
-    // try {
-    //   setIsLoading(true);
-    //   // if (!id) return;
-    //   const res = await PostsApi.addNewComments({
-    //     content_type: "users.organization",
-    //     object_id: organizationId,
-    //     body: text,
-    //     rating
-    //   });
-    //   console.log(res);
-
-    //   getComments(organizationId);
-    //   setComments?.((prev: any) => [res, ...prev]);
-    //   onComment && onComment();
-    //   return Promise.resolve();
-    // } 
     try {
       setIsLoading(true);
       if (updateId) {

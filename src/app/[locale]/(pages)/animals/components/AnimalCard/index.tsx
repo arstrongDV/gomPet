@@ -90,7 +90,6 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete }: AnimalCard
           {pathname == '/my-animals' && (
             <div onClick={(e) => e.stopPropagation()} className={style.addBookmark}>
               <SettingsButton
-                // className={style.settingsWrapper}
                 authId={animal.owner}
                 onEdit={handleUpdateClick}
                 onDelete={() => {
@@ -98,12 +97,6 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete }: AnimalCard
                   setOpenedCardId?.(null); 
               }} 
               />
-              {/* <button
-                className={style.addBookmark}
-                onClick={handleNotificationClick}
-              >
-                <Icon name="list" />
-            </button> */}
             </div>
 
           )}

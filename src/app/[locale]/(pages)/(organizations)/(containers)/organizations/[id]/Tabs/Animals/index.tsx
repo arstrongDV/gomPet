@@ -42,7 +42,9 @@ const Animals = ({ organization }: AnimalsProps) => {
     <div className={style.container}>
       <div className={style.row}>
         <BusinessCard organization={organization} />
-        <OrganizationOnMap organization={organization} />
+        <div className={style.mapWrraper}>
+          <OrganizationOnMap className={style.map} organizations={[organization]} />
+        </div>
       </div>
 
       <List

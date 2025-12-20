@@ -34,16 +34,15 @@ const LoginForm = () => {
       if(state.errors?.email) toast.error('Email is required');
       if(state.errors?.password) toast.error('Password is required');
     }
-
-    if (state.message == state.errorData?.error?.message) {
-      toast.error(state.errorData.error.message);
-    }
     
+    if (state.message == 'wrong') {
+      toast.error("Nie udalo się zalogowac");
+    }
 
     if (state.message === 'success') {
+      // toast.success('Witamy na stronie!');
       if (redirectedFrom) {
         router.replace(redirectedFrom);
-        toast.success('success')
       } else {
         router.replace(Routes.LOGIN_REDIRECT);
       }

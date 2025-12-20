@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, FileDropzone, LabelLink, Textarea } from 'src/components'
 import style from './AddPost.module.scss'
-// import PhotosOrganizer from 'src/app/[locale]/(pages)/new-animal/components/PhotosOrganizer'
 import PhotosOrganizer from 'src/components/layout/Forms/PhotosOrganizer'
 import { PostsApi } from 'src/api'
 import toast from 'react-hot-toast'
@@ -11,7 +10,7 @@ import OutsideClickHandler from 'react-outside-click-handler'
 
 type AddPostProps = {
   className?: string;
-  animalId: number;
+  organizationId: number;
   setShowAddPost: React.Dispatch<React.SetStateAction<boolean>>;
   refreshPosts: () => void; 
 };
@@ -25,7 +24,7 @@ const fileToBase64 = (file: File): Promise<string> => {
   });
 };
 
-const AddPost = ({ className, animalId, setShowAddPost, refreshPosts }: AddPostProps) => {
+const AddPost = ({ className, organizationId, setShowAddPost, refreshPosts }: AddPostProps) => {
   const [text, setText] = useState<string>("")
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,12 +37,10 @@ const AddPost = ({ className, animalId, setShowAddPost, refreshPosts }: AddPostP
 
       const base64 = images.length > 0 ? await fileToBase64(images[0]) : null;
 
-      const res = await PostsApi.addNewAnimalPost({
-        payload: {
-          animal: animalId,
-          content: text,
-          ...(base64 && { image: base64 })
-        }
+      const res = await PostsApi.addNewOrganizationPost({
+        organization: organizationId,
+        content: text,
+        ...(base64 && { image: base64 }),
       });
 
       console.log("res::: ", res);

@@ -21,9 +21,6 @@ type AnimalProfileProps = {
     animal: IAnimal;
     comments: IComment[];
     familyTree: any;
-    // & {
-    // characteristics: { title: string; bool: boolean }[];
-    // }
 }
 
 const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
@@ -34,10 +31,6 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('DD.MM.YYYY, godz. HH:mm');
       };
-
-    console.log("animal::::", animal);
-
-
   return (
     <div className={style.mainBlock}>
         <div className={style.infoWrapper}>
@@ -74,8 +67,8 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
                                 <StarRating
                                     rating={4}
                                     readonly
-                                />
-                            </div>
+                             />
+                        </div>
                         <div className={style.location}>
                             <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.city}</p>
                         </div>
@@ -84,12 +77,6 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
                         ) : (
                             <p style={{color: '#798177'}}>Oddam w dobre rece!</p>
                         )}
-                        {/* <a href='tel:+48213713370' className={style.phoneNumButton}> */}
-                            {/* <button> */}
-                                    {/* <Image src={PHONE_IMAGE} alt='phone-image' width={18} /> 
-                                    <p className={style.call}>Zadzwoń i zapytaj</p> */}
-                            {/* </button> */}
-                        {/* </a> */}
                     
                         <Button
                             className={style.phoneNumButton}
@@ -101,26 +88,7 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
 
                         </div>
                     </div>
-                    {/* <div className={style.characteristicsBlock}> */}
-                        {/* <div className={style.characteristicContent}>
-                            {animal.characteristicBoard?.length ? (
-                                animal.characteristicBoard.map(c => (
-                                <div className={style.AnimalCharacter} key={c.title}>
-                                    <div className={style.caracteristicImage}>
-                                    {c.bool ? <Icon name={"pawFilled"} /> : null}
-                                    </div> 
-                                    <p className={style.caracteristicTitle}>{c.title}</p>
-                                </div>
-                                ))
-                            ) : (
-                                <div>No info</div>
-                            )}
-                        </div>
-                        <div className={style.customScrollbar}>
-                            <div className={style.customThumb}></div>
-                        </div> */}
                         <CharacteristicsBlock animal={animal} />
-                    {/* </div> */}
                     {animal.location?.coordinates ? (
                         <iframe
                             width="600"

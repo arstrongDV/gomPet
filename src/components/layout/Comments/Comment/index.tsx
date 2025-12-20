@@ -22,7 +22,7 @@ type CommentProps = {
   className?: string;
   comment: any;
 
-  commentDel?: () => void;
+  commentDel?: (id: any) => void;
   setUpdateId?: (id: number | null) => void;
 };
 
@@ -44,7 +44,7 @@ const Comment = ({ className, comment, commentDel, setUpdateId }: CommentProps) 
     if(myId === author.id){
       try{
         const res_delete = await PostsApi.deleteComment(comment.id)
-        commentDel(comment.id);
+        if(commentDel) commentDel(comment.id);
         setIsOpen(false);
         toast.success("Commentarz zostal usuńięty");
         console.log(res_delete)

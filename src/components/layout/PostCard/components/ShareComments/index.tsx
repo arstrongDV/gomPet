@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Button, Card, Input } from 'components';
-
 import style from './ShareComments.module.scss';
 import toast from 'react-hot-toast';
 

@@ -49,8 +49,12 @@
 }
 
 .map {
+  position: sticky;
+  padding: 2rem;
+  top: 2rem;
   width: 40%;
   min-width: 300px;
+  height: 700px;
   transition: $transition-main;
 
   &.show {

@@ -174,16 +174,14 @@
   
   .phoneNumButton {
     display: flex;
+    align-self: flex-end;
     width: 100%;
     height: 48px;
     border-radius: $radius-m;
-    border: 1px solid #277D23;
+    border: 2px solid #B1D800;
     gap: 12px;
     padding: $spacing-6;
     background-color: $color-white;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
     cursor: pointer;
 
     // @media (max-width: 480px) {

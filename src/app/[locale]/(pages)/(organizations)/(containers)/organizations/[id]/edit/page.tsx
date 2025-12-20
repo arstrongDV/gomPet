@@ -10,7 +10,7 @@ import { useParams } from "next/navigation";
 import { OptionType } from "dayjs";
 import OrganizationUpdateForm from "./index";
 
-const AnimalEditPage = () => {
+const OrganizationEditPage = () => {
   const [organization, setOrganization] = useState<IOrganization | null>(null);
 
   const params = useParams();
@@ -52,4 +52,4 @@ const AnimalEditPage = () => {
   );
 };
 
-export default AnimalEditPage;
+export default OrganizationEditPage;

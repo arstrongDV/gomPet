@@ -6,14 +6,13 @@ import AnimalSelect from "src/components/layout/Forms/Select/AnimalSelect";
 import { ILitter } from "src/constants/types";
 
 import style from './litterEdit.module.scss'
-import { OptionType } from "dayjs";
 import { OrganizationsApi } from "src/api";
 import { useParams } from "next/navigation";
 
 type LittersEditFormProps = {
     onSuccess?: () => void;
     onCancel?: () => void;
-    litter: ILitter;
+    litter?: ILitter;
 }
 
 const statusOptions = [
@@ -73,6 +72,7 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
       setIsLoading(false);
       }
     }, [litter]);
+
     const handleSubmit = async() => {
         try{
             const res = await OrganizationsApi.updateOrganizationLitters(Number(params.id), formData);
@@ -87,15 +87,6 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
     const handleChange = (field: string, value: string) => {
         setFormData(prev => ({...prev, [field]: value}))
     }
-    // const handleChange = (field: string, value: any, label?: string) => {
-    //   setFormData(prev => ({
-    //     ...prev,
-    //     [field]:
-    //       field === 'species' || field === 'breed'
-    //         ? { value, label: label ?? '' }
-    //         : value,
-    //   }));
-    // };
     return(
         <>
       <SectionHeader
@@ -145,7 +136,7 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
             label='Krótki opis (opcjonalnie)'
             placeholder={'Opisz krótko miot...'}
             value={formData.description}
-            onChangeText={(value: string) => handleChange('description', value)}
+            onChangeText={(value: any) => handleChange('description', value)}
           />
         </Card>
         {/* DESCRIPTION */}

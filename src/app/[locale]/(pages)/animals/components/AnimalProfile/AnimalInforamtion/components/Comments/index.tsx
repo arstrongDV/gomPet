@@ -34,13 +34,6 @@ const Comments = ({ comment }: AnimalProfileProps) => {
             commentsArray.map((com, i) => (
             <div key={i} className={style.comments}>
                 <div className={style.userComInfo}>
-                    {/* <Image 
-                        className={style.avatar} 
-                        src={com.author?.image ?? AVATAR} 
-                        alt='user-icon' 
-                        width={24}
-                        height={24} 
-                    /> */}
                     <Avatar profile={comment.author} />
                     <div className={style.comContainer}>
                         <div className={style.commentWrraper}>
@@ -50,7 +43,6 @@ const Comments = ({ comment }: AnimalProfileProps) => {
                             </div>
                             {com.rating && (  
                                 <div className={style.recomendation}>
-                                    {/* <StarRating rating={com.rating}  /> */}
                                     <StarRating rating={comment.rating !== null ? comment.rating : 0} readonly />
                                 </div>
                             )}

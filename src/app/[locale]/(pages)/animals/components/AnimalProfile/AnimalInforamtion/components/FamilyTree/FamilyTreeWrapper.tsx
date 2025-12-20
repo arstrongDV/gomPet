@@ -6,7 +6,7 @@ import { FamilyTreePyramid } from './FamilyTreePyramid';
 interface FamilyTreeWrapperProps {
   familyTree: any[];
   rootName: string;
-  rootImages?: string[];
+  rootImages?: string | null; //string[]
 }
 // Przykładowa funkcja do konwersji
 const normalizeFamilyTree = (parents: any[]) => {
@@ -15,11 +15,11 @@ const normalizeFamilyTree = (parents: any[]) => {
     id: parent.animal_id,
     name: parent.name,
     image: parent.photos,
-    children: parent.grandparents?.map(gp => ({
+    children: parent.grandparents?.map((gp: any) => ({
       id: gp.animal_id,
       name: gp.name,
       image: gp.photos,
-      children: [] // dziadkowie nie mają już wyższych poziomów
+      children: []
     })) || []
   }));
 };

@@ -76,15 +76,15 @@
 .content {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 
 .list {
   flex: 1;
   display: grid;
-  // flex-wrap: wrap;
+  flex-wrap: wrap;
   gap: $spacing-4;
   margin: 20px 0;
   transition: $transition-main;
@@ -129,9 +129,11 @@
 
 .map {
   position: sticky;
-  top: 0;
+  padding: 2rem;
+  top: 2rem;
   width: 40%;
   min-width: 300px;
+  height: 700px;
   transition: $transition-main;
 
   &.show {

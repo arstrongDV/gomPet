@@ -491,7 +491,6 @@ const NewAnimalPage = () => {
 
             <AddAnimalParents 
               className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
-              // selectSpeciesValue={selectSpeciesValue}
               onAddParent={(parent) => {
                 setParents((prev) => [...prev, parent as Parent]);
                 setIsParentsAdd(false); 

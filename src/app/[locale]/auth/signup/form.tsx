@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useActionState, useEffect } from 'react';
+import React, { useActionState, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Button, Checkbox, Input, Loader } from 'src/components';
@@ -11,6 +11,7 @@ import { signup } from './actions';
 
 import style from './SignUp.module.scss';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 
 const SignUpForm = () => {
@@ -20,6 +21,7 @@ const SignUpForm = () => {
   const [state, action, isPending] = useActionState(signup, {
     message: '',
     errors: undefined,
+    text: '',
     fields: {
       email: '',
       firstName: '',
@@ -29,9 +31,40 @@ const SignUpForm = () => {
       statute: false
     }
   });
+
+  const [locationAlowed, setLocationAllowed] = useState<boolean>(false)
+  const [location, setLocation] = useState<{
+    type: 'Point';
+    coordinates: [number, number];
+  } | null>(null);
+
+
+  const getLocation = (): Promise<GeolocationPosition> => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation not supported'));
+        return;
+      }
+  
+      navigator.geolocation.getCurrentPosition(
+        (position) => resolve(position),
+        (error) => reject(error),
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+        }
+      );
+    });
+  };
   
   useEffect(() => {
+    if(state.message == 'error'){
+      toast.error(state.errors?.email || "Wystąpił błąd.");
+    }
+    console.log(state)
+
     if (state.message === 'success') {
+      toast.success(state.text || "Profile zostal stworzony");
       router.push('/auth/login');
     }
   }, [state.message, router]);
@@ -79,9 +112,45 @@ const SignUpForm = () => {
         placeholder='Powtórz hasło'
         defaultValue={state.fields.passwordRepeat}
       />
+
       <Checkbox
-        id='terms'
-        name='terms'
+        id="location"
+        label="Czy możemy korzystać z twojej lokalizacji"
+        checked={locationAlowed}
+        onChange={async (e: any) => {
+          const checked = e.target.checked;
+          setLocationAllowed(checked);
+
+          if (!checked) {
+            setLocation(null);
+            return;
+          }
+
+          try {
+            const pos = await getLocation();
+            setLocation({
+              type: 'Point',
+              coordinates: [
+                pos.coords.longitude,
+                pos.coords.latitude,
+              ],
+            });
+          } catch {
+            toast.error('Nie udało się pobrać lokalizacji');
+            setLocationAllowed(false);
+          }
+        }}
+      />
+      {location && (
+        <input
+          type="hidden"
+          name="location"
+          value={JSON.stringify(location)}
+        />
+      )}
+      <Checkbox
+        id='statute'
+        name='statute'
         label={t.rich('form.termsAndConditions', {
           statute: (chunks) => (
             <Link

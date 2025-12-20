@@ -166,27 +166,38 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
     },
 
+    // async session({ token, session }) {
+    //   if (token.error) {
+    //     throw new Error("RefreshAccessTokenError");
+    //   }
+    
+    //   const user: AdapterUser = token.user as AdapterUser;
+    
+    //   // delete user.access_token;
+    //   // delete user.refresh_token;
+    
+    //   return {
+    //     ...session,
+    //     access_token: token.access_token,
+    //     refresh_token: token.refresh_token,
+    //     user: {
+    //       ...user,
+    //       access_token: token.access_token,
+    //       refresh_token: token.refresh_token,
+    //     },
+    //     error: token.error,
+    //   };
+    // }
     async session({ token, session }) {
-      if (token.error) {
-        throw new Error("RefreshAccessTokenError");
-      }
+      const access = token.access_token as string;
     
-      const user: AdapterUser = token.user as AdapterUser;
+      const { data: freshUser } = await AuthApi.getLoginUser(access);
     
-      // delete user.access_token;
-      // delete user.refresh_token;
+      session.user = freshUser;
+      session.access_token = access;
+      session.refresh_token = String(token.refresh_token);
     
-      return {
-        ...session,
-        access_token: token.access_token,
-        refresh_token: token.refresh_token,
-        user: {
-          ...user,
-          access_token: token.access_token,
-          refresh_token: token.refresh_token,
-        },
-        error: token.error,
-      };
+      return session;
     }
   },
   session: {

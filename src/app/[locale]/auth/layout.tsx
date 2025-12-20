@@ -23,6 +23,7 @@ const PagesLayout = ({
           url(${Pattern.src})
         `,
         backgroundRepeat: 'repeat',
+        padding: '80px'
       }}
     >
       <main id="main" className={style.main}>

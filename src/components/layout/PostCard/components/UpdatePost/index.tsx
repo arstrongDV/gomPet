@@ -11,9 +11,9 @@ import { IPost } from 'src/constants/types'
 type UpdatePostCardData = {
     className?: string;
     post: IPost;
-    animalId: number;
-    updatePosts: () => void;
-    SetShowUpdateCard: () => void;
+    updatePosts?: (value: any) => void;
+    // updatePosts: ((updatedPost: IPost) => null | undefined) | undefined
+    SetShowUpdateCard?: (e: any) => void;
 };
 
 const urlToFile = async (url: string, filename: string): Promise<File> => {
@@ -39,7 +39,7 @@ const fileToBase64 = (file: File): Promise<string> => {
     });
 };
 
-  const UpdatePostCard = ({ className, animalId, post, SetShowUpdateCard, updatePosts }: UpdatePostCardData) => {
+  const UpdatePostCard = ({ className, post, SetShowUpdateCard, updatePosts }: UpdatePostCardData) => {
     const [text, setText] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -82,11 +82,12 @@ const fileToBase64 = (file: File): Promise<string> => {
             }
             const payload = { ...formData, image: imageBase64 };
             const { data: updatedPost } = await PostsApi.updatePost(post.id, payload);
-            updatePosts(updatedPost);
+            if(updatePosts) updatePosts(updatedPost);
           toast.success("Post zaktualizowany!");
-          SetShowUpdateCard();
+          if(SetShowUpdateCard)
+          SetShowUpdateCard(false);
           console.log(updatedPost);
-          SetShowUpdateCard(); // close modal after success
+          // SetShowUpdateCard(); 
         } catch (err: any) {
           console.error(err);
           toast.error(err.message || "Nie udało się zaktualizować posta");
@@ -102,7 +103,7 @@ const fileToBase64 = (file: File): Promise<string> => {
       }, [addImage])
   
     return (
-      <OutsideClickHandler onOutsideClick={() => SetShowUpdateCard()}>
+      <OutsideClickHandler onOutsideClick={() => SetShowUpdateCard && SetShowUpdateCard(false)}>
           <Card className={`${style.container} ${className || ''}`}>
           <header>
               <h2>Actualizuj Post</h2>
@@ -112,7 +113,7 @@ const fileToBase64 = (file: File): Promise<string> => {
               className={style.textarea}
               placeholder={'Napisz coś...'}
               value={formData.content}
-              onChangeText={(val) => setFormData((prev) => ({ ...prev, content: val }))}
+              onChangeText={(val) => setFormData((prev: any) => ({ ...prev, content: val }))}
               />
 
             <LabelLink 

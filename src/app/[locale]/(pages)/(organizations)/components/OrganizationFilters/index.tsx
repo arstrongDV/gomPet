@@ -14,6 +14,8 @@ import { toSelectOption } from 'src/utils/helpers';
 
 import style from './OrganizationFilters.module.scss';
 import { InputProps } from 'src/components/layout/Forms/Input';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 type OrganizationFiltersProps = {
   className?: string;
@@ -26,6 +28,8 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
+
+  const session = useSession();
 
   const [showFullFilters, setShowFullFilters] = useState(false); 
   useEffect(() => {
@@ -42,26 +46,19 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
     // const params = new URLSearchParams(searchParams.toString());
     params.set(Params.PAGE, '1');
 
-    // if (isArr) {
-    //   const arr = params.get(filter)?.split('&') || [];
-    //   if (arr.includes(value)) {
-    //     arr.splice(arr.indexOf(value), 1);
-    //     if (arr.length === 0) {
-    //       params.delete(filter);
-    //     } else {
-    //       params.set(filter, arr.join('&'));
-    //     }
-    //   } else {
-    //     arr.push(value);
-    //     params.set(filter, arr.join('&'));
-    //   }
-    // } else {
-    //   if (params.get(filter) === value || !value || value === '0') {
-    //     params.delete(filter);
-    //   } else {
-    //     params.set(filter, value);
-    //   }
-    // }
+    if (filter === Params.RANGE) {
+      params.set(Params.PAGE, '1');
+    
+      if (!value) {
+        params.delete(Params.RANGE);
+        params.delete(Params.LOCATION);
+      } else {
+        params.set(Params.RANGE, value);
+      }
+    
+      router.push(`?${params.toString()}`);
+      return;
+    }
 
     if (isArr) {
       const arr = params.get(filter)?.split(',') || [];
@@ -83,6 +80,43 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
         params.set(filter, value);
       }
     }
+    router.push(`?${params.toString()}`);
+  };
+
+  useEffect(() => {
+    const hasRange = searchParams.get(Params.RANGE);
+    const hasLocation = searchParams.get(Params.LOCATION);
+  
+    if (!hasRange && hasLocation) {
+      params.delete(Params.LOCATION);
+      router.replace(`?${params.toString()}`);
+    }
+  }, [searchParams]);
+
+  const applyLocationFilter = () => {
+    if (!session.data?.user?.location){
+      toast.error("Nie udalo się znalezc twojwj lokalizacji");
+    }
+    if (!range) {
+      params.delete(Params.RANGE);
+      params.delete(Params.LOCATION);
+      router.push(`?${params.toString()}`);
+      return;
+    }
+
+    const { coordinates } = session.data.user.location;
+  
+    // upewnij się, że lat i lng są liczby
+    if (coordinates[0] == null || coordinates[1] == null) return;
+  
+    const locationValue = `SRID=4326;POINT(${coordinates[0]} ${coordinates[1]})`;
+
+  
+    params.set(Params.LOCATION, locationValue);
+    params.set(Params.RANGE, range);
+    params.set(Params.PAGE, '1');
+  
+    // params.delete(Params.CITY);
 
     router.push(`?${params.toString()}`);
   };
@@ -91,8 +125,9 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
     router.push('?page=1');
   }, [params]);
 
-  const [locationInput, setLocationInput] = useState(searchParams.get(Params.LOCATION) ?? '')
-  const [rangeInput, setRangeInput] = useState(searchParams.get(Params.RANGE) ?? '')
+  const [locationInput, setLocationInput] = useState(searchParams.get(Params.CITY) ?? '')
+  // const [rangeInput, setRangeInput] = useState(searchParams.get(Params.RANGE) ?? '')
+  const [range, setRange] = useState(searchParams.get(Params.RANGE) ?? '');
 
   return (
     <div className={classNames(style.filters, className)}>
@@ -116,19 +151,21 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
             placeholder={t('pages.organizations.filters.locationPlaceholder')}
             value={locationInput}
             onChange={(e) => setLocationInput(e.target.value)}
-            onBlur={() => {if(locationInput !== '') handleFilter(Params.LOCATION, locationInput)}}
+            onBlur={() => {if(locationInput !== '') handleFilter(Params.CITY, locationInput)}}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && locationInput !== '') handleFilter(Params.LOCATION, locationInput);
+              if (e.key === 'Enter') handleFilter(Params.CITY, locationInput);
             }}
           />
           <Input
             label={`${t('pages.organizations.filters.range')} (km)`}
             placeholder={t('pages.organizations.filters.rangePlaceholder')}
-            value={rangeInput}
-            onChange={(e) => setRangeInput(e.target.value)}
-            onBlur={() => {if(rangeInput !== '') handleFilter(Params.RANGE, rangeInput)}}
+            value={range}
+            onChange={(e) => setRange(e.target.value)}
+            onBlur={() => {if(range !== '') handleFilter(Params.RANGE, range)}}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && rangeInput !== '') handleFilter(Params.RANGE, rangeInput);
+              if (e.key === 'Enter'){
+                applyLocationFilter();
+              }
             }}
           />
           <Select
@@ -154,19 +191,19 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
             placeholder={t('pages.organizations.filters.locationPlaceholder')}
             value={locationInput}
             onChange={(e) => setLocationInput(e.target.value)}
-            onBlur={() => handleFilter(Params.LOCATION, locationInput)}
+            onBlur={() => handleFilter(Params.CITY, locationInput)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleFilter(Params.LOCATION, locationInput);
+              if (e.key === 'Enter') handleFilter(Params.CITY, locationInput);
             }}
           />
           <Input
             label={`${t('pages.organizations.filters.range')} (km)`}
             placeholder={t('pages.organizations.filters.rangePlaceholder')}
-            value={rangeInput}
-            onChange={(e) => setRangeInput(e.target.value)}
-            onBlur={() => handleFilter(Params.RANGE, rangeInput)}
+            value={range}
+            onChange={(e) => setRange(e.target.value)}
+            onBlur={() => handleFilter(Params.RANGE, range)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleFilter(Params.RANGE, rangeInput);
+              if (e.key === 'Enter') handleFilter(Params.RANGE, range);
             }}
           />
       </div>

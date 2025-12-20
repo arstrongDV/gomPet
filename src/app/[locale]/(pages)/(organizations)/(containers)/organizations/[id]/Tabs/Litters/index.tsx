@@ -33,7 +33,7 @@ const Litters = ({ organization }: LittersProps) => {
   const [currentLitters, setCurrentLitters] = useState<ILitter[]>([]);
   const [previousLitters, setPreviousLitters] = useState<ILitter[]>([]);
 
-  const [litters, setLitters] = useState<ILitter[]>([]);
+  // const [litters, setLitters] = useState<ILitter[]>([]);
 
   const [addLitter, setAddLitter] = useState<boolean>(false);
 
@@ -44,7 +44,7 @@ const Litters = ({ organization }: LittersProps) => {
       console.log('res_litters:: ', res_litters);
       const data = res_litters.data.results;
       // const data = littersMock;
-      setLitters(data);
+      // setLitters(data);
       const current = data.filter((item: ILitter) => new Date(item.birth_date) > new Date());
       const previous = data.filter((item: ILitter) => new Date(item.birth_date) <= new Date());
 
@@ -78,7 +78,9 @@ const Litters = ({ organization }: LittersProps) => {
     <div className={style.container}>
       <div className={style.row}>
         <BusinessCard organization={organization} />
-        <OrganizationOnMap organization={organization} />
+        <div className={style.mapWrraper}>
+          <OrganizationOnMap className={style.map} organizations={[organization]} />
+        </div>
       </div>
 
       {organization.user == myId && (
@@ -94,7 +96,7 @@ const Litters = ({ organization }: LittersProps) => {
           isLoading={isLoading}
           className={style.list}
         >
-          {litters.map((litter) => (
+          {currentLitters.map((litter) => (
             <LitterCard
               key={litter.id}
               litter={litter}

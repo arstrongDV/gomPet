@@ -79,14 +79,14 @@ const MyAnimals = () => {
         const res = await AnimalsApi.deleteAnimal(id);
         console.log(res)
         if (res.status == 204) {
-          // If API call fails, revert the UI change
+
           toast.success("Animal deleted!");
         } else {
           await getMyAnimals(params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1);
           toast.error("Failed to delete animal");
         }
       } catch (err) {
-        // Revert on error
+
         await getMyAnimals(params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1);
         console.log(err);
         toast.error("Failed to delete animal");
@@ -111,8 +111,8 @@ const MyAnimals = () => {
                   <AnimalCard
                     key={animal.id}
                     animal={animal}
-                    isSettingsOpen={openedCardId === animal.id}
-                    onToggleSettings={() => handleToggleSettings(animal.id)}
+                    isSettingsOpen={openedCardId === String(animal.id)} ////////// String
+                    onToggleSettings={() => handleToggleSettings(String(animal.id))} ////////// String
                     onDelete={handleDeleteAnimal} 
                     setOpenedCardId={setOpenedCardId}
                   />
@@ -120,13 +120,6 @@ const MyAnimals = () => {
                 </List>
             </div>
             
-            {/* <Pagination              
-                className={style.pagination}
-                totalCount={total}
-                pageSize={paginationConfig.animals}
-                currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
-                onPageChange={changePage} 
-            /> */}
             <Pagination
               className={style.pagination}
               totalCount={total}

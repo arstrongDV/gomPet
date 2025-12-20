@@ -68,7 +68,6 @@ export const login = async (
           fields
         };
       } catch (e) {
-        toast.error(result.error);
         return {
           message: result.error,
           errors: {
@@ -89,7 +88,7 @@ export const login = async (
     };
   } catch (error: any) {
     return {
-      message: 'Something went wrong',
+      message: 'wrong',
       errors: {
         email: '',
         password: error.message || 'Unexpected error occurred'

@@ -1,11 +1,23 @@
 @import 'styles';
 
 .card {
+  // z-index: 0;
+  // position: relative;
+  // max-width: 300px;
+  // min-width: 250px;
+  // min-height: 320px;
+  // border-radius: $radius-m;
+  // padding: $spacing-4;
+  // background-size: cover;
+  // background-position: center;
+  // transition: background $transition-main; 
   z-index: 0;
   position: relative;
-  flex: 0 0 300px; 
+  width: 100%;
+  min-width: unset;
+  max-width: unset;
+
   max-width: 300px;
-  height: 350px;
   border-radius: $radius-m;
   padding: $spacing-4;
   background-size: cover;
@@ -34,17 +46,15 @@
     right: $spacing-4;
   }
 
-  @media (max-width: 1300px) {
-    flex: 0 0 250px;
-    height: 300px;
-    // padding: $spacing-4;
+  @media (min-width: 768px) {
+    min-width: 300px;
+    min-height: 350px;
   }
 
-  @media (max-width: 480px) {
-    flex: 0 0 140px;
-    height: 180px;
-    padding: $spacing-3;
-  }
+  // @media (max-width: 480px) {
+  //   height: 180px;
+  //   padding: $spacing-3;
+  // }
 }
 
 @keyframes fadeIn {
@@ -94,11 +104,11 @@
 }
 
 .badge {
-  padding: $spacing-2 $spacing-3;
-  flex-shrink: 0;
+  padding: $spacing-1 $spacing-2;
   @include body1;
   width: fit-content;
-  min-width: 4rem;
+  min-width: 3rem;
+  font-size: $font-size-s;
   border-radius: $radius-m;
   text-align: center;
 
@@ -141,17 +151,17 @@
     background-color: rgba($color: #4e4e4e, $alpha: 0.8);
   }
 
-  @media (max-width: 768px) {
-    padding: $spacing-1 $spacing-2;
-    min-width: 2rem;
-    font-size: $font-size-xs;
+  @media (min-width: 768px) {
+    padding: $spacing-1 $spacing-3;
+    min-width: 3rem;
+    // font-size: $font-size-m;
   }
 
-  @media (max-width: 480px) {
-    padding: $spacing-1 $spacing-2;
-    min-width: 3rem;
-    font-size: $font-size-s;
-  }
+  // @media (max-width: 480px) {
+  //   padding: $spacing-1 $spacing-2;
+  //   min-width: 3rem;
+  //   font-size: $font-size-s;
+  // }
 }
 
 .hoverContent {
@@ -159,7 +169,7 @@
   visibility: hidden;
   pointer-events: none;
   @include element-flex(column, center, center);
-  gap: $spacing-4;
+  gap: $spacing-3;//4
   width: 100%;
   transition: $transition-main;
 

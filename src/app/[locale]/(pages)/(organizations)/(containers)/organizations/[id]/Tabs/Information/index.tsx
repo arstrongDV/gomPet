@@ -24,7 +24,9 @@ const Information = ({ organization }: InformationProps) => {
     <div className={style.container}>
       <div className={style.row}>
         <BusinessCard organization={organization} />
-        <OrganizationOnMap organization={organization} />
+        <div className={style.mapWrraper}>
+          <OrganizationOnMap className={style.map} organizations={[organization]} />
+        </div>
       </div>
       <Card>
         <DescriptionTranslate text={organization.description} />

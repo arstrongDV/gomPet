@@ -134,7 +134,7 @@ const NewOrganizationPage = () => {
             Number(location.lat)
           ]
         },
-        species: [1, 2]
+        species: [2]
       }
 
       const payload = {
@@ -149,7 +149,7 @@ const NewOrganizationPage = () => {
 
       const res = await OrganizationsApi.addNewOrganization(payload);
       toast.success("Stworzono nową organizację!")
-
+      console.log("res:", res)
       push(Routes.ORGANIZATION_PROFILE(res.data.id))
     }catch(err){
       console.log(err)

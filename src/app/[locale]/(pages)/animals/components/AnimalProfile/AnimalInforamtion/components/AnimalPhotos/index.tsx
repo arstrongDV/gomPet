@@ -3,46 +3,43 @@
 import { useState } from 'react'
 import { IAnimal } from 'src/constants/types';
 import style from './AnimalPhotos.module.scss';
+import ImageShow from 'src/components/layout/ImageShow';
 
 type AnimalProfileProps = {
-  animal: IAnimal & {
-    gallery?: { id: number; image: string; ordering: number }[];
-  }
+  animal: IAnimal;
 }
 
 const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
-  // НЕ кодуємо URL - вони вже закодовані!
-  const images = (animal.gallery || []).map(item => item.image);
-  const [mainPhoto, setMainPhoto] = useState(images[0] || '');
-  
-  console.log("Original images: ", images);
+  const images = (animal.gallery || []).map((item: any) => item.image);
+  const [currentIndex, setCurrentIndex] = useState(0); // domyślnie 0
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  if (!images.length) return <p>No images available</p>;
 
   return (
     <div className={style.photos}>
+      {/* Główne zdjęcie */}
       <div className={style.mainImage}>
-        {mainPhoto ? (
-          <img 
-            src={mainPhoto} 
-            alt={`${animal.name} photo`}
-            onError={(e) => {
-              console.error('Failed to load main image:', mainPhoto);
-              e.currentTarget.style.display = 'none';
-            }}
-          />
-        ) : (
-          <p>No image available</p>
-        )}
+        <img
+          src={images[currentIndex]}
+          alt={`${animal.name} photo`}
+          onClick={() => setIsOpen(true)}
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+          }}
+        />
       </div>
-      
-      {images.length > 0 && (
+
+      {/* Miniaturki */}
+      {images.length > 1 && (
         <div className={style.imagesList}>
           {images.map((img, i) => (
-            <img 
-              key={i} 
-              src={img} 
-              alt={`${animal.name} photo ${i}`} 
+            <img
+              key={i}
+              src={img}
+              alt={`${animal.name} photo ${i}`}
               className={style.thumbnail}
-              onClick={() => setMainPhoto(img)}
+              onClick={() => setCurrentIndex(i)}
               onError={(e) => {
                 console.error('Failed to load thumbnail:', img);
                 e.currentTarget.style.display = 'none';
@@ -51,8 +48,16 @@ const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
           ))}
         </div>
       )}
+
+      {/* Modal ze sliderem */}
+      <ImageShow
+        images={animal.gallery || []}
+        currentPhoto={currentIndex}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
     </div>
-  )
+  );
 }
 
 export default AnimalPhotos;
