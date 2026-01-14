@@ -24,3 +24,14 @@
     font-weight: $font-medium;
   }
 }
+
+.mapWrraper {
+  display: flex;
+  height: auto;
+  border-radius: $radius-l;
+  overflow: hidden; 
+}
+.map {
+  width: 100%;
+  height: 100%; 
+}

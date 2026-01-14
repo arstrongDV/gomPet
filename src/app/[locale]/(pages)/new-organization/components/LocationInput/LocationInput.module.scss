@@ -23,13 +23,17 @@
   @include element-flex(column, flex-start, stretch);
   gap: $spacing-4;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .mapWrapper {
   @include element-flex(column, flex-start, stretch);
   gap: $spacing-4;
   width: 100%;
-
+  position: relative;
+  z-index: 1000;
+  // z-index: 0;
   .map {
     width: 100%;
     height: 100%;

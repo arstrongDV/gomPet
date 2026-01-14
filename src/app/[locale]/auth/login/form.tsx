@@ -12,6 +12,7 @@ import { useRouter } from 'src/navigation';
 import { login } from './actions';
 
 import style from './Login.module.scss';
+import toast from 'react-hot-toast';
 
 const LoginForm = () => {
   const t = useTranslations();
@@ -29,7 +30,17 @@ const LoginForm = () => {
   useEffect(() => {
     const redirectedFrom = searchParams.get(Params.FROM);
 
+    if(state.message == 'error'){
+      if(state.errors?.email) toast.error('Email is required');
+      if(state.errors?.password) toast.error('Password is required');
+    }
+    
+    if (state.message == 'wrong') {
+      toast.error("Nie udalo się zalogowac");
+    }
+
     if (state.message === 'success') {
+      // toast.success('Witamy na stronie!');
       if (redirectedFrom) {
         router.replace(redirectedFrom);
       } else {
@@ -43,13 +54,6 @@ const LoginForm = () => {
       className={style.form}
       action={action}
     >
-      {state.errors && (
-        <div className={style.error}>
-          {Object.values(state.errors).map((error, index) => (
-            <p key={index}>{error}</p>
-          ))}
-        </div>
-      )}
       <Input
         type='email'
         key={'email'}

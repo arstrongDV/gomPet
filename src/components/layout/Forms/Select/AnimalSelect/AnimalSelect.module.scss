@@ -1,0 +1,10 @@
+@import 'styles';
+
+.selectContainer{
+    @include element-flex(row, flex-start, center);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+    gap: $spacing-4;
+    gap: $spacing-3;
+    width: 100%;
+}

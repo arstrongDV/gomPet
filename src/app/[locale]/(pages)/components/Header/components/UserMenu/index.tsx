@@ -13,11 +13,12 @@ import style from './UserMenu.module.scss';
 const UserMenu = () => {
   const t = useTranslations();
   const session = useSession();
+  console.log(session.data?.user)
 
   const menuItems: DropdownItemType[] = [
     {
       title: 'Profile',
-      href: Routes.LANDING,
+      href: Routes.PROFILE,
       roles: []
     },
     {
@@ -26,7 +27,7 @@ const UserMenu = () => {
       roles: []
     }
   ];
-
+  // console.log("Laaaa: ", session.data)
   return (
     <Dropdown
       icon={'chevronDown'}
@@ -37,6 +38,7 @@ const UserMenu = () => {
         <Avatar
           className={style.image}
           profile={session.data?.user}
+          src={session.data?.user.image ? session.data?.user.image : undefined}
         />
       }
     />

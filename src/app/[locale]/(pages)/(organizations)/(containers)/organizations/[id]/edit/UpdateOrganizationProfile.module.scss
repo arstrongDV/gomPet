@@ -1,0 +1,43 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+}
+
+.section {
+  @include element-flex(column);
+  gap: $spacing-6;
+}
+
+.flexRow {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+  flex-wrap: wrap;
+
+  @include tabletWidth {
+    @include element-flex(column, flex-start, stretch);
+    width: 100%;
+  }
+}
+
+.basicData {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  gap: $spacing-4;
+  width: 100%;
+
+  @include tabletWidth {
+    grid-template-columns: 1fr;
+  }
+}
+
+.caption {
+  @include body2;
+  color: $color-foreground-dim;
+}
+
+.submit {
+  align-self: flex-end;
+}

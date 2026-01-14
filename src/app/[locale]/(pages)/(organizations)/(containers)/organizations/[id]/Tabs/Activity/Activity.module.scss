@@ -2,8 +2,10 @@
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 50rem;
-  align-items: start;
+  grid-template-rows: 1fr 50rem;
+  // display: flex;
+  // align-items: start;
+  justify-content: center;
   gap: $spacing-6;
 
   @include desktopWidth {
@@ -11,18 +13,41 @@
   }
 }
 
+.wrapper{
+  @include element-flex(row, space-between);
+  gap: $spacing-2;
+}
+
+.listWrraper{
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
 .post {
   @include desktopWidth {
-    max-width: 100%;
+    // max-width: 80%;
   }
 }
 
 .aside {
   @include element-flex(column, flex-start, stretch);
-  gap: $spacing-6;
+  gap: $spacing-2;
+  max-width: 500px;
+  // max-width: 100%;
 }
 
 .list {
   @include element-flex(column, flex-start, stretch);
   gap: $spacing-6;
+}
+
+.mapWrraper {
+  height: 300px; // albo 350px / 400px
+  border-radius: $radius-l;
+  overflow: hidden;
+}
+.map {
+  width: 100%;
+  height: 100%; 
 }

@@ -1,6 +1,7 @@
 import { IPost } from 'src/constants/types';
 
 import { organizationsMock } from './organizations';
+import { UsersMock } from './user';
 
 export const postsMock: IPost[] = [
   {
@@ -18,7 +19,33 @@ export const postsMock: IPost[] = [
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec libero nec libero rhoncus.',
     image: 'https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg',
     author: organizationsMock[0],
-    comments: [],
-    reactions: []
+    comments: [
+      {
+        id: 1,
+        text: "Yes, cool!",
+        created_at: '2024-08-07T12:00:00Z',
+        updated_at: '2024-08-07T12:00:00Z',
+        author: UsersMock[0],
+      },
+      {
+        id: 2,
+        text: "Nice dog",
+        created_at: '2025-08-07T12:00:00Z',
+        updated_at: '2025-08-07T12:00:00Z',
+        author: UsersMock[1],
+      } 
+    ],
+    reactions: [
+      {
+        author: UsersMock[0],
+        author_type: 'user',
+        type: 'like'
+      },
+      {
+        author: UsersMock[1],
+        author_type: 'user',
+        type: 'like'
+      },
+    ]
   }
 ];

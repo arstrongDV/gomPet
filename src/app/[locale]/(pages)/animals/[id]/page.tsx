@@ -1,23 +1,52 @@
-import { IAnimal } from 'src/constants/types';
-import { animalsMock } from 'src/mocks/animals';
+import { IAnimal, IPost } from 'src/constants/types';
+import { IComment } from 'src/constants/types';
+import { commentsMock } from 'src/mocks/comments';
+import style from './AnimalProfile.module.scss';
+import { AnimalsApi, PostsApi } from 'src/api';
+import TabView from '../components/AnimalProfile/TabView';
 
-import { IPost } from 'src/constants/types';
-import { postsMock } from 'src/mocks/posts';
-
-import style from './AnimalProfile.module.scss'
-import AnimalProfile from '../components/AnimalProfile';
-
-const getAnimalData = (id: number): IAnimal | undefined => {
-  return animalsMock.find(animal => animal.id === id);
+const getAnimalData = async (id: number): Promise<IAnimal | undefined> => {
+  try {
+    const animalProfileRes = await AnimalsApi.getAnimalProfile(id);
+    return animalProfileRes.data
+  } catch (error) {
+    console.error('Error fetching animal:', error);
+    return undefined;
+  }
 };
 
-const getPostsData = (animalId: number): IPost[] => {
-  return postsMock.filter(post => post.author.id === animalId);
+const getAnimalFamilyTree = async (id: number): Promise<IAnimal | undefined> => {
+  try {
+    const animalFamilyTreeRes = await AnimalsApi.getAnimalFamilyTree(id); 
+    return animalFamilyTreeRes.data
+  } catch (error) {
+    console.error('Error fetching animal:', error);
+    return undefined;
+  }
 };
-export const generateMetadata = ({ params: { id } }: { params: { id: string } }) => {
-  const animalData = getAnimalData(Number(id));
-  // const postData = getPostsData(Number(id));
 
+// const getAnimalPosts = async (id: number): Promise<IPost | undefined> => {
+//   try{
+//     const animalPosts = await PostsApi.getAnimalPosts(id);
+//     return animalPosts.results
+//   }catch(error){
+//     throw error
+//   }
+// }
+
+const getCommentData = async (id: number): Promise<IComment | undefined> => {
+  try {
+    const animalCommentsRes = await AnimalsApi.getAnimalComments(id);
+    return animalCommentsRes.data
+  } catch (error) {
+    console.error('Error fetching animal:', error);
+    return undefined;
+  }
+};
+
+export const generateMetadata = async ({ params: { id } }: { params: { id: string } }) => {
+  const animalData = await getAnimalData(Number(id));
+  
   return {
     title: animalData?.name || 'Unknown Animal',
     description: animalData?.species || 'Animal details',
@@ -27,21 +56,23 @@ export const generateMetadata = ({ params: { id } }: { params: { id: string } })
   };
 };
 
+const AnimalDetailPage = async ({ params }: { params: { id: string } }) => {
+  const animal = await getAnimalData(Number(params.id));
+  const familyTree = await getAnimalFamilyTree(Number(params.id))
+  const comments = await getCommentData(Number(params.id));
+  // const posts = await getAnimalPosts(Number(params.id))
 
-
-const AnimalDetailPage = ({ params }: { params: { id: string } }) => {
-  const animal = getAnimalData(Number(params.id));
-  const posts = getPostsData(Number(params.id));
-  if (!animal || !posts) {
-    return <div>Animal not found</div>;
+  if (!animal) {
+    return <div className={style.notFound}>Animal not found</div>;
   }
+//posts={posts}
   return (
-<div className={style.mainContainer}>
-    <div className={style.innerContainer}>
-      <AnimalProfile animal={animal} posts={posts}/>
+    <div className={style.mainContainer}>
+      <div className={style.innerContainer}>
+        {/* <AnimalProfile animal={animal} comment={comment} posts={posts} familyTree={familyTree} />  */}
+        <TabView animal={animal} comments={comments}  familyTree={familyTree} /> 
+      </div>
     </div>
-</div>
-
   );
 };
 

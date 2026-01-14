@@ -1,0 +1,58 @@
+.settingsWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.settingsToggle {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  &:hover {
+    background: #f4f4fd;
+  }
+}
+
+.disabledBtn {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.settings {
+  position: absolute;
+  bottom: 100%; /* directly below the button */
+  right: 0;
+  background: #fff;
+  border: 1px solid #e7e9fc;
+  border-radius: 4px;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  z-index: 50;
+  animation: fadeIn 0.2s ease;
+
+  &.leftSide {
+    left: 2rem;
+    right: auto;
+  }
+
+  &.rightSide {
+    right: 2rem;
+    left: auto;
+  }
+}
+
+.settingsBtn {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #2e2f42;
+
+  &:hover {
+    background: #f4f4fd;
+  }
+}

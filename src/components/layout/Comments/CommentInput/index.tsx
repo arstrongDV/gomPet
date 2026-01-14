@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
@@ -10,7 +10,7 @@ import { Avatar, Button, Comment, StarRating, Textarea } from 'components';
 import style from './CommentInput.module.scss';
 
 export type CommentSubmitData = {
-  id?: string | number;
+  id?: number | string;
   text: string;
   rating?: number;
 };
@@ -20,19 +20,41 @@ type CommentInputProps = {
   placeholder?: string;
   onSubmit: (payload: CommentSubmitData) => Promise<void>;
   withRating?: boolean;
+  // createComment?: () => void;
+  value?: string;
+  ratingValue?: number;
 };
 
-const CommentInput = ({ className, onSubmit, placeholder, withRating = false }: CommentInputProps) => {
+const CommentInput = ({ className, onSubmit, placeholder, withRating = false, value, ratingValue  }: CommentInputProps) => {
   const t = useTranslations();
   const session = useSession();
+  const myId = session.data?.user.id;
 
   const [text, setText] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
+
+  // useEffect(() => {
+  //   if(value) setText(value);
+  // }, [value])
+  useEffect(() => {
+    if (value !== undefined) setText(value);
+    if (ratingValue !== undefined) setRating(ratingValue);
+  }, [value, ratingValue]);
 
   const clearForm = () => {
     setText('');
     setRating(0);
   };
+  // useEffect(() => {
+  //   setText(value ?? '');
+  //   setRating(value ?? '')
+  // }, [value]);
+
+  // const clearForm = () => {
+  //   setText('');
+  //   setRating('')
+  //   setRating(0);
+  // };
 
   const handleSubmit = async () => {
     const payload: CommentSubmitData = {
@@ -75,7 +97,7 @@ const CommentInput = ({ className, onSubmit, placeholder, withRating = false }: 
               label={t('common.action.publish')}
               icon='paw'
               onClick={handleSubmit}
-              disabled={text.length === 0}
+              disabled={text.length === 0 || !myId}
             />
           </div>
         </div>

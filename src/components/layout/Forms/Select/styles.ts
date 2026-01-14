@@ -6,8 +6,8 @@ const cssStyles = {
   colorBackground1: '#ffffff',
   colorBackground2: '#fafafa',
   colorBackground3: '#f7f7f7',
-  colorPrimary: '#277d23',
-  colorAccent: '#E37500',
+  colorPrimary: '#B1D800',
+  colorAccent: '#B1D800',
   colorDanger: '#d32f2f',
   colorBorder: '#dcdfd8',
   sizeInputHeight: '5rem',
@@ -24,7 +24,7 @@ export const selectStyles = (hasError: boolean) => {
     container: (base: any) => ({
       ...base,
       width: '100%',
-      minWidth: '29.5rem',
+      // minWidth: '29.5rem',
       height: '5rem'
     }),
     placeholder: (base: any) => ({

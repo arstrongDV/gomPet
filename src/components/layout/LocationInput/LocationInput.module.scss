@@ -1,0 +1,44 @@
+@import 'styles';
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 29.5rem;
+  gap: $spacing-6;
+  width: 100%;
+  z-index: 1;
+  @include smDesktopWidth {
+    grid-template-columns: 1fr;
+  }
+
+  @include mobileWidth {
+    grid-template-columns: 1fr 29.5rem;
+  }
+
+  @include tabletWidth {
+    grid-template-columns: 1fr;
+  }
+}
+
+.inputs {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.mapWrapper {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  // z-index: 0;
+  .map {
+    width: 100%;
+    height: 100%;
+    min-height: 30rem;
+    border-radius: $radius-m;
+    overflow: hidden;
+  }
+}

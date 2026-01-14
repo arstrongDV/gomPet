@@ -1,0 +1,156 @@
+.myFamilly {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 1.5rem;
+  }
+  
+  .aboutFamilly {
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .pyramidWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Każdy poziom drzewa */
+  .level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    .parents {
+      display: flex;
+      justify-content: space-between; 
+      align-items: flex-end;
+      width: 100%;
+      margin-bottom: 30px;
+      
+      * > {
+        flex: 1 1 0;  
+        display: flex;
+        justify-content: center;
+      }
+    
+      gap: clamp(16px, 5vw, 80px);
+    
+      @media (max-width: 1024px) { gap: clamp(12px, 4vw, 60px); }
+      @media (max-width: 768px) { gap: clamp(8px, 3vw, 40px); }
+      @media (max-width: 550px) { gap: clamp(6px, 2vw, 24px); }
+    
+      // &.parentsLevel{
+      //   flex: 1 1 0;      // parents row still spreads evenly
+      //   display: flex;
+      //   justify-content: center;
+      // }
+    
+
+    }
+  
+    .node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 0 1 auto; 
+      margin: 5px 0;
+  
+      img {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: transform 0.2s;
+  
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+  
+      p {
+        margin-top: 6px;
+        font-size: 13px;
+        word-break: break-word;
+      }
+    }
+  }
+  
+  
+  /* Główne zwierzę (dziecko/root) na dole */
+  .rootNode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+  
+    img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform 0.2s;
+  
+      &:hover {
+        transform: scale(1.05);
+      }
+  
+      @media (max-width: 1024px) {
+        width: 80px;
+        height: 80px;
+      }
+  
+      @media (max-width: 768px) {
+        width: 70px;
+        height: 70px;
+      }
+  
+      @media (max-width: 550px) {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  
+    p {
+      margin-top: 8px;
+      font-weight: bold;
+      font-size: 14px;
+  
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
+  
+      @media (max-width: 550px) {
+        font-size: 11px;
+      }
+    }
+  }
+  
+  /* Placeholder dla brakujących zdjęć */
+  .noPhoto {
+    background: #ccc;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+  
+    @media (max-width: 1024px) {
+      width: 50px;
+      height: 50px;
+    }
+  
+    @media (max-width: 768px) {
+      width: 48px;
+      height: 48px;
+    }
+  
+    @media (max-width: 550px) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
+  

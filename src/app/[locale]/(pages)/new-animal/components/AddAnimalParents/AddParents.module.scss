@@ -1,0 +1,130 @@
+@import 'styles';
+
+.container {
+    @include element-flex(column, flex-start, stretch);
+    gap: $spacing-6;
+    width: 100%;
+  }
+  
+  .animalsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: $spacing-4;
+    width: 100%;
+    height: 48vh;
+    padding: $spacing-3;
+    overflow-y: auto;
+  
+    background: $color-white;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  
+    transition: opacity $transition-main ease;
+  
+    &::-webkit-scrollbar {
+      width: 0.6rem;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+    }
+  }
+  
+  .animalItem {
+    background: #f9fafb;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    padding: $spacing-3;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  
+    &:hover {
+      transform: translateY(-2px);
+      border-color: $color-primary;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+  
+    &.selected {
+      border-color: $color-primary;
+      background: rgba($color-primary, 0.05);
+    }
+  
+    .animalPhoto {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: $spacing-2;
+      border: 2px solid #e5e7eb;
+      background: #e5e7eb;
+    }
+  
+    .animalInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+  
+      h5 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $color-black;
+      }
+  
+      p {
+        font-size: 1.2rem;
+        color: #4b5563;
+      }
+    }
+  }
+  
+
+  .section {
+    @include element-flex(column);
+    gap: $spacing-6;
+  }
+  
+  .genderSelect,
+  .statusSelect {
+    @include element-flex(row, flex-start, center);
+    gap: $spacing-2;
+  }
+  
+  .flexRow {
+    @include element-flex(row, flex-start, center);
+    gap: $spacing-4;
+  }
+  
+  .fullWidth {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-4;
+    width: 100%;
+  }
+
+  .bottom{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  .animalParent{
+    display: flex;
+    flex-direction: row;
+    gap: 1.8rem;
+  }
+
+  .buttonAdd{
+    width: 200px;
+    align-self: flex-end;
+  }
+  

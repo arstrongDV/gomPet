@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { Button, List, Pagination } from 'src/components';
@@ -16,6 +16,8 @@ import OrganizationCard from '../../components/OrganizationCard';
 import OrganizationFilters from '../../components/OrganizationFilters';
 
 import style from './SheltersPage.module.scss';
+import OrganizationOnMap from '../../components/OrganizationOnMap';
+import { OrganizationsApi } from 'src/api';
 
 const SheltersPage = () => {
   const t = useTranslations('pages.animals');
@@ -23,6 +25,7 @@ const SheltersPage = () => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [organizations, setOrganizations] = useState<IOrganization[]>([]);
@@ -36,22 +39,59 @@ const SheltersPage = () => {
     router.push(`?${params.toString()}`);
   };
 
-  const getShelters = async () => {
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const itemsPerPage = 10; 
+
+  const getShelters = useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
-      setOrganizations(organizationsMock);
-      setTotal(120);
+      const res = await OrganizationsApi.getOrganizations(filters);
+      const organizationData = res.data?.results || [];
+      // const organizationData = res.data?.results.filter(o => o.type == "Shalters")
+      setOrganizations(organizationData);
+      setTotal(res.data?.count || 0);
+      console.log("organizationData::", organizationData)
     } catch (error) {
       setOrganizations([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    getShelters();
   }, []);
 
+  // useEffect(() => {
+  //   const page = Number(searchParams.get(Params.PAGE)) || 1;
+  //   getShelters(page);
+  // }, [searchParams]);
+
+  useEffect(() => {
+    const filters: Record<string, string> = {};
+  
+    filters.limit = String(itemsPerPage);
+    filters.page = String(currentPage);
+    filters['organization-type'] = 'SHELTER'; 
+  
+    searchParams.forEach((value, key) => {
+      if (key !== Params.PAGE) {
+        // якщо параметр вже є (наприклад organization-type), то додаємо через кому
+        if (filters[key]) {
+          filters[key] = `${filters[key]},${value}`;
+        } else {
+          filters[key] = value;
+        }
+      }
+    });
+  
+    getShelters(filters);
+  }, [searchParams, getShelters]);
+  
+
+  useEffect(() => {
+    if (pathname !== '/shelters') {
+      setShowMap(false);
+    }
+  }, [pathname]);
+  
   return (
     <div className={style.container}>
       <div className={style.buttons}>
@@ -66,30 +106,44 @@ const SheltersPage = () => {
           onClick={() => setShowMap((prev) => !prev)}
           empty={!showMap}
           icon='map'
+          disabled={organizations.every(o => o.address === null)}
         />
       </div>
 
-      <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} />
+      <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} needFullFilters={true} />
 
-      <List
-        isLoading={isLoading}
-        className={style.list}
-      >
-        {organizations.map((organization) => (
-          <OrganizationCard
-            key={organization.id}
-            organization={organization}
+        <div>
+          <div className={style.content}>
+            <List
+              isLoading={isLoading}
+              className={classNames(style.list, {
+                [style.fullWidthList]: !showMap
+              })}
+            >
+              {organizations.map((organization) => (
+                <OrganizationCard
+                  key={organization.id}
+                  organization={organization}
+                />
+              ))}
+            </List>
+
+            <OrganizationOnMap
+                organizations={organizations}
+                className={classNames(style.map, {
+                  [style.show]: showMap
+                })}
+              />
+          </div>
+
+          <Pagination
+            className={style.pagination}
+            totalCount={total}
+            pageSize={paginationConfig.shelteres}
+            currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+            onPageChange={changePage}
           />
-        ))}
-      </List>
-
-      <Pagination
-        className={style.pagination}
-        totalCount={total}
-        pageSize={paginationConfig.animals}
-        currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
-        onPageChange={changePage}
-      />
+        </div>
     </div>
   );
 };

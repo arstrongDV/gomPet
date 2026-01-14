@@ -4,7 +4,6 @@
   @include appearance(none);
   font-family: $main-font;
   width: 100%;
-  min-width: 29.5rem;
   color: $color-foreground;
   @include body2;
   padding: $spacing-3 $spacing-4;

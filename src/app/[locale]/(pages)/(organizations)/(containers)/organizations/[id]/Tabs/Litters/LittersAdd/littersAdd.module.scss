@@ -1,0 +1,56 @@
+@import 'styles';
+
+.container{
+    position: fixed;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-height: 90vh;
+    max-width: 1200px;
+
+    gap: $spacing-3;
+    background: $color-white;
+    color: $color-black;
+    padding: $spacing-6;
+    border-radius: $radius-l;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    overflow-y: auto;
+  
+    &::-webkit-scrollbar {
+      width: 0.6rem;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+}
+
+.clouseBtn{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.titleInput{
+    width: 300px;
+}
+
+.flexRow{
+    @include element-flex(row, flex-start, center);
+    gap: $spacing-5;
+}

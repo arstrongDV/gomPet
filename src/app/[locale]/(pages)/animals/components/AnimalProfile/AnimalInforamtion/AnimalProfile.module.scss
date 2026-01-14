@@ -1,328 +1,350 @@
 @import 'styles';
 
+@mixin info-blocks() {
+    @include element-flex(column, flex, wrap);
+    font-size: $font-size-s;
+    border-radius: $radius-m;
+    padding: 16px;
+    width: 100%;
+    min-width: 0;       
+    background-color: $color-white;
+    flex: 1 1 0;
+
+    @media (max-width: 1400px) {
+        padding: 14px;
+        font-size: $font-size-xs;
+    }
+
+    @media (max-width: 1000px) {
+      padding: 12px;
+      font-size: $font-size-xs;
+    }
+
+    @media (max-width: 550px) {
+        padding: 10px;
+        font-size: $font-size-xs;
+      }
+
+    //   @media (max-width: 480px) {
+    //     padding: 8px;
+    //     font-size: $font-size-xxs;
+    //   }
+  }
+
+
 .mainBlock {
     font-family: 'Raleway', sans-serif;
 }
-
 .infoWrapper {
     display: grid;
-    grid-template-columns: 2fr 1fr; 
-    gap: 20px;
     align-items: start; 
-}
-
+    grid-template-columns: 2fr 1fr; 
+    gap: $space-padding-page;
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
+    @media (max-width: 1024px) {
+        grid-template-columns: 2fr 1fr; 
+    }
+    @media (max-width: 880px) {
+        grid-template-columns: 1fr;
+    }
+  }
 
 .infoContainer {
+    position: relative;
+    display: flex;
     flex-direction: column;
     max-width: 100%;
     margin: 0 auto;
+    // padding: 0 16px;
 }
-
 
 .blocksContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 20px; 
-    max-width: 50%;
-}
-
-
-.photos {
-    position: sticky;
-    top: 25px;  
-    max-width: 100%;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-
-.mainImage img {
+    grid-template-columns: repeat(2, minmax(320px, 1fr)); 
+    gap: $spacing-5;
     width: 100%;
-    min-width: 400px; 
-    height: auto;
-    border-radius: 16px;
-}
-
-.imagesList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; 
-    margin-top: 10px;
     max-width: 100%;
-}
 
-.thumbnail {
-    width: 64px; 
-    height: 64px;
-    object-fit: cover; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    transition: transform 0.2s ease-in-out;
+    @media (max-width: 1400px) {
+        gap: $spacing-3;
+        grid-template-columns: repeat(2, minmax(230px, 1fr));
+      }
 
-    &:hover {
-        transform: scale(1.1); 
-    }
-}
+    @media (max-width: 768px) {
+        gap: $spacing-2;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
+      @media (max-width: 480px) {
+        gap: $spacing-2;
+        grid-template-columns: repeat(1, 1fr); // Also gives one column
+      }
+  }
+  
+//About Animal Block
 .aboutAnimalBlock {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 15px;
+    @include info-blocks();
+    gap: $spacing-2;
     color: #9f9b9b;
-    flex-wrap: wrap; 
-    background-color: #fff;
-    padding: 16px;  
-    border-radius: 16px;
-    min-width: 300px; 
-}
 
-.contactsBlock {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    font-size: 15px;  
-    color: #000000;
-    flex-wrap: wrap; 
-    background-color: #fff;
-    padding: 16px;  
-    border-radius: 16px;
-    min-width: 300px; 
-}
+    @media (max-width: 1400px) {
+        gap: $spacing-1;
+        font-size: $font-size-xs;
+    }
+    @media (max-width: 1200px) {
+        gap: $spacing-2;
+      }
+    @media (max-width: 1024px) {
+        gap: $spacing-1;
+      }
+    @media (max-width: 900px) {
+        gap: $spacing-2;
+        font-size: $font-size-xs;
+    }
+    @media (max-width: 550px) {
+        font-size: $font-size-xxs;
+    }
+    // @media (max-width: 480px) {
+    //     padding: 8px;
+    // }
+    @media (max-width: 480px) {
+        gap: $spacing-1; 
+        font-size: $font-size-s;
+    }
+  }
 
-.mainInfo{
+
+  //Contacts Block
+  .contactsBlock {
+    @include info-blocks();
+    color: #000;
+    // @media (max-width: 550px) {
+    //     font-size: $font-size-xxs;
+    // }
+  }
+  
+  .mainInfo {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 16px;
-}
-
-
-.logoFundation{
-    display: flex;
-    flex-direction: row;
+  
+    // @media (max-width: 480px) {
+    //   gap: 10px;
+    // }
+  }
+  
+  .logoFundation {
+    @include element-flex(row, flex);
     gap: 3px;
-}
-
-.fundation{
-    font-size: 14px;
-    color: #798177;
-}
-
-.logoHelp{
-    width: 100px;
-}
-
-.contactInfo{
-    display: flex;
-    flex-direction: column;
+  
+    .fundation {
+      font-size: $font-size-xs;
+      color: #9f9b9b;
+  
+    //   @media (max-width: 480px) {
+    //     font-size: 10px;
+    //   }
+    }
+  }
+  
+  .contactInfo {
+    @include element-flex(column, flex);
     justify-content: center;
     align-items: center;
     gap: 16px;
-}
-
-.location{
+  
+    // @media (max-width: 480px) {
+    //   gap: 10px;
+    // }
+  }
+  
+  .location {
+    @include element-flex(row, flex);
+    gap: 3px;
+    font-size: $font-size-xs;
+  
+    // @media (max-width: 480px) {
+    //   font-size: 12px;
+    // }
+  }
+  
+  .phoneNumButton {
     display: flex;
-    flex-direction: row;
-    gap: 5px;
-    font-size: 14px;
-}
-
-.phoneNumButton {
-    display: flex;
+    align-self: flex-end;
     width: 100%;
     height: 48px;
-    border-radius: 16px;
-    border: 1px solid #277D23; 
-    background-color: #fff;
+    border-radius: $radius-m;
+    border: 2px solid #B1D800;
     gap: 12px;
-    padding: 24px;
+    padding: $spacing-6;
+    background-color: $color-white;
+    cursor: pointer;
+
+    // @media (max-width: 480px) {
+    //     height: 35px;
+    //     gap: 8px;
+    //     padding: $spacing-4;
+    //     border-radius: $radius-s;
+    // }
+  
+    .call {
+      font-size: $font-size-s;
+
+      @media (max-width: 1400px) {
+        font-size: $font-size-xs;
+        }
+        // @media (max-width: 480px) {
+        //     font-size: $font-size-xxxs;
+        // }
+    }
+  
+    &:hover {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+  }
+
+//Characteristics Block
+.characteristicsBlock {
+  @include info-blocks();
+  position: relative;
+  color: #000000;
+
+
+  @media (max-width: 550px) {
+    font-size: $font-size-xxs;
+  }
+
+  @media (max-width: 480px) {
+    font-size: $font-size-s;
+  }
+  // // Firefox - persistent scrollbar
+  // scrollbar-width: thin; 
+  // scrollbar-color: #888 #f0f0f0;
+
+  // // WebKit (Chrome, Safari, Edge) - persistent scrollbar
+  // &::-webkit-scrollbar {
+  //   width: 8px; // Slightly wider for better usability
+  //   background-color: #f0f0f0; // Track color
+  // }
+  
+  // &::-webkit-scrollbar-thumb {
+  //   background: #888;
+  //   border-radius: 4px;
+  //   border: 1px solid #f0f0f0; // Adds subtle border for better visibility
+  // }
+  
+  // &::-webkit-scrollbar-thumb:hover {
+  //   background: #666; // Darker on hover for better interaction
+  // }
+  
+  // &::-webkit-scrollbar-track {
+  //   background: #f0f0f0; // Explicit track color
+  //   border-radius: 4px;
+  // }
 }
 
-.call{
-    font-size: 16px;
+.characteristicContent{
+  max-height: 350px;
+  overflow-y: auto; 
+  padding: 12px;
+  margin-right: 8px; 
 }
 
-.phoneNumButton:hover{
-    background-color: #277D23;
-    color: #fff;
+.characteristicContent::-webkit-scrollbar {
+  display: none;
 }
 
-.characteristicsBlock{
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    font-size: 16px;  
-    color: #000000;
-    flex-wrap: wrap; 
-    background-color: #fff;
-    padding: 12px;
-    border-radius: 16px;
-    min-width: 300px;  
+.customScrollbar {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  width: 6px;
+  height: 100%;
+  background: transparent;
+}
+
+.customThumb {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 40px;
+  background: #ff0000;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .AnimalCharacter{
-    display: flex;
-    flex-direction: row;
+    @include element-flex(flex, row);
     gap: 6px;
     padding: 12px;
+    @media (max-width: 550px) {
+        padding: 10px;
+        gap: 3px;
+        font-size: $font-size-xxs;
+    }
+    // @media (max-width: 480px) {
+    //     gap: 5px;
+    //     font-size: $font-size-xxxs;
+    // }
+    @media (max-width: 480px) {
+        gap: 6px;
+        font-size: $font-size-s;
+    }
 }
-
 .caracteristicImage{
     display: flex;
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
-    border: 1px solid #DCDFD8; 
     justify-content: center;
     align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: $radius-s;
+    border: 1px solid #DCDFD8; 
     gap: 12px;
+    @media (max-width: 550px) {
+        gap: 8px;
+    }
+    // @media (max-width: 480px) {
+    //     padding: 3px;
+    //     width: 22px;
+    //     height: 22px;
+    //     border-radius: 8px;
+    //   }
 }
 
+//Map Block
 .mapBlock{
-    flex: 1; 
     display: flex;
     flex-wrap: wrap; 
-    border-radius: 16px;
-    min-width: 300px;  
+    height: auto;
+    min-height: 350px; //
+    width: 100%;
+    min-width: 0px;  
+    flex: 1 1 0;
+    @media (max-width: 480px) {
+        height: 350px;
+      }
 }
-
+.mapBlock iframe{
+    border-radius: $radius-m;
+}
 
 .infoTextBlock, .myFamilly {
     width: 100%;
     box-sizing: border-box; 
+    border-radius: $radius-m;
+    font-size: $font-size-xs;
+    background-color: $color-white;
+}
+.infoTextBlock{
+    margin-top: 24px;
+}
+.myFamilly{
     margin: 24px 0; 
-    background-color: #fff;
-    border-radius: 16px;
-    font-size: 15px;
-}
-
-.infoTextBlock p{
-    display: flex;
-    padding: 16px;  
-    width: 100%;
-}
-  
-
-  .infoTextBlock, .myFamilly {
-    width: 100%; 
-  }
-
-.famillyTree {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-    gap: 20px;
-}
-
-.animalParents {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 100px;
-}
-.mainAnimal{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.animalParents img, .mainAnimal img {
-    width: 64px;  
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.noPhoto{
-    width: 64px;  
-    height: 64px;
-    border-radius: 50%;
-    background-color: #9f9b9b;
-    object-fit: cover;
-    border: 2px solid #ddd; 
-}
-
-.aboutFamilly{
-    padding: 24px;
-}
-
-.aboutFamilly h3{
-    font-size: 20px;
-}
-
-.aboutFamilly p{
-    font-size: 14px;
-    color: #798177;
-    font-weight: 400;
-}
-
-
-.opinion{
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 15px;
-    flex-wrap: wrap; 
-    background-color: #fff;
-    padding: 24px;  
-    border-radius: 16px;
-    min-width: 300px; 
-    color: #000000;
-}
-
-.opinionTitle{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding-left: 24px;
-    color: #000;
-}
-
-.opinionTitle p{
-    color: #798177;
-}
-
-.comments{
-    padding: 12px 24px;
-}
-
-.userComInfo {
-    display: flex;
-    align-items: flex-start; 
-}
-
-.avatar{
-    margin-top: 10px;
-}
-
-.userNameData{
-    display: flex;
-    flex-direction: column;
-}
-
-.userNameData p{
-    color: #798177;
-}
-
-.comContainer{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    padding-left: 24px;
-}
-
-.commentWrraper{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
 }
 
 .recomendation {
@@ -338,10 +360,20 @@
 .related .title h4{
     font-size: 24px;
     font-weight: 500;
+
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+    @media (max-width: 480px) {
+        font-size: $font-size-xs;
+    }
 }
 
 .related .title p{
     color: #798177;
+    @media (max-width: 480px) {
+        font-size: $font-size-xxs;
+    }
 }
 
 .related .title p:hover {
@@ -359,6 +391,37 @@
     min-width: 300px; 
     margin-top: 20px;
     color: #000000;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+        min-width: 250px; 
+    }
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;  
+  overflow-y: auto;
+  padding-right: $spacing-2;
+  gap: $spacing-5;
+
+  @media (max-width: 600px) {
+    max-height: 25vh;
+  }
+
+  @media (max-width: 480px) {
+    max-height: 20vh;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
 }
 
 .relatedAnimals {
@@ -391,158 +454,4 @@
 
 .relatedAnimals::-webkit-scrollbar-track {
     background: transparent;
-}
-
-
-
-.cardClasses {
-position: relative;
-  width: 300px;
-  height: 350px;
-  border-radius: $radius-m;
-  padding: $spacing-4;
-  transition: 'background' $transition-main;
-  background-size: cover;
-  background-position: center;
-
-  &:hover {
-    .gradient {
-      &::after {
-        opacity: 1;
-        visibility: visible;
-      }
-    }
-
-    .hoverContent {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: all;
-    }
-  }
-}
-
-.content {
-  z-index: 0;
-  position: absolute;
-  inset: $spacing-4;
-  @include element-flex(column, space-between, flex-start);
-  gap: $spacing-4;
-}
-
-.gradient {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  border-radius: $radius-m;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0.55) 80%, rgba(0, 0, 0, 0.8) 100%);
-  transition: $transition-main;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: $radius-m;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%);
-    opacity: 0;
-    visibility: hidden;
-    transition: $transition-main;
-  }
-}
-
-.top {
-  @include element-flex(row, space-between);
-  gap: $spacing-2;
-  width: 100%;
-}
-
-.about {
-  @include element-flex(row, flex-start, center);
-  gap: $spacing-1;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-.badge {
-  padding: $spacing-2 $spacing-3;
-  flex-shrink: 0;
-  @include body1;
-  width: fit-content;
-  min-width: 4rem;
-  border-radius: $radius-m;
-  text-align: center;
-
-  &.title {
-    color: $color-white;
-    background-color: rgba($color: #000000, $alpha: 0.8);
-    font-weight: $font-medium;
-  }
-
-  &.age {
-    color: $color-foreground;
-    background-color: rgba($color: #e37500, $alpha: 0.8);
-    font-weight: $font-medium;
-  }
-
-  &.characteristics {
-    color: $color-white;
-    background-color: rgba($color: #277d23, $alpha: 0.8);
-  }
-
-  &.gender {
-    @include element-flex(row, center, flex-start);
-    gap: $spacing-1;
-    color: $color-foreground;
-    background-color: $color-background-3;
-  }
-
-  &.size {
-    color: $color-white;
-    background-color: rgba($color: #4e4e4e, $alpha: 0.8);
-  }
-
-  &.ageText {
-    color: $color-white;
-    background-color: rgba($color: #4e4e4e, $alpha: 0.8);
-  }
-}
-
-.hoverContent {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  @include element-flex(column, center, center);
-  gap: $spacing-4;
-  width: 100%;
-  transition: $transition-main;
-
-  .data {
-    @include element-flex(column, flex-start, center);
-    gap: $spacing-1;
-  }
-}
-
-.bottom {
-  @include element-flex(row, center, center);
-  width: 100%;
-}
-
-.location {
-  @include element-flex(row, flex-start, center);
-  gap: $spacing-1;
-  color: $color-white;
-}
-
-.addBookmark {
-  @include flex-center;
-  width: 3.5rem;
-  height: 3.5rem;
-  background-color: $color-background-1;
-  border-radius: 50%;
-  cursor: pointer;
-
-  &:hover {
-    svg {
-      fill: $color-accent;
-    }
-  }
 }

@@ -1,0 +1,125 @@
+@import 'styles';
+
+.photos {
+    position: sticky;
+    top: 25px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: $spacing-5;
+    min-width: 300px;
+  
+    @media (max-width: 1200px) {
+      position: relative;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-3;
+    }
+
+    @media (max-width: 1024px) {
+        position: sticky;
+        top: 25px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: $spacing-5;
+        min-width: 300px;
+    }
+    @media (max-width: 880px) {
+        position: relative;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-3;
+    }
+
+    // @media (max-width: 550px) {
+    //     min-width: 340px;
+    //     border-radius: $radius-m;
+    //   }
+  }
+  
+  .mainImage {
+    display: flex;
+    justify-content: center;
+  
+    img {
+      width: 100%;
+      max-width: 430px;
+      height: auto;
+      cursor: pointer;
+      border-radius: $radius-l;
+      object-fit: cover;
+  
+      @media (max-width: 768px) {
+        max-width: 390px;
+      }
+
+      @media (max-width: 630px) {
+        max-width: 300px;
+      }
+
+      @media (max-width: 480px) {
+        max-width: 280px;
+      }
+    }
+  }
+  
+  .imagesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+    // justify-content: center;
+    max-height: 600px;
+    margin-top: $spacing-2;
+
+    @media (max-width: 1200px) {
+        flex-direction: column;
+        align-items: center; 
+    }
+    @media (max-width: 1024px) {
+        flex-direction: row;
+        align-items: center;
+    }
+    @media (max-width: 880px) {
+        flex-direction: column;
+        align-items: center;
+        max-height: 500px; 
+    }
+    @media (max-width: 768px) {
+      gap: 8px;
+      margin-top: $spacing-1;
+      max-height: 450px; 
+    }
+  }
+  
+  .thumbnail {
+    width: 64px;
+    height: 64px;
+    border-radius: $radius-s;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    @media (max-width: 700px) {
+      width: 60pxx;
+      height: 60px;
+    }
+
+    @media (max-width: 550px) {
+        width: 55pxx;
+        height: 55px;
+    }
+
+    @media (max-width: 280px) {
+        width: 50pxx;
+        height: 50px;
+    }
+  }
+  

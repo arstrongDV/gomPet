@@ -1,0 +1,46 @@
+@import 'styles';
+
+.container {
+    @include element-flex(column, flex-start, stretch);
+    gap: $spacing-7;
+    width: 100%;
+}
+
+.button{
+    width: 150px;
+    align-self: flex-end;
+}
+  
+.content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.list {
+    flex: 1; 
+    // grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    display: grid;
+    gap: $spacing-4;
+    margin: 20px 0;
+    transition: $transition-main;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: $spacing-3;
+    }
+
+    @media (max-width: 360px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: $spacing-2;
+    }
+}

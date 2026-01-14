@@ -1,14 +1,28 @@
 @import 'styles';
 
 .card {
+  // z-index: 0;
+  // position: relative;
+  // max-width: 300px;
+  // min-width: 250px;
+  // min-height: 320px;
+  // border-radius: $radius-m;
+  // padding: $spacing-4;
+  // background-size: cover;
+  // background-position: center;
+  // transition: background $transition-main; 
+  z-index: 0;
   position: relative;
-  width: 300px;
-  height: 350px;
+  width: 100%;
+  min-width: unset;
+  max-width: unset;
+
+  max-width: 300px;
   border-radius: $radius-m;
   padding: $spacing-4;
-  transition: 'background' $transition-main;
   background-size: cover;
   background-position: center;
+  transition: background $transition-main; 
 
   &:hover {
     .gradient {
@@ -24,6 +38,28 @@
       pointer-events: all;
     }
   }
+
+  .settingsContainer {
+    position: absolute;
+    z-index: 1000;
+    top: $spacing-4;
+    right: $spacing-4;
+  }
+
+  @media (min-width: 768px) {
+    min-width: 300px;
+    min-height: 350px;
+  }
+
+  // @media (max-width: 480px) {
+  //   height: 180px;
+  //   padding: $spacing-3;
+  // }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .content {
@@ -68,11 +104,11 @@
 }
 
 .badge {
-  padding: $spacing-2 $spacing-3;
-  flex-shrink: 0;
+  padding: $spacing-1 $spacing-2;
   @include body1;
   width: fit-content;
-  min-width: 4rem;
+  min-width: 3rem;
+  font-size: $font-size-s;
   border-radius: $radius-m;
   text-align: center;
 
@@ -84,13 +120,18 @@
 
   &.age {
     color: $color-foreground;
-    background-color: rgba($color: #e37500, $alpha: 0.8);
+    background-color: rgba($color: #B1D800, $alpha: 0.8);
     font-weight: $font-medium;
   }
 
   &.characteristics {
     color: $color-white;
     background-color: rgba($color: #277d23, $alpha: 0.8);
+    // @media (max-width: 1300px) {
+    //   font-size: 12px;
+    //   min-width: 3rem;
+    //   // padding: $spacing-4;
+    // }
   }
 
   &.gender {
@@ -109,6 +150,18 @@
     color: $color-white;
     background-color: rgba($color: #4e4e4e, $alpha: 0.8);
   }
+
+  @media (min-width: 768px) {
+    padding: $spacing-1 $spacing-3;
+    min-width: 3rem;
+    // font-size: $font-size-m;
+  }
+
+  // @media (max-width: 480px) {
+  //   padding: $spacing-1 $spacing-2;
+  //   min-width: 3rem;
+  //   font-size: $font-size-s;
+  // }
 }
 
 .hoverContent {
@@ -116,7 +169,7 @@
   visibility: hidden;
   pointer-events: none;
   @include element-flex(column, center, center);
-  gap: $spacing-4;
+  gap: $spacing-3;//4
   width: 100%;
   transition: $transition-main;
 
@@ -124,6 +177,12 @@
     @include element-flex(column, flex-start, center);
     gap: $spacing-1;
   }
+}
+
+.buttonCard{
+  max-width: 16rem;
+  height: 4.3rem;
+  color: #000;
 }
 
 .bottom {
@@ -145,7 +204,17 @@
   border-radius: 50%;
   cursor: pointer;
 
+  svg {
+    transition: fill 0.3s ease;
+  }
+
   &:hover {
+    svg {
+      fill: $color-accent;
+    }
+  }
+
+  &--active {
     svg {
       fill: $color-accent;
     }

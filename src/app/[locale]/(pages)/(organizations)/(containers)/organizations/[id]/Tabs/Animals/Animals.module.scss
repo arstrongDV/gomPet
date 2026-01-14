@@ -17,3 +17,14 @@
   grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
   gap: $spacing-4;
 }
+
+.mapWrraper {
+  display: flex;
+  height: auto;
+  border-radius: $radius-l;
+  overflow: hidden; 
+}
+.map {
+  width: 100%;
+  height: 100%; 
+}

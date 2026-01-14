@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
-const BASE_URL = process.env.NEXT_PUBLIC_WEBSOCKET_BASE_URL;
+const BASE_URL = 'ws://localhost';
 
 const useWebsocket = (path: string) => {
   const session = useSession();
@@ -24,9 +24,8 @@ const useWebsocket = (path: string) => {
     return () => {
       socket.close();
     };
-  }, []);
+  }, [path, session.data?.access_token]);
 
-  // bind is needed to make sure `send` references correct `this`
   return [isReady, val, ws.current?.send.bind(ws.current)];
 };
 

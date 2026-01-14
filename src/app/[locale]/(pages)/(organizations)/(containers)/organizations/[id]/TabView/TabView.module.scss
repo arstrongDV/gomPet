@@ -1,0 +1,33 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+  gap: $spacing-6;
+}
+
+.description {
+  white-space: pre-wrap;
+}
+
+.actionButtons{
+  @include element-flex(row, flex-end, stretch);
+  gap: $spacing-2;
+  margin-top: $spacing-4;
+}
+.editBtn{
+  width: 150px;
+}
+.delBtn{
+  width: 150px;
+  background-color: $color-danger;
+  &:hover{
+    background-color: $color-danger-dark;
+  }
+}

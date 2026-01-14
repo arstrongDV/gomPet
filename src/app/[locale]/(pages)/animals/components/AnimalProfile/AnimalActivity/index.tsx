@@ -1,60 +1,96 @@
-'use client'
-import React from 'react'
+'use client';
+import React, { useEffect, useState } from 'react';
+import { Button, List } from 'src/components';
 import { IPost } from 'src/constants/types';
-import Image from 'next/image';
+import PostCard from 'src/components/layout/PostCard';
+import style from './PostsPage.module.scss';
+import AddPost from './components/AddPost';
+import { PostsApi } from 'src/api';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
-import style from './AnimalProfile.module.scss'
-import AVATAR from '../images/avatar.png'
-import STAR from '../images/star.png'
-import NO_COLORED_PAW from '../images/nowcoloredpaw.png'
-import SHARE from '../images/share.png'
-import MASSAGE from '../images/message.png'
-
-
-type PostsProfileProps = {
-  posts: IPost[];
+type AnimalActivityProps = {
+  postsData?: IPost[];
+  animalId: number;
+  animalOwnerId?: number;
 };
 
-const AnimalActivity = ({posts}: PostsProfileProps) => {
-  debugger
-  return (
-    <div className={style.mainPostContainer}>
-      {posts.map(p => (
-        <div className={style.commentWrapper} key={p.id}>
-          <div className={style.userInfo}>
-            <div className={style.aboutUser}>
-              <div className={style.avatar}>
-                <Image src={AVATAR} alt='user-icon' width={30} height={30} />
-              </div>
-              <p>RatujemyZwierzaki</p>
-            </div>
-            <div className={style.observing}>
-              <Image src={STAR} alt='star-icon' width={24} height={24} />
-              <p>Obserwujesz</p>
-            </div>
-          </div>
-          <div className={style.comment}>
-            {p.text}
-            {p.image ? <img src={p.image} alt='selected-image' /> : <div></div>}
-          </div>
-          <div className={style.bottom}>
-            <p>Opublikowane {p.created_at}</p>
-            <div className={style.icons}>
-              <div className={style.comunicateBlock}>
-                <Image src={NO_COLORED_PAW} alt='paw-icon' width={24} height={24} />
-              </div>
-              <div className={style.comunicateBlock}>
-                <Image src={MASSAGE} alt='massage-icon' width={24} height={24} />
-              </div>
-              <div className={style.comunicateBlock}>
-                <Image src={SHARE} alt='share-icon' width={24} height={24} />
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
+const AnimalActivity = ({ animalId, animalOwnerId }: AnimalActivityProps) => {
+  const [showAddPost, setShowAddPost] = useState<boolean>(false);
+  const [animalPosts, setAnimalPosts] = useState<IPost[]>([]);
 
-export default AnimalActivity
+  const session = useSession()
+  const myId = session.data?.user.id;
+
+  const getAnimalPosts = async (animalId: number): Promise<void> => {
+    try {
+      const res = await PostsApi.getAnimalPosts(animalId);
+      setAnimalPosts(res.results || []);
+      console.log("res.results: ", res.results)
+    } catch (error) {
+      console.error("Failed to fetch animal posts:", error);
+    }
+  };
+
+  const deletePosts = (postId: number) => {
+    if(myId != animalOwnerId){
+      toast.error("Bled operacji")
+      return null;
+    }
+    setAnimalPosts(prev => prev.filter(post => post.id !== postId));
+  };
+
+  const updatePosts = (updatedPost: IPost) => {
+    if(myId != animalOwnerId){
+      toast.error("Bled operacji")
+      return null;
+    }
+    setAnimalPosts(prev =>
+      prev.map(post =>
+        post.id === updatedPost.id ? { ...post, ...updatedPost } : post
+      )
+    );
+  };
+
+  // const updatePosts = async () => {
+  //   await getAnimalPosts(animalId);
+  // };
+
+  useEffect(() => {
+    getAnimalPosts(animalId);
+  }, [animalId]);
+
+  return (
+    <div className={style.container}>
+      {myId == animalOwnerId && (
+        <Button
+          icon="plus"
+          label="Dodaj post"
+          width="200px"
+          onClick={() => setShowAddPost(true)}
+        />
+      )}
+
+      <List isLoading={false} className={style.list}>
+        {animalPosts.length > 0 ? (
+          animalPosts.map((post) => (
+            <PostCard key={post.id} post={post} updatePosts={updatePosts} deletePosts={deletePosts} />
+          ))
+        ) : (
+          <div className={style.noPost}>No posts available</div>
+        )}
+      </List>
+
+
+      {myId == animalOwnerId && showAddPost && (
+        <AddPost
+          animalId={animalId}
+          setShowAddPost={setShowAddPost}
+          refreshPosts={() => getAnimalPosts(animalId)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default AnimalActivity;

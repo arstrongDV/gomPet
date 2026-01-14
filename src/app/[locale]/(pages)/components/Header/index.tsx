@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
@@ -13,6 +13,7 @@ import SearchBar from './components/SearchBar';
 import UserMenu from './components/UserMenu';
 
 import style from './Header.module.scss';
+import MobileMenu from '../MobileMenu';
 
 type HeaderProps = {
   limitedWidth?: boolean;
@@ -23,6 +24,15 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
   const isMobile = useIsMobile({});
   const isScrollingUp = useIsScrollingUp();
   const isScrollingDown = useIsScrollingDown();
+  const [isSearch, setIsSearch] = useState(false)
+
+  const [showMenu, setShowMenu] = useState(false);
+  const toggleMenu = () => setShowMenu(prev => !prev);
+
+  useEffect(() => {
+    document.body.style.overflow = showMenu ? 'hidden' : '';
+  }, [showMenu]);
+
 
   const classes = classNames({
     [style.header]: !isMobile,
@@ -45,35 +55,49 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
   );
 
   const mobileContent = (
-    <div className={style.inner}>
-      <button
-        className={style.iconButton}
-        onClick={() => console.log('Search')}
-      >
-        <Icon name='search' />
-      </button>
-      <Image
-        className={style.logo}
-        src={Logo}
-        alt='Logo'
-        height={50}
-      />
-      <button
-        className={style.iconButton}
-        onClick={() => console.log('Menu')}
-      >
-        <Icon name='menu2' />
-      </button>
-    </div>
+    <>
+      <div className={style.inner}>
+        <button
+          className={style.iconButton}
+          onClick={() => setIsSearch(prev => !prev)}
+        >
+          <Icon name='search' />
+        </button>
+        <Image
+          className={style.logo}
+          src={Logo}
+          alt='Logo'
+          height={50}
+        />
+        <button
+          className={`${style.iconButton} ${showMenu ? style.rotate : style.fade}`}
+          onClick={toggleMenu}
+        >
+          <Icon name='menu2' />
+        </button>
+      </div>
+      {isSearch && <SearchBar />}
+    </>
   );
 
   return (
-    <header
-      id='header'
-      className={classes}
-    >
-      {isMobile ? mobileContent : desktopContent}
-    </header>
+    <>
+      <header
+        id='header'
+        className={classes}
+      >
+        {isMobile ? mobileContent : desktopContent}
+      </header>
+      {showMenu && (
+        <div className={style.backdrop} onClick={() => setShowMenu(false)} />
+      )}
+      <div className={classNames(style.mobileMenu, {
+        [style.active]: showMenu,
+        [style.inactive]: !showMenu,
+      })}>
+          {isMobile && showMenu && <MobileMenu setShowMenu={setShowMenu} />}
+      </div>
+    </>
   );
 };
 

@@ -9,13 +9,20 @@ import { Button, List, Pagination } from 'src/components';
 import { paginationConfig } from 'src/config/pagination';
 import { Params } from 'src/constants/params';
 import { IAnimal } from 'src/constants/types';
-import { animalsMock } from 'src/mocks/animals';
+// import { animalsMock } from 'src/mocks/animals';
 import { useRouter } from 'src/navigation';
 
 import AnimalCard from './components/AnimalCard';
 import AnimalFilters from './components/AnimalFilters';
 
 import style from './AnimalsPage.module.scss';
+
+import { IOrganization } from 'src/constants/types';
+import { organizationsMock } from 'src/mocks/organizations';
+import { useAppSelector } from 'src/lib/store/hooks';
+import { AnimalsApi } from 'src/api';
+import OutsideClickHandler from 'react-outside-click-handler';
+import OrganizationOnMap from '../(organizations)/components/OrganizationOnMap';
 
 const AnimalsPage = () => {
   const t = useTranslations('pages.animals');
@@ -27,6 +34,7 @@ const AnimalsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
   const [total, setTotal] = useState<number>(1);
+  const [organizations, setOrganizations] = useState<IOrganization[]>([]);
 
   const [showFilters, setShowFilters] = useState<boolean>(true);
   const [showMap, setShowMap] = useState<boolean>(false);
@@ -36,20 +44,55 @@ const AnimalsPage = () => {
     router.push(`?${params.toString()}`);
   };
 
-  const getAnimals = async () => {
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const itemsPerPage = 10; 
+  console.log(searchParams);
+  const getAnimals = React.useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
-      setAnimals(animalsMock);
-      setTotal(120);
+      const response = await AnimalsApi.getAnimalsFilter(filters);
+      console.log('API Response:', response); 
+      setAnimals(response.data || []);
+      setTotal(response.total || 0);
     } catch (error) {
+      console.error('Error fetching animals:', error);
       setAnimals([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+  
+  useEffect(() => {
+    const filters = {
+      limit: itemsPerPage,
+      page: currentPage,
+      species: searchParams.getAll('species'),
+      breed: searchParams.getAll('breed'),
+      organizationType: searchParams.getAll('organization-type'),
+      characteristics: searchParams.getAll('characteristics'),
+      gender: searchParams.getAll('gender'),
+      size: searchParams.getAll('size'),
+      name: searchParams.getAll('name'),
+
+      city: searchParams.getAll('city'),
+      // age: searchParams.getAll('age').map(Number),
+      minAge: searchParams.getAll('age-min').map(Number),
+      maxAge: searchParams.getAll('age-max').map(Number),
+
+      location: searchParams.get('location') || undefined,
+      range: searchParams.get('range')
+        ? Number(searchParams.get('range'))
+        : undefined,
+
+      organization_id: searchParams.getAll('organization-id').map(Number),
+      breed_groups: searchParams.getAll('breed-groups')
+    };
+    getAnimals(filters);
+  }, [searchParams, getAnimals]);
 
   useEffect(() => {
-    getAnimals();
+    setOrganizations(organizationsMock);
   }, []);
 
   return (
@@ -58,7 +101,7 @@ const AnimalsPage = () => {
         <Button
           label={showFilters ? t('hideFilters') : t('showFilters')}
           onClick={() => setShowFilters((prev) => !prev)}
-          empty={!showFilters}
+          empty={showFilters}
           icon='filter'
         />
         <Button
@@ -71,25 +114,36 @@ const AnimalsPage = () => {
 
       <AnimalFilters className={classNames(style.filters, { [style.show]: showFilters })} />
 
-      <List
-        isLoading={isLoading}
-        className={style.list}
-      >
-        {animals.map((animal) => (
-          <AnimalCard
-            key={animal.id}
-            animal={animal}
-          />
-        ))}
-      </List>
+        <div>
+          <div className={style.content}>
+            <List
+              isLoading={isLoading}
+              className={classNames(style.list, {
+                [style.fullWidthList]: !showMap,
+                [style.withMap]: showMap,
+              })}
+            >
+                {animals.map((animal) => (
+                  <AnimalCard key={animal.id} animal={animal}/>
+                ))}
+            </List>
 
-      <Pagination
-        className={style.pagination}
-        totalCount={total}
-        pageSize={paginationConfig.animals}
-        currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
-        onPageChange={changePage}
-      />
+            <OrganizationOnMap
+                organizations={organizations}
+                className={classNames(style.map, {
+                  [style.show]: showMap
+                })}
+              />
+          </div>
+
+          <Pagination
+            className={style.pagination}
+            totalCount={total}
+            pageSize={paginationConfig.animals}
+            currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+            onPageChange={changePage}
+          />
+        </div> 
     </div>
   );
 };

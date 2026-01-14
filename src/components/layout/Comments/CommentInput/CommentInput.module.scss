@@ -4,6 +4,10 @@
   display: grid;
   grid-template-columns: auto 1fr;
   gap: $spacing-4;
+
+  @media(max-width: 480px){
+    gap: $spacing-2;
+  }
 }
 
 .image {
@@ -11,6 +15,11 @@
   height: 4.8rem;
 
   @include tabletWidth {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  @media(max-width: 480px){
     width: 4rem;
     height: 4rem;
   }
@@ -24,6 +33,7 @@
 
   .textarea {
     min-height: 8rem;
+    min-width: 8rem;
   }
 
   .footer {
@@ -33,6 +43,14 @@
 
     .submitButton {
       margin-left: auto;
+    }
+  }
+  
+  @media(max-width: 480px){
+    gap: $spacing-2;
+
+    .textarea {
+      min-height: 6rem;
     }
   }
 }

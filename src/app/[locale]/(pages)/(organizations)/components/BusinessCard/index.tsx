@@ -38,7 +38,7 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
           name='mapPin'
         />
         <span className={style.text}>
-          {address.street} {address.house_number}, {address.zip_code} {address.city || t('common.noLocation')}
+          {address?.street} {address?.house_number}, {address?.zip_code} {address?.city || t('common.noLocation')}
         </span>
       </div>
 
@@ -103,7 +103,7 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
           name='mapPin'
         />
         <span className={style.text}>
-          {address.street} {address.house_number}, {address.zip_code} {address.city || t('common.noLocation')}
+          {address?.street} {address?.house_number}, {address?.zip_code} {address?.city || t('common.noLocation')}
         </span>
       </div>
     </>

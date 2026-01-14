@@ -1,0 +1,74 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-7;
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 1rem;
+
+  flex-wrap: wrap;
+}
+
+.fullWidthList {
+  width: 100%;
+}
+
+.buttons {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-4;
+}
+
+.filters {
+  max-height: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+  transition: $transition-main;
+
+  &.show {
+    max-height: 100rem;
+    overflow: visible;
+    visibility: visible;
+    pointer-events: all;
+  }
+}
+
+.list {
+  flex: 1; 
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: $spacing-4;
+  transition: $transition-main;
+  margin: 20px 0;
+}
+
+.map {
+  position: sticky;
+  padding: 2rem;
+  top: 2rem;
+  width: 40%;
+  min-width: 300px;
+  height: 700px;
+  transition: $transition-main;
+
+  &.show {
+    visibility: visible;
+    pointer-events: all;
+    overflow: visible;
+  }
+}
+
+.map:not(.show) {
+  display: none;
+}
+// .list {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+//   gap: $spacing-4;
+// }

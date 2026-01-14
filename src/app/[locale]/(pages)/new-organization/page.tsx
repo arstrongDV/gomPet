@@ -18,22 +18,77 @@ import {
 } from 'src/components';
 import { Location, OrganizationType } from 'src/constants/types';
 
+// import LocationInput from './components/LocationInput';
 import LocationInput from './components/LocationInput';
 
 import style from './NewOrganizationPage.module.scss';
+import type { OptionType } from 'src/components/layout/Forms/Select';
+import toast from 'react-hot-toast';
+import { OrganizationsApi } from 'src/api';
+import { redirect } from 'next/navigation';
+import { Routes } from 'src/constants/routes';
+import { useRouter } from 'next/navigation';
+import Animals from '../(organizations)/(containers)/organizations/[id]/Tabs/Animals';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+
+// type RichTextEditorRef = {
+//   getContent: () => string;
+// };
+
+const animalSpecies: {value: string, label: string}[] = [
+  {
+    value: 'dog',
+    label: 'Pies'
+  },
+  {
+    value: 'cat',
+    label: 'Kot'
+  }
+]
+
+const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+  dog: [
+    { value: 'beagle', label: 'Beagle' },
+    { value: 'terrier', label: 'Terrier' },
+    { value: 'labrador', label: 'Labrador' },
+  ],
+  cat: [
+    { value: 'british', label: 'British Shorthair' },
+    { value: 'siamese', label: 'Siamese' },
+    { value: 'persian', label: 'Persian' },
+  ],
+  other: [
+    { value: 'other', label: 'Other' },
+  ]
+};
+
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
+type AnimalKey = string;
 
 const NewOrganizationPage = () => {
   const t = useTranslations();
   const editorRef = useRef(null);
+  const router = useRouter();
+  const { push } = router;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fileToCrop, setFileToCrop] = useState<File | null>(null);
 
-  const [type, setType] = useState<OrganizationType | null>(OrganizationType.BREEDING);
+  //DATA
+  const [type, setType] = useState<string>("BREEDER"); //<OrganizationType> OrganizationType.BREEDING
   const [logo, setLogo] = useState<File | null>(null);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [description, setDescription] = useState<string>("")
   const [location, setLocation] = useState<Location>({
     lat: '',
     lng: '',
@@ -43,11 +98,73 @@ const NewOrganizationPage = () => {
     zip_code: ''
   });
 
-  const handleSubmit = () => {
-    if (editorRef.current) {
-      JSON.stringify(editorRef.current);
+  const [race, setRace] = useState<OptionType>(null)
+  const [breed, setBreed] = useState<OptionType>(null)
+
+  // const SaveEditText = (content: string) => {
+  //   console.log("Editor content:", content);
+  // }
+  const handleSubmit = async() => {
+    // if (editorRef.current) {
+    //   JSON.stringify(editorRef.current);
+    //   const content = editorRef.current.getContent(); // Assuming getContent() gives the content from the editor
+    //   SaveEditText(content);
+    // }
+
+    if (!logo) {
+      toast.error("Proszę dodać zdjecie");
+      return;
     }
+
+    setIsLoading(true);
+  try{
+      const logoBase64 = await fileToBase64(logo);
+
+      const address = {
+        street: location.street,
+        house_number: Number(location.house_number),
+        city: location.city,
+        zip_code: location.zip_code,
+        lat: Number(location.lat),
+        lng: Number(location.lng),
+        location: {
+          type: "Point",
+          coordinates: [
+            Number(location.lng),
+            Number(location.lat)
+          ]
+        },
+        species: [2]
+      }
+
+      const payload = {
+        type: type,
+        image: logoBase64,
+        name: name,
+        email: email,
+        phone: phoneNumber,
+        description: description,
+        address: address,
+      };
+
+      const res = await OrganizationsApi.addNewOrganization(payload);
+      toast.success("Stworzono nową organizację!")
+      console.log("res:", res)
+      push(Routes.ORGANIZATION_PROFILE(res.data.id))
+    }catch(err){
+      console.log(err)
+      // if(err?.response?.data.name[0]){
+      //   console.log(err?.response?.data.name[0])
+      //   toast.error(err?.response?.data.name[0]);
+      // }
+      toast.error("Bląd dowawania");
+    }
+    setIsLoading(false);
   };
+
+  // const handleChange = (field: string, value: string) => {
+  //   setLitterForm(prev => ({ ...prev, [field]: value }));
+  // };
 
   return (
     <>
@@ -68,20 +185,20 @@ const NewOrganizationPage = () => {
             <Checkbox
               id='type-animal-shelter'
               label={'Schronisko'}
-              checked={type === OrganizationType.ANIMAL_SHELTER}
-              onClick={() => setType(OrganizationType.ANIMAL_SHELTER)}
+              checked={type === "SHELTER"}
+              onClick={() => setType("SHELTER")}
             />
             <Checkbox
               id='type-breeding'
               label={'Hodowla'}
-              checked={type === OrganizationType.BREEDING}
-              onClick={() => setType(OrganizationType.BREEDING)}
+              checked={type === "BREEDER"}
+              onClick={() => setType("BREEDER")}
             />
             <Checkbox
               id='type-association'
               label={'Fundacja'}
-              checked={type === OrganizationType.FUND}
-              onClick={() => setType(OrganizationType.FUND)}
+              checked={type ==="FUND"}
+              onClick={() => setType("FUND")}
             />
           </div>
 
@@ -153,7 +270,7 @@ const NewOrganizationPage = () => {
         {/* CONTACT */}
 
         {/* BREEDING DETAILS */}
-        {type === OrganizationType.BREEDING && (
+        {type === "BREEDER" && (
           <Card className={style.section}>
             <h3>
               Szczegóły <mark>hodowli</mark>
@@ -162,33 +279,18 @@ const NewOrganizationPage = () => {
             <div className={style.flexRow}>
               <Select
                 label={'Gatunek'}
-                options={[
-                  {
-                    value: 'beagle',
-                    label: 'Beagle'
-                  }
-                ]}
-                onChange={() => {}}
-                value={{
-                  value: 'beagle',
-                  label: 'Beagle'
-                }}
+                options={animalSpecies}
+                onChange={(opt: any) => setRace(opt)}
+                value={race}
               />
 
               <Select
                 label={'Rasa'}
-                options={[
-                  {
-                    value: 'beagle',
-                    label: 'Beagle'
-                  }
-                ]}
-                onChange={() => {}}
-                value={{
-                  value: 'beagle',
-                  label: 'Beagle'
-                }}
+                options={animalRace[race?.value as AnimalKey] || []}
+                onChange={(opt: any) => setBreed(opt)}
+                value={breed}
               />
+              {/* <AnimalSelect handleChange={handleChange} /> */}
             </div>
           </Card>
         )}
@@ -199,7 +301,7 @@ const NewOrganizationPage = () => {
           <h3>
             <mark>Opisz</mark> swoją działalność
           </h3>
-          <RichTextEditor placeholder={'Napisz coś...'} />
+         <RichTextEditor ref={editorRef} placeholder={'Napisz coś...'} onChange={setDescription} />
           <span className={style.caption}>To będzie opisem Twojego profilu.</span>
         </Card>
         {/* DESCRIPTION */}

@@ -27,3 +27,16 @@
     margin-bottom: $spacing-6;
   }
 }
+
+@media (max-width: 480px) {
+  .card {
+    padding: $spacing-3;
+    border-radius: $radius-m;
+    // max-width: 380px;
+  }
+
+  .card__header {
+    gap: $spacing-2;
+    margin-bottom: $spacing-4;
+  }
+}

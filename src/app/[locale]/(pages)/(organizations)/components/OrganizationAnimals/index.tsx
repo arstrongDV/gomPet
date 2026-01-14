@@ -11,6 +11,7 @@ import { animalsMock } from 'src/mocks/animals';
 import AnimalCard from '../../../animals/components/AnimalCard';
 
 import style from './OrganizationAnimals.module.scss';
+import { OrganizationsApi } from 'src/api';
 
 type OrganizationAnimalsProps = {
   organizationId: number;
@@ -25,7 +26,8 @@ const OrganizationAnimals = ({ organizationId }: OrganizationAnimalsProps) => {
   const getAnimals = async () => {
     setIsLoading(true);
     try {
-      setAnimals(animalsMock);
+      const res_animals = await OrganizationsApi.getOrganizationAnimals(organizationId);
+      setAnimals(res_animals.data.results);
     } catch (error) {
       setAnimals([]);
     } finally {

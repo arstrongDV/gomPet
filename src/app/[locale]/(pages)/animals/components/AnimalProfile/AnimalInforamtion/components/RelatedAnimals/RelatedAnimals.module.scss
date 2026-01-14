@@ -1,0 +1,196 @@
+@import 'styles';
+
+.relatedAnimals {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap; 
+}
+
+.relatedAnimals > * { 
+    flex: 0 0 300px; 
+    max-width: 300px;
+}
+
+.relatedAnimals::-webkit-scrollbar {
+    height: 5px;
+}
+
+.relatedAnimals::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 10px;
+}
+
+.relatedAnimals::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.list {
+  @include element-flex(row, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
+}
+
+.cardClasses {
+  position: relative;
+  width: 300px;
+  height: 350px;
+  border-radius: $radius-m;
+  padding: $spacing-4;
+  transition: 'background' $transition-main;
+  background-size: cover;
+  background-position: center;
+
+  &:hover {
+    .gradient {
+      &::after {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .hoverContent {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 250px;
+    height: 300px;
+  }
+}
+
+.content {
+  z-index: 0;
+  position: absolute;
+  inset: $spacing-4;
+  @include element-flex(column, space-between, flex-start);
+  gap: $spacing-4;
+}
+
+.gradient {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: $radius-m;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0.55) 80%, rgba(0, 0, 0, 0.8) 100%);
+  transition: $transition-main;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-m;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition-main;
+  }
+}
+
+.top {
+  @include element-flex(row, space-between);
+  gap: $spacing-2;
+  width: 100%;
+}
+
+.about {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-1;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.badge {
+  padding: $spacing-2 $spacing-3;
+  flex-shrink: 0;
+  @include body1;
+  width: fit-content;
+  min-width: 4rem;
+  border-radius: $radius-m;
+  text-align: center;
+
+  &.title {
+    color: $color-white;
+    background-color: rgba($color: #000000, $alpha: 0.8);
+    font-weight: $font-medium;
+  }
+
+  &.age {
+    color: $color-foreground;
+    background-color: rgba($color: #e37500, $alpha: 0.8);
+    font-weight: $font-medium;
+  }
+
+  &.characteristics {
+    color: $color-white;
+    background-color: rgba($color: #277d23, $alpha: 0.8);
+  }
+
+  &.gender {
+    @include element-flex(row, center, flex-start);
+    gap: $spacing-1;
+    color: $color-foreground;
+    background-color: $color-background-3;
+  }
+
+  &.size {
+    color: $color-white;
+    background-color: rgba($color: #4e4e4e, $alpha: 0.8);
+  }
+
+  &.ageText {
+    color: $color-white;
+    background-color: rgba($color: #4e4e4e, $alpha: 0.8);
+  }
+}
+
+.hoverContent {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  @include element-flex(column, center, center);
+  gap: $spacing-4;
+  width: 100%;
+  transition: $transition-main;
+
+  .data {
+    @include element-flex(column, flex-start, center);
+    gap: $spacing-1;
+  }
+}
+
+.bottom {
+  @include element-flex(row, center, center);
+  width: 100%;
+}
+
+.location {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-1;
+  color: $color-white;
+}
+
+.addBookmark {
+  @include flex-center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: $color-background-1;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    svg {
+      fill: $color-accent;
+    }
+  }
+}
