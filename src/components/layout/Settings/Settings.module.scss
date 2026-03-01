@@ -1,3 +1,5 @@
+@import 'styles';
+
 .settingsWrapper {
   position: relative;
   display: inline-block;
@@ -15,6 +17,31 @@
 .disabledBtn {
   pointer-events: none;
   opacity: 0.4;
+}
+
+.filledButton{
+  @include flex-center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: $color-background-1;
+  border-radius: 50%;
+  cursor: pointer;
+
+  svg {
+    transition: fill 0.3s ease;
+  }
+
+  &:hover {
+    svg {
+      fill: $color-accent;
+    }
+  }
+
+  &--active {
+    svg {
+      fill: $color-accent;
+    }
+  }
 }
 
 .settings {
@@ -55,4 +82,9 @@
   &:hover {
     background: #f4f4fd;
   }
+}
+
+.modalWin{
+  max-width: 50rem;
+  height: auto;
 }

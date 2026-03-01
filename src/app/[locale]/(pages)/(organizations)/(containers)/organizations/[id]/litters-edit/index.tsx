@@ -27,11 +27,11 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
     const [formData, setFormData] = useState({
       id: '',
       title: '',
-      spaciesOpt: {
+      species: {
         value: '',
         label: ''
       },
-      breedOpt: {
+      breeds: {
         value: '',
         label: ''
       },
@@ -49,11 +49,11 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
       try {
         setFormData({
           id: litter.id ?? '',
-          breedOpt: {
+          breeds: {
             value: litter.breed.value ?? '',
             label: litter.breed.label ?? '',
           },
-          spaciesOpt: {
+          species: {
             value: litter.species.value ?? '',
             label: litter.species.label ?? '',
           },
@@ -73,6 +73,28 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
       }
     }, [litter]);
 
+    console.log("litter: ", litter);
+    console.log("formData: ", formData.breeds.value);
+
+    const hasChanges = () => {
+      if (!litter || !formData) return false;
+      const speciesChanged =
+        (formData.species?.value ?? '') !== (litter.species?.value ?? '');
+      // const breedChanged =
+      //   (formData.breeds?.value ?? '') !== (litter.breed?.value ?? '');
+      
+      return (
+        formData.title !== (litter.title ?? '') ||
+        formData.description !== (litter.description ?? '') ||
+        formData.birth_date !== (litter.birth_date ?? '') ||
+        formData.status !== (litter.status ?? '') ||
+        speciesChanged
+        // breedChanged
+      );
+    };
+    
+    const disabledButton = isLoading || !hasChanges();
+
     const handleSubmit = async() => {
         try{
             const res = await OrganizationsApi.updateOrganizationLitters(Number(params.id), formData);
@@ -84,9 +106,10 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
         }
     }
 
-    const handleChange = (field: string, value: string) => {
-        setFormData(prev => ({...prev, [field]: value}))
-    }
+    const handleChange = (field: string, value: any) => {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
     return(
         <>
       <SectionHeader
@@ -103,8 +126,8 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
           </h3>
           <AnimalSelect
             initialState={{
-              speciesOpt: formData?.spaciesOpt && {value: formData?.spaciesOpt.value, label: formData?.spaciesOpt.label},
-              breedOpt: formData?.breedOpt && {value: formData?.breedOpt.value, label: formData?.breedOpt.label}
+              speciesOpt: formData?.species && {value: formData?.species.value, label: formData?.species.label},
+              breedOpt: formData?.breeds && {value: formData?.breeds.value, label: formData?.breeds.label}
             }}
             handleChange={handleChange}
           />
@@ -175,6 +198,7 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
 
         <Button
           className={style.submit}
+          disabled={disabledButton}
           label={'Utwórz miot'}
           onClick={handleSubmit}
         />

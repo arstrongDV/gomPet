@@ -84,8 +84,10 @@ const Activity = ({ organization }: ActivityProps) => {
                 className={style.post}
                 key={post.id}
                 post={post}
+                type="posts.post"
                 deletePosts={deletePosts}
                 updatePosts={updatePosts}
+                hideFollowButton
               />
             ))}
           </List>

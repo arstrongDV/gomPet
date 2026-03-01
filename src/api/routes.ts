@@ -1,22 +1,24 @@
 import { OffersApi } from 'src/api';
+
 export class AuthRoutes {
   static REGISTER = '/users/users/'; 
   static LOGIN = '/users/auth/token/'; 
   static GET_LOGIN_USER = (id: number) => `/users/users/${id}/`; 
   static REFRESH_TOKEN = '/accounts/refresh-token/';
-  static REQUEST_PASSWORD_RESET = '/accounts/reset-password/request/';
-  static RESET_PASSWORD = '/accounts/reset-password/submit/';
+  static REQUEST_PASSWORD_RESET = '/users/auth/password-reset/';
+  static RESET_PASSWORD = '/users/auth/password-reset/confirm/';
   static VERIFY_EMAIL = '/accounts/verify-email/';
 }
 
 export class AccountRoutes {
-  // static USER_DATA = '/accounts/user-data';
+  static USER =`/users/users/`;
   static USER_DATA = (id: number) => `/users/users/${id}/`;
   static USER_DELETE = '/users/users/me/delete/';
+  static USER_PROFILE_INFO = (userId: number) => `/users/users/${userId}/profile-info`
 }
 
 export class WebsocketRoutes {
-  static GET_NOTIFICATIONS = '/ws/notifications/';
+  static GET_NOTIFICATIONS = (id: any) => `/ws/notifications/${id}/`;
   static GET_REACTIONS_LIST = (reactable_type: string, reactable_id: number) => `/ws/reactable/${reactable_type}/${reactable_id}/`
 }
 
@@ -30,53 +32,74 @@ export class AnimalsRouts {
   static ANIAML_LATEST = '/animals/latest/';
   static ANIMAL_ID = (id: number) => `/animals/animals/${id}/`;
   static ANIMAL_PARENTS_ID = (id: number) => `/animals/parents/${id}/`;
-  // static ANIAML_FILTERING = '/animals/filtering/';
-  // static ANIAML_FILTERING_ID = (id: number) => `/animals/filtering/${id}`;
   static ANIMALS_ANIMALS = '/animals/animals/';
   static ANIMAL_PARENTS = '/animals/parents/';
-
   static ANIAML_PROFILE = (id: number) => `/animals/animals/${id}/`;
   static ANIMAL_FAMILY_TREE = (id: number) => `/animals/family-tree/${id}/`
-  static ANIMAL_PROFILE_COMMENTS  = (id: number) =>  `/common/comments/${id}/`
-  
   static ANIMAL_SPECIES = "/users/species/"
-  static ANIMAL_BREEDS = "/animals/animal-breed/"
+  static ANIMAL_BREEDS = (speciesId: number) => `/animals/animal-breed/?species=${speciesId}`;
+  static ANIMAL_BOOKMARKS = (id: number) =>`/animals/animals/?liked-by=${id}`
+
+  static USER_ANIMALS = (userId: number) => `animals/animals/?user-animals-by-id=${userId}`
+  static MY_ANIMALS = `/animals/animals/?user-animals=true`;
+
+  static MY_ORGANIZATIONS = `/animals/animals/assignment-options/`;
 }
 
 export class OrganizationsRouts {
   static ORGANIZATION_LATEST = '/users/organization-latest/';
+  static ORGANIZATION_PROFILE_ID = (id: number) => `/users/organizations/${id}/`;
+  static ORGANIZATIONS = '/users/organizations/';
+  static ORGANIZATION_ANIMALS = (id: number) => `/animals/animals/?organization-ids=${id}`;
+  static ORGANIZATION_LITTERS = (id: number) => `/litters/litters/?organization-id=${id}`;
+  static ORGANIZATION_LITTERS_POST ='/litters/litters/';
+  static LITTERS_ID = (id: number) => `/litters/litters/${id}/`;
 
-  static ORGANIZATION_PROFILE_ID = (id: number) => `/users/organizations/${id}/`
-  // static ORGANIZATION_PROFILE = '/users/organization-filtering/'
-  static ORGANIZATIONS = '/users/organizations/'
+  static ORGANIZATION_MEMBERS = '/users/organization-members/';
+  static ORGANIZATION_ROLES = '/users/organization-member-roles/';
+  static ORGANIZATION_MEMBERS_ID = (id: number) => `/users/organization-members/${id}/`;;
+  static MEMBERS_REQUESTS = (id: number) =>  `/users/organization-members/?organization-id=${id}`;
+  static MEMBER_INVITATION = (id: number) => `/users/organization-members/${id}/`;
+  static ORGANIZATION_MEMBERS_CONFIRMED = (id: number) => `/users/organization-members/?organization-id-confirmed=${id}`;
 
-  static ORGANIZATION_ANIMALS = (id: number) => `/animals/animals/?organization-id=${id}`
-  static ORGANIZATION_LITTERS = (id: number) => `/litters/litters/?organization-id=${id}`
-  static ORGANIZATION_LITTERS_POST ='/litters/litters/'
-
-  static LITTERS_ID = (id: number) => `/litters/litters/${id}/`
+  static MY_ORGANIZATIONS = (myOrg: boolean) => `/users/organization-members/?mine=${myOrg}`;
+  static USER_ORGANIZATIONS = (userId: number) => `/users/organization-members/?organizations-user-by-id=${userId}`;
+  static CHANGE_OWNER = (orgId: number) => `/users/organizations/${orgId}/change-owner/`;
 }
 
 export class ArticlesRouts{
   static ARTICLES_LATEST = '/articles/articles-latest/';
   static ARTICLES_LIST = '/articles/articles/';
-  // static ARTICLES_LIST_id = (id: number) => `/articles/articles/${id}`;
+  static ARTICLES_SLUG = (slug: string) => `/articles/articles/${slug}/`;//////
+  static ARTICLES_KNOWLEDGE_LIST = (category: any) => `/articles/articles/?${category}`; //has-category=${category}
+  static ARTICLES_CATEGORIES = '/articles/article-categories/';
 }
 
 export class PostsRouts{
   static POSTS_LIST = '/posts/posts/';
   static POSTS_LIST_ID = (id: number) => `/posts/posts/${id}/`;
+  static ANIMAL_ACTIVITY = (id: number) => `posts/posts/?animal-id=${id}`;
+  static ORGANIZATION_POSTS = (id: number) => `/posts/posts/?organization-id=${id}`;
 
+    //Organization articles (/articles)
+    static POSTS = '/posts/posts/feed/';
+}
+
+export class CommonRouts{
+  // Commnets
   static COMMENTS_LIST = '/common/comments/';
   static COMMENTS_LIST_ID = (id: number) => `/common/comments/${id}/`;
-  static COMMENTS_ID = (id: number, content_type: string) => `/common/comments/?object_id=${id}&content_type=${content_type}`
+  static COMMENTS_ID = (id: number, content_type: string) => `/common/comments/?object_id=${id}&content_type=${content_type}`;
 
-  // static REACTIONS_LIST = '/common/reaction/'; 
-  static REACTIONS = '/common/reactions/'
-  static REACTIONS_ID = (id: number) => `/common/reactions/${id}/`
-  static HAS_REACTION = (reactable_type: string, reactable_id: number) => `/common/reactions/has-reaction/?reactable_type=${reactable_type}&reactable_id=${reactable_id}`
+  // Reactions
+  static REACTIONS_LIST = '/common/reaction/'; 
+  static REACTIONS = '/common/reactions/';
+  static REACTIONS_ID = (id: number) => `/common/reactions/${id}/`;
+  static HAS_REACTION = (reactable_type: string, reactable_id: number) => `/common/reactions/has-reaction/?reactable_type=${reactable_type}&reactable_id=${reactable_id}`;
 
-
-  static ANIMAL_ACTIVITY = (id: number) => `posts/posts/?animal-id=${id}`
-  static ORGANIZATION_POSTS = (id: number) => `/posts/posts/?organization-id=${id}`
-}
+  // Following
+  static HAS_FOLLOWED = (target_typ: string, organizationId: number) => `/common/follows/is-following/?target_type=${target_typ}&target_id=${organizationId}`;
+  static FOLLOWS = '/common/follows/';
+  static FOLLOWS_ID = (id: number) => `/common/follows/${id}/`;
+  static FOLLOWING = (target_type: string, target_id: number) => `/common/follows/followers-count/?target_type=${target_type}&target_id=${target_id}`;
+ }

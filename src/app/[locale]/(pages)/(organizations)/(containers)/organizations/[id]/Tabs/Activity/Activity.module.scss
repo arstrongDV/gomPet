@@ -1,41 +1,57 @@
 @import 'styles';
 
-.container {
-  display: grid;
-  grid-template-rows: 1fr 50rem;
-  // display: flex;
-  // align-items: start;
-  justify-content: center;
-  gap: $spacing-6;
+// .container {
+//   display: grid;
+//   grid-template-rows: 1fr 50rem;
+//   // display: flex;
+//   // align-items: start;
+//   justify-content: center;
+//   gap: $spacing-6;
 
-  @include desktopWidth {
-    grid-template-columns: 1fr;
-  }
+//   @include desktopWidth {
+//     grid-template-columns: 1fr;
+//   }
+// }
+
+.container {
+  width: 100%;
 }
 
-.wrapper{
-  @include element-flex(row, space-between);
-  gap: $spacing-2;
+.wrapper {
+  display: grid;
+  grid-template-columns: 7fr 4fr;
+  gap: $spacing-3;
+  width: 100%;
+  align-items: start;
+}
+
+.listWrraper {
+  width: 100%;
+}
+
+.aside {
+  position: sticky;
+  top: 25px;
+  align-self: start;
 }
 
 .listWrraper{
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  width: 100%
 }
 
 .post {
-  @include desktopWidth {
-    // max-width: 80%;
-  }
+  width: 100%;
 }
 
-.aside {
-  @include element-flex(column, flex-start, stretch);
-  gap: $spacing-2;
-  max-width: 500px;
-  // max-width: 100%;
-}
+// .aside {
+//   @include element-flex(column, flex-start, stretch);
+//   gap: $spacing-2;
+//   max-width: 700px;
+//   // max-width: 100%;
+// }
 
 .list {
   @include element-flex(column, flex-start, stretch);
@@ -46,6 +62,7 @@
   height: 300px; // albo 350px / 400px
   border-radius: $radius-l;
   overflow: hidden;
+  margin-top: 2.4rem;
 }
 .map {
   width: 100%;

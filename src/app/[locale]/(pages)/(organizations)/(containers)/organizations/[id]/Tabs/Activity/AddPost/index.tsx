@@ -102,7 +102,7 @@ const AddPost = ({ className, organizationId, setShowAddPost, refreshPosts }: Ad
         <Button
             type="submit"
             label={loading ? "Publikuję..." : "Opublikuj"}
-            disabled={loading}
+            disabled={loading || text.length < 2}
             onClick={createPost}
         />
         </Card>

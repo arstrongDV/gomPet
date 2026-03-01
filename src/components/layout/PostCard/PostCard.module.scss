@@ -10,6 +10,23 @@
   border-radius: $radius-m;
 }
 
+.modaPostUpdatelWin{
+  max-height: 90vh;
+  max-width: 1200px;
+}
+
+.modaSharinglWin{
+  max-height: 90vh;
+  max-width: 800px;
+}
+
+.modaCommentslWin{
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-width: 1200px;
+}
+
 .header {
   @include element-flex(row, space-between, center);
   gap: $spacing-4;
@@ -37,7 +54,14 @@
       @media (max-width: 480px) {
         font-size: $font-size-s;
       }
+
+
+      .subAuthor{
+        color: $color-gray-500;
+        font-size: $font-size-xs;
+      }
     }
+
   }
   .headerContent{
     @include element-flex(row, center, center);
@@ -135,6 +159,9 @@
   }
 }
 
+.avatarClick{
+  cursor: pointer;
+}
 
 .backdrop {
   position: fixed;

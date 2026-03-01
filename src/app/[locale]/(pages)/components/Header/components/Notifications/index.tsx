@@ -4,102 +4,138 @@ import React, { useEffect, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
 
-import { CloseButton, Icon, Pill, useWebsocket } from 'components';
-
-import { WebsocketRoutes } from 'src/api/routes';
-
-import NotificationItem from './components/NotificationItem';
+import { CloseButton, Icon, Pill } from 'components';
+import useWebsocket from 'components/hooks/useWebsocket';
 
 import style from './Notifications.module.scss';
+import useWebsocket2 from 'src/app/[locale]/(pages)/ws/page';
+import NotificationItem from './components/NotificationItem';
+import { WebsocketRoutes } from 'src/api/routes';
 
-type NotificationType = string;
-
-export type NotificaitonItemType = {
+export type Notification = {
   id: number;
-  author: number | null;
-  user: number | null;
-  first_name: string | null;
-  last_name: string | null;
-  data: {
-    [key: string]: any;
-  };
-  metadata: object;
-  created_at: string;
   seen: boolean;
-  type: NotificationType;
+  created_at: string;
+  type: string;
+  data: any;
 };
 
 const Notifications = () => {
   const t = useTranslations('notifications');
+  const { data: session } = useSession();
 
-  const [ready, val, send] = useWebsocket(WebsocketRoutes.GET_NOTIFICATIONS);
+  const userId = Number(session?.user?.id);
+  const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [notificaitons, setNotificaitons] = useState<NotificaitonItemType[]>([]);
+  const [ isReady, val, send ] = useWebsocket(WebsocketRoutes.GET_NOTIFICATIONS(userId));
 
-  const handleNotificationClick = () => {
-    setIsOpen((prev) => !prev);
-  };
-
+  /** handle incoming message */
   useEffect(() => {
-    if (val) {
-      try {
-        //setNotificaitons(JSON.parse(JSON.parse(val).data) as NotificaitonItemType[]);
-      } catch (error) {
-        console.log(error);
-      }
+    if (!val) return;
+
+    try{
+      const parsed = JSON.parse(val);
+      const notification: Notification = {
+        id: Date.now(),
+        seen: false,
+        created_at: new Date().toISOString(),
+        type: parsed.type ?? 'generic',
+        data: parsed,
+      };
+
+      setNotifications((prev) => [notification, ...prev]);
+    }catch(e){
+      console.error('WS parse error', e);
     }
+
   }, [val]);
 
-  useEffect(() => {
-    // if (ready) {
-    //   send(
-    //     JSON.stringify({
-    //       action: 'subscribe_instance',
-    //       pk: 1,
-    //       request_id: 1
-    //     })
-    //   );
-    // }
-  }, [ready, send]);
+  // useEffect(() => {
+  //   if (isReady && send) {
+      
+  //     const subscriptionMessage = {
+  //       action: 'subscribe_instance',
+  //       pk: userId,
+  //       request_id: Date.now()
+  //     };
+      
+  //     send(JSON.stringify(subscriptionMessage));
+  //   }
+  // }, [isReady, send, userId]); 
+  // useEffect(() => {
+  //   if (isReady) {
+  //     send(
+  //       JSON.stringify({
+  //         action: 'subscribe_instance',
+  //         pk: 1,
+  //         request_id: 1
+  //       })
+  //     );
+  //   }
+  // }, [isReady, send]);
+
+  if (!userId) return null;
 
   return (
     <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
       <div className={style.container}>
         <button
           className={style.button}
-          onClick={handleNotificationClick}
-          title={'Powiadomienia'}
+          onClick={() => setIsOpen((p) => !p)}
         >
           <Icon
             name={isOpen ? 'bellFilled' : 'bell'}
-            className={classNames(style.icon, { [style.active]: isOpen })}
+            className={classNames(style.icon, {
+              [style.active]: isOpen,
+            })}
           />
-          {notificaitons?.filter((item) => !item.seen).length > 0 && (
-            <Pill className={style.counter}>{notificaitons?.filter((item) => !item.seen).length || '0'}</Pill>
+
+          {notifications.some((n) => !n.seen) && (
+            <Pill className={style.counter}>
+              {notifications.filter((n) => !n.seen).length}
+            </Pill>
           )}
         </button>
 
-        <div className={classNames(style.notifications, { [style.open]: isOpen })}>
+        <div
+          className={classNames(style.notifications, {
+            [style.open]: isOpen,
+          })}
+        >
           <div className={style.header}>
-            <h4 className={style.title}>{t('title')}</h4>
-            <CloseButton
-              isOpen={isOpen}
-              onClick={() => setIsOpen((prev) => !prev)}
-              className={style.closeButton}
-            />
+            <h4>{t('title')}</h4>
+            <CloseButton isOpen={isOpen} onClick={() => setIsOpen(false)} />
           </div>
+
           <ul className={style.list}>
-            {notificaitons.length === 0 && <li className={style.empty}>{t('empty')}</li>}
-            {notificaitons?.map((notification, index) => (
+            {notifications.length === 0 && <li className={style.empty}>{t('empty')}</li>}
+            {notifications?.map((notification, index) => (
               <NotificationItem
                 key={index}
-                data={notification}
+                data={notification.data}
                 close={() => setIsOpen(false)}
               />
             ))}
           </ul>
+
+
+        {/* {notifications.length === 0 ? (
+          <p>{t('empty')}</p>
+         ): (
+          <ul>
+            {notifications.map((msg) => (
+              <NotificationItem
+                key={msg.id}
+                data={msg}
+                close={() => setIsOpen(false)}
+              />
+            ))}
+          </ul>
+         )} */}
+
         </div>
       </div>
     </OutsideClickHandler>

@@ -10,9 +10,10 @@ import toast from 'react-hot-toast';
 type PostReactionsProps = {
   postId: number;
   reactionsCount: number;
+  type: string;
 };
 
-const PostReactions = ({ postId, reactionsCount }: PostReactionsProps) => {
+const PostReactions = ({ postId, reactionsCount, type }: PostReactionsProps) => {
   const session = useSession();
   const { isOrgAuth, ...organization } = useOrganization();
 
@@ -29,7 +30,7 @@ const PostReactions = ({ postId, reactionsCount }: PostReactionsProps) => {
   useEffect(() => {
     const checkReaction = async () => {
       try {
-        const res = await ArticlesApi.verifyReactions("posts.post", postId);
+        const res = await ArticlesApi.verifyReactions(type, postId); //"posts.post" 
         setReactionId(res?.data?.reaction_id ?? 0);
         console.log("verifyReactions res:", res);
       } catch (err) {
@@ -55,13 +56,13 @@ const PostReactions = ({ postId, reactionsCount }: PostReactionsProps) => {
       try {
         const res = await ArticlesApi.AddNewReaction({
           reaction_type: "LIKE",
-          reactable_type: "posts.post", // upewnij się że backend oczekuje stringa a nie 26
+          reactable_type: type, // upewnij się że backend oczekuje stringa a nie 26    //"posts.post"
           reactable_id: postId,
         });
 
         if (res?.status === 201) {
           setReactionId(res.data.id);
-          setLikeCount(prev => prev + 1);
+          setLikeCount((prev: any) => prev + 1);
         }
 
         console.log("Add reaction res:", res);
@@ -75,7 +76,7 @@ const PostReactions = ({ postId, reactionsCount }: PostReactionsProps) => {
 
         if (res?.status === 200 || res?.status === 204) {
           setReactionId(0);
-          setLikeCount(prev => Math.max(prev - 1, 0));
+          setLikeCount((prev: any) => Math.max(prev - 1, 0));
         }
 
         console.log("Delete reaction res:", res);
@@ -92,7 +93,7 @@ const PostReactions = ({ postId, reactionsCount }: PostReactionsProps) => {
         name={reactionId !== 0 ? 'pawFilled' : 'paw'}
       />
       <span className={style.label}>
-        {likeCount > 0 ? likeCount : 'brak'}
+        {likeCount && likeCount > 0 ? likeCount : 'brak'}
       </span>
     </button>
   );

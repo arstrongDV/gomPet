@@ -12,3 +12,15 @@
   gap: $spacing-4;
   width: 100%;
 }
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  gap: $spacing-4;
+  margin-top: 2rem;///
+}
+
+.modalAddWin{
+  height: 90vh;
+  max-width: 1200px;
+}

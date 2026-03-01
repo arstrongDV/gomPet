@@ -109,8 +109,8 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                       race: organization.race ?? '', 
                       breed: organization.breed ?? '', 
                       location: {
-                          lat: organization.address?.lat ?? '', 
-                          lng: organization.address?.lng ?? '',
+                          lat: String(organization.address?.lat) ?? '',
+                          lng: String(organization.address?.lng) ?? '',
                           city: organization.address?.city ?? '',
                           street: organization.address?.street ?? '',
                           house_number: organization.address?.house_number ?? '',

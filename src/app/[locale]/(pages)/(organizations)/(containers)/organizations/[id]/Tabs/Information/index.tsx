@@ -1,7 +1,7 @@
 import React from 'react';
 import BusinessCard from 'src/app/[locale]/(pages)/(organizations)/components/BusinessCard';
 import OrganizationAnimals from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationAnimals';
-import OrganizationComments from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationComments';
+// import OrganizationComments from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationComments';
 import OrganizationOnMap from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationOnMap';
 import { Button, Card } from 'src/components';
 
@@ -10,6 +10,8 @@ import { IOrganization } from 'src/constants/types';
 import DescriptionTranslate from './OrganizationDescription';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import PostComments from 'src/components/layout/PostCard/components/PostComments';
+import RichTextViewer from 'src/components/layout/Forms/RichTextViewer';
 
 type InformationProps = {
   organization: IOrganization;
@@ -29,12 +31,19 @@ const Information = ({ organization }: InformationProps) => {
         </div>
       </div>
       <Card>
-        <DescriptionTranslate text={organization.description} />
+        <RichTextViewer content={organization.description} />
         {/* <p className={style.description}>{organization.description}</p> */}
       </Card>
-      <OrganizationComments
+      {/* <OrganizationComments
         organizationId={organization.id}
-        averageRating={4.2}
+        averageRating={organization.rating}
+      /> */}
+      <PostComments 
+        postId={organization.id} 
+        isOrganizationPage={{
+          averageRating: organization.rating
+        }} 
+        type='users.organization'
       />
       <OrganizationAnimals organizationId={organization.id} />
 

@@ -80,6 +80,8 @@ const Header = ({ limitedWidth = false }: HeaderProps) => {
     </>
   );
 
+  if(!isMobile && showMenu) setShowMenu(false);
+
   return (
     <>
       <header

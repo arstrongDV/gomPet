@@ -7,11 +7,13 @@ import {
     Card, 
     Input, 
     Select, 
-    Button
+    Button,
+    Loader
 } from "src/components"
 import { AnimalsApi } from 'src/api';
 import debounce from 'lodash/debounce';
 import toast from 'react-hot-toast';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 type Parent = {
     id?: number;
@@ -27,7 +29,8 @@ type AnimalAddParentsProps = {
     parents?: Parent[];
     onAddParent: (parent: Parent) => void;
     childAnimal: IAnimal; 
-  };
+    setIsParentsAdd: (e: boolean) => void;
+};
 
 type AnimalKey = string;
 const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
@@ -56,7 +59,7 @@ const animalSpecies = [
     }
 ]
 
-const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: AnimalAddParentsProps) => {
+const AddAnimalParents = ({ className, onAddParent, parents, childAnimal, setIsParentsAdd }: AnimalAddParentsProps) => {
     const [searchName, setSearchName] = useState<string>('');
     const [relation, setRelation] = useState<OptionType | null>(null);
     const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
@@ -115,12 +118,13 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
     }, [searchName, selectSpeciesValue, selectRaceValue, debouncedSearch]);
 
     const handleAdd = () => {
-        if (!selectedAnimal) return;
+        if (!selectedAnimal || parents?.length >= 2) return;
 
         const newParent: Parent = {
             animal_id: selectedAnimal.id,  //////// id
             name: selectedAnimal.name,
             relation: relation?.value,
+            gender: selectedAnimal.gender,
             photos: selectedAnimal.image ?? undefined
         };
 
@@ -178,95 +182,97 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
     };
 
     return (
-        <Card className={className}>
-            <h3>
-                Dodawanie <mark>rodziny</mark>
-            </h3>
+        // <OutsideClickHandler onOutsideClick={() => setIsParentsAdd(false)}>
+            <Card className={className}>
+                {/* <h3>
+                    Dodawanie <mark>rodziny</mark>
+                </h3> */}
 
-            <Input
-                id='search-animal'
-                name='search-animal'
-                label={'Wyszukaj zwierzę'}
-                placeholder={'Wpisz nazwę...'}
-                value={searchName}
-                onChangeText={setSearchName}
-            />
-
-            <div className={style.flexRow}>
-                <Select
-                    label={'Gatunek'}
-                    options={animalSpecies}
-                    onChange={setSelectSpeciesValue}
-                    value={selectSpeciesValue}
-                    isClearable
+                <Input
+                    id='search-animal'
+                    name='search-animal'
+                    label={'Wyszukaj zwierzę'}
+                    placeholder={'Wpisz nazwę...'}
+                    value={searchName}
+                    onChangeText={setSearchName}
                 />
 
-                <Select
-                    label={'Rasa'}
-                    options={filteredRaceOpt} 
-                    onChange={setSelectRaceValue}
-                    value={selectRaceValue}
-                    isClearable
-                />
-            </div>
+                <div className={style.flexRow}>
+                    <Select
+                        label={'Gatunek'}
+                        options={animalSpecies}
+                        onChange={setSelectSpeciesValue}
+                        value={selectSpeciesValue}
+                        isClearable
+                    />
 
-            {/* Lista zwierząt */}
-            <div className={style.animalsList}>
-                <h4>Dostępne zwierzęta:</h4>
-                
-                {loading ? (
-                    <p>Ładowanie...</p>
-                ) : animals.length === 0 ? (
-                    <p>Brak zwierząt spełniających kryteria</p>
-                ) : (
-                    <div className={style.animalsGrid}>
-                        {animals.map(animal => (
-                            <div
-                                key={animal.id}
-                                className={`${style.animalItem} ${selectedAnimal?.id === animal.id ? style.selected : ''}`}
-                                onClick={() => handleAnimalSelect(animal)}
-                            >
-                                <img
-                                    src={animal.image || '/images/no-photo.png'}
-                                    className={style.animalPhoto}
-                                />
-                                <div className={style.animalInfo}>
-                                    <h5>{animal.name}</h5>
-                                    <p>{animal.species} • {animal.breed}</p>
-                                    <p>Płeć: {animal.gender}</p>
+                    <Select
+                        label={'Rasa'}
+                        options={filteredRaceOpt} 
+                        onChange={setSelectRaceValue}
+                        value={selectRaceValue}
+                        isClearable
+                    />
+                </div>
+
+                {/* Lista zwierząt */}
+                <div className={style.animalsList}>
+                    <h4>Dostępne zwierzęta:</h4>
+                    
+                    {loading ? (
+                        <Loader />
+                    ) : animals.length === 0 ? (
+                        <p>Brak zwierząt spełniających kryteria</p>
+                    ) : (
+                        <div className={style.animalsGrid}>
+                            {animals.map(animal => (
+                                <div
+                                    key={animal.id}
+                                    className={`${style.animalItem} ${selectedAnimal?.id === animal.id ? style.selected : ''}`}
+                                    onClick={() => handleAnimalSelect(animal)}
+                                >
+                                    <img
+                                        src={animal.image || '/images/no-photo.png'}
+                                        className={style.animalPhoto}
+                                    />
+                                    <div className={style.animalInfo}>
+                                        <h5>{animal.name}</h5>
+                                        <p>{animal.species} • {animal.breed}</p>
+                                        <p>Płeć: {animal.gender}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-            
-            <div className={style.bottom}>
-                <Button 
-                    className={style.buttonAdd} 
-                    icon='plus' 
-                    label="Dodaj jako rodzica" 
-                    onClick={handleAdd} 
-                    disabled={isButtonDisabled}
-                />
-                
-                {selectedAnimal && (
-                    <div className={style.animalParent}>
-                        <Select
-                            options={animalsRelation}
-                            onChange={setRelation}
-                            value={relation}
-                            isClearable
-                            placeholder="Wybierz relację"
-                        />
-                        <div className={style.selectedAnimal}>
-                            <h4>Wybrane zwierzę:</h4>
-                            <p><strong>{selectedAnimal.name}</strong> ({selectedAnimal.species}, {selectedAnimal.breed})</p>
+                            ))}
                         </div>
-                    </div>
-                )}
-            </div>
-        </Card>
+                    )}
+                </div>
+                
+                <div className={style.bottom}>
+                    <Button 
+                        className={style.buttonAdd} 
+                        icon='plus' 
+                        label="Dodaj jako rodzica" 
+                        onClick={handleAdd} 
+                        disabled={isButtonDisabled}
+                    />
+                    
+                    {selectedAnimal && (
+                        <div className={style.animalParent}>
+                            <Select
+                                options={animalsRelation}
+                                onChange={setRelation}
+                                value={relation}
+                                isClearable
+                                placeholder="Wybierz relację"
+                            />
+                            <div className={style.selectedAnimal}>
+                                <h4>Wybrane zwierzę:</h4>
+                                <p><strong>{selectedAnimal.name}</strong> ({selectedAnimal.species}, {selectedAnimal.breed})</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </Card>
+        // </OutsideClickHandler>
     )
 }
 

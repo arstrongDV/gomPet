@@ -10,8 +10,19 @@ const getAnimalData = async (id: number): Promise<IAnimal | undefined> => {
     const animalProfileRes = await AnimalsApi.getAnimalProfile(id);
     return animalProfileRes.data
   } catch (error) {
-    console.error('Error fetching animal:', error);
     return undefined;
+  }
+};
+
+const getAnimalsFollowers = async (target_id: number) => {
+  try {
+    const animalFollowersRes = await PostsApi.Following(
+      'animals.animal',
+      target_id
+    );
+    return animalFollowersRes.data.followers_count;
+  } catch(err) {
+    return 0;
   }
 };
 
@@ -36,11 +47,15 @@ const getAnimalFamilyTree = async (id: number): Promise<IAnimal | undefined> => 
 
 const getCommentData = async (id: number): Promise<IComment | undefined> => {
   try {
-    const animalCommentsRes = await AnimalsApi.getAnimalComments(id);
-    return animalCommentsRes.data
+    // const animalCommentsRes = await AnimalsApi.getAnimalComments(id);
+    const animalCommentsRes = await PostsApi.getComments(id, "users.organization", {
+      limit: 2
+    });
+    console.log("animalCommentsResanimalCommentsRes: ", animalCommentsRes);
+    return animalCommentsRes.results || [];
   } catch (error) {
     console.error('Error fetching animal:', error);
-    return undefined;
+    return [];
   }
 };
 
@@ -58,8 +73,11 @@ export const generateMetadata = async ({ params: { id } }: { params: { id: strin
 
 const AnimalDetailPage = async ({ params }: { params: { id: string } }) => {
   const animal = await getAnimalData(Number(params.id));
-  const familyTree = await getAnimalFamilyTree(Number(params.id))
-  const comments = await getCommentData(Number(params.id));
+  const familyTree = await getAnimalFamilyTree(Number(params.id));
+  const comments = animal?.organization
+  ? await getCommentData(animal.organization.id)
+  : [];
+  const followers = await getAnimalsFollowers(Number(params.id));
   // const posts = await getAnimalPosts(Number(params.id))
 
   if (!animal) {
@@ -70,7 +88,7 @@ const AnimalDetailPage = async ({ params }: { params: { id: string } }) => {
     <div className={style.mainContainer}>
       <div className={style.innerContainer}>
         {/* <AnimalProfile animal={animal} comment={comment} posts={posts} familyTree={familyTree} />  */}
-        <TabView animal={animal} comments={comments}  familyTree={familyTree} /> 
+        <TabView animal={animal} followers={followers} comments={comments} familyTree={familyTree} /> 
       </div>
     </div>
   );

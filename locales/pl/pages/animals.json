@@ -1,4 +1,9 @@
 {
+  "speciesLabel": "Gatunek",
+  "breed": "Rasa",
+  "genderLabel": "Płeć",
+  "sizeLabel": "Rozmiar",
+
   "gender": {
     "male": "On",
     "female": "Ona"

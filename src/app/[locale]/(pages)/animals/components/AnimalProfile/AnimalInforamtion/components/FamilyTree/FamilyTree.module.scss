@@ -36,7 +36,7 @@
         display: flex;
         justify-content: center;
       }
-    
+
       gap: clamp(16px, 5vw, 80px);
     
       @media (max-width: 1024px) { gap: clamp(12px, 4vw, 60px); }
@@ -66,6 +66,8 @@
         border-radius: 50%;
         object-fit: cover;
         transition: transform 0.2s;
+
+        cursor: pointer;
   
         &:hover {
           transform: scale(1.1);

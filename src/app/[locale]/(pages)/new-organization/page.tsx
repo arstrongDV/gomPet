@@ -149,8 +149,8 @@ const NewOrganizationPage = () => {
 
       const res = await OrganizationsApi.addNewOrganization(payload);
       toast.success("Stworzono nową organizację!")
-      console.log("res:", res)
-      push(Routes.ORGANIZATION_PROFILE(res.data.id))
+      push(Routes.ORGANIZATION_PROFILE(res.data.id));
+      return;
     }catch(err){
       console.log(err)
       // if(err?.response?.data.name[0]){
@@ -161,10 +161,6 @@ const NewOrganizationPage = () => {
     }
     setIsLoading(false);
   };
-
-  // const handleChange = (field: string, value: string) => {
-  //   setLitterForm(prev => ({ ...prev, [field]: value }));
-  // };
 
   return (
     <>

@@ -72,6 +72,15 @@ const fileToBase64 = (file: File): Promise<string> => {
         loadExistingImages();
       }, [post]);
 
+      const hasChange = () => {
+        if(!post) return;
+
+        return (
+          formData.content !== post.content ||
+          formData.image !== post.image
+        )
+      }
+  
       const updatePost = async (): Promise<void> => {
         setLoading(true);
         try {
@@ -103,11 +112,7 @@ const fileToBase64 = (file: File): Promise<string> => {
       }, [addImage])
   
     return (
-      <OutsideClickHandler onOutsideClick={() => SetShowUpdateCard && SetShowUpdateCard(false)}>
-          <Card className={`${style.container} ${className || ''}`}>
-          <header>
-              <h2>Actualizuj Post</h2>
-          </header>
+        <Card className={`${style.container} ${className || ''}`}>
           <div className={style.postCreate}>
               <Textarea
               className={style.textarea}
@@ -140,11 +145,10 @@ const fileToBase64 = (file: File): Promise<string> => {
           <Button
               type="submit"
               label={loading ? "Aktualizuję..." : "Aktualizuj"}
-              disabled={loading}
+              disabled={loading || !hasChange()}
               onClick={updatePost}
           />
-          </Card>
-      </OutsideClickHandler>
+        </Card>
     )
   };
 

@@ -16,6 +16,7 @@ type OrganizationCardProps = {
 
 const OrganizationCard = ({ organization, className }: OrganizationCardProps) => {
   const { id, name, type, image, address, rating = 0 } = organization;
+  console.log("organization: ", organization);
   const t = useTranslations();
   console.log(organization)
   const cardClasses = classNames(style.card, className);

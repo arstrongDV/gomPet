@@ -5,6 +5,7 @@ import Select, { OptionType } from "..";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import style from './AnimalSelect.module.scss';
+import { useTranslations } from "next-intl";
 
 type AnimalSelectProps = {
   className?: string;
@@ -13,12 +14,17 @@ type AnimalSelectProps = {
 };
 
 const AnimalSelect = ({ className, handleChange, initialState }: AnimalSelectProps) => {
+  const t = useTranslations();
+
   const [speciesOpt, setSpeciesOpt] = useState<any[]>([]);
   const [breedsOpt, setBreedsOpt] = useState<any[]>([]);
+
   const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType | null>(null);
   const [selectBreedsValue, setSelectBreedsValue] = useState<OptionType | null>(null);
+
   const [hasSpeciesInitialized, setHasSpeciesInitialized] = useState(false);
   const [hasBreedsInitialized, setHasBreedsInitialized] = useState(false);
+
 
   const species = speciesOpt.map(opt => ({
     value: opt.id,
@@ -30,8 +36,9 @@ const AnimalSelect = ({ className, handleChange, initialState }: AnimalSelectPro
     label: opt.group_name,
   }));
 
+
   useEffect(() => {
-    if (initialState?.speciesOpt && species.length > 0 && !hasSpeciesInitialized) {
+    if (initialState && initialState?.speciesOpt && species.length > 0 && !hasSpeciesInitialized) {
       const matchedSpecies = species.find(
         opt => opt.value === initialState.speciesOpt?.value
       );
@@ -55,6 +62,7 @@ const AnimalSelect = ({ className, handleChange, initialState }: AnimalSelectPro
       }
     }
   }, [breeds, initialState, hasBreedsInitialized]);
+
 
   useEffect(() => {
     if (handleChange && selectSpeciesValue) {
@@ -85,32 +93,61 @@ const AnimalSelect = ({ className, handleChange, initialState }: AnimalSelectPro
   }, []);
 
   useEffect(() => {
+    if (!selectSpeciesValue?.value) {
+      setBreedsOpt([]);
+      setSelectBreedsValue(null);
+      return;
+    }
+  
     const fetchBreeds = async () => {
       try {
-        const res = await AnimalsApi.getAnimalsBreeds();
+        const res = await AnimalsApi.getAnimalsBreeds(
+          Number(selectSpeciesValue.value)
+        );
         setBreedsOpt(res.data.results || []);
       } catch (err) {
         console.error("Error fetching breeds:", err);
+        setBreedsOpt([]);
       }
     };
-    fetchBreeds();
-  }, []);
+  
+    // Reset breed przy zmianie species
+    setSelectBreedsValue(null);
 
+    fetchBreeds();
+  }, [selectSpeciesValue]);
+
+  
   return (
     <div className={classNames(style.selectContainer, className)}>
       <Select
-        label="Gatunek"
+        label={t('pages.organizations.filters.breedSpecies')}
         options={species}
-        onChange={setSelectSpeciesValue}
+        onChange={initialState ? setSelectSpeciesValue : (option: any) => {
+          setSelectSpeciesValue(option);
+          handleChange?.(
+            'species',
+            option ? String(option.value) : ''
+          );
+        }}
         value={selectSpeciesValue}
         isClearable
+        isSearchable
       />
       <Select
         label="Rasa"
         options={breeds}
-        onChange={setSelectBreedsValue}
+        onChange={(option: OptionType) => {
+          setSelectBreedsValue(option);
+          handleChange?.(
+            'breed',
+            option ? String(option.value) : ''
+          );
+        }}
         value={selectBreedsValue}
         isClearable
+        isSearchable
+        isDisabled={!selectSpeciesValue}
       />
     </div>
   );

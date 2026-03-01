@@ -1,0 +1,33 @@
+{
+    "addNew": "Dodaj zwierzaka",
+    "RegisterNewAnimal": "Zaprezentuj zwierzę na platformie",
+
+    "basicInfo": "Informacje <mark>podstawowe</mark>",
+    "addImages": "Zaprezentuj <mark>zdjęcia</mark>",
+    "characteristics": "<mark>Cechy</mark> charakterystyczne",
+    "animalsDescription": "<mark>Opisz</mark> zwierzaka",
+    "activeStatus": "Aktualny <mark>status</mark>",
+    "findAnimalParents": "Znajdź <mark>rodzinę</mark> zwierzaka",
+
+    "inputAnimalName": "Nazwij zwierzaka",
+    "animalsName": "Jak się wabi?",
+    "birthDate": "Data urodzenia",
+    "addPrice": "Ustawic cennę?",
+    "price": "Cena",
+    "inputPrice": "Napisz cennę...",
+    "hasMetrics": "Czy zwierzak ma metrykę?",
+    "writeSth": "Napisz coś...",
+    "descriptionVisibleInfo": "Opis będzie widoczny w jego profilu.",
+    "familyTreeInfo": "Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.",
+    
+    "statusOwned": "Ma właściciela",
+    "statusQuarantine": "Kwarantanna",
+    "statusAvailable": "Do adopcji",
+
+    "statusVisibleInfo": "Status jest widoczny w widoku profilu zwierzaka.",
+
+    "noOrganization": "Prywatne",
+
+    "parentsAdd": "Dodawanie rodziny",
+    "addAnimal": "Dodaj zwierzaka"
+}

@@ -1,6 +1,5 @@
 'use server';
 
-import toast from 'react-hot-toast';
 import { signIn } from 'src/auth';
 
 type Fields = {
@@ -32,7 +31,6 @@ export const login = async (
 ): Promise<LoginFormState> => {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-
   const fields = { email, password };
 
   // Валідація
@@ -57,7 +55,6 @@ export const login = async (
     if (result?.error) {
       try {
         const errorData = JSON.parse(result.error);
-        toast.error(errorData.error?.message);
         return {
           errorData,
           message: errorData.error?.message || 'Invalid credentials',

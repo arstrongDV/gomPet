@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import Image from 'next/image';
 import { IAnimal, IComment } from 'src/constants/types';
 import { useTranslations } from 'next-intl';
@@ -9,28 +9,43 @@ import dayjs from 'dayjs';
 import style from './AnimalProfile.module.scss';
 
 import { FamilyTreeWrapper } from './components/FamilyTree/FamilyTreeWrapper';
-import { Button, Icon, List, Comment, OrganizationTypeName, StarRating } from 'src/components';
+import { Button, Icon, List, Comment, OrganizationTypeName, StarRating, Avatar, Card } from 'src/components';
 import RelatedAnimals from './components/RelatedAnimals';
 import AnimalPhotos from './components/AnimalPhotos';
 import Comments from './components/Comments';
 import DescriptionTranslate from './components/AnimalDescription';
 import { useRouter } from 'next/navigation';
 import CharacteristicsBlock from './components/AnimalCharacteristics';
+import { Routes } from 'src/constants/routes';
+import FollowingButton from 'src/components/layout/PostCard/components/FollowingButton';
+import { useSession } from 'next-auth/react';
+import { PostsApi } from 'src/api';
+import RichTextViewer from 'src/components/layout/Forms/RichTextViewer';
 
 type AnimalProfileProps = {
     animal: IAnimal;
     comments: IComment[];
     familyTree: any;
+    followers: number;
 }
 
-const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
+const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) => {
 
     const t = useTranslations('pages.animals');
     const router = useRouter();
+    const session = useSession();
+    const myId = Number(session.data?.user.id);
+    const [followedAuthors, setFollowedAuthors] =
+    useState<Record<number, number>>({});
+
+    console.log("followers: ", followers);
+
+    console.log("animalanimalanimal:: ", animal);
 
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format('DD.MM.YYYY, godz. HH:mm');
       };
+
   return (
     <div className={style.mainBlock}>
         <div className={style.infoWrapper}>
@@ -38,61 +53,159 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
             <div className={style.infoContainer}>
                 <div className={style.blocksContainer}>
                     <div className={style.aboutAnimalBlock}>
-                    <div className={style.aboutAnimalBlock}>
-                        <p>Imię: <span style={{color: '#000'}}>{animal?.name ?? "Brak danych"}</span></p>
-                        <p>Miasto: <span style={{color: '#000'}}>{animal?.city ?? "Brak danych"}</span></p>
-                        <p>Gatunek: <span style={{color: '#000'}}>{animal?.species ?? "Brak danych"}</span></p>
-                        <p>Płeć: <span style={{color: '#000'}}>{animal?.gender ?? "Brak danych"}</span></p>
-                        <p>Wiek: <span style={{color: '#000'}}>{animal?.age ?? "Brak danych"}</span></p>
-                        <p>Wielkość: <span style={{color: '#000'}}>{animal?.size ?? "Brak danych"}</span></p>
-                        <p>Status: <span style={{color: '#000'}}>{animal?.status ?? "Brak danych"}</span></p>
-                        <p>Rasa: <span style={{color: '#000'}}>{animal?.breed ?? "Nieznana"}</span></p>
-                        <p>Dodany dnia: <span style={{color: '#000'}}>
-                            {animal?.created_at ? formatDate(`${animal.created_at}`) : "Brak danych"}
-                        </span></p>
-                        </div>
+                        <ul>
+                            <li>Imię: <span style={{color: '#000'}}>{animal?.name ?? "Brak danych"}</span></li>
+                            <li>Miasto: <span style={{color: '#000'}}>{animal?.city ?? "Brak danych"}</span></li>
+                            <li>Gatunek: <span style={{color: '#000'}}>{animal?.species ?? "Brak danych"}</span></li>
+                            <li>Płeć: <span style={{color: '#000'}}>{animal?.gender ?? "Brak danych"}</span></li>
+                            <li>Wiek: <span style={{color: '#000'}}>{animal?.age ?? "Brak danych"}</span></li>
+                            <li>Wielkość: <span style={{color: '#000'}}>{animal?.size ?? "Brak danych"}</span></li>
+                            <li>Status: <span style={{color: '#000'}}>{animal?.status ?? "Brak danych"}</span></li>
+                            <li>Rasa: <span style={{color: '#000'}}>{animal?.breed ?? "Nieznana"}</span></li>
+                            <li>Dodany dnia: <span style={{color: '#000'}}>
+                                {animal?.created_at ? formatDate(`${animal.created_at}`) : "Brak danych"}
+                            </span></li>
+                        </ul>
                     </div>
                     <div className={style.contactsBlock}>
-                        <div className={style.mainInfo}>
-                            <div className={style.logoFundation}>
-                            <OrganizationTypeName type={animal.owner.type} />
-                            </div>
-                            <div className={style.logoHelp}>
-                                <Image src={animal.owner.image} alt='animals-help-image' width={90} height={40} />
-                            </div>
-                            <p>Ratujemy zwierzaki</p>
-                        </div>
-                        <div className={style.contactInfo}>
-                            <div className={style.boneCount}>
-                                <StarRating
-                                    rating={4}
-                                    readonly
-                             />
-                        </div>
-                        <div className={style.location}>
-                            <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.city}</p>
-                        </div>
-                        {String(animal.price) !== '0.00' ? (
-                            <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
-                        ) : (
-                            <p style={{color: '#798177'}}>Oddam w dobre rece!</p>
-                        )}
-                    
-                        <Button
-                            className={style.phoneNumButton}
-                            icon='phone'
-                            label={'Zadzwoń i zapytaj'}
-                            hrefOutside='tel:+48213713370'
-                            empty={true}
-                        />
+                        {animal.organization ? (
+                            <>
+                                <div className={style.mainInfo}>
+                                    <div className={style.logoFundation}>
+                                        <OrganizationTypeName type={animal.organization.type} />
+                                    </div>
 
-                        </div>
+                                    <div className={style.ownerLogo} onClick={() => {
+                                        router.push(Routes.ORGANIZATION_PROFILE(animal.organization.id))
+                                    }}>
+                                        {animal.organization.image && (
+                                            <img
+                                                src={animal.organization.image}
+                                                alt={animal.organization.name}
+                                                className={style.organizationLogo}
+                                            />
+                                        )}
+                                    </div>
+
+                                    <p>{animal.organization.name}</p>
+                                </div>
+
+                                <div className={style.contactInfo}>
+
+                                    {animal.organization && (
+                                        <div className={style.boneCount}>
+                                            <StarRating
+                                                rating={animal.organization.rating}
+                                                readonly
+                                            />
+                                        </div>
+                                    )}
+
+                                    <div className={style.location}>
+                                        <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.city}</p>
+                                    </div>
+
+                                    {String(animal.price) !== '0.00' ? (
+                                        <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
+                                    ) : (
+                                        <p style={{color: '#798177'}}>Oddam w dobre rece!</p>
+                                    )}
+
+                                    <div className={style.subscribtion}>
+                                        <span>{followers ?? 0} <Icon name='people' /></span>
+                                        {myId !== animal.organization.user && (
+                                            <FollowingButton 
+                                                target_type="animals.animal" 
+                                                fullWidth 
+                                                authorId={animal.id} 
+                                                followedAuthors={followedAuthors}
+                                                setFollowedAuthors={setFollowedAuthors}
+                                            />
+                                        )}
+                                    </div>
+
+                                    {animal?.organization?.phone ? (
+                                        <Button
+                                            className={style.phoneNumButton}
+                                            icon='phone'
+                                            label={'Zadzwoń i zapytaj'}
+                                            hrefOutside={`tel:${animal?.organization?.phone}`}
+                                            empty={true}
+                                        />
+                                    ) : (
+                                        <Button
+                                            className={style.phoneNumButton}
+                                            icon='mail'
+                                            label={'Napisz do nas'}
+                                            hrefOutside={`mailto:${animal?.organization?.email}`}
+                                            empty={true}
+                                        />
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className={style.mainInfo}>
+                                    <div className={style.logoFundation}>
+                                        <Avatar  
+                                            className={style.avatarImage}
+                                            profile={animal.owner_info}
+                                            src={animal.owner_info.image ? animal.owner_info.image : undefined} 
+                                        />
+                                    </div>
+
+                                    <p>{animal.owner_info.full_name}</p>
+                                </div>
+
+                                <div className={style.contactInfo}>
+                                    <div className={style.location}>
+                                        <Icon name={"mapPin"} /> <p style={{color: '#000'}}>{animal.city}</p>
+                                    </div>
+
+                                    {String(animal.price) !== '0.00' ? (
+                                        <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
+                                    ) : (
+                                        <p style={{color: '#798177'}}>Oddam w dobre rece!</p>
+                                    )}
+
+                                    <div className={style.subscribtion}>
+                                        <span>{followers ?? 0} <Icon name='people' /></span>
+                                        {myId !== animal.owner_info.id && (
+                                            <FollowingButton 
+                                                target_type="animals.animal" 
+                                                fullWidth 
+                                                authorId={animal.id} 
+                                                followedAuthors={followedAuthors}
+                                                setFollowedAuthors={setFollowedAuthors}
+                                            />
+                                        )}
+                                    </div>
+
+                                    {animal?.owner_info?.phone && (
+                                        <Button
+                                            className={style.phoneNumButton}
+                                            icon='phone'
+                                            label={'Zadzwoń i zapytaj'}
+                                            hrefOutside={`tel:${animal?.owner_info?.phone}`}
+                                            empty={true}
+                                        />
+                                    )}
+                                    {animal?.owner_info?.email && (
+                                        <Button
+                                            className={style.phoneNumButton}
+                                            icon='mail'
+                                            label={'Napisz do nas'}
+                                            hrefOutside={`mailto:${animal?.owner_info?.email}`}
+                                            empty={true}
+                                        />
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </div>
                         <CharacteristicsBlock animal={animal} />
                     {animal.location?.coordinates ? (
                         <iframe
-                            width="600"
-                            height="450"
                             className={style.mapBlock}
                             style={{ border: 0 }}
                             loading="lazy"
@@ -106,7 +219,7 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
 
                 </div>
                 <div className={style.infoTextBlock}>
-                    <DescriptionTranslate text={animal.descriptions} maxLines={5} />
+                    <RichTextViewer content={animal.descriptions} />
                 </div>
                 <div className={style.myFamilly}>
                 <FamilyTreeWrapper 
@@ -117,27 +230,36 @@ const AnimalInformation = ({ animal, comments }: AnimalProfileProps) => {
                 </div>
             </div>
         </div>
-        <div className={style.bottomContainer}>
-            <List
-                className={style.comments}
-                // isLoading={isLoading}
-                emptyText="Brak komentarzy"
-            >
-                {animal.comments.map((comment: any) => (
-                    <Comment key={comment.id} comment={comment} /> 
-                ))}
-            </List>
-            {/* <Comments comment={comment}/> */}
-            <div className={style.related}>
-                <div className={style.title}>
-                    <h4>Inni <span style={{color: '#277D23'}}>podopieczni</span> fundacji</h4>
-                    <p onClick={() => router.push(`/organizations/${animal.owner.id}`)}>Zobacz stronę fundacji</p>
-                </div>
-                <div className={style.relatedAnimals}>
-                    <RelatedAnimals />
+        {animal.organization && (
+            <div className={style.bottomContainer}>
+                <Card>
+                    <div className={style.organizationOpinionText}>
+                        <h3>Opinie o fundacji</h3>
+                        <p>średnia ocen: {animal.organization.rating} na 5</p>
+                    </div>
+
+                    <List
+                        className={style.comments}
+                        // isLoading={isLoading}
+                        emptyText="Brak komentarzy"
+                    >
+                        {comments.map((comment: any) => (
+                            <Comment key={comment.id} comment={comment} noEditAllowed /> 
+                        ))}
+                    </List>
+                </Card>
+
+                <div className={style.related}>
+                    <div className={style.title}>
+                        <h4>Inni <span style={{color: '#277D23'}}>podopieczni</span> fundacji</h4>
+                        <p onClick={() => router.push(Routes.ORGANIZATION_PROFILE(animal.organization.id))}>Zobacz stronę fundacji</p>
+                    </div>
+                    <div className={style.relatedAnimals}>
+                        <RelatedAnimals organizationId={animal.organization.id} />
+                    </div>
                 </div>
             </div>
-        </div>
+        )}
     </div>
   )
 }

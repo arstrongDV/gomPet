@@ -78,53 +78,59 @@
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  gap: 1rem;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
 }
 
+
+
+
+// .list {
+//   flex: 1;
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: $spacing-4;
+//   margin: 20px 0;
+//   transition: $transition-main;
+//   justify-content: center;
+//   // grid-template-columns: repeat(3, 1fr);
+
+//   // &.withMap {
+//   //   display: grid;
+//   //   grid-template-columns: repeat(2, 1fr);
+//   // }
+// }
+
 .list {
-  flex: 1;
+  flex: 1; 
+  // grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   display: grid;
-  flex-wrap: wrap;
-  gap: $spacing-4;
+  gap: $spacing-5;
   margin: 20px 0;
   transition: $transition-main;
   justify-content: center;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
 
-  &.withMap {
-    grid-template-columns: repeat(2, 1fr); // 👈 zmiana tylko jeśli mapa włączona
-  }
-  // duże ekrany
-  @include desktopWidth {
-    grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 250px));
+      gap: $spacing-2;
   }
 
-  // <= 1024px
-  @include mobileWidth {
-    grid-template-columns: repeat(3, 1fr);
-
-    &.withMap {
-      grid-template-columns: repeat(2, 1fr); // 👈 zmiana tylko jeśli mapa włączona
+  @media (max-width: 480px) {
+      grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+      justify-content: center;
+      justify-items: center;
     }
-  }
+    
 
-  // <= 768px
-  @include tabletWidth {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  // <= 480px
-  @include phoneWidth {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: $spacing-3;
-  }
-
-  // <= 320px
-  @include smPhoneWidth {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: $spacing-2;
-  }
+  // @media (max-width: 360px) {
+  //     grid-template-columns: 1fr;
+  //     justify-items: center;
+  //     gap: $spacing-2;
+  // }
 }
 
 .map {
@@ -132,7 +138,8 @@
   padding: 2rem;
   top: 2rem;
   width: 40%;
-  min-width: 300px;
+  min-width: 350px;
+  // width: 100%;
   height: 700px;
   transition: $transition-main;
 
@@ -153,7 +160,10 @@
   // }
 
   .map {
+    position: relative;
     width: 100%;
+    height: 350px;
+    border-radius: $radius-m;
   }
 
   .list {

@@ -5,9 +5,26 @@
   gap: $spacing-6;
 }
 
-.comments {
+.commentsContainer {
   @include element-flex(column, flex-start, stretch);
   gap: $spacing-6;
+}
+
+.comments {
+  @include element-flex(column, flex-start, stretch);
+  padding: $spacing-4;
+  max-height: 50rem;
+  overflow-y: auto;
+  gap: $spacing-5;
+
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
 }
 
 .title {

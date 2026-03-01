@@ -1,9 +1,14 @@
 @import 'styles';
 
 .container {
+    @include element-flex(column, center, stretch);
+    gap: $spacing-6;
+    width: 100%;
+}
+
+.InfoWrraper{
     @include element-flex(row, space-between, stretch);
     gap: $spacing-9;
-    width: 100%;
 }
 
 .infoSection{
@@ -48,6 +53,24 @@
     }
 }
 
+.organizationList {
+    flex: 1; 
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: $spacing-4;
+    transition: $transition-main;
+    margin: 20px 0;
+  }
+
+.animalsList{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 2rem;
+    align-items: center;
+}
+
 .flexRow {
     @include element-flex(row, flex-start, center);
     gap: $spacing-4;
@@ -64,7 +87,7 @@
     display: flex;
     gap: 2rem;
     margin-top: 3rem;
-    align-self: flex-start;
+    align-self: flex-end;
 }
 
 .btnDel{
@@ -121,4 +144,11 @@
         color: $color-primary-active;
         opacity: 0.85;
       }
+  }
+
+  .usersStaff{
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
   }

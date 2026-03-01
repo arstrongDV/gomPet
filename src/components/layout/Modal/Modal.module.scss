@@ -31,7 +31,7 @@
   padding: $spacing-6;
   padding-right: $spacing-3;
   width: 100%;
-  max-width: 50.5rem;
+  // max-width: 50.5rem;
   animation-duration: $transition-duration-fast;
   overflow: hidden;
   position: relative;
@@ -51,7 +51,7 @@
 .modalBody {
   line-height: 1.38;
   overflow: auto;
-  max-height: 75vh;
+  // max-height: 75vh;
 
   &.extraPadding {
     padding-left: 1px;
@@ -59,7 +59,7 @@
   }
 
   &.withScroll {
-    padding-right: $spacing-3;
+    padding-right: $spacing-4;
     @include custom-scrollbar;
   }
 }

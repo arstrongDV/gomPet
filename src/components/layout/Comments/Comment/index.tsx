@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Ref, useState } from 'react';
 import classNames from 'classnames';
-
-import { Avatar, Icon } from 'components';
-
+import { Avatar } from 'components';
 import { getDaysAgo } from 'src/utils/helpers';
 
 import LabelLink from '../../LabelLink';
@@ -13,22 +11,21 @@ import StarRating from '../../StarRating';
 import style from './Comment.module.scss';
 import { PostsApi } from 'src/api';
 import { useSession } from 'next-auth/react';
-import OutsideClickHandler from 'react-outside-click-handler';
 import toast from 'react-hot-toast';
-import Settings from '../../Settings';
 import SettingsButton from '../../Settings';
 
 type CommentProps = {
   className?: string;
   comment: any;
+  noEditAllowed?: boolean;
 
   commentDel?: (id: any) => void;
   setUpdateId?: (id: number | null) => void;
+  inputFieldRef?: any;
 };
 
 const TEXT_LIMIT = 300;
-
-const Comment = ({ className, comment, commentDel, setUpdateId }: CommentProps) => {
+const Comment = ({ className, comment, noEditAllowed, commentDel, setUpdateId, inputFieldRef }: CommentProps) => {
   const { id, body, created_at, author, rating } = comment;   //text
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDisable, setIsDisable]= useState<boolean>(false);
@@ -59,6 +56,7 @@ const Comment = ({ className, comment, commentDel, setUpdateId }: CommentProps) 
       <Avatar
         className={style.image}
         profile={comment.author}
+        src={comment.author?.image ? comment.author.image : undefined}
       />
 
       <div className={style.header}>
@@ -79,40 +77,23 @@ const Comment = ({ className, comment, commentDel, setUpdateId }: CommentProps) 
           {showMore ? body : body?.substring(0, TEXT_LIMIT)}
           {!showMore && body?.length > TEXT_LIMIT && '...'}
           
-
-          <SettingsButton 
-            onEdit={() => {
-              setUpdateId?.(comment.id);
-              setIsOpen(false);
-              // setIsDisable(true);
-            }}
-            onDelete={deleteComment}
-            authId={author.id}
-            isDisabled={isDisable}
-            align="right"
-          />
-          {/* {myId === author.id && (
-            <div className={style.settingsWrapper}>
-              <div
-                className={style.settingsToggle}
-                onClick={() => setIsOpen(prev => !prev)}
-                >
-                <Icon name="list" />
-              </div>
-
-              {isOpen && (
-                <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
-                  <Settings
-                    onEdit={() => {
-                      setUpdateId?.(comment.id);
-                      setIsOpen(false);
-                    }}
-                    onDelete={deleteComment}
-                  />
-                </OutsideClickHandler>
-              )}
-            </div>
-          )} */}
+          {!noEditAllowed && (
+            <SettingsButton 
+              onEdit={() => {
+                setUpdateId?.(comment.id);
+                setIsOpen(false);
+                if (inputFieldRef?.current) {
+                  inputFieldRef.current.scrollIntoView({
+                    behavior: 'smooth',
+                  });
+                }
+              }}
+              onDelete={deleteComment}
+              authId={author.id}
+              isDisabled={isDisable}
+              align="right"
+            />
+          )}
 
         </p>
 

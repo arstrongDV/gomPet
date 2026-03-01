@@ -81,25 +81,25 @@ const SheltersPage = () => {
     if('/breedings' !== pathname) setShowMap(false);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (
-        showMap &&
-        target &&
-        !target.closest('#map') &&  
-        !target.closest('#button')   
-      ) {
-        setShowMap(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     const target = event.target as Element;
+  //     if (
+  //       showMap &&
+  //       target &&
+  //       !target.closest('#map') &&  
+  //       !target.closest('#button')   
+  //     ) {
+  //       setShowMap(false);
+  //     }
+  //   };
 
-    document.addEventListener('mousedown', handleClickOutside);
+  //   document.addEventListener('mousedown', handleClickOutside);
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMap]);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [showMap]);
 
   return (
     <div className={style.container}>
@@ -123,8 +123,13 @@ const SheltersPage = () => {
 
       <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} needFullFilters={true} />
 
-      <div id='map'>
+      <div>
           <div className={style.content}>
+            <OrganizationOnMap
+              organizations={organizations}
+              className={classNames(style.map, { [style.show]: showMap })}
+            />
+
             <List
               isLoading={isLoading}
               className={style.list}
@@ -136,11 +141,6 @@ const SheltersPage = () => {
                 />
               ))}
             </List>
-
-            <OrganizationOnMap
-              organizations={organizations}
-              className={classNames(style.map, { [style.show]: showMap })}
-            />
           </div>
 
           <Pagination

@@ -8,19 +8,27 @@ import { articlesMock } from 'src/mocks/articles';
 import { Locale } from 'src/navigation';
 
 import style from './BlogArticlePage.module.scss';
+import { ArticlesApi } from 'src/api';
+import KnowledgePage from '.';
 
 const getData = cache(async (slug: string) => {
   const session = await auth();
   injectToken(session?.access_token);
   // const { data } = await OffersApi.getOffer(slug);
-
-  // return data;
-
-  return articlesMock[0];
+  const { data } = await ArticlesApi.getArticlePage(slug);
+  return data;
+  
+  // return articlesMock[0];
 });
 
 export const generateMetadata = async ({ params: { slug } }: { params: { slug: string } }) => {
   const data = await getData(slug);
+  console.log(data);
+  if (!data) {
+    return {
+      title: 'Article not found'
+    };
+  }
 
   return {
     title: data.title,
@@ -42,7 +50,8 @@ const BlogArticlePage = async ({
   if (!data) return <Loader />;
   return (
     <div>
-      <h1>Offer</h1>
+      <KnowledgePage data={data} />
+      {/* <h1>Offer</h1>
 
       {data.image && (
         <img
@@ -51,7 +60,7 @@ const BlogArticlePage = async ({
         />
       )}
       <h2>{data.title}</h2>
-      <p>{data.content}</p>
+      <p>{data.content}</p> */}
     </div>
   );
 };

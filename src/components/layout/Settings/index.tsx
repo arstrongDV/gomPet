@@ -6,14 +6,19 @@ import Icon from "../Icon";
 import style from './Settings.module.scss';
 import { useSession } from "next-auth/react";
 import classNames from "classnames";
+import MemberModal from './memberModal';
+import Modal from '../Modal';
 
 type SettingsButtonProps = {
   className?: string;
   onEdit?: () => void;
   onDelete?: () => void;
   authId?: number;
+  ownerId?: number;
   align?: "left" | "right";
   isDisabled?: boolean;
+  organizationId?: number;
+  filledButton?: boolean;
 };
 
 export default function SettingsButton({
@@ -22,15 +27,26 @@ export default function SettingsButton({
   onDelete,
   isDisabled,
   authId,
+  ownerId,
   align = "right",
+  organizationId,
+  filledButton
 }: SettingsButtonProps) {
-  const [isOpen, setIsOpen] = useState(false);
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+
   const toggleRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+
   const session = useSession();
   const myId = Number(session.data?.user?.id);
 
-  if (authId !== undefined && myId !== authId) return null;
+  const canEdit =
+  (authId !== undefined && myId === authId) ||
+  (ownerId !== undefined && myId === ownerId);
+
+if (!canEdit) return null;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -47,7 +63,11 @@ export default function SettingsButton({
     <div className={style.settingsWrapper}>
       <div
         ref={toggleRef}
-        className={classNames(style.settingsToggle, { [style.disabledBtn]: isDisabled })}
+        className={classNames(
+          style.settingsToggle, 
+          { [style.disabledBtn]: isDisabled },
+          {[style.filledButton]: filledButton}
+        )}
         onClick={(e) => {
           if (isDisabled) return;
           e.stopPropagation();
@@ -71,6 +91,17 @@ export default function SettingsButton({
           >
             Edytuj
           </button>
+          {organizationId && (
+            <button
+              className={style.settingsBtn}
+              onClick={() => {
+                setShowModal(prev => !prev);
+                setIsOpen(false);
+              }}
+            >
+              Przekaz organizacje
+            </button>
+          )}
           <button
             className={style.settingsBtn}
             onClick={() => { onDelete?.(); setIsOpen(false); }}
@@ -79,6 +110,15 @@ export default function SettingsButton({
           </button>
         </div>
       )}
+
+        <Modal 
+          className={style.modalWin} 
+          isOpen={showModal} 
+          closeModal={() => setShowModal(false)}
+          title='Znajdz nowego wlasciciela'
+        >
+          <MemberModal organizationId={organizationId} setShowModal={setShowModal} />
+        </Modal>
     </div>
   );
 }

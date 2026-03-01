@@ -6,6 +6,10 @@
     border-radius: $radius-m;
     padding: 16px;
     width: 100%;
+
+    align-items: center;
+    justify-content: center;
+    
     min-width: 0;       
     background-color: $color-white;
     flex: 1 1 0;
@@ -24,13 +28,7 @@
         padding: 10px;
         font-size: $font-size-xs;
       }
-
-    //   @media (max-width: 480px) {
-    //     padding: 8px;
-    //     font-size: $font-size-xxs;
-    //   }
   }
-
 
 .mainBlock {
     font-family: 'Raleway', sans-serif;
@@ -84,37 +82,83 @@
   }
   
 //About Animal Block
-.aboutAnimalBlock {
-    @include info-blocks();
-    gap: $spacing-2;
-    color: #9f9b9b;
+// .aboutAnimalBlock {
+//     @include info-blocks();
+//     list-style: none;
+//     color: #9f9b9b;
 
-    @media (max-width: 1400px) {
-        gap: $spacing-1;
-        font-size: $font-size-xs;
-    }
-    @media (max-width: 1200px) {
-        gap: $spacing-2;
-      }
-    @media (max-width: 1024px) {
-        gap: $spacing-1;
-      }
-    @media (max-width: 900px) {
-        gap: $spacing-2;
-        font-size: $font-size-xs;
-    }
-    @media (max-width: 550px) {
-        font-size: $font-size-xxs;
-    }
-    // @media (max-width: 480px) {
-    //     padding: 8px;
-    // }
-    @media (max-width: 480px) {
-        gap: $spacing-1; 
-        font-size: $font-size-s;
-    }
+//     ul {
+//       display: flex;
+//       flex-direction: column;
+//       gap: 12px 32px;
+//       // width: 100%;
+//     }
+
+//     li {
+//       display: flex;
+//       gap: 8px;
+//     }
+
+//     span {
+//       color: #000;
+//       text-align: right;
+//     }
+
+//     @media (max-width: 1400px) {
+//         gap: $spacing-1;
+//         font-size: $font-size-xs;
+//     }
+//     @media (max-width: 1200px) {
+//         gap: $spacing-2;
+//       }
+//     @media (max-width: 1024px) {
+//         gap: $spacing-1;
+//       }
+//     @media (max-width: 900px) {
+//         gap: $spacing-2;
+//         font-size: $font-size-xs;
+//     }
+//     @media (max-width: 550px) {
+//         font-size: $font-size-xxs;
+//     }
+//     // @media (max-width: 480px) {
+//     //     padding: 8px;
+//     // }
+//     @media (max-width: 480px) {
+//         gap: $spacing-1; 
+//         font-size: $font-size-s;
+//     }
+//   }
+.aboutAnimalBlock {
+  @include info-blocks();
+  color: #9f9b9b;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
   }
 
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    flex-wrap: nowrap;   // 🔥 prevents breaking into new row
+  }
+
+  li strong {
+    white-space: nowrap; // 🔥 prevents "Dodany dnia" from breaking
+  }
+
+  span {
+    color: #000;
+    flex: 1;             // takes remaining space
+  }
+}
 
   //Contacts Block
   .contactsBlock {
@@ -136,7 +180,18 @@
     //   gap: 10px;
     // }
   }
-  
+
+  .avatarImage{
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .ownerLogo{
+    cursor: pointer;
+    width: 8rem;
+    height: 8rem;
+  }
+
   .logoFundation {
     @include element-flex(row, flex);
     gap: 3px;
@@ -320,8 +375,8 @@
 .mapBlock{
     display: flex;
     flex-wrap: wrap; 
-    height: auto;
-    min-height: 350px; //
+    height: 100%;
+    // min-height: 350px;
     width: 100%;
     min-width: 0px;  
     flex: 1 1 0;
@@ -342,6 +397,7 @@
 }
 .infoTextBlock{
     margin-top: 24px;
+    padding: 2rem;
 }
 .myFamilly{
     margin: 24px 0; 
@@ -398,6 +454,22 @@
     }
 }
 
+.organizationOpinionText{
+  margin-bottom: 2.4rem;
+  
+  h3{
+    font-weight: 600;
+    font-size: 20px;
+    color: #000;
+  }
+
+  p{
+    font-size: 14px;
+    line-height: 130%;
+    color: $color-foreground-dim;
+  }
+}
+
 .comments {
   display: flex;
   flex-direction: column;
@@ -425,33 +497,18 @@
 }
 
 .relatedAnimals {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    padding-bottom: 10px;
-    scroll-behavior: smooth;
     width: 100%;
-    max-width: 100%;
-    flex-wrap: nowrap; 
 }
 
-.relatedAnimals > * { 
-    flex: 0 0 300px; 
-    max-width: 300px;
-}
+.subscribtion{
+  display: flex;
+  gap: 1.4rem;
+  align-items: center;
+  justify-content: center;
 
-.relatedAnimals::-webkit-scrollbar {
-    height: 5px;
-}
-
-.relatedAnimals::-webkit-scrollbar-thumb {
-    background-color: #aaa;
-    border-radius: 10px;
-}
-
-.relatedAnimals::-webkit-scrollbar-track {
-    background: transparent;
+  span{
+    display: flex;
+    gap: 0.6rem;
+    font-size: $font-size-m;
+  }
 }

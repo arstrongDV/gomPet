@@ -14,8 +14,8 @@
   z-index: 0;
   position: relative;
   width: 100%;
-  min-width: unset;
-  max-width: unset;
+  min-width: 230px;
+  min-height: 280px;
 
   max-width: 300px;
   border-radius: $radius-m;
@@ -45,10 +45,15 @@
     top: $spacing-4;
     right: $spacing-4;
   }
+  
+  &.card--map{
+    width: 200px;
+    height: 250px;
+  }
 
   @media (min-width: 768px) {
     min-width: 300px;
-    min-height: 350px;
+    height: 350px;
   }
 
   // @media (max-width: 480px) {
@@ -65,9 +70,14 @@
 .content {
   z-index: 0;
   position: absolute;
-  inset: $spacing-4;
+  inset: $spacing-2;
   @include element-flex(column, space-between, flex-start);
-  gap: $spacing-4;
+  gap: $spacing-2;
+
+  @media (min-width: 768px) {
+    inset: $spacing-4;
+    gap: $spacing-4;
+  }
 }
 
 .gradient {
@@ -92,8 +102,12 @@
 
 .top {
   @include element-flex(row, space-between);
-  gap: $spacing-2;
+  gap: $spacing-1;
   width: 100%;
+
+  @media (min-width: 768px) {
+    gap: $spacing-2;
+  }
 }
 
 .about {
@@ -108,9 +122,13 @@
   @include body1;
   width: fit-content;
   min-width: 3rem;
-  font-size: $font-size-s;
+  font-size: $font-size-xs;
   border-radius: $radius-m;
   text-align: center;
+
+  @media (min-width: 768px) {
+    font-size: $font-size-s;
+  }
 
   &.title {
     color: $color-white;
@@ -127,11 +145,15 @@
   &.characteristics {
     color: $color-white;
     background-color: rgba($color: #277d23, $alpha: 0.8);
+    font-size: $font-size-xxxs;
     // @media (max-width: 1300px) {
     //   font-size: 12px;
     //   min-width: 3rem;
     //   // padding: $spacing-4;
     // }
+      @media (min-width: 768px) {
+        font-size: $font-size-s;
+      }
   }
 
   &.gender {
@@ -169,7 +191,7 @@
   visibility: hidden;
   pointer-events: none;
   @include element-flex(column, center, center);
-  gap: $spacing-3;//4
+  gap: $spacing-2;
   width: 100%;
   transition: $transition-main;
 
@@ -177,12 +199,21 @@
     @include element-flex(column, flex-start, center);
     gap: $spacing-1;
   }
+
+  @media (min-width: 768px) {
+    gap: $spacing-3;//4
+  }
 }
 
 .buttonCard{
-  max-width: 16rem;
-  height: 4.3rem;
+  max-width: 14rem;
+  height: 3.7rem;
   color: #000;
+
+  @media (min-width: 768px) {
+    max-width: 16rem;
+    height: 4.3rem;
+  }
 }
 
 .bottom {
@@ -194,6 +225,10 @@
   @include element-flex(row, flex-start, center);
   gap: $spacing-1;
   color: $color-white;
+  font-size: $font-size-xs;
+  @media (min-width: 768px) {
+    font-size: $font-size-s;
+  }
 }
 
 .addBookmark {
@@ -218,5 +253,51 @@
     svg {
       fill: $color-accent;
     }
+  }
+
+  // @media (min-width: 768px) {
+  //   width: 3.5rem;
+  //   height: 3.5rem;
+  // }
+}
+
+.card--map {
+  .card {
+    width: 200px;
+    height: 250px;
+  }
+
+  .content {
+    inset: $spacing-2;
+    gap: $spacing-2;
+  }
+
+  .top {
+    gap: $spacing-1;
+  }
+
+  .badge {
+    font-size: $font-size-xs;
+    padding: $spacing-1 $spacing-2;
+
+    &.characteristics {
+      font-size: $font-size-xxs;
+      // @media (min-width: 768px) {
+      //     font-size: $font-size-s;
+      // }
+    }
+  }
+
+  .hoverContent {
+    gap: $spacing-2;
+  }
+
+  .buttonCard {
+    max-width: 14rem;
+    height: 3.7rem;
+  }
+
+  .location {
+    font-size: $font-size-xs;
   }
 }

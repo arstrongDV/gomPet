@@ -72,6 +72,7 @@ const CommentInput = ({ className, onSubmit, placeholder, withRating = false, va
         <Avatar
           className={style.image}
           profile={session.data?.user}
+          src={session.data?.user.image ? session.data?.user.image : undefined}
         />
         <div className={style.inputWrapper}>
           <Textarea

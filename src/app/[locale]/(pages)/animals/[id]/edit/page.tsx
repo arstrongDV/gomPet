@@ -28,7 +28,7 @@ const AnimalEditPage = () => {
     const fetchAnimal = async () => {
       try {
         const response_animal = await AnimalsApi.getAnimalProfile(Number(params.id));
-
+        console.error('Error fetching animal:', response_animal);
         setAnimal(response_animal.data);
       } catch (error) {
         console.error('Error fetching animal:', error);

@@ -52,7 +52,7 @@ const NewLitterPage = () => {
       toast.success("Nowy miot dodany");
 
       if (orgId) {
-        router.push(Routes.ORGANIZATION_PROFILE(orgId));
+        router.push(Routes.ORGANIZATION_LITTERS(orgId));
       }
       router.back()
     } catch (err) {
@@ -76,37 +76,7 @@ const NewLitterPage = () => {
             Informacje <mark>podstawowe</mark>
           </h3>
           <AnimalSelect handleChange={handleChange} />
-          {/* <div className={style.flexRow}> */}
-            {/* <Select
-              label={'Gatunek'}
-              options={[
-                {
-                  value: 'dog',
-                  label: 'Pies'
-                }
-              ]}
-              onChange={() => {}}
-              value={{
-                value: 'cat',
-                label: 'Kot'
-              }}
-            />
-
-            <Select
-              label={'Rasa'}
-              options={[
-                {
-                  value: 'beagle',
-                  label: 'Beagle'
-                }
-              ]}
-              onChange={() => {}}
-              value={{
-                value: 'beagle',
-                label: 'Beagle'
-              }}
-            /> */}
-          {/* </div> */}
+          
           <span className={style.caption}>Gatunek i rasa, którą obejmuje ten miot.</span>
         </Card>
         {/* BASIC DATA */}
@@ -162,33 +132,6 @@ const NewLitterPage = () => {
             Aktualny <mark>status</mark>
           </h3>
 
-          {/* <div className={style.statusSelect}>
-            <Tag
-              onClick={() => {}}
-              selected={false}
-            >
-              Dostępne
-            </Tag>
-            <Tag
-              onClick={() => {}}
-              selected={false}
-            >
-              Wydane
-            </Tag>
-            <Tag
-              onClick={() => {}}
-              selected={true}
-            >
-              Można zarezerwować
-            </Tag>
-            <Tag
-              onClick={() => {}}
-              selected={false}
-            >
-              Brak miejsc do rezerwacji
-            </Tag>
-          </div> */}
-
           <Select 
               label="Status"
               options={statusOptions}
@@ -202,6 +145,7 @@ const NewLitterPage = () => {
 
         <Button
           className={style.submit}
+          disabled={Object.values(litterForm).some(value => value === '')}
           label={'Utwórz miot'}
           onClick={handleSubmit}
         />

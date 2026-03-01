@@ -9,7 +9,6 @@ import { Button, List, Pagination } from 'src/components';
 import { paginationConfig } from 'src/config/pagination';
 import { Params } from 'src/constants/params';
 import { IAnimal } from 'src/constants/types';
-// import { animalsMock } from 'src/mocks/animals';
 import { useRouter } from 'src/navigation';
 
 import AnimalCard from './components/AnimalCard';
@@ -17,12 +16,8 @@ import AnimalFilters from './components/AnimalFilters';
 
 import style from './AnimalsPage.module.scss';
 
-import { IOrganization } from 'src/constants/types';
-import { organizationsMock } from 'src/mocks/organizations';
-import { useAppSelector } from 'src/lib/store/hooks';
 import { AnimalsApi } from 'src/api';
-import OutsideClickHandler from 'react-outside-click-handler';
-import OrganizationOnMap from '../(organizations)/components/OrganizationOnMap';
+import AnimalsOnMap from './components/AnimalsOnMap';
 
 const AnimalsPage = () => {
   const t = useTranslations('pages.animals');
@@ -34,7 +29,6 @@ const AnimalsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
   const [total, setTotal] = useState<number>(1);
-  const [organizations, setOrganizations] = useState<IOrganization[]>([]);
 
   const [showFilters, setShowFilters] = useState<boolean>(true);
   const [showMap, setShowMap] = useState<boolean>(false);
@@ -45,7 +39,6 @@ const AnimalsPage = () => {
   };
 
   const currentPage = Number(searchParams.get('page')) || 1;
-  const itemsPerPage = 10; 
   console.log(searchParams);
   const getAnimals = React.useCallback(async (filters?: any) => {
     setIsLoading(true);
@@ -62,10 +55,10 @@ const AnimalsPage = () => {
       setIsLoading(false);
     }
   }, []);
-  
+
   useEffect(() => {
     const filters = {
-      limit: itemsPerPage,
+      // limit: itemsPerPage,
       page: currentPage,
       species: searchParams.getAll('species'),
       breed: searchParams.getAll('breed'),
@@ -91,10 +84,6 @@ const AnimalsPage = () => {
     getAnimals(filters);
   }, [searchParams, getAnimals]);
 
-  useEffect(() => {
-    setOrganizations(organizationsMock);
-  }, []);
-
   return (
     <div className={style.container}>
       <div className={style.buttons}>
@@ -116,6 +105,13 @@ const AnimalsPage = () => {
 
         <div>
           <div className={style.content}>
+            <AnimalsOnMap
+                animals={animals}
+                className={classNames(style.map, {
+                  [style.show]: showMap
+                })}
+              />
+
             <List
               isLoading={isLoading}
               className={classNames(style.list, {
@@ -124,16 +120,9 @@ const AnimalsPage = () => {
               })}
             >
                 {animals.map((animal) => (
-                  <AnimalCard key={animal.id} animal={animal}/>
+                  <AnimalCard key={animal.id} animal={animal} showMap={showMap} />
                 ))}
             </List>
-
-            <OrganizationOnMap
-                organizations={organizations}
-                className={classNames(style.map, {
-                  [style.show]: showMap
-                })}
-              />
           </div>
 
           <Pagination

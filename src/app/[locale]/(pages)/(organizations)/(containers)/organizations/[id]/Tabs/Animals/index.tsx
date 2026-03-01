@@ -55,6 +55,7 @@ const Animals = ({ organization }: AnimalsProps) => {
           <AnimalCard
             key={animal.id}
             animal={animal}
+            filledButton
           />
         ))}
       </List>

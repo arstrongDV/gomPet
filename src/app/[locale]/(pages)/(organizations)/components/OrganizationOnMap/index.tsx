@@ -31,14 +31,13 @@ const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapPro
   //   lat: +organizations[0].address.lat,
   //   lng: +organizations[0].address.lng,
   // };
-    const center = user?.location ? {
-      lat: +user?.location.coordinates[0],
-      lng: +user?.location.coordinates[1],
+    const center = user?.location && organizations.length >= 2 ? {
+      lat: +user?.location.coordinates[1],
+      lng: +user?.location.coordinates[0],
     } : {
         lat: +organizations[0].address.lat,
         lng: +organizations[0].address.lng,
     }
-
 
   return (
     <Suspense fallback={<Loader />}>
@@ -53,8 +52,8 @@ const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapPro
           <AdvancedMarker
           key={user?.id}
           position={{
-            lat: +user?.location.coordinates[0],
-            lng: +user?.location.coordinates[1],
+            lat: +user?.location.coordinates[1],
+            lng: +user?.location.coordinates[0],
           }}
           onClick={() => {
             // console.log(`Marker clicked for organization ID: ${user.id}`);

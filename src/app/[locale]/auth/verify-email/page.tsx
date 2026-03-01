@@ -9,7 +9,7 @@ import { Locale } from 'src/navigation';
 import style from './VerifyEmail.module.scss';
 
 const VerifyEmail = ({ params: { locale } }: Readonly<{ params: { locale: Locale } }>) => {
-  unstable_setRequestLocale(locale);
+  // unstable_setRequestLocale(locale);
 
   const t = useTranslations();
 

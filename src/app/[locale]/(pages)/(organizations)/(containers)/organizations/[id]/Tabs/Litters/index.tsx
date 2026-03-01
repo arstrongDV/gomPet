@@ -68,7 +68,7 @@ const Litters = ({ organization }: LittersProps) => {
   }
 
   const onDelete = (id: number) => {
-    setLitters(prev => prev.filter(l => l.id !== id));
+    // setLitters((prev: any) => prev.filter((l: any) => l.id !== id)); ////////
     setCurrentLitters(prev => prev.filter(l => l.id !== id));
     setPreviousLitters(prev => prev.filter(l => l.id !== id));
   };

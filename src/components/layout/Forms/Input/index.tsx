@@ -16,7 +16,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>,
   hideLabel?: boolean;
   description?: string;
   className?: string;
-  //validator?: SimpleReactValidator;
+  // validator?: SimpleReactValidator;
   rule?: string;
   value?: number | string;
   onChangeText?: (value: string) => void;

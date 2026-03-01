@@ -74,7 +74,14 @@ const AnimalActivity = ({ animalId, animalOwnerId }: AnimalActivityProps) => {
       <List isLoading={false} className={style.list}>
         {animalPosts.length > 0 ? (
           animalPosts.map((post) => (
-            <PostCard key={post.id} post={post} updatePosts={updatePosts} deletePosts={deletePosts} />
+            <PostCard 
+              type="posts.post" 
+              key={post.id} 
+              post={post} 
+              updatePosts={updatePosts} 
+              deletePosts={deletePosts} 
+              hideFollowButton
+            />
           ))
         ) : (
           <div className={style.noPost}>No posts available</div>

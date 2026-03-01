@@ -116,7 +116,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
       return;
     }
 
-    const { coordinates } = session.data.user.location;
+    const { coordinates }: any = session?.data?.user.location; ////////
   
     // upewnij się, że lat i lng są liczby
     if (coordinates[0] == null || coordinates[1] == null) return;

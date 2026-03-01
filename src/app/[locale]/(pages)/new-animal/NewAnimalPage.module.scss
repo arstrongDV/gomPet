@@ -4,21 +4,31 @@
   @include element-flex(column, flex-start, stretch);
   gap: $spacing-6;
   width: 100%;
+
+  @include phoneWidth {
+    font-size: $font-size-xxs;
+  }
 }
 
 .section {
   @include element-flex(column);
   gap: $spacing-6;
+
+  @include phoneWidth {
+    font-size: $font-size-xxs;
+  }
 }
 
 .genderSelect,
 .statusSelect {
   @include element-flex(row, flex-start, center);
   gap: $spacing-2;
+
 }
 
 .flexRow {
   @include element-flex(row, flex-start, center);
+  flex-wrap: wrap;
   gap: $spacing-4;
 }
 
@@ -34,6 +44,10 @@
   grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
   gap: $spacing-4;
   width: 100%;
+
+  @include phoneWidth {
+    font-size: $font-size-xxs;
+  }
 }
 
 .caption {
@@ -48,6 +62,7 @@
 .familyTreeBlock{
   @include element-flex(row, flex-start, center);
   gap: $spacing-4;
+  flex-wrap: wrap
 }
 
 .addParents {
@@ -57,6 +72,7 @@
   background-color: #FAFAFA;
   border-radius: 16px;
   transition: all 0.4s ease-in-out; 
+  cursor: pointer;
 
   &:hover {
     background-color: #ededed;
@@ -72,54 +88,15 @@
 }
 
 .cardAddParents {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
   display: flex;
   flex-direction: column;
-
-  width: 100%;
-  max-width: 1200px;
-  height: 90vh; // zawsze ma stałą wysokość
-  background: $color-white;
-  color: $color-black;
-  padding: $spacing-6;
-  border-radius: $radius-l;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-
-  // przewijanie tylko wewnątrz
-  overflow-y: auto;
-
-  gap: $spacing-3;
-
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity $transition-main ease;
-
-  &::-webkit-scrollbar {
-    width: 0.6rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-  }
-
-  &.show {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: all;
-  }
+  padding: $spacing-4;
 }
 
 
 .parent {
   @include element-flex(column, center, center);
-  position: relative; // ważne - kontekst dla absolute
+  position: relative;
 }
 
 .image {
@@ -144,4 +121,15 @@
   &:hover {
     background: rgba(255, 255, 255, 1);
   }
+}
+
+.modaParentsAddlWin{
+  max-width: 1200px;
+  height: 95vh;
+  gap: $spacing-3;
+}
+
+.statusSelect{
+  display: flex;
+  flex-wrap: wrap;
 }

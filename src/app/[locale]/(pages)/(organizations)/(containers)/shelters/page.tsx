@@ -114,6 +114,13 @@ const SheltersPage = () => {
 
         <div>
           <div className={style.content}>
+            <OrganizationOnMap
+              organizations={organizations}
+              className={classNames(style.map, {
+                [style.show]: showMap
+              })}
+            />
+
             <List
               isLoading={isLoading}
               className={classNames(style.list, {
@@ -127,13 +134,6 @@ const SheltersPage = () => {
                 />
               ))}
             </List>
-
-            <OrganizationOnMap
-                organizations={organizations}
-                className={classNames(style.map, {
-                  [style.show]: showMap
-                })}
-              />
           </div>
 
           <Pagination

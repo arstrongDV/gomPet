@@ -23,6 +23,7 @@ const AnimalsScroll = () => {
     try {
       const response = await AnimalsApi.getAnimalsLatest(5, {});
       const animalsData = response.data || [];
+      console.log("response:::", animalsData);
       setAnimals(animalsData);
     } catch (err) {
       setAnimals([]);

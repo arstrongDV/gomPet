@@ -13,10 +13,11 @@ type TabViewProps = {
     animal: IAnimal;
     posts: IPost[];
     comments: IComment[];
+    followers: number;
     familyTree: any;
 };
 
-const TabView = ({ animal, posts, comments, familyTree}: TabViewProps) => {
+const TabView = ({ animal, posts, comments, familyTree, followers}: TabViewProps) => {
   const t = useTranslations();
   const menu: TabMenuItem[] = useMemo(
     () => [
@@ -50,7 +51,7 @@ const TabView = ({ animal, posts, comments, familyTree}: TabViewProps) => {
         />
       </SectionHeader>
 
-      {tab.id === 'main' && <AnimalInformation animal={animal} comments={comments} familyTree={familyTree}  />}
+      {tab.id === 'main' && <AnimalInformation animal={animal} followers={followers} comments={comments} familyTree={familyTree}  />}
       {tab.id === 'activity' && <AnimalActivity postsData={posts} animalId={animal.id} animalOwnerId={animal.owner} />}
     </>
   );

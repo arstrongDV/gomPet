@@ -12,6 +12,9 @@ import { avatarBackgrounds } from './backgrounds';
 import { generateAvatar, generateInitials } from './functions';
 
 import style from './Avatar.module.scss';
+import { useRouter } from 'next/navigation';
+import { Routes } from 'src/constants/routes';
+import { useSession } from 'next-auth/react';
 
 type AvatarProps = {
   className?: string;
@@ -70,6 +73,16 @@ const Avatar = (props: AvatarProps) => {
         alt={'user-avatar'}
       />
     ) : null;
+
+    // console.log("profile: ", profile);
+    // const handleClick = (e: React.MouseEvent) => {
+    //   e.preventDefault();
+    //   e.stopPropagation();
+      
+    //   if (profile?.id) {
+    //     router.push(`/profile/${profile.id}`);
+    //   }
+    // };
 
   if (tooltip)
     return (

@@ -46,7 +46,7 @@ const OrganizationsScroll = () => {
           })}
         </h3>
         <LabelLink
-          href={Routes.ANIMALS}
+          href={Routes.SHELTERS}
           label={t('organizationsScroll.seeAll')}
           color='dimmed'
         />

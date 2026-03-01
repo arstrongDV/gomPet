@@ -132,11 +132,13 @@ export interface IAnimal {
   birth_date: string | null;
   created_at: string;
   city: string;
-  owner: T<IUser | IOrganization>;
+  owner: IUser | IOrganization;
   parents: IAnimal[];
   status: AnimalStatus;
   descriptions: string;
   characteristicsBoard: string[];
+  organization: IOrganization;
+  owner_info: IUser;
 
   price: number;
   location: {
@@ -188,6 +190,8 @@ export interface IPost {
     author_type: 'user' | 'organization';
     type: 'like' | 'dislike';
   }[];
+
+  organization_info?: IOrganization
 }
 
 export interface IArticle {
@@ -204,4 +208,15 @@ export interface withPagination<T = any> {
   count: number;
   next?: string | null;
   previous?: string | null;
+}
+
+export interface NotificaitonItemType {
+  created_at: string;
+  origin: {
+    id: number;
+    type: string;
+  };
+  actor: IUser;
+  verb: string;
+  is_read: boolean;
 }

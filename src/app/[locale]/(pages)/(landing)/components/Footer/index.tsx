@@ -1,14 +1,17 @@
 'use client'
 
-import { Card, Divider } from "src/components"
+import { Card, Divider, LabelLink } from "src/components"
 import Image from "next/image"
 import { Routes } from "src/constants/routes"
 import Logo from 'assets/images/logo.png';
 import { Link } from 'src/navigation';
 
 import style from './Footer.module.scss'
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+    const t = useTranslations('pages.landing');
+
     return(
         <Card className={style.card}>
             <Link href={Routes.LANDING}>
@@ -39,10 +42,22 @@ const Footer = () => {
 
             <div className={style.privicyBlock}>
                 <div className={style.politic}>
-                    <Link className={style.link} href="/">Regulamin</Link>
-                    <Link className={style.link} href="/">Polityka prywatności</Link>
+                    <LabelLink 
+                        className={style.link} 
+                        href={Routes.LANDING}
+                        label={t('footer.rules')}
+                    />
+                    <LabelLink 
+                        className={style.link} 
+                        href={Routes.LANDING}
+                        label={t('footer.privatePolitic')}
+                    />
                 </div>
-                <Link href="/" className={style.footerGreenLink}>Wszelkie prawa zastrzeżone</Link>
+                <LabelLink 
+                    className={style.footerGreenLink} 
+                    href={Routes.LANDING}
+                    label={t('footer.toCnange')}
+                />
             </div>
         </Card>
     )

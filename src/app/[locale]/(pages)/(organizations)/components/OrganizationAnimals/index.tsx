@@ -39,6 +39,11 @@ const OrganizationAnimals = ({ organizationId }: OrganizationAnimalsProps) => {
     getAnimals();
   }, [organizationId]);
 
+  if (isLoading) {
+    return <Loader />;
+  }
+  
+
   return (
     <section className={style.container}>
       <header className={style.header}>
@@ -52,16 +57,23 @@ const OrganizationAnimals = ({ organizationId }: OrganizationAnimalsProps) => {
         />
       </header>
 
-      <HorizontalScroll className={style.list}>
-        {isLoading && <Loader />}
-        {animals.map((animal) => (
-          <AnimalCard
-            className={style.animal}
-            key={animal.id}
-            animal={animal}
-          />
-        ))}
-      </HorizontalScroll>
+      {animals.length === 0 ? (
+        <div className={style.noAnimalsText}>
+          <p>Brak Zwierzat</p>
+        </div>
+      ) : (
+        <HorizontalScroll className={style.list}>
+          {isLoading && <Loader />}
+          {animals.map((animal) => (
+            <AnimalCard
+              key={animal.id}
+              animal={animal}
+              filledButton
+            />
+          ))}
+        </HorizontalScroll>
+      )}
+
     </section>
   );
 };

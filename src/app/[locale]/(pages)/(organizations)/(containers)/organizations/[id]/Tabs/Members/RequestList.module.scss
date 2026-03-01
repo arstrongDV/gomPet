@@ -1,0 +1,54 @@
+@import 'styles';
+
+.container{
+  @include element-flex(column, flex-start, stretch);
+  gap: 4rem;
+}
+
+.list{
+    @include element-flex(column, flex-start, stretch);
+    gap: 4rem;
+}
+
+.requestLabel{
+  @include element-flex(row, flex-start, stretch);
+  gap: 1.2rem;
+
+  .newLabel{
+    color: $color-primary-hover;
+  }
+}
+
+.requestsList {
+    max-height: 0rem;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    pointer-events: none;
+    transition: $transition-main;
+  
+    &.show {
+      // max-height: 100rem;
+      max-height: 300rem;
+      overflow: visible;
+      visibility: visible;
+      pointer-events: all;
+    }
+}
+
+.membersList {
+    max-height: 0rem;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    pointer-events: none;
+    transition: $transition-main;
+  
+    &.show {
+      // max-height: 100rem;
+      max-height: 300rem;
+      overflow: visible;
+      visibility: visible;
+      pointer-events: all;
+    }
+}

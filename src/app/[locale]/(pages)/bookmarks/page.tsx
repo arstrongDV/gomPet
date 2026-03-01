@@ -1,114 +1,85 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useAppSelector, useAppDispatch } from 'src/lib/store/hooks';
-import { addItemToFavorites, deleteItemFromFavorites } from './slice';
-import { useRouter } from 'next/navigation';
-
 import style from './Bookmarks.module.scss';
 import classNames from 'classnames';
-import { Icon } from 'src/components';
+import { List, Pagination } from 'src/components';
 import { useTranslations } from 'next-intl';
-import { IconNames } from 'src/assets/icons';
 import { IAnimal } from 'src/constants/types';
+import { AnimalsApi } from 'src/api';
+import { useSession } from 'next-auth/react';
+import AnimalCard from '../animals/components/AnimalCard';
+import { useSearchParams } from 'next/navigation';
 
-const genderIconNames: { [key: string]: IconNames } = {
-  male: 'genderMale',
-  female: 'genderFemale'
-};
+import { Params } from 'src/constants/params';
+import { useRouter } from 'src/navigation';
+import { paginationConfig } from 'src/config/pagination';
 
 const Bookmarks = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const dispatch = useAppDispatch();
-  const favorites = useAppSelector((state) => state.bookmarks.favorites);
   const t = useTranslations('pages.animals');
-  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [animals, setAnimals] = useState<IAnimal[]>([]);
+
+  const session = useSession()
+  const myId = session.data?.user.id;
+  const [total, setTotal] = useState<number>(1);
+
+  const changePage = (page: number) => {
+    params.set(Params.PAGE, page.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  const postReaction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await AnimalsApi.getUserBookmarks(Number(myId), {
+        limit: 10,
+        page: currentPage,
+      });
+      console.log(res);
+      setAnimals(res.data?.results)
+      setTotal(res.data.count || 0);
+    } catch {
+      setAnimals([])
+      setTotal(0);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (!myId) return;
+    postReaction();
+  }, [currentPage, myId]);
 
-  if (!isMounted) return null;
-
-  const handleCardClick = (event: React.MouseEvent, id: string) => {
-    const target = event.target as HTMLElement;
-    if (!target.closest('button')) {
-      push(`/animals/${id}`);
-    }
-  };
-
-  const toggleFavorite = (animal: IAnimal) => {
-    const isFav = favorites.some((fav) => fav.id === animal.id);
-    if (isFav) {
-      dispatch(deleteItemFromFavorites(animal));
-    } else {
-      dispatch(addItemToFavorites(animal));
-    }
-  };
-
-  if (favorites.length === 0) return <div>No Favorites Now</div>;
+  const onReactionDelete = (deletedAnimal: number) => {
+    setAnimals(animals.filter(animal => animal.id !== deletedAnimal));
+  }
 
   return (
     <div className={style.bookmarksWrapper}>
-      {favorites.map((animal) => {
-        const isFavorite = favorites.some((fav) => fav.id === animal.id);
-        const cardClasses = classNames(style.card);
-        const cardStyles = {
-          backgroundImage: `url(${animal.image})`
-        };
+      <List
+        isLoading={isLoading}
+        className={classNames(style.list)}
+      >
+          {animals.map((animal: any) => (
+            <AnimalCard key={animal.id} animal={animal} onReactionDelete={onReactionDelete} />
+          ))}
+      </List>
 
-        return (
-          <div
-            key={animal.id}
-            className={cardClasses}
-            style={cardStyles}
-          >
-            <div className={style.gradient}></div>
-            <div className={style.content} onClick={(e) => handleCardClick(e, animal.id.toString())}>
-              <div className={style.top}>
-                <div className={style.about}>
-                  <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>
-                  <div className={classNames(style.badge, style.age)}>+{animal.age}</div>
-                  {animal.characteristicsBoard?.length > 0 && (
-                    <div className={classNames(style.badge, style.characteristics)}>
-                      {t(`characteristics.${animal.species}.${animal.characteristicsBoard[0]}`)}
-                    </div>
-                  )}
-                </div>
-                <button
-                  id='#button'
-                  className={classNames(style.addBookmark, {
-                    [style['addBookmark--active']]: isFavorite,
-                  })}
-                  onClick={() => toggleFavorite(animal)}
-                >
-                  <Icon name='heart' />
-                </button>
-              </div>
-
-              <div className={style.hoverContent}>
-                <div className={style.data}>
-                  <div className={classNames(style.badge, style.gender)}>
-                    <span>Płeć: {t(`gender.${animal.gender}`)}</span>
-                    <Icon name={genderIconNames[animal.gender]} />
-                  </div>
-                  <div className={classNames(style.badge, style.size)}>
-                    Wielkość: {t(`size.${animal.size}`)}
-                  </div>
-                  <div className={classNames(style.badge, style.ageText)}>Wiek: Dorosły</div>
-                </div>
-              </div>
-
-              <div className={style.bottom}>
-                <div className={style.location}>
-                  <Icon name='mapPin' />
-                  <span>{animal.city}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
+      <Pagination
+          className={style.pagination}
+          totalCount={total}
+          pageSize={paginationConfig.animals}
+          currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+          onPageChange={changePage}
+      />
     </div>
   );
 };

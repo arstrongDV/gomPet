@@ -40,7 +40,7 @@ const InputPlacesAutocomplete = ({
     },
     debounce: 300
   });
-
+  const round6 = (value: number) => Math.round(value * 1e6) / 1e6;
   const handleSelect = async (suggestion: any) => {
     const { description } = suggestion;
     let location = {
@@ -58,8 +58,8 @@ const InputPlacesAutocomplete = ({
       const { lat, lng } = getLatLng(geocode[0]);
       location = {
         ...location,
-        lat,
-        lng
+        lat: round6(lat),
+        lng: round6(lng),
       };
 
       if (withDetails) {
