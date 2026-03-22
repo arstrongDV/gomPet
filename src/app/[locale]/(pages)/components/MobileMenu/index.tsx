@@ -10,6 +10,7 @@ import { RouteItemType } from '../Sidebar/components/RouteItem';
 import { Routes } from 'src/constants/routes';
 import RouteItem from '../Sidebar/components/RouteItem';
 import { Icon } from 'src/components';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 type MenuProps = {
   setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -57,7 +58,7 @@ const MobileMenu = ({setShowMenu}: MenuProps) => {
       icon: 'heart'
     },
     {
-      title: t('navigation.sidebar.blog'),
+      title: t('navigation.sidebar.knowledge'),
       url: Routes.KNOWLEDGE,
       icon: 'book'
     }
@@ -83,39 +84,41 @@ const MobileMenu = ({setShowMenu}: MenuProps) => {
   ];
 
   return (
-    <div id='mobile-menu' className={style.menu}>
-      <div className={style.userMenu}>
-        {session.status === 'authenticated' && (
-          <div className={style.stack}>
-            <UserMenu />
-            <Notifications />
+    <OutsideClickHandler onOutsideClick={() => setShowMenu(false)}>
+      <div id='mobile-menu' className={style.menu}>
+        <div className={style.userMenu}>
+          {session.status === 'authenticated' && (
+            <div className={style.stack}>
+              <UserMenu />
+              <Notifications />
+            </div>
+          )}
+          <Icon name='x' onClick={() => setShowMenu(false)} /> 
+        </div>
+        <RouteItem
+          item={highlightedRoute}
+          highlighted
+        />
+        <nav className={style.nav}>
+          <div className={style.topNav}>
+            {topNavItems.map((item, index) => (
+              <RouteItem
+                key={index}
+                item={item}
+              />
+            ))}
           </div>
-        )}
-        <Icon name='x' onClick={() => setShowMenu(false)} /> 
+          <div className={style.bottomNav}>
+            {bottomNavItems.map((item, index) => (
+              <RouteItem
+                key={index}
+                item={item}
+              />
+            ))}
+          </div>
+        </nav>
       </div>
-      <RouteItem
-        item={highlightedRoute}
-        highlighted
-      />
-      <nav className={style.nav}>
-        <div className={style.topNav}>
-          {topNavItems.map((item, index) => (
-            <RouteItem
-              key={index}
-              item={item}
-            />
-          ))}
-        </div>
-        <div className={style.bottomNav}>
-          {bottomNavItems.map((item, index) => (
-            <RouteItem
-              key={index}
-              item={item}
-            />
-          ))}
-        </div>
-      </nav>
-    </div>
+    </OutsideClickHandler>
   )
 
 };

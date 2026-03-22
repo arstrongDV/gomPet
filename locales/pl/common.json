@@ -30,5 +30,25 @@
     "FUND": "Fundacja",
     "BREEDER": "Hodowla"
   },
-  "noLocation": "Brak lokalizacji"
+
+  "noLocation": "Brak lokalizacji",
+
+  "categories": {
+    "breeding": "hodowla",
+    "walking": "spacer"
+  },
+
+  "roles": {
+    "OWNER": "Właściciel / Kierownik",
+    "STAFF": "Pracownik",
+    "MEMBER": "Członek",
+    "VOLUNTEER": "Wolontariusz",
+    "MODERATOR": "Moderator",
+    "PARTNER": "Partner",
+    "FINANCE": "Finanse",
+    "CONTENT": "Twórca treści",
+    "VIEWER": "Obserwator"
+  },
+
+  "imagesInfo": "Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone formaty to .png, .jpg, .jpeg"
 }

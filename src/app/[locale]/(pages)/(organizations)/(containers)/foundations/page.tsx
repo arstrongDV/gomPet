@@ -41,7 +41,6 @@ const FundationPage = () => {
   const currentPage = Number(searchParams.get('page')) || 1;
   const itemsPerPage = 10; 
 
-
   const getFoundations = useCallback(async (filters?: any) => {
     setIsLoading(true);
     try {
@@ -60,7 +59,7 @@ const FundationPage = () => {
   useEffect(() => {
     const filters: Record<string, string> = {};
   
-    filters.limit = String(itemsPerPage);
+    // filters.limit = String(itemsPerPage);
     filters.page = String(currentPage);
     filters['organization-type'] = 'FUND'; 
   
@@ -82,25 +81,25 @@ const FundationPage = () => {
     if('/foundations' !== pathname) setShowMap(false);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (
-        showMap &&
-        target &&
-        !target.closest('#map') &&  
-        !target.closest('#button')   
-      ) {
-        setShowMap(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     const target = event.target as Element;
+  //     if (
+  //       showMap &&
+  //       target &&
+  //       !target.closest('#map') &&  
+  //       !target.closest('#button')   
+  //     ) {
+  //       setShowMap(false);
+  //     }
+  //   };
 
-    document.addEventListener('mousedown', handleClickOutside);
+  //   document.addEventListener('mousedown', handleClickOutside);
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMap]);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [showMap]);
 
   return (
     <div className={style.container}>
@@ -124,8 +123,13 @@ const FundationPage = () => {
 
       <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} />
 
-      <div id='map'>
+      <div>
           <div className={style.content}>
+          <OrganizationOnMap
+            organizations={organizations}
+            className={classNames(style.map, { [style.show]: showMap })}
+          />
+
           <List
             isLoading={isLoading}
             className={style.list}
@@ -137,12 +141,7 @@ const FundationPage = () => {
               />
             ))}
           </List>
-
-          <OrganizationOnMap
-            organizations={organizations}
-            className={classNames(style.map, { [style.show]: showMap })}
-          />
-          </div>
+      </div>
 
         <Pagination
           className={style.pagination}

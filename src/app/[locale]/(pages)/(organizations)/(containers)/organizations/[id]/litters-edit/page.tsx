@@ -20,7 +20,9 @@ const LittersEditPage = () => {
                 console.log("API response:", res);
                 setLitter(res.data);
             } catch(err) {
-                console.log(err);
+                console.log("FULL ERROR:", err);
+                console.log("STATUS:", err?.response?.status);
+                console.log("DATA:", err?.response?.data);
                 toast.error("Nie mogę znalezc tego miotu");
             }
         }

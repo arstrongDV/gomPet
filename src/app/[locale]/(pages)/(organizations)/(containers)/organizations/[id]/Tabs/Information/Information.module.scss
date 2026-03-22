@@ -8,8 +8,14 @@
 
 .row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: $spacing-6;
+}
+
+@include tabletWidth {
+  .row {
+    grid-template-columns: 1fr;
+  }
 }
 
 .description {
@@ -34,6 +40,7 @@
 .mapWrraper {
   display: flex;
   height: auto;
+  min-height: 300px;
   border-radius: $radius-l;
   overflow: hidden; 
 }

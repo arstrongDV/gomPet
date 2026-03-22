@@ -75,6 +75,8 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
     const [fileToCrop, setFileToCrop] = useState<File | null>(null);
     const [logo, setLogo] = useState<File | null>(null);
     const [logoUrl, setLogoUrl] = useState<string>('');
+
+    console.log("formDataformData: ", organization);
     const [formData, setFormData] = useState({
         type: "",
         logo: '',
@@ -109,8 +111,8 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                       race: organization.race ?? '', 
                       breed: organization.breed ?? '', 
                       location: {
-                          lat: organization.address?.lat ?? '', 
-                          lng: organization.address?.lng ?? '',
+                          lat: String(organization.address?.lat) ?? '',
+                          lng: String(organization.address?.lng) ?? '',
                           city: organization.address?.city ?? '',
                           street: organization.address?.street ?? '',
                           house_number: organization.address?.house_number ?? '',
@@ -231,7 +233,7 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
       } catch (err) {
         console.error('Update error:', err);
         toast.error("Nie udalo sie aktualizowac organizacje");
-        onCancel?.()
+        // onCancel?.()
       }
     };
  

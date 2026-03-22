@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
-import { Avatar, Button, SectionHeader, useWebsocket } from 'src/components';
+import { Avatar, Button, Modal, SectionHeader, useWebsocket } from 'src/components';
 import { IComment, IPost } from 'src/constants/types';
 import { getDaysAgo } from 'src/utils/helpers';
 
@@ -16,15 +16,28 @@ import { PostsApi } from 'src/api';
 import { WebsocketRoutes } from 'src/api/routes';
 import UpdatePostCard from './components/UpdatePost';
 import SettingsButton from 'src/components/layout/Settings';
+import FollowingButton from './components/FollowingButton';
+import toast from 'react-hot-toast';
+import { redirect, useRouter } from 'next/navigation';
+import { Routes } from 'src/constants/routes';
 
 type PostCardProps = {
   className?: string;
   post: IPost;
-  updatePosts?: (value: any) => void ; //// 
-  deletePosts?: (id: number) => void
+  type: string;
+  updatePosts?: (value: any) => void;
+  deletePosts?: (id: number) => void;
+  hideFollowButton?: boolean;
 };
 
-const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) => {
+const PostCard = ({ 
+    post, 
+    className, 
+    type, 
+    updatePosts, 
+    deletePosts,
+    hideFollowButton
+}: PostCardProps) => {
   const { 
     id, 
     text, 
@@ -34,16 +47,19 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
     created_at, 
     updated_at,
     image, 
-    author, 
+    author,
   } = post;  
 
   console.log("post:::", post)
   const [showComments, setShowComments] = useState<boolean>(false);
   const [showCopyLink, setShowCopyLink] = useState<boolean>(false);
-  const [comments, setComments] = useState<IComment[]>([]);
+
+  const [followedAuthors, setFollowedAuthors] = useState<Record<number, number>>({});
+
   const [reactions, setReactions] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showUpdateCard, SetShowUpdateCard] = useState<boolean>(false);
+  const { push } = useRouter();
 
   const session = useSession();
   const myId = Number(session.data?.user.id);
@@ -58,9 +74,9 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
   const deletePost = async() => {
     if(myId === post.author.id){
       try{
-        const delete_res = await PostsApi.deletePost(id);
+        await PostsApi.deletePost(id);
         if(deletePosts) deletePosts(id);
-        console.log("delete_res:: ", delete_res)
+        toast.success("Post zostal usunienty!");
         setIsOpen(false)
       }catch(err){
         console.log(err)
@@ -75,20 +91,7 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
     }
   }
 
-  const [ready, val, send] = useWebsocket(WebsocketRoutes.GET_REACTIONS_LIST("posts.post", id))
-  const fetchComments = async () => {
-    try {
-      const res_comments = await PostsApi.getComments(id, "posts.post");
-      console.log("res::", res_comments)
-      setComments(res_comments.results);
-    } catch (err) {
-      console.error("Failed to load comments", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchComments();
-  }, []);
+  const [ready, val, send] = useWebsocket(WebsocketRoutes.GET_REACTIONS_LIST(type, id))
 
   useEffect(() => {
     if (val) {
@@ -138,20 +141,49 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
 
       <header className={style.header}>
         <div className={style.author}>
-          <Avatar className={style.avatar} profile={author} />
-          <h3 className={style.name}>{author.full_name}</h3>
+          <div 
+            className={style.avatarClick}
+            onClick={() => {
+              post.organization_info ? 
+              push(Routes.ORGANIZATION_PROFILE(post.organization_info.id)) 
+                : 
+              push(Routes.ANIMAL_PROFILE(post.animal))}
+            }
+          >
+            <Avatar 
+              className={style.avatar} 
+              profile={author}
+              src={post?.organization_info ? post?.organization_info.image : undefined}  
+            />
+          </div>
+          {post.organization_info ? (
+            <h3 className={style.name}>{post.organization_info.name} 
+              <p className={style.subAuthor}>{author.full_name ?? 'Unknown'}</p>
+            </h3>
+          ) : (
+            <h3 className={style.name}>{post.animal_name} 
+              <p className={style.subAuthor}>{author.full_name ?? 'Unknown'}</p>
+            </h3>
+            // <h3 className={style.name}>{author.full_name}</h3>
+          )}
         </div>
         <div className={style.headerContent}>
-
-        {myId == author.id ? (
-          <SettingsButton 
-            onEdit={updatePost} 
-            onDelete={deletePost}
-            authId={author.id}
-          />
-          ) : (
-            <Button icon="starFilled" label={'Obserwujesz'} gray />
-        )}
+          {myId == author.id ? (
+            <SettingsButton 
+              onEdit={updatePost} 
+              onDelete={deletePost}
+              authId={author.id}
+            />
+            ) : (
+              !hideFollowButton && (
+                <FollowingButton 
+                  authorId={post.organization_info ? post.organization_info.id : post.animal} 
+                  followedAuthors={followedAuthors}
+                  setFollowedAuthors={setFollowedAuthors}
+                  target_type={post.organization_info ? "users.organization" : "animals.animal"}
+                />
+              )
+            )}
         </div>
       </header>
 
@@ -166,7 +198,11 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
         )}
 
         <div className={style.postContent}>
-          {content || text}
+          {typeof content === "string"
+            ? content
+            : typeof text === "string"
+            ? text
+            : ""}
 
           {image && (
             <img className={style.image} src={image} alt={text} width={300} height={400} />
@@ -189,6 +225,7 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
           <PostReactions
             postId={id}
             reactionsCount={reactions}
+            type={type}
           />
           <Button
             icon="message"
@@ -198,11 +235,35 @@ const PostCard = ({ post, className, updatePosts, deletePosts }: PostCardProps) 
           <Button icon="share" gray  onClick={() => setShowCopyLink(prev => !prev)}/>
         </div>
       </footer>
-      {showUpdateCard && <UpdatePostCard SetShowUpdateCard={SetShowUpdateCard} post={post} updatePosts={updatePosts} />}
-      {showCopyLink && <ShareComments commentId={id} />}
-      {showComments && <PostComments postId={id} comments={comments} setComments={setComments}  />} 
+
+      <Modal 
+        className={style.modaPostUpdatelWin} 
+        isOpen={showUpdateCard} 
+        closeModal={() => SetShowUpdateCard(false)}
+        title='Actualizuj Post'
+      >
+        <UpdatePostCard SetShowUpdateCard={SetShowUpdateCard} post={post} updatePosts={updatePosts} />
+      </Modal>
+
+      <Modal 
+          className={style.modaSharinglWin} 
+          isOpen={showCopyLink} 
+          closeModal={() => setShowCopyLink(false)}
+          title='Podzieli sie postem'
+        >
+          <ShareComments commentId={id} />
+        </Modal>
+
+      <Modal 
+        className={style.modaCommentslWin} 
+        isOpen={showComments} 
+        closeModal={() => setShowComments(false)}
+        title='Komentarzy'
+      >
+        <PostComments postId={id} type={type} />
+      </Modal>
+      {/* {showComments && }   */}
     </article>
   );
 };
-//slug={slug} 
 export default PostCard;

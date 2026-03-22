@@ -50,7 +50,6 @@ const SheltersPage = () => {
       // const organizationData = res.data?.results.filter(o => o.type == "Shalters")
       setOrganizations(organizationData);
       setTotal(res.data?.count || 0);
-      console.log("organizationData::", organizationData)
     } catch (error) {
       setOrganizations([]);
       setTotal(0);
@@ -67,7 +66,7 @@ const SheltersPage = () => {
   useEffect(() => {
     const filters: Record<string, string> = {};
   
-    filters.limit = String(itemsPerPage);
+    // filters.limit = String(itemsPerPage);
     filters.page = String(currentPage);
     filters['organization-type'] = 'SHELTER'; 
   
@@ -114,6 +113,13 @@ const SheltersPage = () => {
 
         <div>
           <div className={style.content}>
+            <OrganizationOnMap
+              organizations={organizations}
+              className={classNames(style.map, {
+                [style.show]: showMap
+              })}
+            />
+
             <List
               isLoading={isLoading}
               className={classNames(style.list, {
@@ -127,13 +133,6 @@ const SheltersPage = () => {
                 />
               ))}
             </List>
-
-            <OrganizationOnMap
-                organizations={organizations}
-                className={classNames(style.map, {
-                  [style.show]: showMap
-                })}
-              />
           </div>
 
           <Pagination

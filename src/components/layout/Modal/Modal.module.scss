@@ -31,13 +31,17 @@
   padding: $spacing-6;
   padding-right: $spacing-3;
   width: 100%;
-  max-width: 50.5rem;
+  // max-width: 50.5rem;
   animation-duration: $transition-duration-fast;
   overflow: hidden;
   position: relative;
   animation: fadeIn $transition-duration-fast ease-out;
 
   @include custom-scrollbar;
+}
+
+@include phoneWidth {
+
 }
 
 .modalHeader {
@@ -59,7 +63,7 @@
   }
 
   &.withScroll {
-    padding-right: $spacing-3;
+    padding-right: $spacing-4;
     @include custom-scrollbar;
   }
 }

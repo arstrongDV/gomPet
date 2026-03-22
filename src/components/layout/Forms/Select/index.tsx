@@ -31,6 +31,8 @@ interface SelectProps extends InnerWrapperProps {
   closeMenuOnSelect?: boolean;
   showValue?: boolean;
   isClearable?: boolean;
+  isDisabled?: boolean;
+  isMulti?: boolean;
 }
 
 const Select = (props: SelectProps) => {
@@ -47,7 +49,9 @@ const Select = (props: SelectProps) => {
     onChange,
     showValue = true,
     closeMenuOnSelect = true,
-    isClearable = false
+    isClearable = false,
+    isDisabled = false,
+    isMulti = false
   } = props;
   const wrapperProps = getWrapperProps(props);
 
@@ -67,6 +71,8 @@ const Select = (props: SelectProps) => {
           isSearchable={isSearchable}
           closeMenuOnSelect={closeMenuOnSelect}
           isClearable={isClearable}
+          isDisabled={isDisabled}
+          isMulti={isMulti}
         />
       </div>
     </InputWrapper>

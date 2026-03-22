@@ -1,17 +1,22 @@
-'use client'
-import style from './AddParents.module.scss'
-import { useEffect, useState, useCallback, useRef } from "react"
-import { Gender, IAnimal } from 'src/constants/types';
-import { OptionType } from 'src/components/layout/Forms/Select';
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import classNames from 'classnames';
+import debounce from 'lodash/debounce';
+
+import { AnimalsApi } from 'src/api';
 import { 
+    Button,
     Card, 
     Input, 
-    Select, 
-    Button
-} from "src/components"
-import { AnimalsApi } from 'src/api';
-import debounce from 'lodash/debounce';
-import toast from 'react-hot-toast';
+    Loader,
+    Select} from 'src/components';
+import { OptionType } from 'src/components/layout/Forms/Select';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import { IAnimal } from 'src/constants/types';
+
+import style from './AddParents.module.scss';
 
 type Parent = {
     id?: number;
@@ -27,7 +32,8 @@ type AnimalAddParentsProps = {
     parents?: Parent[];
     onAddParent: (parent: Parent) => void;
     childAnimal: IAnimal; 
-  };
+    setIsParentsAdd: (e: boolean) => void;
+};
 
 type AnimalKey = string;
 const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
@@ -47,16 +53,16 @@ const animalsRelation = [
 
 const animalSpecies = [
     {
-      value: 'dog',
+      value: '1',
       label: 'Pies'
     },
     {
-      value: 'cat',
+      value: '2',
       label: 'Kot'
     }
 ]
 
-const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: AnimalAddParentsProps) => {
+const AddAnimalParents = ({ className, onAddParent, parents, childAnimal, setIsParentsAdd }: AnimalAddParentsProps) => {
     const [searchName, setSearchName] = useState<string>('');
     const [relation, setRelation] = useState<OptionType | null>(null);
     const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
@@ -83,7 +89,13 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
         }, 500),
         []
     );
-
+    const handleChange = (field: string, value: string, label?: string) => {
+        if(field === 'breed'){
+          setSelectRaceValue({ value, label } as OptionType);
+        } else if(field === 'species'){
+          setSelectSpeciesValue({ value, label } as OptionType);
+        }
+      };
     const filteredRaceOpt = selectSpeciesValue
         ? animalRace[selectSpeciesValue.value] || []
         : [];
@@ -115,12 +127,13 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
     }, [searchName, selectSpeciesValue, selectRaceValue, debouncedSearch]);
 
     const handleAdd = () => {
-        if (!selectedAnimal) return;
+        if (!selectedAnimal || parents?.length >= 2) return;
 
         const newParent: Parent = {
-            animal_id: selectedAnimal.id,  //////// id
+            animal_id: selectedAnimal.id,
             name: selectedAnimal.name,
             relation: relation?.value,
+            gender: selectedAnimal.gender,
             photos: selectedAnimal.image ?? undefined
         };
 
@@ -178,11 +191,7 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
     };
 
     return (
-        <Card className={className}>
-            <h3>
-                Dodawanie <mark>rodziny</mark>
-            </h3>
-
+        <Card className={classNames(style.container, className)}>
             <Input
                 id='search-animal'
                 name='search-animal'
@@ -208,6 +217,7 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
                     value={selectRaceValue}
                     isClearable
                 />
+                {/* <AnimalSelect handleChange={handleChange} /> */}
             </div>
 
             {/* Lista zwierząt */}
@@ -215,7 +225,7 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal }: Anim
                 <h4>Dostępne zwierzęta:</h4>
                 
                 {loading ? (
-                    <p>Ładowanie...</p>
+                    <Loader />
                 ) : animals.length === 0 ? (
                     <p>Brak zwierząt spełniających kryteria</p>
                 ) : (

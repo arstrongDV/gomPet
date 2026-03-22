@@ -42,7 +42,8 @@
     "swapy": "^0.2.0",
     "use-places-autocomplete": "^4.0.1",
     "validate-polish": "^2.1.40",
-    "veloxi": "^0.14.2"
+    "veloxi": "^0.14.2",
+    "yet-another-react-lightbox": "^3.29.1"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

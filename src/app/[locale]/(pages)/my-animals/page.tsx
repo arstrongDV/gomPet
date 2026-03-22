@@ -1,22 +1,26 @@
 'use client'
 
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
+
+import { AnimalsApi } from "src/api";
 import { Button, List, Pagination } from "src/components";
+import { paginationConfig } from "src/config/pagination";
+import { Params } from 'src/constants/params';
+import { Routes } from "src/constants/routes";
+import { IAnimal } from "src/constants/types";
+import { useRouter } from 'src/navigation';
+
 import AnimalCard from "../animals/components/AnimalCard";
 
-import { Params } from 'src/constants/params';
-import { useEffect, useState } from "react";
-import { IAnimal } from "src/constants/types";
-import { AnimalsApi } from "src/api";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from 'src/navigation';
-import { useSession } from "next-auth/react";
-
 import style from './myAnimals.module.scss'
-import { paginationConfig } from "src/config/pagination";
-import { Routes } from "src/constants/routes";
-import toast from "react-hot-toast";
 
 const MyAnimals = () => {
+    const t = useTranslations('pages.myAnimals');
+
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams.toString());
     const router = useRouter();
@@ -34,47 +38,49 @@ const MyAnimals = () => {
     const changePage = (page: number) => {
         params.set(Params.PAGE, page.toString());
         router.push(`?${params.toString()}`);
-      };
+    };
 
-      const getMyAnimals = async (page: number = 1) => {
+    const getMyAnimals = async (page: number = 1) => {
         setIsLoading(true);
         try {
-          const response = await AnimalsApi.getAnimals({
-            page: page,
-            limit: paginationConfig.animals
+          const response = await AnimalsApi.getUsersAnimals(Number(auth.data?.user.id), {
+            page
           });
-
-          const animalsData: IAnimal[] = response.data.results || [];
-          const myAnimals = animalsData.filter((res: IAnimal) => {
-            return String(res.owner) === String(auth.data?.user?.id);
-          });
-          console.log("myAnimals:::", myAnimals)
-          setAnimals(myAnimals);
-          console.log("response:::", response)
-          setTotal(myAnimals.length);
+          setAnimals(response.data.results);
+          setTotal(response.data.count);
         } catch (error) {
-          console.error("Error fetching animals:", error);
           setAnimals([]);
           setTotal(0);
+          changePage(1);
         } finally {
           setIsLoading(false);
         }
       };
+      const page = searchParams.get(Params.PAGE)
+      ? Number(searchParams.get(Params.PAGE))
+      : 1;
 
     useEffect(() => {
-        getMyAnimals();
-    }, []);
+      if (!auth.data?.user?.id) return;
 
-    useEffect(() => {
-      const currentPage = params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1;
-      getMyAnimals(currentPage);
-    }, [params.get(Params.PAGE)]); // Add page as dependency
+      getMyAnimals(page);
+    }, [page, auth.data?.user?.id]);
+
+    console.log("total:", total);
+    console.log("pageSize:", paginationConfig.animals);
+    console.log("pages:", Math.ceil(total / paginationConfig.animals));
 
     const handleDeleteAnimal = async (id: number) => {
       try {
-        // Optimistic update: remove from UI first
         setAnimals(prevAnimals => prevAnimals.filter(animal => animal.id !== id));
         setTotal(prevTotal => prevTotal - 1);
+
+        const newTotal = total - 1;
+        const lastPage = Math.ceil(newTotal / paginationConfig.animals);
+
+        if (page > lastPage && page > 1) {
+          changePage(lastPage || 1);
+        }
         
         const res = await AnimalsApi.deleteAnimal(id);
         console.log(res)
@@ -93,12 +99,12 @@ const MyAnimals = () => {
       }
     };
 
-    return(
+    return (
         <div className={style.container}>
             <Button
                 className={style.button}
                 icon='plus'
-                label={'add new'}
+                label={t('addNew')}
                 onClick={() => router.push(Routes.NEW_ANIMAL)}
             />
 
@@ -110,6 +116,7 @@ const MyAnimals = () => {
                 {animals.map((animal) => (
                   <AnimalCard
                     key={animal.id}
+                    filledButton
                     animal={animal}
                     isSettingsOpen={openedCardId === String(animal.id)} ////////// String
                     onToggleSettings={() => handleToggleSettings(String(animal.id))} ////////// String
@@ -128,6 +135,6 @@ const MyAnimals = () => {
               onPageChange={changePage}
             />
         </div>
-    )
-}
+    );
+};
 export default MyAnimals;

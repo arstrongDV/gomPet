@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import classNames from 'classnames';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 
+import { OrganizationsApi } from 'src/api';
 import { Card } from 'src/components';
+import SettingsButton from 'src/components/layout/Settings';
+import { Routes } from 'src/constants/routes';
 import { ILitter } from 'src/constants/types';
 
 import style from './LitterCard.module.scss';
-import SettingsButton from 'src/components/layout/Settings';
-import { useSession } from 'next-auth/react';
-import { OrganizationsApi } from 'src/api';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { Routes } from 'src/constants/routes';
 
 type LitterCardProps = {
   litter: ILitter;
@@ -22,7 +22,7 @@ type LitterCardProps = {
 const LitterCard = ({ litter, organizationUser, onDelete }: LitterCardProps) => {
   const t = useTranslations('pages');
   const session = useSession();
-  const myId = session.data?.user.id
+  const myId = Number(session.data?.user.id)
   const route = useRouter();
   const { push } = route;
 
@@ -46,22 +46,18 @@ const LitterCard = ({ litter, organizationUser, onDelete }: LitterCardProps) => 
   const updateLitter = () => {
     push(Routes.LITTER_EDIT(litter.id));
   }
-  console.log("litter::", litter)
+  
   const isAfter = new Date(litter.birth_date) > new Date();
-  console.log("litter:  ", litter);
   return (
     <Card className={style.litter}>
-      {organizationUser == myId && (
-        <div className={style.settingsBtn}>
+      <div className={style.modalSettings}>
         <SettingsButton 
             onEdit={updateLitter}
             onDelete={deleteLitter}
-            // authId={author.id}
-            // isDisabled={isDisable}
+            authId={organizationUser} 
             align="right"
           />
-        </div>
-      )}
+      </div>
 
       <h3>{litter.title}</h3>
 

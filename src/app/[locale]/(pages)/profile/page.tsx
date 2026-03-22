@@ -2,12 +2,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { AccountsApi } from 'src/api';
-import { IUser } from "src/constants/types";
+import { AccountsApi, AnimalsApi, OrganizationsApi } from 'src/api';
+import { IAnimal, IOrganization, IUser } from "src/constants/types";
 import { useSession } from "next-auth/react";
-import ProfileForm from "./index";
+import ProfileForm from "./UserProfile";
 import { Routes } from "src/constants/routes";
 import { logout } from "../../auth/logout/actions";
+import { Loader } from "src/components";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -15,22 +16,63 @@ const ProfilePage = () => {
   const session = useSession();
   const userId = session.data?.user.id;
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const [userData, setUserData] = useState<IUser | null>(null);
+  const [userOrganizations, setUserOrganizations] = useState<IOrganization[]>([]);
+  const [userAnimals, setUserAnimals] = useState<IAnimal[]>([]);
 
     const getProfile = async() => {
+      setIsLoading(true)
         try{
             const res = await AccountsApi.getUserData(Number(userId));
             setUserData(res.data);
             console.log(res.data);
+            setIsLoading(false)
         }catch(err){
             setUserData(null)
+            setIsLoading(false)
             toast.error('Profile not found!');
             router.push(Routes.LANDING);
         }
     }
     useEffect(() => {
         getProfile();
-    })
+    }, [])
+
+    const getMyOrganizations = async() => {
+      setIsLoading(true)
+      try{
+        const res = await OrganizationsApi.getMyOrganizations(true, String(session.data?.access_token), 5);
+        setUserOrganizations(res.data.results)
+        setIsLoading(false)
+      }catch(err){
+        // toast.error('Profile not found!');
+        console.log(err);
+        setIsLoading(false)
+        setUserOrganizations([]);
+      }
+    }
+    useEffect(() => {
+      getMyOrganizations();
+  }, [])
+
+  const auth = useSession();
+  const getMyAnimals = async() => {
+    setIsLoading(true);
+    try {
+      const response = await AnimalsApi.getMyAnimals(5);
+      setUserAnimals(response.data.results);
+    } catch (error) {
+      setUserAnimals([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+useEffect(() => {
+    getMyAnimals();
+}, []);
+
 
   const handleSuccess = () => {
     toast.success('Profile updated successfully!');
@@ -65,15 +107,18 @@ const ProfilePage = () => {
 };
 
   if (!userData) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
     <ProfileForm
       userData={userData} 
+      userOrganizations={userOrganizations}
+      userAnimals={userAnimals}
       onSuccess={handleSuccess}
       onDelete={handleDelete}
       onCancel={handleCancel}
+      isLoading={isLoading}
     />
   );
 };

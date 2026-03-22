@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useActionState, useEffect, useState } from 'react';
+import React, { useActionState, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Button, Checkbox, Input, Loader } from 'src/components';
@@ -68,6 +68,20 @@ const SignUpForm = () => {
       router.push('/auth/login');
     }
   }, [state.message, router]);
+
+  const lastMessage = useRef<string | null>(null);
+
+useEffect(() => {
+  if (state.message && state.message !== lastMessage.current) {
+    lastMessage.current = state.message;
+
+    if (state.message === 'error') return; //toast.error()
+    if (state.message === 'success') {
+      // toast.success(...);
+      router.push('/auth/login');
+    }
+  }
+}, [state.message]);
 
   return (
     <form

@@ -1,21 +1,21 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 
+import { OrganizationsApi } from 'src/api';
 import BusinessCard from 'src/app/[locale]/(pages)/(organizations)/components/BusinessCard';
 import LitterCard from 'src/app/[locale]/(pages)/(organizations)/components/LitterCard';
 import OrganizationOnMap from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationOnMap';
-import { Button, List } from 'src/components';
+import { Button, List, Pagination } from 'src/components';
+import { Params } from 'src/constants/params';
+import { Routes } from 'src/constants/routes';
 import { ILitter, IOrganization } from 'src/constants/types';
-import { littersMock } from 'src/mocks/litters';
 
 import style from './Litters.module.scss';
-import { OrganizationsApi } from 'src/api';
-import AddLitters from './LittersAdd';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { Routes } from 'src/constants/routes';
+import { paginationConfig } from 'src/config/pagination';
 
 type LittersProps = {
   organization: IOrganization;
@@ -24,7 +24,10 @@ type LittersProps = {
 const Litters = ({ organization }: LittersProps) => {
   const t = useTranslations();
   const session = useSession();
-  const myId = session.data?.user.id
+  const myId = session.data?.user.id;
+
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
 
   const router = useRouter();
   const { push } = router;
@@ -32,19 +35,26 @@ const Litters = ({ organization }: LittersProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentLitters, setCurrentLitters] = useState<ILitter[]>([]);
   const [previousLitters, setPreviousLitters] = useState<ILitter[]>([]);
+  const [total, setTotal] = useState<number>(1);
 
-  // const [litters, setLitters] = useState<ILitter[]>([]);
+  const changePage = (page: number) => {
+    params.set(Params.PAGE, page.toString());
+    router.push(`?${params.toString()}`);
+  };
 
-  const [addLitter, setAddLitter] = useState<boolean>(false);
+  const currentPage = Number(searchParams.get('page')) || 1;
 
   const getLitters = async () => {
     try {
       setIsLoading(true);
-      const res_litters = await OrganizationsApi.getOrganizationLitters(organization.id);
+      const res_litters = await OrganizationsApi.getOrganizationLitters(organization.id, {
+        page: currentPage
+      });
       console.log('res_litters:: ', res_litters);
       const data = res_litters.data.results;
       // const data = littersMock;
       // setLitters(data);
+      setTotal(res_litters.data.count);
       const current = data.filter((item: ILitter) => new Date(item.birth_date) > new Date());
       const previous = data.filter((item: ILitter) => new Date(item.birth_date) <= new Date());
 
@@ -54,6 +64,7 @@ const Litters = ({ organization }: LittersProps) => {
       console.log('current:: ', current);
     } catch (error) {
       setCurrentLitters([]);
+      setTotal(0);
       setPreviousLitters([]);
     } finally {
       setIsLoading(false);
@@ -61,14 +72,14 @@ const Litters = ({ organization }: LittersProps) => {
   };
   useEffect(() => {
     getLitters();
-  }, [organization.id]);
-  const onLitterAdded = (newLitter: any) => {
-    setCurrentLitters(prev => [...prev, newLitter]);
-    setAddLitter(false);
-  }
+  }, [currentPage, organization.id]);
+  // const onLitterAdded = (newLitter: any) => {
+  //   setCurrentLitters(prev => [...prev, newLitter]);
+  //   setAddLitter(false);
+  // }
 
   const onDelete = (id: number) => {
-    setLitters(prev => prev.filter(l => l.id !== id));
+    // setLitters((prev: any) => prev.filter((l: any) => l.id !== id)); ////////
     setCurrentLitters(prev => prev.filter(l => l.id !== id));
     setPreviousLitters(prev => prev.filter(l => l.id !== id));
   };
@@ -127,9 +138,14 @@ const Litters = ({ organization }: LittersProps) => {
         </List>
       </section>
 
-      {/* {addLitter && (
-        <AddLitters setAddLitter={setAddLitter} organization={organization} onLitterAdded={onLitterAdded} />
-      )} */}
+
+      <Pagination
+          className={style.pagination}
+          totalCount={total}
+          pageSize={paginationConfig.posts}
+          currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+          onPageChange={changePage}
+      />
     </div>
   );
 };

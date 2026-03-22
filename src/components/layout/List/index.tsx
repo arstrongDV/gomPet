@@ -14,16 +14,18 @@ type ListProps = {
   isLoading?: boolean;
   search?: string;
   children: React.ReactNode;
+  ref?: any;
+  isEmpty?: boolean;
 };
 
 const List = (props: ListProps) => {
-  const { className, emptyText, emptyIcon, isLoading, search, children } = props;
+  const { className, emptyText, emptyIcon, isLoading, search, children, ref, isEmpty } = props;
 
   return (
-    <ul className={classNames(style.list, className)}>
+    <ul ref={ref} className={classNames(style.list, className)}>
       <ListEmptyState
         key={'empty-state'}
-        visible={isLoading || !children || React.Children.count(children) === 0}
+        visible={isLoading || isEmpty || !children || React.Children.count(children) === 0}
         isLoading={isLoading}
         icon={emptyIcon}
         text={emptyText}

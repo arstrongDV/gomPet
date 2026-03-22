@@ -23,6 +23,7 @@ const AnimalsScroll = () => {
     try {
       const response = await AnimalsApi.getAnimalsLatest(5, {});
       const animalsData = response.data || [];
+      console.log("response:::", animalsData);
       setAnimals(animalsData);
     } catch (err) {
       setAnimals([]);
@@ -52,6 +53,7 @@ const AnimalsScroll = () => {
           })}
         </h3>
         <LabelLink
+          className={style.label}
           href={Routes.ANIMALS}
           label={t('animalsScroll.seeAll')}
           color='dimmed'

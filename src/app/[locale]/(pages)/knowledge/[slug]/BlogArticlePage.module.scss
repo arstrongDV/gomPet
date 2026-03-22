@@ -1,0 +1,54 @@
+@import 'styles';
+
+.container{
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-7;
+    gap: 4rem;
+}
+
+.header{
+    @include element-flex(row, space-between, stretch);
+
+}
+
+.autorInfo{
+    @include element-flex(row, flex-start, stretch);
+    gap: $spacing-4;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttons {
+    @include element-flex(row, flex-end, center);
+    gap: $spacing-2;
+    width: 100%;
+    @media (max-width: 480px) {
+      @include element-flex(row, flex-end, center);
+    }
+  }
+
+.image{
+    width: 40px;
+    height: 40px;
+}
+
+// .backdrop {
+//     position: fixed;
+//     inset: 0; // shorthand for top: 0; right: 0; bottom: 0; left: 0
+//     background-color: rgba(0, 0, 0, 0.4); // or your theme color
+//     z-index: 9; // should be below the comment card
+//     backdrop-filter: blur(2px); // optional: blur for fancy look
+//   }
+
+  .modaSharinglWin{
+    max-height: 90vh;
+    max-width: 800px;
+  }
+  
+  .modaCommentslWin{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-width: 1200px;
+  }

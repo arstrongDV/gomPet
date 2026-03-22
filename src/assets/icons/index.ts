@@ -74,6 +74,7 @@ import xIcon from './x.svg';
 
 import twitterIcon from './twitter.svg'
 import whatsAppIcon from './whatsapp.svg'
+import peopleIcon from './people.svg'
 
 export type IconNames =
   | 'underline'
@@ -149,7 +150,8 @@ export type IconNames =
   | 'heart'
 
   | 'twitter'
-  | 'whatsApp';
+  | 'whatsApp'
+  | 'people';
 
 export const Icons = {
   underline: underlineIcon,
@@ -225,5 +227,6 @@ export const Icons = {
   heart: heartIcon,
 
   twitter: twitterIcon,
-  whatsApp: whatsAppIcon
+  whatsApp: whatsAppIcon,
+  people: peopleIcon
 };

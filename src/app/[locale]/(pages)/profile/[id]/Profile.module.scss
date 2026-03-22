@@ -1,0 +1,71 @@
+@import 'styles';
+
+.mainContainer{
+    @include element-flex(column, center, stretch);
+    gap: 4rem;
+}
+
+.cardContainer{
+    @include element-flex(row, center, center);
+    width: 100%;
+    gap: 5rem;
+}
+
+.infoCard{
+    @include element-flex(row, space-between, center);
+    min-width: 50rem;
+    gap: 3rem;
+    min-height: 22rem;
+}
+.roleCard{
+    min-height: 22rem;
+}
+
+.avatar{
+    width: 13rem;
+    height: 13rem;
+}
+
+.userInfoContainer{
+    list-style: none;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2.3rem;
+}
+.userRoleContainer{
+    list-style: circle;
+
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.userInfoElement{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    p{
+        font-size: $font-size-m;
+        color: $color-foreground-dim;
+    }
+
+    span{
+        color: $color-gray-700;
+        margin-left: 1rem;
+    }
+}
+
+.userDataWrapper{
+    @include element-flex(column, center, stretch);
+}
+
+.list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 2rem;
+    align-items: center;
+}

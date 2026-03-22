@@ -34,7 +34,7 @@ export const toCommas = (value: number | string) => {
 
 export const toNumberFormat = (value: number | string) => {
   const number = numeral(value).format('0.[0]');
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return "+" + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 };
 
 export const checkLink =

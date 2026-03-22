@@ -1,21 +1,27 @@
 'use client'
 import { IAnimal, IComment } from 'src/constants/types';
 import AnimalCard from '../../../../AnimalCard';
-import { AnimalsApi } from 'src/api';
+import { AnimalsApi, OrganizationsApi } from 'src/api';
 import { useEffect, useState } from 'react';
 import { HorizontalScroll, Loader } from 'src/components';
 import style from './RelatedAnimals.module.scss'
 
+type RelatedAnimalsProps = {
+  organizationId: number;
+}
 
-const RelatedAnimals = () => {
+const RelatedAnimals = ({ organizationId }: RelatedAnimalsProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
 
   const fetchAnimals = async () => {
     setIsLoading(true);
     try {
-      const response = await AnimalsApi.getAnimalsLatest(5, {});
-      const animalsData = response.data || [];
+      const response = await OrganizationsApi.getOrganizationAnimals(organizationId, {
+        limit: 5
+      });
+      console.log(response)
+      const animalsData = response.data.results || [];
       setAnimals(animalsData);
     } catch (err) {
       setAnimals([]);
@@ -24,30 +30,32 @@ const RelatedAnimals = () => {
     }
   };
 
+
   useEffect(() => {
     fetchAnimals();
   }, []);
 
-  if (animals === null) {
-    return (
-      <section>
-        <Loader />
-      </section>
-    );
+  if (isLoading) {
+    return <Loader />;
   }
-
-    return(
-      <HorizontalScroll className={style.list}>
-        {isLoading && <Loader />}
-        {animals.map((animal) => (
-          <AnimalCard
-            className={style.animal}
-            key={animal.id}
-            animal={animal}
-          />
-        ))}
-      </HorizontalScroll>
-    )
+  
+  if (animals.length === 0) {
+    return <div className={style.noAnimalsText}>
+        <p>Brak Zwierzat</p>
+      </div>;
   }
+  
+  return (
+    <HorizontalScroll className={style.list}>
+      {animals.map((animal) => (
+        <AnimalCard
+          className={style.animal}
+          key={animal.id}
+          animal={animal}
+        />
+      ))}
+    </HorizontalScroll>
+  );
+}
 
   export default RelatedAnimals;

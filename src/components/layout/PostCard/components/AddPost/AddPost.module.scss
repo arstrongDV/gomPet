@@ -1,0 +1,24 @@
+@import 'styles';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: $spacing-3;
+  padding: $spacing-6;
+}
+
+.postCreate{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.textarea {
+  min-height: 10rem;
+}
+
+.modaPostAddWin{
+  max-height: 90vh;
+  max-width: 1200px;
+}

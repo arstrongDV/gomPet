@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 
 import Logo from 'assets/images/logo.png';
-import Pattern from 'src/assets/gompetPattern.png';
+import backGround from 'assets/images/AuthBgPaw.png'
 
 import { Routes } from 'src/constants/routes';
 import { Link } from 'src/navigation';
@@ -16,15 +16,13 @@ const PagesLayout = ({
 }>) => {
   return (
     <div
+    style={{
+      backgroundImage: `url(${backGround.src})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}
       className={style.container}
-      style={{
-        backgroundImage: `
-          url(${Pattern.src}),
-          url(${Pattern.src})
-        `,
-        backgroundRepeat: 'repeat',
-        padding: '80px'
-      }}
     >
       <main id="main" className={style.main}>
         <Link href={Routes.LANDING}>

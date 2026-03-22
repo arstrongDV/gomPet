@@ -1,7 +1,11 @@
 'use client';
 
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+
+import { OrganizationsApi } from 'src/api';
 import {
   Button,
   Card,
@@ -10,13 +14,10 @@ import {
   Select,
   Textarea
 } from 'src/components';
-import style from './NewLitterPage.module.scss';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { OrganizationsApi } from 'src/api';
 import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
-import { OptionType } from 'dayjs';
-import toast from 'react-hot-toast';
 import { Routes } from 'src/constants/routes';
+
+import style from './NewLitterPage.module.scss';
 
 const statusOptions = [
   { value: 'ACTIVE', label: 'Active' },
@@ -52,7 +53,7 @@ const NewLitterPage = () => {
       toast.success("Nowy miot dodany");
 
       if (orgId) {
-        router.push(Routes.ORGANIZATION_PROFILE(orgId));
+        router.push(Routes.ORGANIZATION_LITTERS(orgId));
       }
       router.back()
     } catch (err) {
@@ -75,38 +76,8 @@ const NewLitterPage = () => {
           <h3>
             Informacje <mark>podstawowe</mark>
           </h3>
-          <AnimalSelect handleChange={handleChange} />
-          {/* <div className={style.flexRow}> */}
-            {/* <Select
-              label={'Gatunek'}
-              options={[
-                {
-                  value: 'dog',
-                  label: 'Pies'
-                }
-              ]}
-              onChange={() => {}}
-              value={{
-                value: 'cat',
-                label: 'Kot'
-              }}
-            />
-
-            <Select
-              label={'Rasa'}
-              options={[
-                {
-                  value: 'beagle',
-                  label: 'Beagle'
-                }
-              ]}
-              onChange={() => {}}
-              value={{
-                value: 'beagle',
-                label: 'Beagle'
-              }}
-            /> */}
-          {/* </div> */}
+          <AnimalSelect handleChange={handleChange} isAdding />
+          
           <span className={style.caption}>Gatunek i rasa, którą obejmuje ten miot.</span>
         </Card>
         {/* BASIC DATA */}
@@ -162,33 +133,6 @@ const NewLitterPage = () => {
             Aktualny <mark>status</mark>
           </h3>
 
-          {/* <div className={style.statusSelect}>
-            <Tag
-              onClick={() => {}}
-              selected={false}
-            >
-              Dostępne
-            </Tag>
-            <Tag
-              onClick={() => {}}
-              selected={false}
-            >
-              Wydane
-            </Tag>
-            <Tag
-              onClick={() => {}}
-              selected={true}
-            >
-              Można zarezerwować
-            </Tag>
-            <Tag
-              onClick={() => {}}
-              selected={false}
-            >
-              Brak miejsc do rezerwacji
-            </Tag>
-          </div> */}
-
           <Select 
               label="Status"
               options={statusOptions}
@@ -202,6 +146,7 @@ const NewLitterPage = () => {
 
         <Button
           className={style.submit}
+          // disabled={Object.values(litterForm).some(value => value === '')}
           label={'Utwórz miot'}
           onClick={handleSubmit}
         />

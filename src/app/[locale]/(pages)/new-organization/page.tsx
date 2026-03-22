@@ -30,37 +30,38 @@ import { Routes } from 'src/constants/routes';
 import { useRouter } from 'next/navigation';
 import Animals from '../(organizations)/(containers)/organizations/[id]/Tabs/Animals';
 import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import SpeciesSelect from './components/SpeciesSelect';
 
 // type RichTextEditorRef = {
 //   getContent: () => string;
 // };
 
-const animalSpecies: {value: string, label: string}[] = [
-  {
-    value: 'dog',
-    label: 'Pies'
-  },
-  {
-    value: 'cat',
-    label: 'Kot'
-  }
-]
+// const animalSpecies: {value: string, label: string}[] = [
+//   {
+//     value: 'dog',
+//     label: 'Pies'
+//   },
+//   {
+//     value: 'cat',
+//     label: 'Kot'
+//   }
+// ]
 
-const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-  dog: [
-    { value: 'beagle', label: 'Beagle' },
-    { value: 'terrier', label: 'Terrier' },
-    { value: 'labrador', label: 'Labrador' },
-  ],
-  cat: [
-    { value: 'british', label: 'British Shorthair' },
-    { value: 'siamese', label: 'Siamese' },
-    { value: 'persian', label: 'Persian' },
-  ],
-  other: [
-    { value: 'other', label: 'Other' },
-  ]
-};
+// const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+//   dog: [
+//     { value: 'beagle', label: 'Beagle' },
+//     { value: 'terrier', label: 'Terrier' },
+//     { value: 'labrador', label: 'Labrador' },
+//   ],
+//   cat: [
+//     { value: 'british', label: 'British Shorthair' },
+//     { value: 'siamese', label: 'Siamese' },
+//     { value: 'persian', label: 'Persian' },
+//   ],
+//   other: [
+//     { value: 'other', label: 'Other' },
+//   ]
+// };
 
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -98,18 +99,18 @@ const NewOrganizationPage = () => {
     zip_code: ''
   });
 
-  const [race, setRace] = useState<OptionType>(null)
-  const [breed, setBreed] = useState<OptionType>(null)
+  // const [raceValue, setSelectRaceValue] = useState<OptionType>(null)
+  const [speciesValue, setSelectSpeciesValue] = useState<OptionType[]>([])
+
+  const handleChange = (selectedOptions: OptionType[]) => {
+    const speciesIds = selectedOptions ? selectedOptions.map(opt => opt?.value) : [];
+    setSelectSpeciesValue(speciesIds as any);
+};
 
   // const SaveEditText = (content: string) => {
   //   console.log("Editor content:", content);
   // }
   const handleSubmit = async() => {
-    // if (editorRef.current) {
-    //   JSON.stringify(editorRef.current);
-    //   const content = editorRef.current.getContent(); // Assuming getContent() gives the content from the editor
-    //   SaveEditText(content);
-    // }
 
     if (!logo) {
       toast.error("Proszę dodać zdjecie");
@@ -134,7 +135,7 @@ const NewOrganizationPage = () => {
             Number(location.lat)
           ]
         },
-        species: [2]
+        species: speciesValue
       }
 
       const payload = {
@@ -149,8 +150,8 @@ const NewOrganizationPage = () => {
 
       const res = await OrganizationsApi.addNewOrganization(payload);
       toast.success("Stworzono nową organizację!")
-      console.log("res:", res)
-      push(Routes.ORGANIZATION_PROFILE(res.data.id))
+      // push(Routes.ORGANIZATION_PROFILE(res.data.id));
+      return;
     }catch(err){
       console.log(err)
       // if(err?.response?.data.name[0]){
@@ -161,10 +162,6 @@ const NewOrganizationPage = () => {
     }
     setIsLoading(false);
   };
-
-  // const handleChange = (field: string, value: string) => {
-  //   setLitterForm(prev => ({ ...prev, [field]: value }));
-  // };
 
   return (
     <>
@@ -277,7 +274,7 @@ const NewOrganizationPage = () => {
             </h3>
 
             <div className={style.flexRow}>
-              <Select
+              {/* <Select
                 label={'Gatunek'}
                 options={animalSpecies}
                 onChange={(opt: any) => setRace(opt)}
@@ -289,8 +286,9 @@ const NewOrganizationPage = () => {
                 options={animalRace[race?.value as AnimalKey] || []}
                 onChange={(opt: any) => setBreed(opt)}
                 value={breed}
-              />
+              /> */}
               {/* <AnimalSelect handleChange={handleChange} /> */}
+              <SpeciesSelect handleChange={handleChange} />
             </div>
           </Card>
         )}

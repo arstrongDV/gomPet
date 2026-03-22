@@ -65,11 +65,7 @@ const AddPost = ({ className, organizationId, setShowAddPost, refreshPosts }: Ad
   }, [addImage])
 
   return (
-    <OutsideClickHandler onOutsideClick={() => setShowAddPost(false)}>
-        <Card className={`${style.container} ${className || ''}`}>
-        <header>
-            <h2>Dodaj Post</h2>
-        </header>
+      <Card className={`${style.container} ${className || ''}`}>
         <div className={style.postCreate}>
             <Textarea
             className={style.textarea}
@@ -90,7 +86,7 @@ const AddPost = ({ className, organizationId, setShowAddPost, refreshPosts }: Ad
                     Zaprezentuj <mark>zdjęcia</mark>
                 </h3>
   
-                <FileDropzone files={images} setFiles={setImages} />
+                <FileDropzone files={images} setFiles={setImages} oneImageOnly />
                 <PhotosOrganizer photos={images} setPhotos={setImages} />
   
                 <span className={style.caption}>
@@ -102,11 +98,10 @@ const AddPost = ({ className, organizationId, setShowAddPost, refreshPosts }: Ad
         <Button
             type="submit"
             label={loading ? "Publikuję..." : "Opublikuj"}
-            disabled={loading}
+            disabled={loading || text.length < 2}
             onClick={createPost}
         />
-        </Card>
-    </OutsideClickHandler>
+      </Card>
   )
 };
 

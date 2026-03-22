@@ -8,7 +8,7 @@ import "prismjs/themes/prism.css";
 import "prismjs/components/prism-markup";
 import "prismjs/components/prism-css";
 import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-python";
 
 type Props = {
   text: string | any; // Allow any type to prevent crashes
@@ -267,36 +267,3 @@ const DescriptionTranslate = ({ text, maxLines = 5 }: Props) => {
 };
 
 export default DescriptionTranslate;
-
-
-// const processRichText = () => {
-//   const parsed = text;
-
-//   if (parsed?.root?.children) {
-//     const processNode = (node: any, index: number): React.ReactNode => {
-//       if (node.type === "text") {
-//         let element: React.ReactNode = node.text;
-//         if (node.format & 1) element = <strong key={index}>{element}</strong>;
-//         return element;
-//       }
-
-//       if (node.type === "paragraph") {
-//         return (
-//           <p key={index}>
-//             {node.children?.map((child: any, i: number) => processNode(child, i))}
-//           </p>
-//         );
-//       }
-
-//       return null;
-//     };
-
-//     const elements = parsed.root.children.map((node: any, index: number) =>
-//       processNode(node, index)
-//     );
-
-//     setFormattedText(<div>{elements}</div>);
-//   }
-// };
-
-// processRichText();

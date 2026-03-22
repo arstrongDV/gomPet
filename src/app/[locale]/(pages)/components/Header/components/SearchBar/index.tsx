@@ -40,7 +40,7 @@ const SearchBar = () => {
       return;
     }
     const filteredData = organizations.filter((item) => 
-      item.name.toLowerCase().includes(searchValues.toLowerCase())
+      item.name.toLowerCase().includes(searchValues.trim().toLowerCase())
     );
     setSearched(filteredData);
   }, [searchValues, organizations]); // Re-run when searchValues or organizations change

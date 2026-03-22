@@ -25,12 +25,12 @@ export const apiErrorHandler = (error: any) => {
 
 export const isNetworkError = (err: AxiosError) => err.isAxiosError && !err.response;
 
-const NETWORK_ERROR_NOTIFY_DURATION = 10_000;
+// const NETWORK_ERROR_NOTIFY_DURATION = 10_000;
 
-const notifyNetworkError = () => {
-  // notifyError('Błąd sieci');
-  console.log('notifyNetworkError');
-};
+// const notifyNetworkError = () => {
+//   // notifyError('Błąd sieci');
+//   console.log('notifyNetworkError');
+// };
 
 // export const throttledNotifyNetworkError = _.throttle(notifyNetworkError, NETWORK_ERROR_NOTIFY_DURATION, {
 //   trailing: false

@@ -72,6 +72,32 @@ const fileToBase64 = (file: File): Promise<string> => {
         loadExistingImages();
       }, [post]);
 
+      const hasChange = () => {
+        if (!post) return false;
+      
+        const contentChanged = formData.content !== post.content;
+      
+        const hadImageBefore = !!post.image;
+        const hasImageNow = images.length > 0;
+      
+        let imageChanged = false;
+      
+        if (!hadImageBefore && hasImageNow) {
+          imageChanged = true; // dodano nowe
+        }
+      
+        if (hadImageBefore && !hasImageNow) {
+          imageChanged = true; // usunięto
+        }
+      
+        if (hadImageBefore && hasImageNow) {
+          // było zdjęcie i jest zdjęcie – sprawdzamy czy to nowe File
+          imageChanged = images[0] instanceof File;
+        }
+      
+        return contentChanged || imageChanged;
+      };
+  
       const updatePost = async (): Promise<void> => {
         setLoading(true);
         try {
@@ -103,11 +129,7 @@ const fileToBase64 = (file: File): Promise<string> => {
       }, [addImage])
   
     return (
-      <OutsideClickHandler onOutsideClick={() => SetShowUpdateCard && SetShowUpdateCard(false)}>
-          <Card className={`${style.container} ${className || ''}`}>
-          <header>
-              <h2>Actualizuj Post</h2>
-          </header>
+        <Card className={`${style.container} ${className || ''}`}>
           <div className={style.postCreate}>
               <Textarea
               className={style.textarea}
@@ -128,7 +150,7 @@ const fileToBase64 = (file: File): Promise<string> => {
                       Zaprezentuj <mark>zdjęcia</mark>
                   </h3>
     
-                  <FileDropzone files={images} setFiles={setImages} />
+                  <FileDropzone files={images} setFiles={setImages} oneImageOnly />
                   <PhotosOrganizer photos={images} setPhotos={setImages} />
     
                   <span className={style.caption}>
@@ -140,11 +162,10 @@ const fileToBase64 = (file: File): Promise<string> => {
           <Button
               type="submit"
               label={loading ? "Aktualizuję..." : "Aktualizuj"}
-              disabled={loading}
+              disabled={loading || !hasChange()}
               onClick={updatePost}
           />
-          </Card>
-      </OutsideClickHandler>
+        </Card>
     )
   };
 

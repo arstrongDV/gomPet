@@ -19,8 +19,24 @@
   }
 }
 
+.label{
+  text-align: end
+}
+
 .list {
   @include element-flex(row, flex-start, stretch);
   gap: $spacing-4;
   width: 100%;
+}
+
+.noAnimalsText{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  p{
+    font-size: $font-size-xs;
+    color: $color-foreground-dim;
+  }
 }

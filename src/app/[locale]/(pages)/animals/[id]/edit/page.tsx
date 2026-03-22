@@ -1,13 +1,14 @@
 'use client'
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+
 import { AnimalsApi } from 'src/api';
 import { IAnimal } from "src/constants/types";
+
 import AnimalUpdateForm from './index'
-import { useParams } from "next/navigation";
-import { OptionType } from "dayjs";
 
 type Parent = {
   name: string;
@@ -28,7 +29,7 @@ const AnimalEditPage = () => {
     const fetchAnimal = async () => {
       try {
         const response_animal = await AnimalsApi.getAnimalProfile(Number(params.id));
-
+        console.error('Error fetching animal:', response_animal);
         setAnimal(response_animal.data);
       } catch (error) {
         console.error('Error fetching animal:', error);

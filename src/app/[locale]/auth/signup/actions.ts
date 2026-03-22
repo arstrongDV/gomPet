@@ -64,19 +64,18 @@ export const signup = async (
     };
   } 
   catch (error: any) {
-    console.error('REGISTER ERROR:', {
-      status: error?.response?.status,
-      data: error?.response?.data,
-      message: error?.message,
-    });
+    console.log(error);
+    const message =
+      error?.response?.data?.email?.[0] ||
+      error?.response?.data?.username?.[0] ||
+      error?.response?.data?.non_field_errors?.[0] ||
+      error?.message ||
+      'Wystąpił błąd po stronie serwera.';
+  
     return {
       message: 'error',
       errors: {
-        email:
-          error?.response?.data?.email?.[0] ||
-          error?.response?.data?.username?.[0] ||
-          error?.response?.data?.non_field_errors?.[0] ||
-          'Wystąpił błąd po stronie serwera.',
+        email: message,
         firstName: '',
         lastName: '',
         password: '',
@@ -87,4 +86,28 @@ export const signup = async (
       fields,
     };
   }
+  // catch (error: any) {
+  //   console.error('REGISTER ERROR:', {
+  //     status: error?.response?.status,
+  //     data: error?.response?.data,
+  //     message: error?.message,
+  //   });
+  //   return {
+  //     message: 'error',
+  //     errors: {
+  //       email:
+  //         error?.response?.data?.email?.[0] ||
+  //         error?.response?.data?.username?.[0] ||
+  //         error?.response?.data?.non_field_errors?.[0] ||
+  //         'Wystąpił błąd po stronie serwera.',
+  //       firstName: error,
+  //       lastName: error,
+  //       password: error,
+  //       passwordRepeat: error,
+  //       location: error,
+  //       statute: error,
+  //     },
+  //     fields,
+  //   };
+  // }
 }

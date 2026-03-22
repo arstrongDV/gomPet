@@ -1,8 +1,13 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import classNames from 'classnames';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 
+import { AnimalsApi } from 'src/api';
 import {
   Button,
   Card,
@@ -11,26 +16,22 @@ import {
   Icon,
   Input,
   InputWrapper,
+  Modal,
   RichTextEditor,
   SectionHeader,
-  Select,
   Tag,
 } from 'src/components';
 import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
-import { AnimalSize, Gender, OrganizationType } from 'src/constants/types';
-
-// import PhotosOrganizer from './components/PhotosOrganizer';
 import PhotosOrganizer from 'src/components/layout/Forms/PhotosOrganizer';
+import { OptionType } from 'src/components/layout/Forms/Select';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import { Routes } from 'src/constants/routes';
+import { AnimalSize, Gender } from 'src/constants/types';
+
+import AddAnimalParents from './components/AddAnimalParents';
+import SelectMyOrganizations from './components/SelectOrganizatio';
 
 import style from './NewAnimalPage.module.scss';
-import { OptionType } from 'src/components/layout/Forms/Select';
-import { AnimalsApi } from 'src/api';
-import AddAnimalParents from './components/AddAnimalParents';
-import classNames from 'classnames';
-import toast from 'react-hot-toast';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { Routes } from 'src/constants/routes';
 
 type Parent = {
   name: string;
@@ -39,31 +40,31 @@ type Parent = {
   photos?: string;
 };
 
-const animalSpecies = [
-  {
-    value: 'dog',
-    label: 'Pies'
-  },
-  {
-    value: 'cat',
-    label: 'Kot'
-  }
-]
-const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-  dog: [
-    { value: 'beagle', label: 'Beagle' },
-    { value: 'terrier', label: 'Terrier' },
-    { value: 'labrador', label: 'Labrador' },
-  ],
-  cat: [
-    { value: 'british', label: 'British Shorthair' },
-    { value: 'siamese', label: 'Siamese' },
-    { value: 'persian', label: 'Persian' },
-  ],
-  other: [
-    { value: 'other', label: 'Other' },
-  ]
-};
+// const animalSpecies = [
+//   {
+//     value: 'dog',
+//     label: 'Pies'
+//   },
+//   {
+//     value: 'cat',
+//     label: 'Kot'
+//   }
+// ]
+// const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+//   dog: [
+//     { value: 'beagle', label: 'Beagle' },
+//     { value: 'terrier', label: 'Terrier' },
+//     { value: 'labrador', label: 'Labrador' },
+//   ],
+//   cat: [
+//     { value: 'british', label: 'British Shorthair' },
+//     { value: 'siamese', label: 'Siamese' },
+//     { value: 'persian', label: 'Persian' },
+//   ],
+//   other: [
+//     { value: 'other', label: 'Other' },
+//   ]
+// };
 
 const genderMap: Record<string, string> = {
   male: 'MALE',
@@ -81,7 +82,6 @@ type AnimalKey = string;
 const NewAnimalPage = () => {
   const t = useTranslations();
   // const editorRef = useRef(null);
-  const { characteristics } = useAnimalInfo();
 
   // const [type, setType] = useState<OrganizationType | null>(OrganizationType.BREEDING);
   const [name, setName] = useState<string>('');
@@ -100,19 +100,22 @@ const NewAnimalPage = () => {
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
 
+  const [organization, setOrganization] = useState<number | null>();
+  const [owner, setOwner] = useState<number | null>();
+
+  const formData = new FormData(); ////
+
+  const session = useSession();
+  const user = session.data?.user;
+
   const router = useRouter()
   const { push } = router;
 
-  useEffect(() => {
-    document.body.style.overflow = isParentsAdd ? 'hidden' : '';
-  }, [isParentsAdd]);
 
-  const filteredSpeciesOpt = animalSpecies.filter(opt => opt.value !== selectSpeciesValue?.value)
-  const filteredRaceOpt = selectSpeciesValue
-  ? (animalRace[`${selectSpeciesValue.value}`] || []).filter(
-      (opt) => opt.value !== selectRaceValue?.value
-    )
-  : [];
+  const selectedSpecies = selectSpeciesValue?.value
+  ? selectSpeciesValue.label.toUpperCase()
+  : undefined;
+  const { characteristics } = useAnimalInfo(selectedSpecies);
 
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -123,9 +126,53 @@ const NewAnimalPage = () => {
     });
   }
 
+  const handleApiError = (error: any) => {
+    const data = error?.response?.data;
+  
+    if (!data) {
+      toast.error("Coś poszło nie tak");
+      return;
+    }
+  
+    if (data.detail) {
+      toast.error(data.detail);
+      return;
+    }
+  
+    if (typeof data === 'object') {
+      Object.entries(data).forEach(([field, messages]) => {
+        if (Array.isArray(messages)) {
+          messages.forEach((msg) => {
+            toast.error(`${field}: ${msg}`);
+          });
+        }
+      });
+    }
+  };
+
+  const isBtnDisabled =
+  !name ||
+  !birthDate ||
+  !selectSpeciesValue?.label ||
+  !selectRaceValue?.label ||
+  photos.length === 0 ||
+  !status;
+
+  const handleChange = (field: string, value: string, label?: string) => {
+    if(field === 'breed'){
+      setSelectRaceValue({ value, label } as OptionType);
+    } 
+    else if(field === 'species'){
+      setSelectSpeciesValue({ value, label } as OptionType);
+    }
+  };
+  
   const handleSubmit = async () => {
+    if(!user?.location && !organization){
+      toast.error("Musisz udostepnic lokalizacje aby dodac zwierze albo podac wlasna organizacje")
+      return;
+    }
     try {
-      const formData = new FormData();
       const galleryWithBase64 = await Promise.all(
         photos.map(async (photo) => {
           const base64 = await fileToBase64(photo);
@@ -143,13 +190,28 @@ const NewAnimalPage = () => {
       formData.append('birth_date', birthDate);
       formData.append('status', statusMap[status]);
       formData.append('descriptions', descriptions);
-      formData.append('city', "Krakow");
-      formData.append('location', JSON.stringify({
-        type: "Point",
-        coordinates: [20.673144511006825, 51.59228169182775]
-      }));
 
-      if(!hasPrice){
+        if (organization !== null && organization !== undefined) {
+          formData.append('organization_id', String(organization));
+        } else {
+          formData.append('organization_id', '');
+        }
+        
+        if (owner !== null && owner !== undefined) {
+          formData.append('owner_id', String(owner));
+        } else {
+          formData.append('owner_id', '');
+        }
+      // }
+
+      if(hasMetrics){
+        formData.append('hasMetrics', true);
+      }
+      // else{
+      //   formData.append('organization_id', null);
+      // }
+
+      if(!hasPrice || price == ''){
         setPrice('0');
         formData.append('price', '0');
       }
@@ -165,28 +227,34 @@ const NewAnimalPage = () => {
         formData.append(`gallery[${index}][image]`, item.image);
       });
 
-      const characteristicsBoard = Object.entries(characteristics.dog).map(
-        ([key, value]) => ({
-          title: value,
-          bool: selectedCharacteristics.includes(key)
-        })
-      );
+      // const characteristicsBoard = Object.entries(characteristics).map(
+      //   ([key, value]) => ({
+      //     title: value,
+      //     bool: selectedCharacteristics.includes(key)
+      //   })
+      // );
+      const characteristicsBoard = characteristics.map((char) => ({
+        title: char.value,
+        bool: selectedCharacteristics.includes(String(char.id))
+      }));
+      console.log("characteristicsBoard: ", characteristicsBoard);
+      console.log("characteristics: ", characteristics);
       characteristicsBoard.forEach((char, index) => {
         formData.append(`characteristicBoard[${index}][title]`, char.title);
         formData.append(`characteristicBoard[${index}][bool]`, char.bool.toString());
       });
-      
+
       const animals_res = await AnimalsApi.createNewAnimal(formData);
-      console.log("animals_res: ", animals_res);
+      console.log('animals_res: ', animals_res);
 
-      console.log("parents: ", parents)
+      console.log('parents: ', parents)
 
-      if (animals_res.status === 201 || animals_res.statusText === "Created") {
+      if (animals_res.status === 201 || animals_res.statusText === 'Created') {
         const animalId = animals_res.data?.id;
         if (animalId && parents.length > 0) {
           const parentsToAdd = parents.slice(0, 2);
           let successCount = 0;
-          
+
           for (const [index, parent] of parentsToAdd.entries()) {
             try {
               const parentData = {
@@ -206,7 +274,7 @@ const NewAnimalPage = () => {
               toast.error("Failed to add parent")
             }
           }
-          
+
           if (successCount === 0) {
             toast.error("Animal created but failed to add any parents");
           } else if (successCount < parentsToAdd.length) {
@@ -216,8 +284,9 @@ const NewAnimalPage = () => {
           }
         }
       }
-      push(Routes.ANIMAL_PROFILE(animals_res.data.id));
       toast.success("Animal created");
+      push(Routes.ANIMAL_PROFILE(animals_res.data.id));
+
       setName('');
       setGender(Gender.MALE);
       setSize(AnimalSize.SMALL);
@@ -234,19 +303,21 @@ const NewAnimalPage = () => {
       setDescriptions('');
     } catch (err: any) {
       console.error('Failed to create animal:', err.response?.data || err);
-      toast.error("Failed to create animal");
+      handleApiError(err);
     }
   };
 
+  useEffect(() => {
+    if(parents.length >= 2){
+      setIsParentsAdd(false)
+    }
+  }, [])
+
   return (
     <>
-      {isParentsAdd && (
-        <div className={style.backdrop} onClick={() => setIsParentsAdd(false)} />
-      )}
-
       <SectionHeader
-        title={'Dodaj zwierzaka'}
-        subtitle={'Zaprezentuj zwierzę na platformie'}
+        title={t('pages.newAnimal.addNew')}
+        subtitle={t('pages.newAnimal.RegisterNewAnimal')}
         margin
       />
 
@@ -254,15 +325,17 @@ const NewAnimalPage = () => {
         {/* BASIC DATA */}
         <Card className={style.section}>
           <h3>
-            Informacje <mark>podstawowe</mark>
+          {t.rich('pages.newAnimal.basicInfo', {
+            mark: (chunks) => <mark>{chunks}</mark>,
+          })}
           </h3>
 
           <div className={style.fullWidth}>
             <Input
               id='animal-name'
               name='animal-name'
-              label={'Nazwij zwierzaka'}
-              placeholder={'Jak się wabi?'}
+              label={t('pages.newAnimal.inputAnimalName')}
+              placeholder={t('pages.newAnimal.animalsName')}
               value={name}
               onChangeText={setName}
               required
@@ -270,8 +343,8 @@ const NewAnimalPage = () => {
           </div>
 
           <div className={style.flexRow}>
-            <Select
-              label={'Gatunek'}
+            {/* <Select
+              label={t('pages.animals.speciesLabel')}
               options={filteredSpeciesOpt}
               onChange={setSelectSpeciesValue}
               value={selectSpeciesValue}
@@ -279,66 +352,69 @@ const NewAnimalPage = () => {
             />
 
             <Select
-              label={'Rasa'}
+              label={t('pages.animals.breed')}
               options={filteredRaceOpt}
               onChange={setSelectRaceValue}
               value={selectRaceValue}
               isClearable
-            />
+            /> */}
+            <AnimalSelect handleChange={handleChange} isAdding />
 
             <Input
-              label="Birth date"
+              label={t('pages.newAnimal.birthDate')}
               type="date"
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
             />
           </div>
 
-          <InputWrapper label={'Płeć'}>
+          <InputWrapper label={t('pages.animals.genderLabel')}>
             <div className={style.genderSelect}>
               <Tag
                 selected={gender === Gender.MALE}
                 onClick={() => setGender(Gender.MALE)}
               >
-                On
+                {t('pages.animals.gender.male')}
                 <Icon name='genderMale' />
               </Tag>
               <Tag
                 selected={gender === Gender.FEMALE}
                 onClick={() => setGender(Gender.FEMALE)}
               >
-                Ona
+                {t('pages.animals.gender.female')}
                 <Icon name='genderFemale' />
               </Tag>
             </div>
           </InputWrapper>
 
-          <InputWrapper label={'Rozmiar'}>
+          <InputWrapper label={t('pages.animals.sizeLabel')}>
             <div className={style.genderSelect}>
               <Tag
                 selected={size === AnimalSize.SMALL}
                 onClick={() => setSize(AnimalSize.SMALL)}
               >
-                Mały
+                {t('pages.animals.size.small')}
               </Tag>
               <Tag
                 selected={size === AnimalSize.MEDIUM}
                 onClick={() => setSize(AnimalSize.MEDIUM)}
               >
-                Średni
+                {t('pages.animals.size.medium')}
               </Tag>
               <Tag
                 selected={size === AnimalSize.LARGE}
                 onClick={() => setSize(AnimalSize.LARGE)}
               >
-                Duży
+                {t('pages.animals.size.large')}
               </Tag>
             </div>
           </InputWrapper>
 
+          <SelectMyOrganizations setOrganization={setOrganization} setOwner={setOwner} />
+
           <Checkbox
             id='animal-has-prise'
-            label={'Ustawic cennę?'}
+            label={t('pages.newAnimal.addPrice')}
             checked={hasPrice}
             onClick={() => setHasPrice((prev) => !prev)}
           />
@@ -347,8 +423,8 @@ const NewAnimalPage = () => {
             <Input
               id='animal-price'
               name='animal-price'
-              label={'Cena'}
-              placeholder='Napisz cennę...'
+              label={t('pages.newAnimal.price')}
+              placeholder={t('pages.newAnimal.inputPrice')}
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
@@ -358,7 +434,7 @@ const NewAnimalPage = () => {
 
           <Checkbox
             id='animal-has-metrics'
-            label={'Czy zwierzak ma metrykę?'}
+            label={t('pages.newAnimal.hasMetrics')}
             checked={hasMetrics}
             onClick={() => setHasMetrics((prev) => !prev)}
           />
@@ -368,7 +444,9 @@ const NewAnimalPage = () => {
         {/* IMAGES */}
         <Card className={style.section}>
           <h3>
-            Zaprezentuj <mark>zdjęcia</mark>
+            {t.rich('pages.newAnimal.addImages', {
+              mark: (chunks) => <mark>{chunks}</mark>,
+            })}
           </h3>
 
           <FileDropzone
@@ -382,8 +460,9 @@ const NewAnimalPage = () => {
           />
 
           <span className={style.caption}>
-            Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
-            formaty to .png, .jpg, .jpeg
+            {/* Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
+            formaty to .png, .jpg, .jpeg */}
+            {t('common.imagesInfo')}
           </span>
         </Card>
         {/* IMAGES */}
@@ -391,11 +470,13 @@ const NewAnimalPage = () => {
         {/* CHARACTERISTICS */}
         <Card className={style.section}>
           <h3>
-            <mark>Cechy</mark> charakterystyczne
+            {t.rich('pages.newAnimal.characteristics', {
+              mark: (chunks) => <mark>{chunks}</mark>,
+            })}
           </h3>
 
           <div className={style.characteristics}>
-            {Object.entries(characteristics.dog).map(([key, value]) => (
+            {/* {Object.entries(characteristics.dog).map(([key, value]) => (
               <Checkbox
                 key={key}
                 id={key}
@@ -410,7 +491,27 @@ const NewAnimalPage = () => {
                 }}
                 label={value}
               />
-            ))}
+            ))} */}
+            {(!selectSpeciesValue || characteristics.length === 0) ? (
+              <p>Musisz najpierw wybrać gatunek</p>
+            ) : (
+              characteristics.map(({ id, label }) => (
+                <Checkbox
+                  key={id}
+                  id={String(id)}
+                  className={style.checkbox}
+                  checked={selectedCharacteristics.includes(String(id))}
+                  onChange={() => {
+                    setSelectedCharacteristics((prev) =>
+                      prev.includes(String(id))
+                        ? prev.filter((item) => item !== String(id))
+                        : [...prev, String(id)]
+                    );
+                  }}
+                  label={label}
+                />
+              ))
+            )}
           </div>
 
         </Card>
@@ -419,17 +520,21 @@ const NewAnimalPage = () => {
         {/* DESCRIPTION */}
         <Card className={style.section}>
           <h3>
-            <mark>Opisz</mark> zwierzaka
+            {t.rich('pages.newAnimal.animalsDescription', {
+              mark: (chunks) => <mark>{chunks}</mark>,
+            })}
           </h3>
-          <RichTextEditor placeholder={'Napisz coś...'} onChange={setDescriptions} />
-          <span className={style.caption}>Opis będzie widoczny w jego profilu.</span>
+          <RichTextEditor placeholder={t('pages.newAnimal.writeSth')} onChange={setDescriptions} />
+          <span className={style.caption}>{t('pages.newAnimal.descriptionVisibleInfo')}</span>
         </Card>
         {/* DESCRIPTION */}
 
         {/* STATUS */}
         <Card className={style.section}>
           <h3>
-            Aktualny <mark>status</mark>
+            {t.rich('pages.newAnimal.activeStatus', {
+              mark: (chunks) => <mark>{chunks}</mark>,
+            })}
           </h3>
 
           <div className={style.statusSelect}>
@@ -437,37 +542,40 @@ const NewAnimalPage = () => {
               onClick={() => {setStatus('Ma właściciela')}}
               selected={status === 'Ma właściciela'}
             >
-              Ma właściciela
+              {t('pages.newAnimal.statusOwned')}
             </Tag>
             <Tag
               onClick={() => {setStatus('Kwarantanna')}}
               selected={status === 'Kwarantanna'}
             >
-              Kwarantanna
+               {t('pages.newAnimal.statusQuarantine')}
             </Tag>
             <Tag
               onClick={() => {setStatus('Do adopcji')}}
               selected={status === 'Do adopcji'}
             >
-              Do adopcji
+              {t('pages.newAnimal.statusAvailable')}
             </Tag>
           </div>
 
-          <span className={style.caption}>Status jest widoczny w widoku profilu zwierzaka.</span>
+          <span className={style.caption}>{t('pages.newAnimal.statusVisibleInfo')}</span>
         </Card>
         {/* STATUS */}
 
-        {/* STATUS */}
+        {/* PARENTS */}
         <Card className={style.section}>
           <h3>
-            Znajdź <mark>rodzinę</mark> zwierzaka
+            {t.rich('pages.newAnimal.findAnimalParents', {
+              mark: (chunks) => <mark>{chunks}</mark>,
+            })}
           </h3>
 
           <div className={style.familyTreeBlock}>
-
-            <div className={style.addParents} onClick={() => setIsParentsAdd((prev) => !prev)} aria-disabled={parents.length == 2}>
-              <Icon name='plus' />
-            </div>
+            {parents.length < 2  && (
+              <div className={style.addParents} onClick={() => setIsParentsAdd((prev) => !prev)} aria-disabled={parents.length == 2}>
+                <Icon name='plus' />
+              </div>
+            )}
 
             {parents.map((p, index) => (
               <div key={index} className={style.parent}>
@@ -488,20 +596,32 @@ const NewAnimalPage = () => {
               </div>
             ))}
           </div>
+      {/* PARENTS */}
 
-            <AddAnimalParents 
-              className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
+      <Modal
+        className={style.modaParentsAddlWin} 
+        isOpen={isParentsAdd} 
+        closeModal={() => setIsParentsAdd(false)}
+        title={t('pages.newAnimal.parentsAdd')}
+      >
+          <AddAnimalParents 
+              className={classNames(style.cardAddParents)} 
+              setIsParentsAdd={setIsParentsAdd}
+              parents={parents}
               onAddParent={(parent) => {
                 setParents((prev) => [...prev, parent as Parent]);
                 setIsParentsAdd(false); 
               }}
           />
-          <span className={style.caption}>Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.</span>
+      </Modal>
+
+          <span className={style.caption}>{t('pages.newAnimal.familyTreeInfo')}</span>
         </Card>
 
         <Button
           className={style.submit}
-          label={'Dodaj zwierzaka'}
+          disabled={isBtnDisabled}
+          label={t('pages.newAnimal.addAnimal')}
           onClick={handleSubmit}
         />
       </div>

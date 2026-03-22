@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { CloseButton } from 'components';
 
 import style from './Modal.module.scss';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 interface IModalContentProps {
   title?: string;

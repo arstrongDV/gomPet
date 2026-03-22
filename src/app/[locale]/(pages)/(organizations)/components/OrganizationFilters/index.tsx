@@ -16,6 +16,8 @@ import style from './OrganizationFilters.module.scss';
 import { InputProps } from 'src/components/layout/Forms/Input';
 import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import { ValueOf } from 'next/dist/shared/lib/constants';
 
 type OrganizationFiltersProps = {
   className?: string;
@@ -43,7 +45,7 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
   };
 
   const handleFilter = (filter: string, value: string, isArr = false) => {
-    // const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams.toString());
     params.set(Params.PAGE, '1');
 
     if (filter === Params.RANGE) {
@@ -83,15 +85,15 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
     router.push(`?${params.toString()}`);
   };
 
-  useEffect(() => {
-    const hasRange = searchParams.get(Params.RANGE);
-    const hasLocation = searchParams.get(Params.LOCATION);
+  // useEffect(() => {
+  //   const hasRange = searchParams.get(Params.RANGE);
+  //   const hasLocation = searchParams.get(Params.LOCATION);
   
-    if (!hasRange && hasLocation) {
-      params.delete(Params.LOCATION);
-      router.replace(`?${params.toString()}`);
-    }
-  }, [searchParams]);
+  //   if (!hasRange && hasLocation) {
+  //     params.delete(Params.LOCATION);
+  //     router.replace(`?${params.toString()}`);
+  //   }
+  // }, [searchParams]);
 
   const applyLocationFilter = () => {
     if (!session.data?.user?.location){
@@ -104,7 +106,7 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
       return;
     }
 
-    const { coordinates } = session.data.user.location;
+    const { coordinates } = session.data?.user.location;
   
     // upewnij się, że lat i lng są liczby
     if (coordinates[0] == null || coordinates[1] == null) return;
@@ -168,13 +170,22 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
               }
             }}
           />
-          <Select
+          {/* <Select
             label={t('pages.organizations.filters.breedSpecies')}
             options={[toSelectOption('dog'), toSelectOption('cat')]}
             value={toSelectOption(searchParams.get(Params.SPECIES))}
             onChange={(value: OptionType) => handleFilter(Params.SPECIES, value ? String(value.value) : '')}
             isClearable
-          />
+          /> */}
+          {/* <AnimalSelect
+              handleChange={(type, value) => {
+                handleFilter(
+                  type === 'species' ? Params.SPECIES : Params.BREED,
+                  value
+                );
+              }}
+            /> */}
+
           <Select
             label={t('pages.organizations.filters.breedType')}
             options={[toSelectOption('dog'), toSelectOption('cat')]}

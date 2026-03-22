@@ -1,17 +1,17 @@
 @import 'styles';
 
 .container {
-    @include element-flex(column, flex-start, stretch);
-    gap: $spacing-6;
+    @include element-flex(column, center, stretch);
+    gap: $spacing-4;
     width: 100%;
   }
   
   .animalsGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: $spacing-4;
     width: 100%;
-    height: 48vh;
+    height: 45vh;
+    gap: $spacing-4;
     padding: $spacing-3;
     overflow-y: auto;
   
@@ -30,6 +30,11 @@
       background-color: rgba(0, 0, 0, 0.15);
       border-radius: 10px;
     }
+  }
+
+  .animalsList{
+    @include element-flex(column, center, stretch);
+    gap: $spacing-4;
   }
   
   .animalItem {
@@ -100,6 +105,7 @@
   .flexRow {
     @include element-flex(row, flex-start, center);
     gap: $spacing-4;
+    margin-top: 2rem;
   }
   
   .fullWidth {
@@ -113,14 +119,21 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
     margin-top: 2rem;
+    gap: $spacing-4;
   }
 
   .animalParent{
     display: flex;
     flex-direction: row;
     gap: 1.8rem;
+
+    @include phoneWidth {
+      flex-direction: column; // switch to column on tablet
+      align-items: stretch;    // optional, make elements take full width
+    }
   }
 
   .buttonAdd{

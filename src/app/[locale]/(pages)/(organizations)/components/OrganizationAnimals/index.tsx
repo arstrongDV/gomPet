@@ -3,15 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { OrganizationsApi } from 'src/api';
 import { HorizontalScroll, LabelLink, Loader } from 'src/components';
 import { Routes } from 'src/constants/routes';
 import { IAnimal } from 'src/constants/types';
-import { animalsMock } from 'src/mocks/animals';
 
 import AnimalCard from '../../../animals/components/AnimalCard';
 
 import style from './OrganizationAnimals.module.scss';
-import { OrganizationsApi } from 'src/api';
 
 type OrganizationAnimalsProps = {
   organizationId: number;
@@ -39,6 +38,11 @@ const OrganizationAnimals = ({ organizationId }: OrganizationAnimalsProps) => {
     getAnimals();
   }, [organizationId]);
 
+  if (isLoading) {
+    return <Loader />;
+  }
+  
+
   return (
     <section className={style.container}>
       <header className={style.header}>
@@ -47,21 +51,29 @@ const OrganizationAnimals = ({ organizationId }: OrganizationAnimalsProps) => {
         </h3>
         <LabelLink
           href={Routes.ANIMALS}
+          className={style.label}
           label={t('common.action.seeAll')}
           color='dimmed'
         />
       </header>
 
-      <HorizontalScroll className={style.list}>
-        {isLoading && <Loader />}
-        {animals.map((animal) => (
-          <AnimalCard
-            className={style.animal}
-            key={animal.id}
-            animal={animal}
-          />
-        ))}
-      </HorizontalScroll>
+      {animals.length === 0 ? (
+        <div className={style.noAnimalsText}>
+          <p>Brak Zwierzat</p>
+        </div>
+      ) : (
+        <HorizontalScroll className={style.list}>
+          {isLoading && <Loader />}
+          {animals.map((animal) => (
+            <AnimalCard
+              key={animal.id}
+              animal={animal}
+              filledButton
+            />
+          ))}
+        </HorizontalScroll>
+      )}
+
     </section>
   );
 };

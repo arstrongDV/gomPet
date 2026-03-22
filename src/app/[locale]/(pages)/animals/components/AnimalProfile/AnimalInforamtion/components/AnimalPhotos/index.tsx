@@ -1,61 +1,86 @@
 'use client'
 
-import { useState } from 'react'
+import { useState } from 'react';
+import Lightbox from 'yet-another-react-lightbox';
+
 import { IAnimal } from 'src/constants/types';
+
+import 'yet-another-react-lightbox/styles.css';
 import style from './AnimalPhotos.module.scss';
-import ImageShow from 'src/components/layout/ImageShow';
+
+// import ImageShow from 'src/components/layout/ImageShow';
 
 type AnimalProfileProps = {
   animal: IAnimal;
 }
 
 const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
-  const images = (animal.gallery || []).map((item: any) => item.image);
-  const [currentIndex, setCurrentIndex] = useState(0); // domyślnie 0
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  if (!images.length) return <p>No images available</p>;
+  const slides = (animal.gallery || []).map((item: any) => ({
+    src: item.image
+  }));
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!slides.length) return <p>No images available</p>;
 
   return (
     <div className={style.photos}>
-      {/* Główne zdjęcie */}
+
+      {/* MAIN IMAGE */}
       <div className={style.mainImage}>
         <img
-          src={images[currentIndex]}
+          src={slides[currentIndex].src}
           alt={`${animal.name} photo`}
           onClick={() => setIsOpen(true)}
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
         />
       </div>
 
-      {/* Miniaturki */}
-      {images.length > 1 && (
+      {/* THUMBNAILS */}
+      {slides.length > 1 && (
         <div className={style.imagesList}>
-          {images.map((img, i) => (
+          {slides.map((img, i) => (
             <img
               key={i}
-              src={img}
+              src={img.src}
               alt={`${animal.name} photo ${i}`}
               className={style.thumbnail}
               onClick={() => setCurrentIndex(i)}
-              onError={(e) => {
-                console.error('Failed to load thumbnail:', img);
-                e.currentTarget.style.display = 'none';
-              }}
             />
           ))}
         </div>
       )}
 
-      {/* Modal ze sliderem */}
-      <ImageShow
-        images={animal.gallery || []}
-        currentPhoto={currentIndex}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+      {/* LIGHTBOX */}
+      <Lightbox
+        open={isOpen}
+        close={() => setIsOpen(false)}
+        slides={slides}
+        index={currentIndex}
+        styles={{
+          container: {
+            backgroundColor: 'rgba(255,255,255,0.6)',
+            backdropFilter: 'blur(6px)'
+          },
+          button: {
+            color: '#B1D800',
+          },
+          icon: {
+            color: '#B1D800',      
+            width: '60px',          
+            height: '60px',         
+            fontSize: '4.5rem',  
+            padding: '1rem',
+            borderRadius: '50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+          },
+        }}
       />
+
     </div>
   );
 }

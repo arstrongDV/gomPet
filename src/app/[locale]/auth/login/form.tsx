@@ -4,7 +4,7 @@ import React, { useActionState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import { Button, Input } from 'src/components';
+import { Button, Input, useWebsocket } from 'src/components';
 import { Params } from 'src/constants/params';
 import { Routes } from 'src/constants/routes';
 import { useRouter } from 'src/navigation';
@@ -13,11 +13,14 @@ import { login } from './actions';
 
 import style from './Login.module.scss';
 import toast from 'react-hot-toast';
+import { WebsocketRoutes } from 'src/api/routes';
+import { useSession } from 'next-auth/react';
 
 const LoginForm = () => {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const session = useSession();
   const [state, action, isPending] = useActionState(login, {
     message: '',
     errors: undefined,
@@ -41,6 +44,7 @@ const LoginForm = () => {
 
     if (state.message === 'success') {
       // toast.success('Witamy na stronie!');
+
       if (redirectedFrom) {
         router.replace(redirectedFrom);
       } else {

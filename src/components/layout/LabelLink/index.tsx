@@ -12,7 +12,7 @@ type LabelLinkProps = {
   onClick?: () => void;
   className?: string;
   labelStyle?: string;
-  color?: 'primary' | 'accent' | 'font' | 'dimmed';
+  color?: 'primary' | 'accent' | 'font' | 'dimmed' | 'black';
   underlined?: boolean;
   icon?: IconNames;
   fontSize?: number;

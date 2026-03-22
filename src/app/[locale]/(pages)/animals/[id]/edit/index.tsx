@@ -1,29 +1,33 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect,useState } from 'react';
 import toast from 'react-hot-toast';
-import { AnimalsApi } from 'src/api';
-import { IAnimal, Gender, AnimalSize } from 'src/constants/types';
-import { OptionType } from 'src/components/layout/Forms/Select';
-import style from './updateAnimal.module.scss'
-import {
-  Card,
-  Input,
-  Select,
-  Button,
-  FileDropzone,
-  Tag,
-  Icon,
-  Checkbox,
-  InputWrapper,
-  RichTextEditor,
-  SectionHeader
-} from 'src/components';
-import PhotosOrganizer from '../../../new-animal/components/PhotosOrganizer';
-import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
-import AddAnimalParents from '../../../new-animal/components/AddAnimalParents';
 import classNames from 'classnames';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
+import { AnimalsApi } from 'src/api';
+import {
+  Button,
+  Card,
+  Checkbox,
+  FileDropzone,
+  Icon,
+  Input,
+  InputWrapper,
+  Modal,
+  RichTextEditor,
+  SectionHeader,
+  Tag } from 'src/components';
+import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import { AnimalSize, Gender, IAnimal, IOrganization } from 'src/constants/types';
+
+import AddAnimalParents from '../../../new-animal/components/AddAnimalParents';
+import PhotosOrganizer from '../../../new-animal/components/PhotosOrganizer';
+import SelectMyOrganizations from '../../../new-animal/components/SelectOrganizatio';
+
+import style from './updateAnimal.module.scss'
 
 type Parent = {
   id: number;
@@ -45,27 +49,27 @@ interface CharacteristicItem {
   bool: boolean;
 }
 
-const speciesOptions = [
-  { value: 'dog', label: 'Dog' },
-  { value: 'cat', label: 'Cat' },
-  { value: 'other', label: 'Other' },
-];
+// const speciesOptions = [
+//   { value: 'dog', label: 'Dog' },
+//   { value: 'cat', label: 'Cat' },
+//   { value: 'other', label: 'Other' },
+// ];
 
-const breedOptions = {
-  dog: [
-    { value: 'beagle', label: 'Beagle' },
-    { value: 'terrier', label: 'Terrier' },
-    { value: 'labrador', label: 'Labrador' },
-  ],
-  cat: [
-    { value: 'british', label: 'British Shorthair' },
-    { value: 'siamese', label: 'Siamese' },
-    { value: 'persian', label: 'Persian' },
-  ],
-  other: [
-    { value: 'other', label: 'Other' },
-  ],
-};
+// const breedOptions = {
+//   dog: [
+//     { value: 'beagle', label: 'Beagle' },
+//     { value: 'terrier', label: 'Terrier' },
+//     { value: 'labrador', label: 'Labrador' },
+//   ],
+//   cat: [
+//     { value: 'british', label: 'British Shorthair' },
+//     { value: 'siamese', label: 'Siamese' },
+//     { value: 'persian', label: 'Persian' },
+//   ],
+//   other: [
+//     { value: 'other', label: 'Other' },
+//   ],
+// };
 
 const urlToFile = async (url: string, filename: string): Promise<File> => {
   try {
@@ -95,33 +99,52 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   onSuccess, 
   onCancel 
 }) => {
+  const t = useTranslations();
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    species: '',
-    breed: '',
+    species: {
+      id: '',
+      label: ''
+    },
+    breed: {
+      id: '',
+      label: ''
+    },
     gender: "MALE",
     birth_date: '',
     image: '',
     size: '',
     descriptions: '',
     status: 'AVAILABLE',
-    city: '',
+    // city: '',
     parents: [],
     price: 0,
+    organization: null,
+    owner: null
   });
+
+  console.log("animalanimal: ", animal);
 
   const [photos, setPhotos] = useState<File[]>([]);
   const [characteristics, setCharacteristics] = useState<CharacteristicItem[]>([]);
-  const { characteristics: animalCharacteristics } = useAnimalInfo();
   const [description, setDescriptions] = useState<string>('');
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
   const [oldParents, setOldParents] = useState<Parent[]>([]);
-
   const [price, setPrice] = useState<string>('');
   const [hasPrice, setHasPrice] = useState<boolean>(false);
+
+  const [initialOrganization, setInitialOrganization] = useState<IOrganization | null>(null);
+  const [organization, setOrganization] = useState<number | null>(null);
+  const [owner, setOwner] = useState<number | null>();
+
+  // const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
+  // const [selectRaceValue, setSelectRaceValue] = useState<OptionType>(null);
+
+  const { characteristics: animalCharacteristics } = useAnimalInfo("DOG");
 
   useEffect(() => {
       if (animal) {
@@ -129,15 +152,27 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
           name: animal.name ?? '',
           species: animal.species ?? '',
           breed: animal.breed ?? '',
+          // breeds: {
+          //   value: animal.breed.value ?? '',
+          //   label: animal.breed.label ?? '',
+          // },
+          // species: {
+          //   value: animal.species.value ?? '',
+          //   label: animal.species.label ?? '',
+          // },
           gender: animal.gender ?? "MALE",
           birth_date: animal.birth_date ?? '',
           size: animal.size ?? AnimalSize.SMALL,
           status: animal.status ?? 'AVAILABLE',
-          city: animal.city ?? '',
+          // city: animal.city ?? '',
           price: animal.price !== '0.00' ? animal.price : '',
           descriptions: animal.descriptions ?? '',
+          // organization: animal?.organization && animal?.organization.id,
+          // owner: animal.owner,
           parents: animal.parents ?? [],
         });
+
+        setInitialOrganization(animal.organization ?? null);
 
         setDescriptions(animal.descriptions ?? '');
 
@@ -148,6 +183,17 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
           setHasPrice(false);
           setPrice(''); 
         }
+
+        if (animal.owner) {
+          setOwner(animal.owner);
+        }
+
+        if (animal.organization) {
+          setOrganization(animal.organization.id);
+        }
+
+        // setSelectSpeciesValue(animal.species);
+        // setSelectRaceValue(animal.breed);
 
       const loadExistingImages = async () => {
         const imageFiles: File[] = [];
@@ -182,9 +228,9 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   
       if (animal.characteristicBoard?.length > 0) {
         setCharacteristics(animal.characteristicBoard);
-      } else if (animalCharacteristics.dog) {
+      } else if (animalCharacteristics) {
         setCharacteristics(
-          Object.entries(animalCharacteristics.dog).map(([key]) => ({
+          Object.entries(animalCharacteristics).map(([key]) => ({
             title: key,
             bool: false,
           }))
@@ -208,11 +254,58 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
 
   }, [animal, animalCharacteristics]);
 
+  // const handleChange = (field: string, value: string, label?: string) => {
+  //   if(field === 'breed'){
+  //     setFormData({ value, label } as OptionType);
+  //   } else if(field === 'species'){
+  //     setFormData({ value, label } as OptionType);
+  //   }
+  // };
+console.log(formData);
   const handleInputChange = (field: string, value: string | number | Gender) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
+  };
+
+
+  const hasChanged = () => {
+    if (!animal) return false;
+  
+    const basicChanged =
+      formData.name !== (animal.name ?? '') ||
+      formData.species !== (animal.species.label ?? '') ||
+      formData.breed !== (animal.breed.label ?? '') ||
+      formData.gender !== (animal.gender ?? "MALE") ||
+      formData.birth_date !== (animal.birth_date ?? '') ||
+      formData.size !== animal.size ||
+      formData.status !== animal.status ||
+      initialOrganization?.id !== organization ||
+      description !== (animal.descriptions ?? '');
+  
+    const priceChanged =
+      Number(hasPrice ? price : 0) !== Number(animal.price ?? 0);
+  
+    const parentsChanged =
+      JSON.stringify(
+        parents
+          .map(p => ({
+            id: p.animal_id ?? p.id,
+            relation: p.relation
+          }))
+          .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
+      ) !==
+      JSON.stringify(
+        (animal.parents ?? [])
+          .map(p => ({
+            id: p.animal_id ?? p.id,
+            relation: p.relation
+          }))
+          .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
+      );
+  
+    return basicChanged || priceChanged || parentsChanged;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -231,12 +324,27 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
     try {
       const submitData = new FormData();
   
+      // Object.entries(formData).forEach(([key, value]) => {
+      //   if (key !== 'descriptions' && key !== 'price' && value !== null && value !== undefined) {
+      //     submitData.append(key, value.toString());
+      //   }
+      // });  
+
       Object.entries(formData).forEach(([key, value]) => {
-        if (key !== 'descriptions' && key !== 'price' && value !== null && value !== undefined) {
+        if (value === null || value === undefined) return;
+      
+        if (key === 'species' || key === 'breed') {
+          // Sprawdzamy, czy value jest obiektem, czy już gotowym ID (string/number)
+          const id = typeof value === 'object' 
+            ? (value.id || value.value) 
+            : value;
+          
+          submitData.append(key, String(id));
+        } else if (key !== 'descriptions' && key !== 'price') {
           submitData.append(key, value.toString());
         }
-      });  
-  
+      });
+      
       submitData.append('descriptions', description);
 
       if (photos.length === 0) {
@@ -250,7 +358,18 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
         submitData.append('image', base64);
       }
 
-      if (!hasPrice) {
+      if (organization !== null && organization !== undefined) {
+        submitData.append('organization_id', String(organization));
+      } else {
+        submitData.append('organization_id', '');
+      }
+      if (owner !== null && owner !== undefined) {
+        submitData.append('owner_id', String(owner));
+      } else {
+        submitData.append('owner_id', '');
+      }
+
+      if (!hasPrice || price == '') {
         setPrice('0');
         submitData.append('price', '0'); 
       } else {
@@ -291,8 +410,8 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
         }
       }
       toast.success('Animal updated successfully!');
-      onSuccess?.(); 
-      router.refresh();
+      // onSuccess?.(); 
+      // router.refresh();
     } catch (error) {
       console.error('Error updating animal:', error);
       toast.error('Failed to update animal. Please try again.');
@@ -308,9 +427,12 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
       )
     );
   };
-  const currentBreedOptions = formData.species 
-    ? breedOptions[formData.species as keyof typeof breedOptions] || breedOptions.other
-    : breedOptions.other;
+  // const currentBreedOptions = formData.species 
+  //   ? breedOptions[formData.species as keyof typeof breedOptions] || breedOptions.other
+  //   : breedOptions.other;
+
+    console.log("formDataformData: ", formData);
+
 
   if (!animal) {
     return (
@@ -342,7 +464,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
             </div>
 
             <div className={style.flexRow}>
-              <Select
+              {/* <Select
                 label="Species"
                 options={speciesOptions}
                 value={speciesOptions.find(opt => opt.value === formData.species) || null}
@@ -359,6 +481,27 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
                 onChange={(option: OptionType | null) => 
                   handleInputChange('breed', option?.value || '')
                 }
+              /> */}
+
+              <AnimalSelect 
+                // initialState={{
+                //   speciesOpt: formData?.species && { value: formData?.species },
+                //   breedOpt: formData?.breed && { value: formData?.breed }
+                // }}
+                // initialState={{
+                //   speciesOpt: formData.species
+                //     ? { value: formData.species, label: formData.species }
+                //     : null,
+                //   breedOpt: formData.breed
+                //     ? { value: formData.breed, label: formData.breed }
+                //     : null
+                // }}
+                initialState={{
+                  speciesOpt: formData?.species && {value: formData?.species.id, label: formData?.species.label},
+                  breedOpt: formData?.breed && {value: formData?.breed.id, label: formData?.breed.label}
+                }}
+                handleChange={handleInputChange} 
+                isAdding
               />
 
               <Input
@@ -369,14 +512,14 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
               />
             </div>
 
-            <div className={style.formRow}>
+            {/* <div className={style.formRow}>
               <Input
                 label="City"
                 value={formData.city}
                 onChange={(e) => handleInputChange('city', e.target.value)}
                 required
               />
-            </div>
+            </div> */}
 
             <InputWrapper label="Gender">
               <div className={style.genderSelect}>
@@ -420,7 +563,18 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
               </div>
             </InputWrapper>
 
-            <Checkbox
+            {/* {organization !== null && ( */}
+              <SelectMyOrganizations 
+              initialOrganization={initialOrganization ? {
+                label: initialOrganization.name, 
+                value: initialOrganization.id
+              } : null} 
+              setOrganization={setOrganization} 
+              setOwner={setOwner}
+            />
+            {/* )} */}
+
+          <Checkbox
             id='animal-has-prise'
             label={'Ustawic cennę?'}
             checked={hasPrice}
@@ -547,6 +701,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
                     setParents(prev => prev.filter((_, i) => i !== index));
                   }} 
                 />
+
                 <img 
                   className={style.image}
                   src={p.photos
@@ -560,16 +715,25 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
             ))}
           </div>
 
-          <AddAnimalParents 
-            className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
-            parents={parents}
-            childAnimal={animal}
-            onAddParent={(parent) => {
-              const newParent = { ...parent, isNew: true };
-              setParents((prev) => [...prev, newParent as Parent]);
-              setIsParentsAdd(false); 
-            }}
-          />
+
+        <Modal
+          className={style.modaParentsAddlWin} 
+          isOpen={isParentsAdd} 
+          closeModal={() => setIsParentsAdd(false)}
+          title={t('pages.newAnimal.parentsAdd')}
+        >
+            <AddAnimalParents 
+              className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
+              parents={parents}
+              childAnimal={animal}
+              setIsParentsAdd={setIsParentsAdd}
+              onAddParent={(parent) => {
+                const newParent = { ...parent, isNew: true };
+                setParents((prev) => [...prev, newParent as Parent]);
+                setIsParentsAdd(false); 
+              }}
+            />
+        </Modal>
           <span className={style.caption}>Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.</span>
         </Card>
 
@@ -586,7 +750,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
               <Button
                 type="submit"
                 className={style.submit}
-                disabled={loading}
+                disabled={loading || !hasChanged()}
                 label="Update Animal"
               />
             </div>
