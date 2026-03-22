@@ -53,6 +53,7 @@ const AnimalsScroll = () => {
           })}
         </h3>
         <LabelLink
+          className={style.label}
           href={Routes.ANIMALS}
           label={t('animalsScroll.seeAll')}
           color='dimmed'

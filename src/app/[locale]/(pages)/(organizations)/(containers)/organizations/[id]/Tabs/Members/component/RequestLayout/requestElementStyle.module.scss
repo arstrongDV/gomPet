@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    
+    background-color: #f0f0f0;
 }
 
 .wrrapper{
@@ -65,10 +65,15 @@
 .btns{
     display: flex;
     align-self: flex-end;
+    flex-wrap: wrap;
     gap: 2rem;
 }
 
-
 .deleteButton{
     background-color: $color-danger-dark;
+}
+
+.submitButton, .deleteButton{
+  font-size: $font-size-xs;
+  padding: $spacing-3;
 }

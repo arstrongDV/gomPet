@@ -3,15 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { OrganizationsApi } from 'src/api';
 import { HorizontalScroll, LabelLink, Loader } from 'src/components';
 import { Routes } from 'src/constants/routes';
 import { IAnimal } from 'src/constants/types';
-import { animalsMock } from 'src/mocks/animals';
 
 import AnimalCard from '../../../animals/components/AnimalCard';
 
 import style from './OrganizationAnimals.module.scss';
-import { OrganizationsApi } from 'src/api';
 
 type OrganizationAnimalsProps = {
   organizationId: number;
@@ -52,6 +51,7 @@ const OrganizationAnimals = ({ organizationId }: OrganizationAnimalsProps) => {
         </h3>
         <LabelLink
           href={Routes.ANIMALS}
+          className={style.label}
           label={t('common.action.seeAll')}
           color='dimmed'
         />

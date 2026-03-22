@@ -69,6 +69,25 @@
   }
 }
 
+@include phoneWidth {
+
+  .header {
+    @include element-flex(column, flex-start, stretch);
+    gap: $spacing-1;
+  }
+
+  .headerContent {
+    order: 1; // buttons first
+    align-self: flex-end;
+  }
+
+  .author {
+    order: 2; // author second
+    align-self: flex-start;
+  }
+
+}
+
 .text {
   @include body1;
   color: $color-foreground;
@@ -95,8 +114,8 @@
   .time {
     @include body2;
     color: $color-foreground-dim;
-    flex-shrink: 0;
-    
+    // flex-shrink: 0;
+    width: 100%;
     @media (max-width: 550px) {
       font-size: $font-size-xxs;
     }
@@ -106,12 +125,12 @@
     @include element-flex(row, flex-end, center);
     gap: $spacing-2;
     width: 100%;
-    @media (max-width: 480px) {
+    @include phoneWidth {
       @include element-flex(row, flex-end, center);
     }
   }
 
-  @media (max-width: 480px) {
+  @include phoneWidth {
     @include element-flex(column, center);
   }
 }

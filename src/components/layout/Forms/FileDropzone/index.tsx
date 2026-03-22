@@ -11,9 +11,10 @@ import style from './FileDropzone.module.scss';
 type FileDropzoneProps = {
   files: File[];
   setFiles: (photos: File[]) => void;
+  oneImageOnly?: boolean;
 };
 
-const FileDropzone = ({ files, setFiles }: FileDropzoneProps) => {
+const FileDropzone = ({ files, setFiles, oneImageOnly }: FileDropzoneProps) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       setFiles([...files, ...acceptedFiles]);
@@ -22,6 +23,10 @@ const FileDropzone = ({ files, setFiles }: FileDropzoneProps) => {
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  if(oneImageOnly && files.length >= 1){
+    return;
+  }
 
   return (
     <div

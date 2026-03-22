@@ -36,7 +36,6 @@ const OrganizationsScroll = () => {
     fetchOrganizations();
   }, []);
 
-
   return (
     <section className={style.container}>
       <header className={style.header}>
@@ -46,6 +45,7 @@ const OrganizationsScroll = () => {
           })}
         </h3>
         <LabelLink
+          className={style.label}
           href={Routes.SHELTERS}
           label={t('organizationsScroll.seeAll')}
           color='dimmed'

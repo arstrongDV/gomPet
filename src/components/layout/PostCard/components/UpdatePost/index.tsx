@@ -73,13 +73,30 @@ const fileToBase64 = (file: File): Promise<string> => {
       }, [post]);
 
       const hasChange = () => {
-        if(!post) return;
-
-        return (
-          formData.content !== post.content ||
-          formData.image !== post.image
-        )
-      }
+        if (!post) return false;
+      
+        const contentChanged = formData.content !== post.content;
+      
+        const hadImageBefore = !!post.image;
+        const hasImageNow = images.length > 0;
+      
+        let imageChanged = false;
+      
+        if (!hadImageBefore && hasImageNow) {
+          imageChanged = true; // dodano nowe
+        }
+      
+        if (hadImageBefore && !hasImageNow) {
+          imageChanged = true; // usunięto
+        }
+      
+        if (hadImageBefore && hasImageNow) {
+          // było zdjęcie i jest zdjęcie – sprawdzamy czy to nowe File
+          imageChanged = images[0] instanceof File;
+        }
+      
+        return contentChanged || imageChanged;
+      };
   
       const updatePost = async (): Promise<void> => {
         setLoading(true);
@@ -133,7 +150,7 @@ const fileToBase64 = (file: File): Promise<string> => {
                       Zaprezentuj <mark>zdjęcia</mark>
                   </h3>
     
-                  <FileDropzone files={images} setFiles={setImages} />
+                  <FileDropzone files={images} setFiles={setImages} oneImageOnly />
                   <PhotosOrganizer photos={images} setPhotos={setImages} />
     
                   <span className={style.caption}>

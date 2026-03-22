@@ -2,10 +2,15 @@ import { useEffect, useRef } from "react";
 import style from "./AnimalCharacteristics.module.scss";
 import { Icon } from "src/components";
 import { IAnimal } from "src/constants/types";
+import { useTranslations } from "next-intl";
 
 export default function CharacteristicsBlock({ animal }: { animal: IAnimal }) {
+  const t = useTranslations('pages.animals.characteristics');
+
   const contentRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
+
+  console.log(animal)
 
   const characteristicCheck = !!(animal.characteristicBoard && animal.characteristicBoard.length > 0);
 
@@ -13,6 +18,7 @@ export default function CharacteristicsBlock({ animal }: { animal: IAnimal }) {
     const content = contentRef.current;
     const thumb = thumbRef.current;
     if (!content || !thumb) return;
+
 
     const updateThumb = () => {
       const scrollHeight = content.scrollHeight;
@@ -45,7 +51,7 @@ export default function CharacteristicsBlock({ animal }: { animal: IAnimal }) {
               <div className={style.caracteristicImage}>
                 {c.bool ? <Icon name="pawFilled" /> : null}
               </div>
-              <p className={style.caracteristicTitle}>{c.title}</p>
+              <p className={style.caracteristicTitle}>{t(`${c.title.toLowerCase()}`)}</p>
             </div>
           ))
         ) : (

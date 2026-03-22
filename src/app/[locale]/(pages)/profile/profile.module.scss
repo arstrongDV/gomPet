@@ -8,16 +8,50 @@
 
 .InfoWrraper{
     @include element-flex(row, space-between, stretch);
-    gap: $spacing-9;
+    gap: $spacing-3;
+}
+
+@include tabletWidth{
+    .InfoWrraper{
+        @include element-flex(column, center, stretch);
+        gap: $spacing-3;
+    }
+}
+
+.avatarSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+@include tabletWidth{
+    .avatarSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
 }
 
 .infoSection{
-    @include element-flex(column, flex-start, stretch);
+    @include element-flex(column, flex-end, flex-end);
     gap: $spacing-5;
+    width: 100%;
+}
+
+@include tabletWidth{
+    .infoSection{
+        @include element-flex(column, center, center);
+        gap: $spacing-5;
+        width: 100%;
+    }
 }
 
 .inputWrraper{
     position: relative;
+    width: 100%;
+    max-width: 350px;
 }
 .inputIcon{
     position: absolute;
@@ -28,7 +62,7 @@
 }
 
 .inputs {
-    width: 30rem;
+    width: 100%;
 }
 
 .avatar {
@@ -41,6 +75,7 @@
     flex-direction: column;
     gap: 1.3rem;
     margin-top: 3rem;
+    text-wrap: nowrap;
 
     p{
         font-size: $font-size-xs;
@@ -50,6 +85,11 @@
     span{
         color: $color-gray-700;
         margin-left: 1rem;
+    }
+}
+@include tabletWidth{
+    .userData{
+        text-wrap: wrap;
     }
 }
 
@@ -72,8 +112,19 @@
 }
 
 .flexRow {
-    @include element-flex(row, flex-start, center);
+    @include element-flex(row, flex-end, center);
+    width: 100%;
     gap: $spacing-4;
+}
+@include smDesktopWidth{
+    .flexRow {
+        flex-wrap: wrap;
+    }
+}
+@include tabletWidth{
+    .flexRow {
+        @include element-flex(row, center, center);
+    }
 }
 
 .fullWidth {
@@ -87,7 +138,15 @@
     display: flex;
     gap: 2rem;
     margin-top: 3rem;
-    align-self: flex-end;
+    width: 100%;
+    justify-content: flex-end;
+}
+@include tabletWidth{
+    .btns{
+        justify-content: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
 }
 
 .btnDel{
@@ -118,8 +177,6 @@
   }
 
   .newAvatar{
-    // // width: 200px;
-    // overflow: hidden;
     border-radius: 100%;
   }
 

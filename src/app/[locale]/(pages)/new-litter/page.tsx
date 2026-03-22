@@ -1,7 +1,11 @@
 'use client';
 
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+
+import { OrganizationsApi } from 'src/api';
 import {
   Button,
   Card,
@@ -10,13 +14,10 @@ import {
   Select,
   Textarea
 } from 'src/components';
-import style from './NewLitterPage.module.scss';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { OrganizationsApi } from 'src/api';
 import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
-import { OptionType } from 'dayjs';
-import toast from 'react-hot-toast';
 import { Routes } from 'src/constants/routes';
+
+import style from './NewLitterPage.module.scss';
 
 const statusOptions = [
   { value: 'ACTIVE', label: 'Active' },
@@ -75,7 +76,7 @@ const NewLitterPage = () => {
           <h3>
             Informacje <mark>podstawowe</mark>
           </h3>
-          <AnimalSelect handleChange={handleChange} />
+          <AnimalSelect handleChange={handleChange} isAdding />
           
           <span className={style.caption}>Gatunek i rasa, którą obejmuje ten miot.</span>
         </Card>
@@ -145,7 +146,7 @@ const NewLitterPage = () => {
 
         <Button
           className={style.submit}
-          disabled={Object.values(litterForm).some(value => value === '')}
+          // disabled={Object.values(litterForm).some(value => value === '')}
           label={'Utwórz miot'}
           onClick={handleSubmit}
         />

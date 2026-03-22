@@ -67,4 +67,5 @@ export const PROTECTED_ROUTES = [
   Routes.NEW_ANIMAL, 
   Routes.MY_ANIMALS,
   Routes.BOOKMARKS,
+  Routes.PROFILE,
 ];

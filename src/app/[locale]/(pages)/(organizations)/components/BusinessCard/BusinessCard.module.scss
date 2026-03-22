@@ -4,11 +4,23 @@
   @include element-flex(column, space-between, stretch);
   position: relative;
   gap: $spacing-6;
+  min-width: 380px;
+}
+@include mobileWidth{
+  .container {
+    min-width: 140px;
+  }
 }
 
 .horizontal {
   .header {
     @include element-flex(row, space-between, stretch);
+
+    @include phoneWidth{
+      .name {
+        font-size: $font-size-m
+      }
+    }
   }
 
   .dataHeader{
@@ -37,6 +49,11 @@
 
   .name {
     text-align: center;
+  }
+  @include phoneWidth{
+    .name {
+      font-size: $font-size-m
+    }
   }
 
   .contact {
@@ -96,37 +113,42 @@
     color: $color-foreground;
   }
 }
+@include tabletWidth{
+  .location {
+    margin: 0 auto;
+  }
+}
 
 @media (max-width: 480px) {
-  .container {
-    gap: $spacing-4;
-    max-width: 90%; 
-  }
+  // .container {
+  //   gap: $spacing-4;
+  //   max-width: 90%; 
+  // }
 
-  .contact {
-    gap: $spacing-1;
+  // .contact {
+  //   gap: $spacing-1;
 
-    .location .icon {
-      width: 3rem;
-      height: 3rem;
-    }
-  }
+  //   .location .icon {
+  //     width: 3rem;
+  //     height: 3rem;
+  //   }
+  // }
 
-  .logo {
-    height: 6rem; // zmniejsz logo
-  }
+  // .logo {
+  //   height: 6rem; // zmniejsz logo
+  // }
 
-  .name {
-    font-size: 2rem; // lub użyj np. @include title4
-  }
+  // .name {
+  //   font-size: 2rem; // lub użyj np. @include title4
+  // }
 
-  .location .text {
-    font-size: 1.7rem;
-  }
+  // .location .text {
+  //   font-size: 1.7rem;
+  // }
 
-  .row {
-    gap: $spacing-4;
-  }
+  // .row {
+  //   gap: $spacing-4;
+  // }
 } 
 
 .modal{

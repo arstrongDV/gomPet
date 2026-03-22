@@ -1,28 +1,40 @@
 @import 'styles';
 
-// .container {
-//   display: grid;
-//   grid-template-rows: 1fr 50rem;
-//   // display: flex;
-//   // align-items: start;
-//   justify-content: center;
-//   gap: $spacing-6;
-
-//   @include desktopWidth {
-//     grid-template-columns: 1fr;
-//   }
-// }
-
 .container {
   width: 100%;
+}
+
+.modaPostAddWin{
+  max-height: 90vh;
+  max-width: 1200px;
 }
 
 .wrapper {
   display: grid;
   grid-template-columns: 7fr 4fr;
-  gap: $spacing-3;
+  gap: $spacing-6;
   width: 100%;
   align-items: start;
+  margin-bottom: $spacing-6;
+}
+@include tabletWidth{
+  .wrapper {
+    grid-template-columns: 1fr;
+    align-items: center;
+    // display: flex;
+    // flex-wrap: wrap-reverse;
+    // width: 100%;
+  }
+
+  .aside {
+    order: -1;
+    margin-bottom: $spacing-7;
+  }
+
+  .listWrraper {
+    order: 1;
+  }
+
 }
 
 .listWrraper {
@@ -33,6 +45,12 @@
   position: sticky;
   top: 25px;
   align-self: start;
+}
+@include tabletWidth{
+  .aside {
+    position: relative;
+    align-self: center;
+  }
 }
 
 .listWrraper{
@@ -45,13 +63,6 @@
 .post {
   width: 100%;
 }
-
-// .aside {
-//   @include element-flex(column, flex-start, stretch);
-//   gap: $spacing-2;
-//   max-width: 700px;
-//   // max-width: 100%;
-// }
 
 .list {
   @include element-flex(column, flex-start, stretch);

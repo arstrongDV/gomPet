@@ -41,6 +41,7 @@
   "roles": {
     "OWNER": "Właściciel / Kierownik",
     "STAFF": "Pracownik",
+    "MEMBER": "Członek",
     "VOLUNTEER": "Wolontariusz",
     "MODERATOR": "Moderator",
     "PARTNER": "Partner",

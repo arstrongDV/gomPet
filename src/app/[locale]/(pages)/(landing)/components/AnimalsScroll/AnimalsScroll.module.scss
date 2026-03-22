@@ -14,8 +14,18 @@
     @include title3;
   }
 
+  .label{
+    text-align: end;
+  }
+
   .highlight {
     color: $color-primary;
+  }
+}
+
+@include tabletWidth{
+  .header {
+    font-size: 12px;
   }
 }
 
@@ -24,9 +34,3 @@
   gap: $spacing-4;
   width: 100%;
 }
-
-// .animal {
-//   user-select: none;
-//   -webkit-user-drag: none;
-//   touch-action: pan-y;
-// }

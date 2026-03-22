@@ -47,7 +47,6 @@ const BlogPage = () => {
       const res = await ArticlesApi.getArticlesList(currentPage, hasCategoryParam);
       setKnowledge(res.data.results);
       setTotal(res.data.count);
-      // setArticles(articlesMock);
     } catch (error) {
       setKnowledge([]);
     } finally {
@@ -78,8 +77,8 @@ const BlogPage = () => {
           />
         ))}
       </div>
-      {session.status === 'authenticated' && (
-        <Button label="Dodaj wiedze" icon='plus' width={300} onClick={() => setIsOpen(prev => !prev)} />
+      {session.status === 'authenticated' && !isLoading &&(
+        <Button className={style.btnAdd} label="Dodaj wiedze" icon='plus' onClick={() => setIsOpen(prev => !prev)} />
       )}
 
       <List
@@ -103,14 +102,6 @@ const BlogPage = () => {
             onPageChange={changePage}
         />
 
-      {/* {session.status === 'authenticated' && isOpen && (
-        <div className={style.modalBlackBg}>
-              <AddKnowledge setIsOpen={setIsOpen} refreshKnowledge={() => getKnowledge()} />
-        </div>
-      )} */}
-          {/* <header>
-            {!isEditMode ? <h2>Dodaj Wiedze</h2> : <h2>Aktualizuj Wiedze</h2>}
-          </header> */}
         <Modal 
           className={style.modalAddWin} 
           isOpen={isOpen} 

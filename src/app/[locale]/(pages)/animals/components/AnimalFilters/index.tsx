@@ -15,6 +15,7 @@ import { toSelectOption } from 'src/utils/helpers';
 import style from './AnimalFilters.module.scss';
 import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
 
 type AnimalFiltersProps = {
   className?: string;
@@ -22,28 +23,37 @@ type AnimalFiltersProps = {
 
 type AnimalKey = string;
 
-const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-  dog: [
-    { value: 'beagle', label: 'Beagle' },
-    { value: 'terrier', label: 'Terrier' },
-    { value: 'labrador', label: 'Labrador' },
-  ],
-  cat: [
-    { value: 'british', label: 'British Shorthair' },
-    { value: 'siamese', label: 'Siamese' },
-    { value: 'persian', label: 'Persian' },
-  ],
-  other: [
-    { value: 'other', label: 'Other' },
-  ]
-};
+// const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+//   dog: [
+//     { value: 'beagle', label: 'Beagle' },
+//     { value: 'terrier', label: 'Terrier' },
+//     { value: 'labrador', label: 'Labrador' },
+//   ],
+//   cat: [
+//     { value: 'british', label: 'British Shorthair' },
+//     { value: 'siamese', label: 'Siamese' },
+//     { value: 'persian', label: 'Persian' },
+//   ],
+//   other: [
+//     { value: 'other', label: 'Other' },
+//   ]
+// };
 
 const AnimalFilters = ({ className }: AnimalFiltersProps) => {
   const t = useTranslations();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
-  const { characteristics } = useAnimalInfo();
+
+  const [spacie, setSpacie] = useState<string>(
+    searchParams.get(Params.SPECIES) || ''
+  );
+
+  // const [spaciesLable, setSpaciesLabel] = useState("");
+  // const [breedLable, setBreedLabel] = useState("");
+
+  const { characteristics } = useAnimalInfo(spacie);
+
 
   const session = useSession();
   console.log(session.data?.user)
@@ -69,9 +79,9 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
       router.push(`?${params.toString()}`);
       return;
     }
-    
 
     if (isArr) {
+      // if (params.get(filter) === value) return;
       const arr = params.get(filter)?.split(',') || [];
       if (arr.includes(value)) {
         arr.splice(arr.indexOf(value), 1);
@@ -85,13 +95,16 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         params.set(filter, arr.join(','));
       }
     } else {
-      if (params.get(filter) === value || !value || value === '0') {
+    if (params.get(filter) === value || !value || value === '0'){
         params.delete(filter);
       } else {
         params.set(filter, value);
       }
     }
-    router.push(`?${params.toString()}`);
+    const newUrl = `?${params.toString()}`;
+    if (newUrl !== window.location.search) {
+      router.push(newUrl);
+    }
   };
 
   useEffect(() => {
@@ -143,6 +156,25 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
   const [name, setName] = useState(searchParams.get(Params.NAME) ?? '');
   const [minAge, setMinAge] = useState(searchParams.get(Params.AGE_MIN) ?? '');
   const [maxAge, setMaxAge] = useState(searchParams.get(Params.AGE_MAX) ?? '');
+
+
+  const handleChange = (field: string, value: string, label?: string) => {
+    if(field === 'breed'){
+      const breeds = value ? String(value).toUpperCase() : '';
+      if(params.get(Params.BREED) !== breeds){
+        handleFilter(Params.BREED, breeds);
+      }
+      // setBreedLabel(label);
+    } 
+    else if(field === 'species'){
+      const species = value ? String(value).toUpperCase() : '';
+      if (params.get(Params.SPECIES) !== species) {
+        handleFilter(Params.SPECIES, species); // URL tylko gdy zmiana
+        // setSpaciesLabel(label);
+      }
+      setSpacie(species);
+    }
+  };
 
   // useEffect(() => {
   //   const getUserLocation = async() => {
@@ -211,21 +243,39 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
           onChange={(value: OptionType) => handleFilter(Params.GENDER, value ? String(value.value).toUpperCase() : '')}
           isClearable
         />
-        <Select
+        {/* <Select
           label={t('pages.animals.filters.species')}
           options={[toSelectOption(AnimalSpecies.DOG), toSelectOption(AnimalSpecies.CAT)]}
           value={toSelectOption(searchParams.get(Params.SPECIES))}
-          onChange={(value: OptionType) => handleFilter(Params.SPECIES, value ? String(value.value) : '')}
+          onChange={(value: OptionType) => {
+            handleFilter(Params.SPECIES, value ? String(value.value) : '');
+
+            const species = value ? String(value.value).toUpperCase() : '';
+            setSpacie(species);
+          }}
           isClearable
+        /> */}
+        <AnimalSelect 
+          key={searchParams.get(Params.SPECIES)}
+          initialState={{
+            speciesOpt: {
+              value: searchParams.get(Params.SPECIES)
+            },
+            breedOpt: {
+              value: searchParams.get(Params.BREED)
+            }
+          }}
+          handleChange={handleChange} 
         />
-        <Select
+
+        {/* <Select
           label={t('pages.animals.filters.breed')}
           options={animalRace.dog}  // <-- pass directly
           value={animalRace.dog.find(opt => opt.value === searchParams.get(Params.BREED)) || null}
           onChange={(value: OptionType) => handleFilter(Params.BREED, value ? String(value.value) : '')}
           isClearable
           isSearchable
-        />
+        /> */}
         {/* TODO: przebudować na od - do */}
         <section className={style.ageInputs}>
           <Input 
@@ -272,15 +322,28 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         />
       </div>
       <div className={style.characteristics}>
-        {Object.entries(characteristics.dog).map(([key, value]) => (
+        {/* {Object.entries(characteristics).map(({id, label, value}) => (
           <Checkbox
-            key={key}
-            id={key}
+            key={id}
+            id={id}
             className={style.checkbox}
             // POPRAWKA: split(',') zamiast split('&')
-            checked={searchParams.get(Params.CHARACTERISTICS)?.split(',').includes(value)}
+            checked={searchParams.get(Params.CHARACTERISTICS)?.split(',').includes(label)}
             onChange={() => handleFilter(Params.CHARACTERISTICS, value, true)}
             label={value}
+          />
+        ))} */}
+        {characteristics.map(({ id, label, value }) => (
+          <Checkbox
+            key={id}
+            id={String(id)}
+            className={style.checkbox}
+            checked={searchParams
+              .get(Params.CHARACTERISTICS)
+              ?.split(',')
+              .includes(value)}
+            onChange={() => handleFilter(Params.CHARACTERISTICS, value, true)}
+            label={label}
           />
         ))}
       </div>

@@ -1,16 +1,17 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import Card from '../../Card'
-import style from './memberModal.module.scss'
-import Input from '../../Forms/Input'
-import { OrganizationsApi } from 'src/api'
-import { IUser } from 'src/constants/types'
-import OutsideClickHandler from 'react-outside-click-handler'
-import List from '../../List'
-import Avatar from '../../Avatar'
-import Button from '../../Buttons/Button'
-import toast from 'react-hot-toast'
-import { useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
+import { OrganizationsApi } from 'src/api';
+import { IUser } from 'src/constants/types';
+
+import Avatar from '../../Avatar';
+import Button from '../../Buttons/Button';
+import Card from '../../Card';
+import Input from '../../Forms/Input';
+import List from '../../List';
+
+import style from './memberModal.module.scss';
 
 type MemberModalProps = {
     organizationId?: number;
@@ -116,6 +117,7 @@ const MemberModal = ({ organizationId, setShowModal }: MemberModalProps) => {
         </List>
         <Button 
             label={'Przekaz organizacje'}
+            disabled={isLoading || !userId}
             onClick={changeCreator}
         />
     </Card>

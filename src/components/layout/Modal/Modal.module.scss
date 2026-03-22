@@ -40,6 +40,10 @@
   @include custom-scrollbar;
 }
 
+@include phoneWidth {
+
+}
+
 .modalHeader {
   justify-content: flex-end;
   display: flex;
@@ -51,7 +55,7 @@
 .modalBody {
   line-height: 1.38;
   overflow: auto;
-  // max-height: 75vh;
+  max-height: 75vh;
 
   &.extraPadding {
     padding-left: 1px;

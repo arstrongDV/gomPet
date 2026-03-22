@@ -1,19 +1,21 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import style from './Bookmarks.module.scss';
 import classNames from 'classnames';
-import { List, Pagination } from 'src/components';
-import { useTranslations } from 'next-intl';
-import { IAnimal } from 'src/constants/types';
-import { AnimalsApi } from 'src/api';
-import { useSession } from 'next-auth/react';
-import AnimalCard from '../animals/components/AnimalCard';
 import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 
-import { Params } from 'src/constants/params';
-import { useRouter } from 'src/navigation';
+import { AnimalsApi } from 'src/api';
+import { List, Pagination } from 'src/components';
 import { paginationConfig } from 'src/config/pagination';
+import { Params } from 'src/constants/params';
+import { IAnimal } from 'src/constants/types';
+import { useRouter } from 'src/navigation';
+
+import AnimalCard from '../animals/components/AnimalCard';
+
+import style from './Bookmarks.module.scss';
 
 const Bookmarks = () => {
   const t = useTranslations('pages.animals');
@@ -24,7 +26,7 @@ const Bookmarks = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [animals, setAnimals] = useState<IAnimal[]>([]);
 
-  const session = useSession()
+  const session = useSession();
   const myId = session.data?.user.id;
   const [total, setTotal] = useState<number>(1);
 
@@ -46,7 +48,7 @@ const Bookmarks = () => {
       setAnimals(res.data?.results)
       setTotal(res.data.count || 0);
     } catch {
-      setAnimals([])
+      setAnimals([]);
       setTotal(0);
     } finally {
       setIsLoading(false);
@@ -60,7 +62,7 @@ const Bookmarks = () => {
 
   const onReactionDelete = (deletedAnimal: number) => {
     setAnimals(animals.filter(animal => animal.id !== deletedAnimal));
-  }
+  };
 
   return (
     <div className={style.bookmarksWrapper}>

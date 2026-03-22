@@ -14,11 +14,11 @@
     "large": "Duży"
   },
   "species": {
-    "dog": "Pies",
-    "cat": "Kot"
+    "DOG": "Pies",
+    "CAT": "Kot"
   },
   "characteristics": {
-    "dog": {
+
       "vaccinated": "zaszczepiony",
       "neutered": "wykastrowany",
       "dewormed": "odrobaczony",
@@ -39,7 +39,7 @@
       "gentle": "łagodny",
       "watchdog": "instynkt stróża",
       "hasHealthBook": "książeczka zdrowia"
-    }
+
   },
   "empty": "Brak dostępnych zwierząt",
   "filters": {
@@ -55,6 +55,7 @@
     "age": "Wiek",
     "size": "Rozmiar"
   },
+
   "showFilters": "Pokaż filtry",
   "hideFilters": "Ukryj filtry",
   "showMap": "Pokaż mapę",

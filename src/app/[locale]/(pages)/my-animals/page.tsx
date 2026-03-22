@@ -1,21 +1,22 @@
 'use client'
 
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
+
+import { AnimalsApi } from "src/api";
 import { Button, List, Pagination } from "src/components";
+import { paginationConfig } from "src/config/pagination";
+import { Params } from 'src/constants/params';
+import { Routes } from "src/constants/routes";
+import { IAnimal } from "src/constants/types";
+import { useRouter } from 'src/navigation';
+
 import AnimalCard from "../animals/components/AnimalCard";
 
-import { Params } from 'src/constants/params';
-import { useEffect, useState } from "react";
-import { IAnimal } from "src/constants/types";
-import { AnimalsApi } from "src/api";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from 'src/navigation';
-import { useSession } from "next-auth/react";
-
 import style from './myAnimals.module.scss'
-import { paginationConfig } from "src/config/pagination";
-import { Routes } from "src/constants/routes";
-import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
 
 const MyAnimals = () => {
     const t = useTranslations('pages.myAnimals');
@@ -43,9 +44,8 @@ const MyAnimals = () => {
         setIsLoading(true);
         try {
           const response = await AnimalsApi.getUsersAnimals(Number(auth.data?.user.id), {
-            limit: paginationConfig.animals,
             page
-          })
+          });
           setAnimals(response.data.results);
           setTotal(response.data.count);
         } catch (error) {
@@ -65,6 +65,10 @@ const MyAnimals = () => {
 
       getMyAnimals(page);
     }, [page, auth.data?.user?.id]);
+
+    console.log("total:", total);
+    console.log("pageSize:", paginationConfig.animals);
+    console.log("pages:", Math.ceil(total / paginationConfig.animals));
 
     const handleDeleteAnimal = async (id: number) => {
       try {
@@ -95,7 +99,7 @@ const MyAnimals = () => {
       }
     };
 
-    return(
+    return (
         <div className={style.container}>
             <Button
                 className={style.button}
@@ -131,6 +135,6 @@ const MyAnimals = () => {
               onPageChange={changePage}
             />
         </div>
-    )
-}
+    );
+};
 export default MyAnimals;

@@ -1,18 +1,21 @@
 'use client'
 
-import { Avatar, Button, Card, Icon } from "src/components";
-import { IOrganization, IUser } from "src/constants/types";
-import style from './memberCardStyle.module.scss'
-import { getDaysAgo } from "src/utils/helpers";
 import { useEffect, useState, useTransition } from "react";
-import { OrganizationsApi } from "src/api";
 import toast from "react-hot-toast";
-import { useParams, useRouter } from "next/navigation";
-import RoleSelector from "./RoleSelector";
-import { Role } from "src/components/hooks/useRoles";
 import OutsideClickHandler from "react-outside-click-handler";
+import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
+
+import { OrganizationsApi } from "src/api";
+import { Avatar, Button, Card, Icon } from "src/components";
+import { Role } from "src/components/hooks/useRoles";
+import { IOrganization, IUser } from "src/constants/types";
+import { getDaysAgo } from "src/utils/helpers";
+
+import RoleSelector from "./RoleSelector";
+
+import style from './memberCardStyle.module.scss'
 
 type DataElements = {
     id: number;
@@ -50,6 +53,9 @@ const MemberCard = ({ data, onDelete }: RequestElementProps) => {
     const [showSelector, setShowSelector] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
 
+    console.log("data: ", data);
+    console.log("selectedRole: ", selectedRole);
+
     const MemberDelete = async() => {
         setIsLoading(true)
         try{
@@ -71,7 +77,7 @@ const MemberCard = ({ data, onDelete }: RequestElementProps) => {
         setIsLoading(true)
         try{
             await OrganizationsApi.updateOrganizationMember(id, {
-                role: selectedRole?.value
+                role: selectedRole?.label
             });
             setSelectedRole(selectedRole);
             toast.success("Member zostal aktualizowany");
@@ -103,7 +109,7 @@ const MemberCard = ({ data, onDelete }: RequestElementProps) => {
                     <div className={style.roleChange}>
                         <p>Role: 
                             <span className={style.date}>
-                                {!showSelector ? t(`common.roles.${selectedRole?.value}`) || t(`common.roles.${role}`) 
+                                {!showSelector ?  t(`common.roles.${data.role}`) || t(`common.roles.${selectedRole?.label}`)
                                 : 
                                 (
                                     <RoleSelector 

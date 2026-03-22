@@ -21,7 +21,7 @@ type OrganizationOnMapProps = {
 
 const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapProps) => {
   if (!organizations.length || !organizations[0].address) return null
-
+  console.log(organizations);
   const router = useRouter();
   const { push } = router;
   const session = useSession();

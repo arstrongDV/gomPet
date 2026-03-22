@@ -41,7 +41,7 @@ const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
       <APIProvider apiKey={String(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)}>
         <Map
           className={classNames(style.map, className)}
-          mapId="location-organization-map"
+          mapId="location-animal-map"
           defaultZoom={6}
           defaultCenter={center}
         >
@@ -91,16 +91,16 @@ const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
       </AdvancedMarker>
           )}
 
-          {animals.map((org) => (
-            org.location && (
+          {animals.map((animal) => (
+            animal.location && (
               <AdvancedMarker
-                key={org.id}
+                key={animal.id}
                 position={{
-                  lat: +org.location.coordinates[1],
-                  lng: +org.location.coordinates[0],
+                  lat: +animal.location.coordinates[1],
+                  lng: +animal.location.coordinates[0],
                 }}
                 onClick={() => {
-                  push(Routes.ORGANIZATION_PROFILE(org.id));
+                  push(Routes.ANIMAL_PROFILE(animal.id));
                 }}
               >
               <div style={{
@@ -114,7 +114,7 @@ const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
                   border: '2px solid green',
                 }}>
                 <img
-                    src={org.image || ''}
+                    src={animal.image || ''}
                     style={{
                       width: '60px',
                       height: '60px',

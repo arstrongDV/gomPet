@@ -35,19 +35,23 @@ const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization 
         const res = await AnimalsApi.getUsersOrganization(session.data.access_token);
         setOrganizations(res.data.results || []);
 
-        // Apply initialOrganization only once
-        if (initialOrganization && !hasSetInitial) {
-          const matchedOrg = res.data.results.find(
-            (org: IOrganization) => org.organization.id === initialOrganization.value
-          );
-          if (matchedOrg) {
-            setSelectedOrg({
-              label: matchedOrg.organization.name,
-              value: matchedOrg.organization.id
-            });
-          }
-          setHasSetInitial(true);
-        }
+        console.log("ress: ", res.data.results);
+        console.log("initialOrganization: ", initialOrganization);
+
+        // // Apply initialOrganization only once
+        // if (initialOrganization && !hasSetInitial) {
+        //   const matchedOrg = res.data.results.find(
+        //     (org: IOrganization) =>
+        //       org.organization?.id === initialOrganization.value
+        //   );
+        //   if (matchedOrg) {
+        //     setSelectedOrg({
+        //       label: matchedOrg.organization.name,
+        //       value: matchedOrg.organization.id
+        //     });
+        //   }
+        //   setHasSetInitial(true);
+        // }
       } catch (err) {
         console.error("Error fetching organizations:", err);
         setOrganizations([]);
@@ -55,7 +59,7 @@ const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization 
     };
 
     fetchOrgs();
-  }, [session.data?.access_token, initialOrganization, hasSetInitial]);
+  }, [session.data?.access_token]);
 
   // Notify parent whenever selection changes
   useEffect(() => {
@@ -74,14 +78,26 @@ const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization 
 
   // Map organizations to Select options
   const options: OptionType[] = organizations.map(org => ({
-    // label: org.label == "noOrganization" ? t(`pages.newAnimal.${org.label}`) : org.label,
-    // value: org.organization_id ? org.organization_id : org.owner_id
       label: org.label === "noOrganization"
       ? t(`pages.newAnimal.${org.label}`)
       : org.label,
     value: org.organization_id ?? org.owner_id,
     type: org.organization_id ? "ORGANIZATION" : "OWNER"
   }));
+
+  useEffect(() => {
+    if (!initialOrganization || hasSetInitial || options.length === 0) return;
+  
+    const foundOption = options.find(
+      (opt) => opt.value === initialOrganization.value
+    );
+  
+    if (foundOption) {
+      setSelectedOrg(foundOption);
+    }
+  
+    setHasSetInitial(true);
+  }, [initialOrganization, options, hasSetInitial]);
 
   if (organizations.length === 0) return null;
 

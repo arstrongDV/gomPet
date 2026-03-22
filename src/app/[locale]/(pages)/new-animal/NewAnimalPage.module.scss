@@ -23,7 +23,6 @@
 .statusSelect {
   @include element-flex(row, flex-start, center);
   gap: $spacing-2;
-
 }
 
 .flexRow {

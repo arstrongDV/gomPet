@@ -14,12 +14,20 @@
 .genderSelect,
 .statusSelect {
   @include element-flex(row, flex-start, center);
+  flex-wrap: wrap;
   gap: $spacing-2;
 }
 
 .flexRow {
   @include element-flex(row, flex-start, center);
+  flex-wrap: wrap;
   gap: $spacing-4;
+}
+
+.modaParentsAddlWin{
+  max-width: 1200px;
+  height: 95vh;
+  gap: $spacing-3;
 }
 
 .fullWidth {
@@ -48,6 +56,7 @@
 .familyTreeBlock{
   @include element-flex(row, flex-start, center);
   gap: $spacing-4;
+  flex-wrap: wrap
 }
 
 .addParents {
@@ -65,57 +74,17 @@
 
 .backdrop {
   position: fixed;
-  inset: 0; // shorthand for top: 0; right: 0; bottom: 0; left: 0
-  background-color: rgba(0, 0, 0, 0.4); // or your theme color
-  z-index: 9; // should be below the comment card
-  backdrop-filter: blur(2px); // optional: blur for fancy look
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9;
+  backdrop-filter: blur(2px);
 }
 
 .cardAddParents {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
   display: flex;
   flex-direction: column;
-
-  width: 100%;
-  max-width: 1200px;
-  height: 90vh; // zawsze ma stałą wysokość
-  background: $color-white;
-  color: $color-black;
-  padding: $spacing-6;
-  border-radius: $radius-l;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-
-  // przewijanie tylko wewnątrz
-  overflow-y: auto;
-
-  gap: $spacing-3;
-
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity $transition-main ease;
-
-  &::-webkit-scrollbar {
-    width: 0.6rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-  }
-
-  &.show {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: all;
-  }
+  padding: $spacing-4;
 }
-
 
 .parent {
   @include element-flex(column, center, center);
@@ -140,7 +109,7 @@
   border-radius: 50%;
   // padding: 4px;
   transition: background 0.2s;
-
+  z-index: 5000;
   &:hover {
     background: rgba(255, 255, 255, 1);
   }

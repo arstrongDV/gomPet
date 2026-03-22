@@ -19,7 +19,7 @@ import RichTextViewer from 'src/components/layout/Forms/RichTextViewer';
 type ArticleCardProps = {
   className?: string;
   article: IArticle;
-  setKnowledge?: () => void;
+  setKnowledge?: (e: any) => void;
 };
 
 const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) => {
@@ -34,7 +34,7 @@ const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) =
       const res = await ArticlesApi.deleteArticlePage(slug);
       console.log(res);
       toast.success("Post zostal usuniaty")
-      if(setKnowledge) setKnowledge((prev) => prev.filter(p => p.slug !== slug));
+      if(setKnowledge) setKnowledge((prev: any) => prev.filter(p => p.slug !== slug));
     }catch(err){
       toast.error("Nie udalo sie usunac posta")
       console.log(err)
@@ -81,14 +81,12 @@ const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) =
       </Link>
 
       <div className={style.body}>
-      <Link href={Routes.BLOG_ARTICLE(slug)}>
-        <h2 className={ title.length <= 45 ? style.title : style.titleSmall}>{title}</h2>
-      </Link>
-      {/* <p className={style.content}>{DescriptionTranslate(content)}</p> */}
-      <div className={style.content}>
-        {/* <DescriptionTranslate text={content}/> */}
-        <RichTextViewer content={content} size="small" />
-      </div>
+        <Link href={Routes.BLOG_ARTICLE(slug)}>
+          <h2 className={ title.length <= 45 ? style.title : style.titleSmall}>{title}</h2>
+        </Link>
+        <div className={style.content}>
+          <RichTextViewer content={content} size="small" />
+        </div>
 
         <Button
           className={style.readBtn}

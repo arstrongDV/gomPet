@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Card, FileDropzone, LabelLink, Textarea } from 'src/components'
 import style from './AddPost.module.scss'
-// import PhotosOrganizer from 'src/app/[locale]/(pages)/new-animal/components/PhotosOrganizer'
 import PhotosOrganizer from 'src/components/layout/Forms/PhotosOrganizer'
 import { PostsApi } from 'src/api'
 import toast from 'react-hot-toast'
-import OutsideClickHandler from 'react-outside-click-handler'
 
 type AddPostProps = {
   className?: string;
-  animalId: number;
+  animalId?: number;
+  organizationId?: number;
+  // postOwnerId: number;
   setShowAddPost: React.Dispatch<React.SetStateAction<boolean>>;
   refreshPosts: () => void; 
 };
@@ -25,7 +25,7 @@ const fileToBase64 = (file: File): Promise<string> => {
   });
 };
 
-const AddPost = ({ className, animalId, setShowAddPost, refreshPosts }: AddPostProps) => {
+const AddPostComponent = ({ className, animalId, organizationId, setShowAddPost, refreshPosts }: AddPostProps) => {
   const [text, setText] = useState<string>("")
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,13 +38,19 @@ const AddPost = ({ className, animalId, setShowAddPost, refreshPosts }: AddPostP
 
       const base64 = images.length > 0 ? await fileToBase64(images[0]) : null;
 
-      const res = await PostsApi.addNewAnimalPost({
-        payload: {
-          animal: animalId,
-          content: text,
-          ...(base64 && { image: base64 })
-        }
-      });
+        const payloadId = animalId ? {
+            animal: animalId
+        } : {
+            organization: organizationId
+        };
+
+        const res = await PostsApi.addNewAnimalPost({
+          payload: {
+            ...payloadId,
+            content: text,
+            ...(base64 && { image: base64 })
+          }
+        });
 
       console.log("res::: ", res);
       toast.success("Post został dodany!");
@@ -68,11 +74,7 @@ const AddPost = ({ className, animalId, setShowAddPost, refreshPosts }: AddPostP
   }, [addImage])
 
   return (
-    <OutsideClickHandler onOutsideClick={() => setShowAddPost(false)}>
-        <Card className={`${style.container} ${className || ''}`}>
-        <header>
-            <h2>Dodaj Post</h2>
-        </header>
+      <Card className={`${style.container} ${className || ''}`}>
         <div className={style.postCreate}>
             <Textarea
             className={style.textarea}
@@ -93,7 +95,7 @@ const AddPost = ({ className, animalId, setShowAddPost, refreshPosts }: AddPostP
                     Zaprezentuj <mark>zdjęcia</mark>
                 </h3>
   
-                <FileDropzone files={images} setFiles={setImages} />
+                <FileDropzone files={images} setFiles={setImages} oneImageOnly />
                 <PhotosOrganizer photos={images} setPhotos={setImages} />
   
                 <span className={style.caption}>
@@ -108,9 +110,8 @@ const AddPost = ({ className, animalId, setShowAddPost, refreshPosts }: AddPostP
             disabled={loading}
             onClick={createPost}
         />
-        </Card>
-    </OutsideClickHandler>
+      </Card>
   )
 };
 
-export default AddPost;
+export default AddPostComponent;

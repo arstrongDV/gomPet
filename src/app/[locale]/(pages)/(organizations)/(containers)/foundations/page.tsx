@@ -59,7 +59,7 @@ const FundationPage = () => {
   useEffect(() => {
     const filters: Record<string, string> = {};
   
-    filters.limit = String(itemsPerPage);
+    // filters.limit = String(itemsPerPage);
     filters.page = String(currentPage);
     filters['organization-type'] = 'FUND'; 
   

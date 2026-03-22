@@ -2,9 +2,9 @@
 
 .container {
   position: relative;
-  @include phoneWidth {
-    position: static;
-  }
+  // @include phoneWidth {
+  //   position: static;
+  // }
 }
 
 .button {
@@ -40,8 +40,17 @@
   transform: translateY(-1rem);
   pointer-events: none;
 
+  // @include phoneWidth {
+  //   right: $spacing-5;
+  // }
+
+  @include tabletWidth {
+    width: clamp(20rem, 30vw, 35rem);
+  }
+
   @include phoneWidth {
-    right: $spacing-5;
+    width: calc(100vw - 8rem);
+    left: 0;
   }
 
   &.open {

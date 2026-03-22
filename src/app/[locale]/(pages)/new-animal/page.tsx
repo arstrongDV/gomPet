@@ -1,8 +1,13 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import classNames from 'classnames';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 
+import { AnimalsApi } from 'src/api';
 import {
   Button,
   Card,
@@ -14,26 +19,19 @@ import {
   Modal,
   RichTextEditor,
   SectionHeader,
-  Select,
   Tag,
 } from 'src/components';
 import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
-import { AnimalSize, Gender, OrganizationType } from 'src/constants/types';
-
-// import PhotosOrganizer from './components/PhotosOrganizer';
 import PhotosOrganizer from 'src/components/layout/Forms/PhotosOrganizer';
+import { OptionType } from 'src/components/layout/Forms/Select';
+import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import { Routes } from 'src/constants/routes';
+import { AnimalSize, Gender } from 'src/constants/types';
+
+import AddAnimalParents from './components/AddAnimalParents';
+import SelectMyOrganizations from './components/SelectOrganizatio';
 
 import style from './NewAnimalPage.module.scss';
-import { OptionType } from 'src/components/layout/Forms/Select';
-import { AnimalsApi } from 'src/api';
-import AddAnimalParents from './components/AddAnimalParents';
-import classNames from 'classnames';
-import toast from 'react-hot-toast';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { Routes } from 'src/constants/routes';
-import SelectMyOrganizations from './components/SelectOrganizatio';
-import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
 
 type Parent = {
   name: string;
@@ -42,31 +40,31 @@ type Parent = {
   photos?: string;
 };
 
-const animalSpecies = [
-  {
-    value: 'dog',
-    label: 'Pies'
-  },
-  {
-    value: 'cat',
-    label: 'Kot'
-  }
-]
-const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-  dog: [
-    { value: 'beagle', label: 'Beagle' },
-    { value: 'terrier', label: 'Terrier' },
-    { value: 'labrador', label: 'Labrador' },
-  ],
-  cat: [
-    { value: 'british', label: 'British Shorthair' },
-    { value: 'siamese', label: 'Siamese' },
-    { value: 'persian', label: 'Persian' },
-  ],
-  other: [
-    { value: 'other', label: 'Other' },
-  ]
-};
+// const animalSpecies = [
+//   {
+//     value: 'dog',
+//     label: 'Pies'
+//   },
+//   {
+//     value: 'cat',
+//     label: 'Kot'
+//   }
+// ]
+// const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
+//   dog: [
+//     { value: 'beagle', label: 'Beagle' },
+//     { value: 'terrier', label: 'Terrier' },
+//     { value: 'labrador', label: 'Labrador' },
+//   ],
+//   cat: [
+//     { value: 'british', label: 'British Shorthair' },
+//     { value: 'siamese', label: 'Siamese' },
+//     { value: 'persian', label: 'Persian' },
+//   ],
+//   other: [
+//     { value: 'other', label: 'Other' },
+//   ]
+// };
 
 const genderMap: Record<string, string> = {
   male: 'MALE',
@@ -84,7 +82,6 @@ type AnimalKey = string;
 const NewAnimalPage = () => {
   const t = useTranslations();
   // const editorRef = useRef(null);
-  const { characteristics } = useAnimalInfo();
 
   // const [type, setType] = useState<OrganizationType | null>(OrganizationType.BREEDING);
   const [name, setName] = useState<string>('');
@@ -114,16 +111,11 @@ const NewAnimalPage = () => {
   const router = useRouter()
   const { push } = router;
 
-  // useEffect(() => {
-  //   document.body.style.overflow = isParentsAdd ? 'hidden' : '';
-  // }, [isParentsAdd]);
 
-  const filteredSpeciesOpt = animalSpecies.filter(opt => opt.value !== selectSpeciesValue?.value)
-  const filteredRaceOpt = selectSpeciesValue
-  ? (animalRace[`${selectSpeciesValue.value}`] || []).filter(
-      (opt) => opt.value !== selectRaceValue?.value
-    )
-  : [];
+  const selectedSpecies = selectSpeciesValue?.value
+  ? selectSpeciesValue.label.toUpperCase()
+  : undefined;
+  const { characteristics } = useAnimalInfo(selectedSpecies);
 
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -161,15 +153,16 @@ const NewAnimalPage = () => {
   const isBtnDisabled =
   !name ||
   !birthDate ||
-  !selectSpeciesValue ||
-  !selectRaceValue ||
+  !selectSpeciesValue?.label ||
+  !selectRaceValue?.label ||
   photos.length === 0 ||
   !status;
 
   const handleChange = (field: string, value: string, label?: string) => {
     if(field === 'breed'){
       setSelectRaceValue({ value, label } as OptionType);
-    } else if(field === 'species'){
+    } 
+    else if(field === 'species'){
       setSelectSpeciesValue({ value, label } as OptionType);
     }
   };
@@ -197,12 +190,7 @@ const NewAnimalPage = () => {
       formData.append('birth_date', birthDate);
       formData.append('status', statusMap[status]);
       formData.append('descriptions', descriptions);
-      //////////////////////formData.append('city', "Krakow");
-      // formData.append('location', JSON.stringify({
-      //   type: "Point",
-      //   coordinates: [20.673144511006825, 51.59228169182775]
-      // }));
-      // if(organization !== null){
+
         if (organization !== null && organization !== undefined) {
           formData.append('organization_id', String(organization));
         } else {
@@ -239,23 +227,29 @@ const NewAnimalPage = () => {
         formData.append(`gallery[${index}][image]`, item.image);
       });
 
-      const characteristicsBoard = Object.entries(characteristics.dog).map(
-        ([key, value]) => ({
-          title: value,
-          bool: selectedCharacteristics.includes(key)
-        })
-      );
+      // const characteristicsBoard = Object.entries(characteristics).map(
+      //   ([key, value]) => ({
+      //     title: value,
+      //     bool: selectedCharacteristics.includes(key)
+      //   })
+      // );
+      const characteristicsBoard = characteristics.map((char) => ({
+        title: char.value,
+        bool: selectedCharacteristics.includes(String(char.id))
+      }));
+      console.log("characteristicsBoard: ", characteristicsBoard);
+      console.log("characteristics: ", characteristics);
       characteristicsBoard.forEach((char, index) => {
         formData.append(`characteristicBoard[${index}][title]`, char.title);
         formData.append(`characteristicBoard[${index}][bool]`, char.bool.toString());
       });
 
       const animals_res = await AnimalsApi.createNewAnimal(formData);
-      console.log("animals_res: ", animals_res);
+      console.log('animals_res: ', animals_res);
 
-      console.log("parents: ", parents)
+      console.log('parents: ', parents)
 
-      if (animals_res.status === 201 || animals_res.statusText === "Created") {
+      if (animals_res.status === 201 || animals_res.statusText === 'Created') {
         const animalId = animals_res.data?.id;
         if (animalId && parents.length > 0) {
           const parentsToAdd = parents.slice(0, 2);
@@ -364,7 +358,7 @@ const NewAnimalPage = () => {
               value={selectRaceValue}
               isClearable
             /> */}
-            <AnimalSelect handleChange={handleChange} />
+            <AnimalSelect handleChange={handleChange} isAdding />
 
             <Input
               label={t('pages.newAnimal.birthDate')}
@@ -482,7 +476,7 @@ const NewAnimalPage = () => {
           </h3>
 
           <div className={style.characteristics}>
-            {Object.entries(characteristics.dog).map(([key, value]) => (
+            {/* {Object.entries(characteristics.dog).map(([key, value]) => (
               <Checkbox
                 key={key}
                 id={key}
@@ -497,7 +491,27 @@ const NewAnimalPage = () => {
                 }}
                 label={value}
               />
-            ))}
+            ))} */}
+            {(!selectSpeciesValue || characteristics.length === 0) ? (
+              <p>Musisz najpierw wybrać gatunek</p>
+            ) : (
+              characteristics.map(({ id, label }) => (
+                <Checkbox
+                  key={id}
+                  id={String(id)}
+                  className={style.checkbox}
+                  checked={selectedCharacteristics.includes(String(id))}
+                  onChange={() => {
+                    setSelectedCharacteristics((prev) =>
+                      prev.includes(String(id))
+                        ? prev.filter((item) => item !== String(id))
+                        : [...prev, String(id)]
+                    );
+                  }}
+                  label={label}
+                />
+              ))
+            )}
           </div>
 
         </Card>

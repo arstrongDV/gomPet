@@ -1,8 +1,6 @@
 @import 'styles';
 
 .container{
-    // width: 100%;
-    // margin: 0 auto;
     @include element-flex(column, center, center);
     gap: $spacing-6;
     width: 100%;
@@ -18,12 +16,14 @@
     }
 }
 
-.list{
-  overflow: visible;
+.list {
+  @include element-flex(row, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
 }
 
-.noArticles{
-  align-self: center;
+.noArticles {
+  text-align: center;
   color: $color-foreground-dim;
   font-size: $font-size-s;
   width: 100%;

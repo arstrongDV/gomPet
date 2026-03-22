@@ -6,8 +6,6 @@
 }
 
 .container {
-  // position: fixed;
-  // overflow: hidden;
   display: flex;
   flex-direction: column;
 
@@ -17,34 +15,16 @@
   color: $color-black;
   padding: $spacing-7;
 
-  // top: 50%;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
-  // border-radius: $radius-l;
-  // box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  // z-index: 10;
-  // overflow-y: auto;
-  // &::-webkit-scrollbar {
-  //   width: 0.6rem;
-  // }
-  // &::-webkit-scrollbar-thumb {
-  //   background-color: rgba(0, 0, 0, 0.2);
-  //   border-radius: 10px;
-  // }
-
-  // @media (max-width: 1300px) {
-  //   max-height: 70vh;
-  //   max-width: 90%;
-  //   padding: $spacing-4;
-  // }
-
-  // @media (max-width: 600px) {
-  //   max-height: 50vh;
-  // }
 
   // @media (max-width: 480px) {
   //   max-height: 45vh;
   // }
+}
+
+@include tabletWidth{
+  .container {
+    padding: $spacing-2;
+  }
 }
 
 .comments {
@@ -55,13 +35,8 @@
   padding-right: $spacing-2;
   gap: $spacing-5;
 
-  @media (max-width: 600px) {
-    max-height: 25vh;
-  }
-
-  @media (max-width: 480px) {
-    max-height: 20vh;
-  }
+  overflow-wrap: break-word;
+  word-break: break-word;
 
   &::-webkit-scrollbar {
     width: 0.6rem;
@@ -70,6 +45,11 @@
   &::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
+  }
+}
+@include phoneWidth{
+  .comments {
+    gap: $spacing-4;
   }
 }
 

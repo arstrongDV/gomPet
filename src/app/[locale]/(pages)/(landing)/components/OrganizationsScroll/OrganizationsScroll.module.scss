@@ -14,8 +14,18 @@
     @include title3;
   }
 
+  .label{
+    text-align: end;
+  }
+
   .highlight {
     color: $color-primary;
+  }
+}
+
+@include tabletWidth{
+  .header {
+    font-size: 12px;
   }
 }
 

@@ -18,7 +18,7 @@
   min-width: 3.2rem;
   @include appearance(none);
   cursor: pointer;
-
+  
   transition: all $transition-main;
 
   &:checked {
@@ -58,6 +58,10 @@
   @include body1;
   cursor: pointer;
   margin-top: $spacing-1;
+
+  @include phoneWidth {
+    font-size: $font-size-xxs;
+  }
 
   &.small {
     @include body2;

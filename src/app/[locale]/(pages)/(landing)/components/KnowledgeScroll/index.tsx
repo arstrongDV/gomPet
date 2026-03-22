@@ -37,18 +37,20 @@ const KnowledgeScroll = () => {
                     })}
                 </h3>
             </header>
-            <HorizontalScroll className={style.list}>
-                {isLoading && <Loader />}
-                {isLoading || knowledges.length !== 0 ? knowledges.map((knowledge) => (
-                <KnowledgeCard
-                    key={knowledge.id}
-                    // className={style.item}
-                    article={knowledge}
-                />
-                )) : (
-                    <p className={style.noArticles}>Brak artyklow</p>
-                )}
-            </HorizontalScroll>
+            {isLoading || knowledges.length !== 0 ? (
+                <HorizontalScroll className={style.list}>
+                    {isLoading && <Loader />}
+                    {knowledges.map((knowledge) => (
+                        <KnowledgeCard
+                            key={knowledge.id}
+                            // className={style.item}
+                            article={knowledge}
+                        />
+                    ))}
+                </HorizontalScroll>
+            ) : (
+                <p className={style.noArticles}>Brak artyklow</p>
+            )}
 
             <LabelLink
                 href={Routes.KNOWLEDGE}

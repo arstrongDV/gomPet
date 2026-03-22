@@ -1,31 +1,33 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect,useState } from 'react';
 import toast from 'react-hot-toast';
-import { AnimalsApi } from 'src/api';
-import { IAnimal, Gender, AnimalSize, IOrganization } from 'src/constants/types';
-import { OptionType } from 'src/components/layout/Forms/Select';
-import style from './updateAnimal.module.scss'
-import {
-  Card,
-  Input,
-  Select,
-  Button,
-  FileDropzone,
-  Tag,
-  Icon,
-  Checkbox,
-  InputWrapper,
-  RichTextEditor,
-  SectionHeader
-} from 'src/components';
-import PhotosOrganizer from '../../../new-animal/components/PhotosOrganizer';
-import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
-import AddAnimalParents from '../../../new-animal/components/AddAnimalParents';
 import classNames from 'classnames';
-import SelectMyOrganizations from '../../../new-animal/components/SelectOrganizatio';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
+import { AnimalsApi } from 'src/api';
+import {
+  Button,
+  Card,
+  Checkbox,
+  FileDropzone,
+  Icon,
+  Input,
+  InputWrapper,
+  Modal,
+  RichTextEditor,
+  SectionHeader,
+  Tag } from 'src/components';
+import useAnimalInfo from 'src/components/hooks/useAnimalInfo';
 import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
+import { AnimalSize, Gender, IAnimal, IOrganization } from 'src/constants/types';
+
+import AddAnimalParents from '../../../new-animal/components/AddAnimalParents';
+import PhotosOrganizer from '../../../new-animal/components/PhotosOrganizer';
+import SelectMyOrganizations from '../../../new-animal/components/SelectOrganizatio';
+
+import style from './updateAnimal.module.scss'
 
 type Parent = {
   id: number;
@@ -47,27 +49,27 @@ interface CharacteristicItem {
   bool: boolean;
 }
 
-const speciesOptions = [
-  { value: 'dog', label: 'Dog' },
-  { value: 'cat', label: 'Cat' },
-  { value: 'other', label: 'Other' },
-];
+// const speciesOptions = [
+//   { value: 'dog', label: 'Dog' },
+//   { value: 'cat', label: 'Cat' },
+//   { value: 'other', label: 'Other' },
+// ];
 
-const breedOptions = {
-  dog: [
-    { value: 'beagle', label: 'Beagle' },
-    { value: 'terrier', label: 'Terrier' },
-    { value: 'labrador', label: 'Labrador' },
-  ],
-  cat: [
-    { value: 'british', label: 'British Shorthair' },
-    { value: 'siamese', label: 'Siamese' },
-    { value: 'persian', label: 'Persian' },
-  ],
-  other: [
-    { value: 'other', label: 'Other' },
-  ],
-};
+// const breedOptions = {
+//   dog: [
+//     { value: 'beagle', label: 'Beagle' },
+//     { value: 'terrier', label: 'Terrier' },
+//     { value: 'labrador', label: 'Labrador' },
+//   ],
+//   cat: [
+//     { value: 'british', label: 'British Shorthair' },
+//     { value: 'siamese', label: 'Siamese' },
+//     { value: 'persian', label: 'Persian' },
+//   ],
+//   other: [
+//     { value: 'other', label: 'Other' },
+//   ],
+// };
 
 const urlToFile = async (url: string, filename: string): Promise<File> => {
   try {
@@ -97,12 +99,20 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   onSuccess, 
   onCancel 
 }) => {
+  const t = useTranslations();
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    species: '',
-    breed: '',
+    species: {
+      id: '',
+      label: ''
+    },
+    breed: {
+      id: '',
+      label: ''
+    },
     gender: "MALE",
     birth_date: '',
     image: '',
@@ -112,12 +122,14 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
     // city: '',
     parents: [],
     price: 0,
-    organization: null
+    organization: null,
+    owner: null
   });
+
+  console.log("animalanimal: ", animal);
 
   const [photos, setPhotos] = useState<File[]>([]);
   const [characteristics, setCharacteristics] = useState<CharacteristicItem[]>([]);
-  const { characteristics: animalCharacteristics } = useAnimalInfo();
   const [description, setDescriptions] = useState<string>('');
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
@@ -132,12 +144,22 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   // const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
   // const [selectRaceValue, setSelectRaceValue] = useState<OptionType>(null);
 
+  const { characteristics: animalCharacteristics } = useAnimalInfo("DOG");
+
   useEffect(() => {
       if (animal) {
         setFormData({
           name: animal.name ?? '',
           species: animal.species ?? '',
           breed: animal.breed ?? '',
+          // breeds: {
+          //   value: animal.breed.value ?? '',
+          //   label: animal.breed.label ?? '',
+          // },
+          // species: {
+          //   value: animal.species.value ?? '',
+          //   label: animal.species.label ?? '',
+          // },
           gender: animal.gender ?? "MALE",
           birth_date: animal.birth_date ?? '',
           size: animal.size ?? AnimalSize.SMALL,
@@ -145,7 +167,8 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
           // city: animal.city ?? '',
           price: animal.price !== '0.00' ? animal.price : '',
           descriptions: animal.descriptions ?? '',
-          // organization: animal.organization.id ?? '',
+          // organization: animal?.organization && animal?.organization.id,
+          // owner: animal.owner,
           parents: animal.parents ?? [],
         });
 
@@ -159,6 +182,14 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
         } else {
           setHasPrice(false);
           setPrice(''); 
+        }
+
+        if (animal.owner) {
+          setOwner(animal.owner);
+        }
+
+        if (animal.organization) {
+          setOrganization(animal.organization.id);
         }
 
         // setSelectSpeciesValue(animal.species);
@@ -197,9 +228,9 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   
       if (animal.characteristicBoard?.length > 0) {
         setCharacteristics(animal.characteristicBoard);
-      } else if (animalCharacteristics.dog) {
+      } else if (animalCharacteristics) {
         setCharacteristics(
-          Object.entries(animalCharacteristics.dog).map(([key]) => ({
+          Object.entries(animalCharacteristics).map(([key]) => ({
             title: key,
             bool: false,
           }))
@@ -244,8 +275,8 @@ console.log(formData);
   
     const basicChanged =
       formData.name !== (animal.name ?? '') ||
-      formData.species !== (animal.species ?? '') ||
-      formData.breed !== (animal.breed ?? '') ||
+      formData.species !== (animal.species.label ?? '') ||
+      formData.breed !== (animal.breed.label ?? '') ||
       formData.gender !== (animal.gender ?? "MALE") ||
       formData.birth_date !== (animal.birth_date ?? '') ||
       formData.size !== animal.size ||
@@ -293,16 +324,28 @@ console.log(formData);
     try {
       const submitData = new FormData();
   
+      // Object.entries(formData).forEach(([key, value]) => {
+      //   if (key !== 'descriptions' && key !== 'price' && value !== null && value !== undefined) {
+      //     submitData.append(key, value.toString());
+      //   }
+      // });  
+
       Object.entries(formData).forEach(([key, value]) => {
-        if (key !== 'descriptions' && key !== 'price' && value !== null && value !== undefined) {
+        if (value === null || value === undefined) return;
+      
+        if (key === 'species' || key === 'breed') {
+          // Sprawdzamy, czy value jest obiektem, czy już gotowym ID (string/number)
+          const id = typeof value === 'object' 
+            ? (value.id || value.value) 
+            : value;
+          
+          submitData.append(key, String(id));
+        } else if (key !== 'descriptions' && key !== 'price') {
           submitData.append(key, value.toString());
         }
-      });  
-  
+      });
+      
       submitData.append('descriptions', description);
-
-      // submitData.append('species', selectSpeciesValue?.value);
-      // submitData.append('breed', selectRaceValue?.value);
 
       if (photos.length === 0) {
         toast.error('Musisz nadac zdjecia')
@@ -320,17 +363,11 @@ console.log(formData);
       } else {
         submitData.append('organization_id', '');
       }
-      
       if (owner !== null && owner !== undefined) {
         submitData.append('owner_id', String(owner));
       } else {
         submitData.append('owner_id', '');
       }
-    // }
-
-    // if(hasMetrics){
-    //   submitData.append('hasMetrics', true);
-    // }
 
       if (!hasPrice || price == '') {
         setPrice('0');
@@ -373,8 +410,8 @@ console.log(formData);
         }
       }
       toast.success('Animal updated successfully!');
-      onSuccess?.(); 
-      router.refresh();
+      // onSuccess?.(); 
+      // router.refresh();
     } catch (error) {
       console.error('Error updating animal:', error);
       toast.error('Failed to update animal. Please try again.');
@@ -390,9 +427,12 @@ console.log(formData);
       )
     );
   };
-  const currentBreedOptions = formData.species 
-    ? breedOptions[formData.species as keyof typeof breedOptions] || breedOptions.other
-    : breedOptions.other;
+  // const currentBreedOptions = formData.species 
+  //   ? breedOptions[formData.species as keyof typeof breedOptions] || breedOptions.other
+  //   : breedOptions.other;
+
+    console.log("formDataformData: ", formData);
+
 
   if (!animal) {
     return (
@@ -444,11 +484,24 @@ console.log(formData);
               /> */}
 
               <AnimalSelect 
+                // initialState={{
+                //   speciesOpt: formData?.species && { value: formData?.species },
+                //   breedOpt: formData?.breed && { value: formData?.breed }
+                // }}
+                // initialState={{
+                //   speciesOpt: formData.species
+                //     ? { value: formData.species, label: formData.species }
+                //     : null,
+                //   breedOpt: formData.breed
+                //     ? { value: formData.breed, label: formData.breed }
+                //     : null
+                // }}
                 initialState={{
-                  speciesOpt: formData?.species && { value: formData?.species },
-                  breedOpt: formData?.breed && { value: formData?.breed }
+                  speciesOpt: formData?.species && {value: formData?.species.id, label: formData?.species.label},
+                  breedOpt: formData?.breed && {value: formData?.breed.id, label: formData?.breed.label}
                 }}
                 handleChange={handleInputChange} 
+                isAdding
               />
 
               <Input
@@ -648,6 +701,7 @@ console.log(formData);
                     setParents(prev => prev.filter((_, i) => i !== index));
                   }} 
                 />
+
                 <img 
                   className={style.image}
                   src={p.photos
@@ -661,17 +715,25 @@ console.log(formData);
             ))}
           </div>
 
-          <AddAnimalParents 
-            className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
-            parents={parents}
-            childAnimal={animal}
-            setIsParentsAdd={setIsParentsAdd}
-            onAddParent={(parent) => {
-              const newParent = { ...parent, isNew: true };
-              setParents((prev) => [...prev, newParent as Parent]);
-              setIsParentsAdd(false); 
-            }}
-          />
+
+        <Modal
+          className={style.modaParentsAddlWin} 
+          isOpen={isParentsAdd} 
+          closeModal={() => setIsParentsAdd(false)}
+          title={t('pages.newAnimal.parentsAdd')}
+        >
+            <AddAnimalParents 
+              className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
+              parents={parents}
+              childAnimal={animal}
+              setIsParentsAdd={setIsParentsAdd}
+              onAddParent={(parent) => {
+                const newParent = { ...parent, isNew: true };
+                setParents((prev) => [...prev, newParent as Parent]);
+                setIsParentsAdd(false); 
+              }}
+            />
+        </Modal>
           <span className={style.caption}>Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.</span>
         </Card>
 

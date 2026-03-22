@@ -9,6 +9,11 @@
   }
 }
 
+.modaPostAddWin{
+  max-height: 90vh;
+  max-width: 1200px;
+}
+
 .list {
   @include element-flex(column, flex-start, stretch);
   gap: $spacing-4;

@@ -219,7 +219,15 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                         <>
                             <Avatar 
                                 className={style.avatar}
-                                src={typeof userForm.image === 'string' ? userForm.image : undefined}
+                                src={
+                                    logo
+                                      ? URL.createObjectURL(logo)
+                                      : typeof userForm.image === "string"
+                                      ? userForm.image
+                                      : userForm.image instanceof File
+                                      ? URL.createObjectURL(userForm.image)
+                                      : undefined
+                                  }
                                 profile={userForm && userForm} 
                             />
                             <p 
@@ -324,37 +332,37 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                         </label>
                     </div>
                     <div>
-                    <Checkbox
-                        id="location"
-                        label="Czy możemy korzystać z twojej lokalizacji"
-                        checked={locationAllowed}
-                        onChange={async (e: any) => {
-                            const checked = e.target.checked;
-                            setLocationAllowed(checked);
+                        <Checkbox
+                            id="location"
+                            label="Czy możemy korzystać z twojej lokalizacji"
+                            checked={locationAllowed}
+                            onChange={async (e: any) => {
+                                const checked = e.target.checked;
+                                setLocationAllowed(checked);
 
-                            if (!checked) {
-                            setUserForm(prev => ({ ...prev, location: null }));
-                            return;
-                            }
-
-                            try {
-                            const pos = await getLocation();
-                            setUserForm(prev => ({
-                                ...prev,
-                                location: {
-                                    type: 'Point',
-                                    coordinates: [
-                                        pos.coords.longitude,
-                                        pos.coords.latitude
-                                    ]
+                                if (!checked) {
+                                setUserForm(prev => ({ ...prev, location: null }));
+                                return;
                                 }
-                            }));
-                            } catch {
-                            toast.error('Nie udało się pobrać lokalizacji');
-                            setLocationAllowed(false);
-                            }
-                        }}
-                        />
+
+                                try {
+                                const pos = await getLocation();
+                                setUserForm(prev => ({
+                                    ...prev,
+                                    location: {
+                                        type: 'Point',
+                                        coordinates: [
+                                            pos.coords.longitude,
+                                            pos.coords.latitude
+                                        ]
+                                    }
+                                }));
+                                } catch {
+                                toast.error('Nie udało się pobrać lokalizacji');
+                                setLocationAllowed(false);
+                                }
+                            }}
+                            />
                     </div>
                 </div>
             </div>
@@ -382,7 +390,6 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
             </div>
         </Card>
 
-        
         <div className={style.usersStaff}>
             <OrganizationsScroll organizations={userOrganizations} isLoading={isLoading} />
 

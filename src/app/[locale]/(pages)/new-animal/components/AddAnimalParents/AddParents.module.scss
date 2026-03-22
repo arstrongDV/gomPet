@@ -1,8 +1,8 @@
 @import 'styles';
 
 .container {
-    @include element-flex(column, flex-start, stretch);
-    // gap: $spacing-4;
+    @include element-flex(column, center, stretch);
+    gap: $spacing-4;
     width: 100%;
   }
   
@@ -30,6 +30,11 @@
       background-color: rgba(0, 0, 0, 0.15);
       border-radius: 10px;
     }
+  }
+
+  .animalsList{
+    @include element-flex(column, center, stretch);
+    gap: $spacing-4;
   }
   
   .animalItem {

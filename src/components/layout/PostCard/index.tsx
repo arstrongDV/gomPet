@@ -168,23 +168,22 @@ const PostCard = ({
           )}
         </div>
         <div className={style.headerContent}>
-
-        {myId == author.id ? (
-          <SettingsButton 
-            onEdit={updatePost} 
-            onDelete={deletePost}
-            authId={author.id}
-          />
-          ) : (
-            !hideFollowButton && (
-              <FollowingButton 
-                authorId={post.organization_info ? post.organization_info.id : post.animal} 
-                followedAuthors={followedAuthors}
-                setFollowedAuthors={setFollowedAuthors}
-                target_type={post.organization_info ? "users.organization" : "animals.animal"}
-              />
-            )
-          )}
+          {myId == author.id ? (
+            <SettingsButton 
+              onEdit={updatePost} 
+              onDelete={deletePost}
+              authId={author.id}
+            />
+            ) : (
+              !hideFollowButton && (
+                <FollowingButton 
+                  authorId={post.organization_info ? post.organization_info.id : post.animal} 
+                  followedAuthors={followedAuthors}
+                  setFollowedAuthors={setFollowedAuthors}
+                  target_type={post.organization_info ? "users.organization" : "animals.animal"}
+                />
+              )
+            )}
         </div>
       </header>
 
@@ -238,13 +237,13 @@ const PostCard = ({
       </footer>
 
       <Modal 
-          className={style.modaPostUpdatelWin} 
-          isOpen={showUpdateCard} 
-          closeModal={() => SetShowUpdateCard(false)}
-          title='Actualizuj Post'
-        >
-          <UpdatePostCard SetShowUpdateCard={SetShowUpdateCard} post={post} updatePosts={updatePosts} />
-        </Modal>
+        className={style.modaPostUpdatelWin} 
+        isOpen={showUpdateCard} 
+        closeModal={() => SetShowUpdateCard(false)}
+        title='Actualizuj Post'
+      >
+        <UpdatePostCard SetShowUpdateCard={SetShowUpdateCard} post={post} updatePosts={updatePosts} />
+      </Modal>
 
       <Modal 
           className={style.modaSharinglWin} 

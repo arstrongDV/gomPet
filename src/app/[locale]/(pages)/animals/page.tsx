@@ -103,37 +103,37 @@ const AnimalsPage = () => {
 
       <AnimalFilters className={classNames(style.filters, { [style.show]: showFilters })} />
 
-        <div>
-          <div className={style.content}>
-            <AnimalsOnMap
-                animals={animals}
-                className={classNames(style.map, {
-                  [style.show]: showMap
-                })}
-              />
-
-            <List
-              isLoading={isLoading}
-              className={classNames(style.list, {
-                [style.fullWidthList]: !showMap,
-                [style.withMap]: showMap,
+      {/* <div> */}
+        <div className={style.content}>
+          <AnimalsOnMap
+              animals={animals}
+              className={classNames(style.map, {
+                [style.show]: showMap
               })}
-            >
-                {animals.map((animal) => (
-                  <AnimalCard key={animal.id} animal={animal} showMap={showMap} />
-                ))}
-            </List>
-          </div>
+            />
 
-          <Pagination
-            className={style.pagination}
-            totalCount={total}
-            pageSize={paginationConfig.animals}
-            currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
-            onPageChange={changePage}
-          />
-        </div> 
-    </div>
+          <List
+            isLoading={isLoading}
+            className={classNames(style.list, {
+              [style.fullWidthList]: !showMap,
+              [style.withMap]: showMap,
+            })}
+          >
+              {animals.map((animal) => (
+                <AnimalCard key={animal.id} animal={animal} showMap={showMap} />
+              ))}
+          </List>
+        </div>
+
+        <Pagination
+          className={style.pagination}
+          totalCount={total}
+          pageSize={paginationConfig.animals}
+          currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+          onPageChange={changePage}
+        />
+      </div> 
+    // </div>
   );
 };
 

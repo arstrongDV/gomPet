@@ -36,6 +36,11 @@
   transform: translateY(-1rem);
   pointer-events: none;
 
+  @include phoneWidth {
+    width: 20rem;
+    left: 0;
+  }
+
   &.open {
     opacity: 1;
     transform: translateY(0);

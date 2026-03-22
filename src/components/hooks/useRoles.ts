@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { OrganizationsApi } from './../../api/index';
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export type Role = {
     label: string;
@@ -15,6 +16,8 @@ type ApiRole = {
 }
 
 const useRoles = () => {
+    const t = useTranslations('pages.common');
+
     const [data, setData] = useState<ApiRole[]>();
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -23,7 +26,7 @@ const useRoles = () => {
             setLoading(true)
             try{
                 const res = await OrganizationsApi.getOrganizationRoles();
-                console.log(res);
+                console.log("aaass: ", res);
                 setData(res.data.roles)
                 setLoading(false)
             }catch(err){

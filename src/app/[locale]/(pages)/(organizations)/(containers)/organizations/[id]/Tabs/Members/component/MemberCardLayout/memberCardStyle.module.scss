@@ -2,12 +2,25 @@
 
 .container{
   @include element-flex(row, space-between, center);
+  gap: $spacing-5;
+  background-color: #f0f0f0;
+}
+
+@include customWidth(630px){
+  .container{
+    flex-wrap: wrap;
+  }
 }
 
 .memberInfocontainer{
   display: flex;
   flex-direction: row;
   gap: 3rem;
+}
+@include phoneWidth{
+  .memberInfocontainer{
+    gap: 1.5rem;
+  }
 }
 
 .wrrapper{
@@ -65,13 +78,6 @@
   }
 }
 
-.btns{
-    display: flex;
-    align-self: flex-end;
-    gap: 2rem;
-}
-
-
 .deleteButton{
     background-color: $color-danger-dark;
 }
@@ -84,11 +90,32 @@
   p{
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
+    text-wrap: nowrap;
   }
 
   span{
     margin-left: 1rem;
+    text-wrap: wrap;
+  }
+}
+
+@include phoneWidth{
+  .info{
+    gap: 0.5rem;
+    text-wrap: wrap;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  
+    p{
+      font-size: $font-size-xxs;
+    }
+  
+    span{
+      margin-left: 0.5rem;
+      font-size: $font-size-xxs;
+    }
   }
 }
 
@@ -130,14 +157,28 @@
 }
 
 .btns{
-  @include element-flex(row, center, stretch);
-  gap: 3rem;
-
+  @include element-flex(row, flex-end, stretch);
+  gap: 2rem;
+  flex-wrap: wrap-reverse;
   align-self: flex-end;
+  width: 100%;
+
   .btnDel{
     background-color: $color-danger;
   }
   .btnDel:hover{
     background-color: $color-danger-dark;
   }
+}
+
+@include customWidth(630px){
+  .btns{
+    gap: 0.4rem;
+    align-self: center;
+    justify-content: center;
+  }
+}
+.submitButton, .deleteButton{
+  font-size: $font-size-xs;
+  padding: $spacing-3;
 }

@@ -15,6 +15,9 @@ const RoleSelector = ({ initialRole, selectedRole, setSelectedRole }: RoleSelect
   // const [role, setRole] = useState<Role | null>(null);
   const { roles, loading } = useRoles();
 
+  console.log("roles: ", roles);
+  console.log("initialRole: ", initialRole);
+
   useEffect(() => {
     if (!initialRole || roles.length === 0) return;
 

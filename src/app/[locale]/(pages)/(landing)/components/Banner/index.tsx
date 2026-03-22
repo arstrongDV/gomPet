@@ -8,22 +8,22 @@ import { Routes } from "src/constants/routes";
 
 const Banner = () => {
 const { push } = useRouter()
-  const cardStyles = {
-    backgroundImage: `
-      linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.0) 10%,
-        rgba(0, 0, 0, 0.5) 35%,
-        rgba(0, 0, 0, 0.7) 50%,
-        rgba(0, 0, 0, 0.5) 65%,
-        rgba(0, 0, 0, 0.0) 90%
-      ),
-      url(${image.src})
-    `
-  };
+  // const cardStyles = {
+  //   backgroundImage: `
+  //     linear-gradient(
+  //       90deg,
+  //       rgba(0, 0, 0, 0.0) 10%,
+  //       rgba(0, 0, 0, 0.5) 35%,
+  //       rgba(0, 0, 0, 0.7) 50%,
+  //       rgba(0, 0, 0, 0.5) 65%,
+  //       rgba(0, 0, 0, 0.0) 90%
+  //     ),
+  //     url(${image.src})
+  //   `
+  // };
 
   return (
-    <Card className={style.baner} style={cardStyles}>
+    <Card className={style.baner} >
         <div className={style.container}>
             <h1>Znajdź swojego nowego <span className={style.greenText}>przyjaciela</span></h1>
             <p>

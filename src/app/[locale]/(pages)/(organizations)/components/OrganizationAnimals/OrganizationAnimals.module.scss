@@ -19,6 +19,10 @@
   }
 }
 
+.label{
+  text-align: end
+}
+
 .list {
   @include element-flex(row, flex-start, stretch);
   gap: $spacing-4;

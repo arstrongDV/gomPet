@@ -20,6 +20,12 @@
   }
 }
 
+.description{
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 .status {
   padding: $spacing-1 $spacing-2;
   width: fit-content;

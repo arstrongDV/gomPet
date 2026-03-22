@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { useTranslations } from 'next-intl';
-
-import { Button, Card, Icon, Input, LabelLink, OrganizationTypeName } from 'src/components';
-import { IOrganization } from 'src/constants/types';
-
-import style from './BusinessCard.module.scss';
-import { Routes } from 'src/constants/routes';
-import { OrganizationsApi, PostsApi } from 'src/api';
-import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import OutsideClickHandler from 'react-outside-click-handler';
-import SettingsButton from 'src/components/layout/Settings';
+import classNames from 'classnames';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+
+import { OrganizationsApi, PostsApi } from 'src/api';
+import { Button, Card, Icon, Input, LabelLink, OrganizationTypeName } from 'src/components';
 import FollowingButton from 'src/components/layout/PostCard/components/FollowingButton';
+import SettingsButton from 'src/components/layout/Settings';
+import { Routes } from 'src/constants/routes';
+import { IOrganization } from 'src/constants/types';
 import { toNumberFormat } from 'src/utils/helpers';
+
+import style from './BusinessCard.module.scss';
 
 type BusinessCardProps = {
   organization: IOrganization;
@@ -22,20 +22,34 @@ type BusinessCardProps = {
   variant?: 'horizontal' | 'vertical';
 };
 
-const BusinessCard = ({ organization, className, variant = 'horizontal' }: BusinessCardProps) => {
+const BusinessCard = ({ organization, variant = 'horizontal' }: BusinessCardProps) => {
   const { name, image, phone, email, address, id } = organization;
   const t = useTranslations();
   const { push } = useRouter();
 
-  const [invitationMessage, setInvitationMessage] = useState<string>("Chce dolaczyc");
+  const [invitationMessage, setInvitationMessage] = useState<string>('Chce dolaczyc');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [followedAuthors, setFollowedAuthors] = useState<Record<number, number>>({});
   const [followers, setFollowers] = useState<number>(0);
 
   const session = useSession();
 
-  const organizationId = Number(session.data?.user.id)
+  const organizationId = Number(session.data?.user.id);
   const isOwner = organizationId === organization.user;
+
+  const [isMobile, setIsMobile] = useState(false);
+  const currentVariant = isMobile ? "vertical" : variant;
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 600px)');
+
+    const listener = () => setIsMobile(media.matches);
+
+    listener();
+    media.addEventListener('change', listener);
+
+    return () => media.removeEventListener('change', listener);
+  }, []);
 
   const getOrganizationFollowers = async (target_id: number) => {
     try {
@@ -44,7 +58,7 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
         target_id
       );
       setFollowers(organizationFollowersRes.data.followers_count);
-    } catch(err) {
+    } catch (err) {
       setFollowers(0);
     }
   };
@@ -54,7 +68,7 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
   }, [id]);
 
   const sendJoinRequest = () => {
-    try{
+    try {
       const res = OrganizationsApi.postJoinRequest({
         user: session.data?.user.id,
         organization: id,
@@ -64,19 +78,19 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
       console.log(res)
       toast.success("Request was sended");
       setShowModal(false);
-    }catch(err){
+    } catch (err) {
       console.log(err);
       toast.success("Nie udalo sie nadeslac ...")
     }
   }
 
   const deleteOrganization = async() => {
-    try{
-      const res_delete = await OrganizationsApi.deleteOrganizationProfile(id)
+    try {
+      const res_delete = await OrganizationsApi.deleteOrganizationProfile(id);
       console.log(res_delete);
       push('/my-animals')
       toast.success("Organizacja usunieta")
-    }catch(err){
+    } catch (err) {
       console.log(err);
       toast.error("Nie udalo sie usunac organizacje")
     }
@@ -106,7 +120,6 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
           </div>
       </>
       )}
-
       </header>
 
       {image && (
@@ -190,17 +203,6 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
           </div>
       </>
       )}
-       {/* : (
-        <div className={style.subscribtion}>
-          <span className={style.followers}>{followers ?? 0} <Icon name='people' /></span>
-          <FollowingButton 
-            target_type="users.organization" 
-            authorId={id} 
-            followedAuthors={followedAuthors}
-            setFollowedAuthors={setFollowedAuthors}
-          />
-      </div>
-      )} */}
       </header>
 
       <div className={style.row}>
@@ -274,8 +276,10 @@ const BusinessCard = ({ organization, className, variant = 'horizontal' }: Busin
 
   return (
     <Card className={classNames(style.container, style[variant])}>
-      {variant === 'horizontal' && horizontal}
-      {variant === 'vertical' && vertical}
+      {/* {variant === 'horizontal' && horizontal}
+      {variant === 'vertical' && vertical} */}
+      {currentVariant === 'horizontal' && horizontal}
+      {currentVariant === 'vertical' && vertical}
 
       {showModal && (
         <OutsideClickHandler onOutsideClick={() => setShowModal(false)}>

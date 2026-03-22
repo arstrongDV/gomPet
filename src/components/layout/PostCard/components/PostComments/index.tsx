@@ -1,12 +1,16 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Card, Comment, CommentInput, Divider, List } from 'components';
-import { CommentSubmitData } from 'src/components/layout/Comments/CommentInput';
-import { PostsApi } from 'src/api';
+import React, { useCallback,useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import style from './PostComments.module.scss';
 import { useTranslations } from 'next-intl';
+
+import { Card, Comment, CommentInput, Divider, List } from 'components';
+
+import { PostsApi } from 'src/api';
+import { CommentSubmitData } from 'src/components/layout/Comments/CommentInput';
+import InfinityScroll from 'src/components/layout/InfinityScroll';
+
+import style from './PostComments.module.scss';
 
 type PostCommentsProps = {
   postId: number;
@@ -28,10 +32,8 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
   const [updateId, setUpdateId] = useState<number | null>(null);
 
   const currentPageRef = useRef(1);
-  const guardRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  const isFetchingMoreRef = useRef(false);
   const hasNextPageRef = useRef(true);
 
   const getComments = async (postId: number, page = 1) => {
@@ -60,47 +62,30 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
     loadInitial();
   }, [postId]);
 
-  const getMoreComments = useCallback(async () => {
-    if (isFetchingMoreRef.current || !hasNextPageRef.current) return;
-
-    isFetchingMoreRef.current = true;
-
+  const getMoreComments = async () => {
+    if (!hasNextPageRef.current) return;
+  
     const nextPage = currentPageRef.current + 1;
     const data = await getComments(postId, nextPage);
-
+  
     if (!data.results.length) {
       hasNextPageRef.current = false;
-      isFetchingMoreRef.current = false;
       return;
     }
-
+  
     currentPageRef.current = nextPage;
     setComments(prev => [...prev, ...data.results]);
     hasNextPageRef.current = !!data.next;
-    isFetchingMoreRef.current = false;
-  }, [postId]);
+  };
 
-  useEffect(() => {
-    if (comments.length === 0) return;
-    const guardEl = guardRef.current;
-    if (!guardEl) return;
-  
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) getMoreComments();
-    }, { root: listRef.current || null, rootMargin: '200px', threshold: 0 });
-  
-    observer.observe(guardEl);
-    return () => observer.disconnect();
-  }, [comments, getMoreComments]);
-
-  const createComment = async ({ id, text, rating = 0 }: CommentSubmitData) => {
+  const createComment = async ({ text, rating = 0 }: CommentSubmitData) => {
     setIsLoading(true);
     try {
       if (updateId) {
         const current = comments.find(c => c.id === updateId);
         if (!current) return;
 
-        if(isOrganizationPage){
+        if (isOrganizationPage) {
           if (text !== current.body || rating !== current.rating) {
             await PostsApi.updateComment(updateId, { 
               body: text, 
@@ -108,11 +93,11 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
             });
             setComments(prev => prev.map(c => (c.id === updateId ? { ...c, body: text, rating } : c)));
           }
-        }else{
+        } else {
           if (updateId) {
-            if(text !== current.body){
+            if (text !== current.body) {
               await PostsApi.updateComment(updateId, { body: text });
-              toast.success("Komentarz zaktualizowany!");
+              toast.success('Komentarz zaktualizowany!');
               setUpdateId(null);
               setComments?.((prev: any) =>
                 prev.map((c: any) =>
@@ -120,7 +105,7 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
                 )
               );
             }
-            else{
+            else {
               setUpdateId(null);
             }
         }
@@ -143,11 +128,11 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
         toast.success('Komentarz zostal dodany');
       }
     } catch (err: any) {
-      if(err.response.data.error)(
+      if (err.response.data.error)(
         toast.error(t(`comments.${err.response.data.error.code}`))
       )
-      else{
-        toast.error(t("mainErrors.unexpectedError"));
+      else { 
+        toast.error(t('mainErrors.unexpectedError'));
       }
       console.error(err.response.data.error.code);
     } finally {
@@ -189,26 +174,27 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
 
         <Divider />
 
-        <List 
+        <List
           ref={listRef}
           className={style.comments}
-          emptyText="Brak komentarzy"
+          emptyText='Brak komentarzy'
           isLoading={isLoading}
           isEmpty={!isLoading && comments.length === 0}
         >
-          {comments.length === 0 ? null : comments.map(comment => (
-            <Comment 
-              key={comment.id}
-              comment={comment}
-              commentDel={deleteComment}
-              setUpdateId={setUpdateId}
-              {...(isOrganizationPage ? { inputFieldRef: null } : {})}
-            />
-          ))}
-
-          {comments.length > 0 && (
-            <div ref={guardRef} style={{ height: '1px' }} />
-          )}
+          <InfinityScroll
+            loadMore={getMoreComments}
+            hasNext={hasNextPageRef.current}
+            rootRef={listRef}
+          >
+            {comments.map(comment => (
+              <Comment
+                key={comment.id}
+                comment={comment}
+                commentDel={deleteComment}
+                setUpdateId={setUpdateId}
+              />
+            ))}
+          </InfinityScroll>
         </List>
     </Card>
   );

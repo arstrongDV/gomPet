@@ -27,14 +27,8 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
     const [formData, setFormData] = useState({
       id: '',
       title: '',
-      species: {
-        value: '',
-        label: ''
-      },
-      breeds: {
-        value: '',
-        label: ''
-      },
+      species: null,
+      breed: null,
       description: '',
       birth_date: '',
       status: '',
@@ -43,53 +37,45 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
     });
   const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-      if (!litter) return;
-      setIsLoading(true);
-      try {
-        setFormData({
-          id: litter.id ?? '',
-          breeds: {
-            value: litter.breed.value ?? '',
-            label: litter.breed.label ?? '',
-          },
-          species: {
-            value: litter.species.value ?? '',
-            label: litter.species.label ?? '',
-          },
-          title: litter.title ?? '',
-          description: litter.description ?? '',
-          birth_date: litter.birth_date ?? '',
-          status: litter.status ?? '',
-          owner: litter.owner ?? null,
-          created_at: litter.created_at ?? '',
-        });
-      } catch (err) {
-        toast.error("Nie mogę pobrać danych");
-        console.error(err);
-      }
-      finally {
+  useEffect(() => {
+    if (!litter) return; // Jeśli danych jeszcze nie ma, nic nie rób
+    setIsLoading(true);
+    try {
+      setFormData({
+        id: litter.id ?? '',
+        breed: litter.breed ?? null, // Nie buduj obiektu ręcznie, weź cały z API
+        species: litter.species ?? null,
+        title: litter.title ?? '',
+        description: litter.description ?? '',
+        birth_date: litter.birth_date ?? '',
+        status: litter.status ?? '',
+        owner: litter.owner ?? null,
+        created_at: litter.created_at ?? '',
+      });
+    } catch (err) {
+      console.error("Błąd mapowania:", err);
+    } finally {
       setIsLoading(false);
-      }
-    }, [litter]);
-
-    console.log("litter: ", litter);
-    console.log("formData: ", formData.breeds.value);
+    }
+  }, [litter]);
 
     const hasChanges = () => {
       if (!litter || !formData) return false;
-      const speciesChanged =
-        (formData.species?.value ?? '') !== (litter.species?.value ?? '');
-      // const breedChanged =
-      //   (formData.breeds?.value ?? '') !== (litter.breed?.value ?? '');
-      
+
+      const getID = (val: any) => (typeof val === 'object' && val !== null ? String(val.value) : String(val ?? ''));
+    
+      const speciesChanged = getID(formData.species) !== getID(litter.species);
+      const breedChanged = getID(formData.breed) !== getID(litter.breed);
+
+      console.log(speciesChanged, breedChanged);
+    
       return (
         formData.title !== (litter.title ?? '') ||
         formData.description !== (litter.description ?? '') ||
         formData.birth_date !== (litter.birth_date ?? '') ||
         formData.status !== (litter.status ?? '') ||
-        speciesChanged
-        // breedChanged
+        speciesChanged ||
+        breedChanged
       );
     };
     
@@ -97,7 +83,17 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
 
     const handleSubmit = async() => {
         try{
-            const res = await OrganizationsApi.updateOrganizationLitters(Number(params.id), formData);
+          const payload = {
+            ...formData,
+            // Jeśli to obiekt, bierzemy .value. Jeśli to już ID, bierzemy value.
+            species: typeof formData.species === 'object' && formData.species !== null 
+                     ? formData.species.value 
+                     : formData.species,
+            breed: typeof formData.breed === 'object' && formData.breed !== null 
+                   ? formData.breed.value 
+                   : formData.breed,
+          };
+            const res = await OrganizationsApi.updateOrganizationLitters(Number(params.id), payload);
             console.log(res);
             onSuccess?.();
         }catch(err){
@@ -107,8 +103,14 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
     }
 
     const handleChange = (field: string, value: any) => {
-      setFormData(prev => ({ ...prev, [field]: value }));
+      setFormData(prev => {
+        return { ...prev, [field]: value };
+      });
     };
+
+    if (isLoading || !formData.id) {
+      return <div>Ładowanie danych miotu...</div>; // Lub Twój komponent Spinnera
+    }
 
     return(
         <>
@@ -125,11 +127,13 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
             Informacje <mark>podstawowe</mark>
           </h3>
           <AnimalSelect
+            key={formData.id}
             initialState={{
               speciesOpt: formData?.species && {value: formData?.species.value, label: formData?.species.label},
-              breedOpt: formData?.breeds && {value: formData?.breeds.value, label: formData?.breeds.label}
+              breedOpt: formData?.breed && {value: formData?.breed.value, label: formData?.breed.label}
             }}
             handleChange={handleChange}
+            // isAdding
           />
           <span className={style.caption}>Gatunek i rasa, którą obejmuje ten miot.</span>
         </Card>

@@ -1,41 +1,56 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
+import { OrganizationsApi } from 'src/api';
 import BusinessCard from 'src/app/[locale]/(pages)/(organizations)/components/BusinessCard';
 import OrganizationOnMap from 'src/app/[locale]/(pages)/(organizations)/components/OrganizationOnMap';
-
+import { List, Pagination } from 'src/components';
 import PostCard from 'src/components/layout/PostCard';
-
-import { Button, List } from 'src/components';
+import AddPost from 'src/components/layout/PostCard/components/AddPost';
+import { paginationConfig } from 'src/config/pagination';
+import { Params } from 'src/constants/params';
 import { IOrganization, IPost } from 'src/constants/types';
-import { postsMock } from 'src/mocks/posts';
 
 import style from './Activity.module.scss';
-import { OrganizationsApi } from 'src/api';
-import AddPost from './AddPost';
-import { useSession } from 'next-auth/react';
-import toast from 'react-hot-toast';
 
 type ActivityProps = {
   organization: IOrganization;
 };
 
 const Activity = ({ organization }: ActivityProps) => {
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [showAddPost, setShowAddPost] = useState<boolean>(false);
 
-  const session = useSession()
-  const myId = session.data?.user.id
+  const session = useSession();
+  const myId = session.data?.user.id;
+  const [total, setTotal] = useState<number>(1);
+
+  const changePage = (page: number) => {
+    params.set(Params.PAGE, page.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const currentPage = Number(searchParams.get('page')) || 1;
 
   const getPosts = async () => {
     try {
       setIsLoading(true);
-      const res_organzationPosts = await OrganizationsApi.getOrganizationPosts(organization.id);
+      const res_organzationPosts = await OrganizationsApi.getOrganizationPosts(organization.id, {
+        page: currentPage
+      });
       setPosts(res_organzationPosts.data.results);
+      setTotal(res_organzationPosts.data.count || 0);
     } catch (error) {
       setPosts([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
@@ -43,10 +58,10 @@ const Activity = ({ organization }: ActivityProps) => {
 
   useEffect(() => {
     getPosts();
-  }, [organization.id]);
+  }, [currentPage, organization.id]);
 
   const deletePosts = (postId: number) => {
-    if(myId != organization.user){
+    if (myId != organization.user) {
       toast.error("Bled operacji")
       return null;
     }
@@ -54,7 +69,7 @@ const Activity = ({ organization }: ActivityProps) => {
   };
 
   const updatePosts = (updatedPost: IPost) => {
-    if(myId != organization.user){
+    if (myId != organization.user) {
       toast.error("Bled operacji")
       return null;
     }
@@ -71,9 +86,11 @@ const Activity = ({ organization }: ActivityProps) => {
       
       <div className={style.wrapper}>
         <aside className={style.listWrraper}>
-          {organization.user == myId && (
-            <Button label="Dodaj post" icon="plus" onClick={() => setShowAddPost(true)} width='300px' />
-          )}
+          <AddPost 
+              organizationId={organization.id} 
+              animalOwnerId={organization.user}
+              getPosts={getPosts}
+          />
 
           <List
             isLoading={isLoading}
@@ -104,13 +121,13 @@ const Activity = ({ organization }: ActivityProps) => {
         </aside>
       </div>
 
-      {showAddPost && (
-        <AddPost 
-          organizationId={organization.id} 
-          setShowAddPost={setShowAddPost} 
-          refreshPosts={() => getPosts()}
-        />
-      )}
+      <Pagination
+          className={style.pagination}
+          totalCount={total}
+          pageSize={paginationConfig.posts}
+          currentPage={params.get(Params.PAGE) ? Number(params.get(Params.PAGE)) : 1}
+          onPageChange={changePage}
+      />
     </div>
   );
 };

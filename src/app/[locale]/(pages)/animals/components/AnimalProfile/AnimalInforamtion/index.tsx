@@ -1,26 +1,23 @@
 'use client';
 
-import React, { useRef, useState } from 'react'
-import Image from 'next/image';
-import { IAnimal, IComment } from 'src/constants/types';
-import { useTranslations } from 'next-intl';
+import React, { useState } from 'react'
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+
+import { Avatar, Button, Card,Comment, Icon, List, OrganizationTypeName, StarRating } from 'src/components';
+import RichTextViewer from 'src/components/layout/Forms/RichTextViewer';
+import FollowingButton from 'src/components/layout/PostCard/components/FollowingButton';
+import { Routes } from 'src/constants/routes';
+import { IAnimal, IComment } from 'src/constants/types';
+
+import CharacteristicsBlock from './components/AnimalCharacteristics';
+import AnimalPhotos from './components/AnimalPhotos';
+import { FamilyTreeWrapper } from './components/FamilyTree/FamilyTreeWrapper';
+import RelatedAnimals from './components/RelatedAnimals';
 
 import style from './AnimalProfile.module.scss';
-
-import { FamilyTreeWrapper } from './components/FamilyTree/FamilyTreeWrapper';
-import { Button, Icon, List, Comment, OrganizationTypeName, StarRating, Avatar, Card } from 'src/components';
-import RelatedAnimals from './components/RelatedAnimals';
-import AnimalPhotos from './components/AnimalPhotos';
-import Comments from './components/Comments';
-import DescriptionTranslate from './components/AnimalDescription';
-import { useRouter } from 'next/navigation';
-import CharacteristicsBlock from './components/AnimalCharacteristics';
-import { Routes } from 'src/constants/routes';
-import FollowingButton from 'src/components/layout/PostCard/components/FollowingButton';
-import { useSession } from 'next-auth/react';
-import { PostsApi } from 'src/api';
-import RichTextViewer from 'src/components/layout/Forms/RichTextViewer';
 
 type AnimalProfileProps = {
     animal: IAnimal;
@@ -54,15 +51,15 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
                 <div className={style.blocksContainer}>
                     <div className={style.aboutAnimalBlock}>
                         <ul>
-                            <li>Imię: <span style={{color: '#000'}}>{animal?.name ?? "Brak danych"}</span></li>
-                            <li>Miasto: <span style={{color: '#000'}}>{animal?.city ?? "Brak danych"}</span></li>
-                            <li>Gatunek: <span style={{color: '#000'}}>{animal?.species ?? "Brak danych"}</span></li>
-                            <li>Płeć: <span style={{color: '#000'}}>{animal?.gender ?? "Brak danych"}</span></li>
-                            <li>Wiek: <span style={{color: '#000'}}>{animal?.age ?? "Brak danych"}</span></li>
-                            <li>Wielkość: <span style={{color: '#000'}}>{animal?.size ?? "Brak danych"}</span></li>
-                            <li>Status: <span style={{color: '#000'}}>{animal?.status ?? "Brak danych"}</span></li>
-                            <li>Rasa: <span style={{color: '#000'}}>{animal?.breed ?? "Nieznana"}</span></li>
-                            <li>Dodany dnia: <span style={{color: '#000'}}>
+                            <li key={animal?.name}>Imię: <span style={{color: '#000'}}>{animal?.name ?? "Brak danych"}</span></li>
+                            <li key={animal?.city}>Miasto: <span style={{color: '#000'}}>{animal?.city ?? "Brak danych"}</span></li>
+                            <li key={animal?.species}>Gatunek: <span style={{color: '#000'}}>{animal?.species.label ?? "Brak danych"}</span></li>
+                            <li key={animal?.gender}>Płeć: <span style={{color: '#000'}}>{animal?.gender ?? "Brak danych"}</span></li>
+                            <li key={animal?.age}>Wiek: <span style={{color: '#000'}}>{animal?.age ?? "Brak danych"}</span></li>
+                            <li key={animal?.size}>Wielkość: <span style={{color: '#000'}}>{animal?.size ?? "Brak danych"}</span></li>
+                            <li key={animal?.status}>Status: <span style={{color: '#000'}}>{animal?.status ?? "Brak danych"}</span></li>
+                            <li key={animal?.breed}>Rasa: <span style={{color: '#000'}}>{animal?.breed.label ?? "Nieznana"}</span></li>
+                            <li key={animal?.created_at}>Dodany dnia: <span style={{color: '#000'}}>
                                 {animal?.created_at ? formatDate(`${animal.created_at}`) : "Brak danych"}
                             </span></li>
                         </ul>
@@ -150,11 +147,11 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
                                         <Avatar  
                                             className={style.avatarImage}
                                             profile={animal.owner_info}
-                                            src={animal.owner_info.image ? animal.owner_info.image : undefined} 
+                                            src={animal.owner_info ? animal.owner_info.image : undefined} 
                                         />
                                     </div>
 
-                                    <p>{animal.owner_info.full_name}</p>
+                                    <p>{animal.owner_info && animal.owner_info.full_name}</p>
                                 </div>
 
                                 <div className={style.contactInfo}>
@@ -170,7 +167,7 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
 
                                     <div className={style.subscribtion}>
                                         <span>{followers ?? 0} <Icon name='people' /></span>
-                                        {myId !== animal.owner_info.id && (
+                                        {myId !== animal?.owner_info?.id && (
                                             <FollowingButton 
                                                 target_type="animals.animal" 
                                                 fullWidth 
@@ -232,22 +229,24 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
         </div>
         {animal.organization && (
             <div className={style.bottomContainer}>
-                <Card>
-                    <div className={style.organizationOpinionText}>
-                        <h3>Opinie o fundacji</h3>
-                        <p>średnia ocen: {animal.organization.rating} na 5</p>
-                    </div>
+                {comments.length !== 0 && (
+                    <Card>
+                        <div className={style.organizationOpinionText}>
+                            <h3>Opinie o fundacji</h3>
+                            <p>średnia ocen: {animal.organization.rating} na 5</p>
+                        </div>
 
-                    <List
-                        className={style.comments}
-                        // isLoading={isLoading}
-                        emptyText="Brak komentarzy"
-                    >
-                        {comments.map((comment: any) => (
-                            <Comment key={comment.id} comment={comment} noEditAllowed /> 
-                        ))}
-                    </List>
-                </Card>
+                        <List
+                            className={style.comments}
+                            // isLoading={isLoading}
+                            emptyText="Brak komentarzy"
+                        >
+                            {comments.map((comment: any) => (
+                                <Comment key={comment.id} comment={comment} noEditAllowed /> 
+                            ))}
+                        </List>
+                    </Card>
+                )}
 
                 <div className={style.related}>
                     <div className={style.title}>

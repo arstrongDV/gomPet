@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import classNames from 'classnames';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 
+import { OrganizationsApi } from 'src/api';
 import { Card } from 'src/components';
+import SettingsButton from 'src/components/layout/Settings';
+import { Routes } from 'src/constants/routes';
 import { ILitter } from 'src/constants/types';
 
 import style from './LitterCard.module.scss';
-import SettingsButton from 'src/components/layout/Settings';
-import { useSession } from 'next-auth/react';
-import { OrganizationsApi } from 'src/api';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { Routes } from 'src/constants/routes';
 
 type LitterCardProps = {
   litter: ILitter;
