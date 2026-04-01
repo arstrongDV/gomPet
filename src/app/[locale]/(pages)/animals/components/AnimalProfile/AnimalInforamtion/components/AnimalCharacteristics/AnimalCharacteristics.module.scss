@@ -33,10 +33,10 @@
 
 //Characteristics Block
 .characteristicsBlock {
-  @include info-blocks();
   position: relative;
   color: #000000;
   padding: 12px;
+  @include info-blocks();
 
   @media (max-width: 550px) {
     font-size: $font-size-xxs;

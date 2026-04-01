@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.vscode
+.idea
+coverage
+dist
+build
+*.log
+.env
+.env.*
+BACKUP
+backup
+tmp
+temp
+.DS_Store

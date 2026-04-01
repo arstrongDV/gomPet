@@ -16,9 +16,14 @@ type AnimalProfileProps = {
 
 const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
 
-  const slides = (animal.gallery || []).map((item: any) => ({
-    src: item.image
-  }));
+  const gallerySlides = (animal.gallery || [])
+    .map((item: any) => (typeof item === 'string' ? item : item?.image))
+    .filter(Boolean)
+    .map((src: string) => ({ src }));
+
+  const slides = gallerySlides.length
+    ? gallerySlides
+    : (animal.image ? [{ src: animal.image }] : []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);

@@ -9,6 +9,8 @@ import { Link } from 'src/navigation';
 
 import style from './AuthLayout.module.scss';
 
+export const dynamic = 'force-dynamic';
+
 const PagesLayout = ({
   children
 }: Readonly<{

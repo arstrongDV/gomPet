@@ -8,6 +8,7 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useEffect, ReactNode } from "react";
+import type { JSX } from "react";
 
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
@@ -28,17 +29,107 @@ interface Props {
   size?: "small" | "medium" | "large"; // new prop
 }
 
+type LexicalEditorStateShape = {
+  root: {
+    children: any[];
+    direction: null | string;
+    format: string;
+    indent: number;
+    type: "root";
+    version: number;
+  };
+};
+
+const createPlainTextEditorState = (text: string): LexicalEditorStateShape => ({
+  root: {
+    children: [
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: "normal",
+            style: "",
+            text,
+            type: "text",
+            version: 1,
+          },
+        ],
+        direction: null,
+        format: "",
+        indent: 0,
+        type: "paragraph",
+        version: 1,
+      },
+    ],
+    direction: null,
+    format: "",
+    indent: 0,
+    type: "root",
+    version: 1,
+  },
+});
+
+const toEditorStateString = (content: unknown): string | null => {
+  if (content == null) {
+    return null;
+  }
+
+  if (typeof content === "string") {
+    const trimmed = content.trim();
+    if (!trimmed) {
+      return null;
+    }
+
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed?.root && Array.isArray(parsed.root.children)) {
+        return trimmed;
+      }
+      if (Array.isArray(parsed?.children)) {
+        return JSON.stringify({
+          root: { ...createPlainTextEditorState("").root, children: parsed.children },
+        });
+      }
+    } catch {
+      return JSON.stringify(createPlainTextEditorState(trimmed));
+    }
+
+    return JSON.stringify(createPlainTextEditorState(trimmed));
+  }
+
+  if (typeof content === "object") {
+    const value = content as Record<string, any>;
+
+    if (value.root && Array.isArray(value.root.children)) {
+      return JSON.stringify(value);
+    }
+
+    if (Array.isArray(value.children)) {
+      return JSON.stringify({
+        root: { ...createPlainTextEditorState("").root, children: value.children },
+      });
+    }
+  }
+
+  return null;
+};
+
 // Plugin to load Lexical editor state
 export function LoadContentPlugin({ content }: { content: any }) {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
-    if (!content) return;
+    const editorState = toEditorStateString(content);
+    if (!editorState) return;
+
     editor.update(() => {
-      const parsedState = typeof content === "string" 
-        ? editor.parseEditorState(content) 
-        : editor.parseEditorState(JSON.stringify(content));
-      editor.setEditorState(parsedState);
+      try {
+        const parsedState = editor.parseEditorState(editorState);
+        editor.setEditorState(parsedState);
+      } catch (error) {
+        console.error("Failed to parse rich text content:", error);
+      }
     });
   }, [content, editor]);
 
@@ -136,8 +227,6 @@ const renderNode = (node: any, index: number): ReactNode => {
 // Main viewer component
 export default function RichTextViewer({ content, size = "medium" }: Props) {
   if (!content) return null;
-
-  const nodes = typeof content === "string" ? JSON.parse(content).root.children : content.root.children;
 
   const sizeClass = 
     size === "small" ? style.smallText 

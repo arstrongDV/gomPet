@@ -39,8 +39,8 @@
 .loader {
   height: 2rem;
   position: absolute;
-  @include loading-spinner-animation;
   color: $color-white;
+  @include loading-spinner-animation;
 }
 
 .gray {

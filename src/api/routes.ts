@@ -2,7 +2,7 @@ export class AuthRoutes {
   static REGISTER = '/users/users/'; 
   static LOGIN = '/users/auth/token/'; 
   static GET_LOGIN_USER = (id: number) => `/users/users/${id}/`; 
-  static REFRESH_TOKEN = '/accounts/refresh-token/';
+  static REFRESH_TOKEN = '/users/auth/token/refresh/';
   static REQUEST_PASSWORD_RESET = '/users/auth/password-reset/';
   static RESET_PASSWORD = '/users/auth/password-reset/confirm/';
   static VERIFY_EMAIL = '/accounts/verify-email/';

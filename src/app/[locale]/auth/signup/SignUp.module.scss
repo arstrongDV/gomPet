@@ -14,9 +14,8 @@
   @include element-flex(column, flex-start, center);
 
   .title {
-    @include title2;
-
     color: $color-foreground;
+    @include title2;
   }
 
   .subtitle {

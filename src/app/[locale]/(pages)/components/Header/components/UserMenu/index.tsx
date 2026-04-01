@@ -13,7 +13,6 @@ import style from './UserMenu.module.scss';
 const UserMenu = () => {
   const t = useTranslations();
   const session = useSession();
-  console.log(session.data?.user)
 
   const menuItems: DropdownItemType[] = [
     {

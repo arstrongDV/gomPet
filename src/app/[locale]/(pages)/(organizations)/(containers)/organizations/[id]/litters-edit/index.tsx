@@ -27,12 +27,12 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
     const [formData, setFormData] = useState({
       id: '',
       title: '',
-      species: null,
-      breed: null,
+      species: null as any,
+      breed: null as any,
       description: '',
       birth_date: '',
       status: '',
-      owner: null,
+      owner: null as any,
       created_at: ''
     });
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +42,7 @@ const LittersEditForm = ({ onSuccess, onCancel, litter }: LittersEditFormProps) 
     setIsLoading(true);
     try {
       setFormData({
-        id: litter.id ?? '',
+        id: String(litter.id ?? ''),
         breed: litter.breed ?? null, // Nie buduj obiektu ręcznie, weź cały z API
         species: litter.species ?? null,
         title: litter.title ?? '',

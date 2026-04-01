@@ -30,10 +30,11 @@ import SelectMyOrganizations from '../../../new-animal/components/SelectOrganiza
 import style from './updateAnimal.module.scss'
 
 type Parent = {
-  id: number;
-  animal_id?: number;
+  id?: number;
+  animal_id: number;
   name: string;
   relation?: string;
+  gender?: string;
   photos?: string;
   isNew?: boolean;
 }
@@ -48,6 +49,48 @@ interface CharacteristicItem {
   title: string;
   bool: boolean;
 }
+
+type SelectLikeValue =
+  | string
+  | number
+  | null
+  | undefined
+  | {
+      id?: string | number;
+      value?: string | number;
+      label?: string;
+    };
+
+type GalleryLikeItem =
+  | string
+  | {
+      id?: string | number;
+      image?: string;
+    };
+
+type AnimalUpdateFormData = {
+  name: string;
+  species: string;
+  breed: string;
+  gender: string;
+  birth_date: string;
+  image: string;
+  size: string;
+  descriptions: string;
+  status: string;
+  parents: Parent[];
+  price: string;
+  organization: null;
+  owner: null;
+};
+
+const getSelectId = (value: SelectLikeValue): string => {
+  if (value && typeof value === 'object') {
+    const raw = value.id ?? value.value;
+    return raw === undefined || raw === null ? '' : String(raw);
+  }
+  return value === undefined || value === null ? '' : String(value);
+};
 
 // const speciesOptions = [
 //   { value: 'dog', label: 'Dog' },
@@ -103,16 +146,10 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AnimalUpdateFormData>({
     name: '',
-    species: {
-      id: '',
-      label: ''
-    },
-    breed: {
-      id: '',
-      label: ''
-    },
+    species: '',
+    breed: '',
     gender: "MALE",
     birth_date: '',
     image: '',
@@ -121,7 +158,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
     status: 'AVAILABLE',
     // city: '',
     parents: [],
-    price: 0,
+    price: '',
     organization: null,
     owner: null
   });
@@ -148,10 +185,12 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
 
   useEffect(() => {
       if (animal) {
+        const normalizedPrice = Number(animal.price ?? 0);
+
         setFormData({
           name: animal.name ?? '',
-          species: animal.species ?? '',
-          breed: animal.breed ?? '',
+          species: getSelectId(animal.species as SelectLikeValue),
+          breed: getSelectId(animal.breed as SelectLikeValue),
           // breeds: {
           //   value: animal.breed.value ?? '',
           //   label: animal.breed.label ?? '',
@@ -165,27 +204,34 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
           size: animal.size ?? AnimalSize.SMALL,
           status: animal.status ?? 'AVAILABLE',
           // city: animal.city ?? '',
-          price: animal.price !== '0.00' ? animal.price : '',
+          price: normalizedPrice > 0 ? String(normalizedPrice) : '',
           descriptions: animal.descriptions ?? '',
+          image: '',
           // organization: animal?.organization && animal?.organization.id,
           // owner: animal.owner,
-          parents: animal.parents ?? [],
+          parents: [],
+          organization: null,
+          owner: null,
         });
 
         setInitialOrganization(animal.organization ?? null);
 
         setDescriptions(animal.descriptions ?? '');
 
-        if (animal.price !== '0.00') {
+        if (normalizedPrice > 0) {
           setHasPrice(true);
-          setPrice(animal.price);
+          setPrice(String(normalizedPrice));
         } else {
           setHasPrice(false);
           setPrice(''); 
         }
 
         if (animal.owner) {
-          setOwner(animal.owner);
+          if (typeof animal.owner === 'number') {
+            setOwner(animal.owner);
+          } else if (typeof animal.owner === 'object' && 'id' in animal.owner) {
+            setOwner(Number(animal.owner.id));
+          }
         }
 
         if (animal.organization) {
@@ -206,12 +252,17 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
             imageFiles.push(mainImageFile);
           }
           if (animal.gallery?.length) {
-            const animalSlice = animal.gallery.slice(1)
+            const animalSlice = (animal.gallery as GalleryLikeItem[]).slice(1);
             for (const galleryItem of animalSlice) {
-              if (galleryItem.image) {
+              const galleryImage =
+                typeof galleryItem === 'string' ? galleryItem : galleryItem.image;
+              const galleryId =
+                typeof galleryItem === 'string' ? 'legacy' : String(galleryItem.id ?? 'legacy');
+
+              if (galleryImage) {
                 const galleryFile = await urlToFile(
-                  galleryItem.image,
-                  `gallery-${galleryItem.id}.jpg`
+                  galleryImage,
+                  `gallery-${galleryId}.jpg`
                 );
                 imageFiles.push(galleryFile);
               }
@@ -239,8 +290,11 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
 
       if (animal.parents) {
         // Mark existing parents as not new
-        const existingParents = animal.parents.map(parent => ({
+        const existingParents: Parent[] = (animal.parents as any[]).map(parent => ({
           ...parent,
+          id: parent.id ?? parent.animal_id,
+          animal_id: parent.animal_id ?? parent.id,
+          photos: parent.photos ?? parent.image,
           isNew: false
         }));
         setParents(existingParents);
@@ -263,10 +317,30 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   // };
 console.log(formData);
   const handleInputChange = (field: string, value: string | number | Gender) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    const normalizedValue = String(value);
+
+    setFormData((prev) => {
+      switch (field) {
+        case 'name':
+          return { ...prev, name: normalizedValue };
+        case 'species':
+          return { ...prev, species: normalizedValue };
+        case 'breed':
+          return { ...prev, breed: normalizedValue };
+        case 'gender':
+          return { ...prev, gender: normalizedValue };
+        case 'birth_date':
+          return { ...prev, birth_date: normalizedValue };
+        case 'size':
+          return { ...prev, size: normalizedValue };
+        case 'status':
+          return { ...prev, status: normalizedValue };
+        case 'image':
+          return { ...prev, image: normalizedValue };
+        default:
+          return prev;
+      }
+    });
   };
 
 
@@ -275,8 +349,8 @@ console.log(formData);
   
     const basicChanged =
       formData.name !== (animal.name ?? '') ||
-      formData.species !== (animal.species.label ?? '') ||
-      formData.breed !== (animal.breed.label ?? '') ||
+      formData.species !== getSelectId(animal.species as SelectLikeValue) ||
+      formData.breed !== getSelectId(animal.breed as SelectLikeValue) ||
       formData.gender !== (animal.gender ?? "MALE") ||
       formData.birth_date !== (animal.birth_date ?? '') ||
       formData.size !== animal.size ||
@@ -297,7 +371,7 @@ console.log(formData);
           .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
       ) !==
       JSON.stringify(
-        (animal.parents ?? [])
+        ((animal.parents ?? []) as unknown as Parent[])
           .map(p => ({
             id: p.animal_id ?? p.id,
             relation: p.relation
@@ -335,12 +409,15 @@ console.log(formData);
       
         if (key === 'species' || key === 'breed') {
           // Sprawdzamy, czy value jest obiektem, czy już gotowym ID (string/number)
-          const id = typeof value === 'object' 
-            ? (value.id || value.value) 
-            : value;
-          
-          submitData.append(key, String(id));
-        } else if (key !== 'descriptions' && key !== 'price') {
+          submitData.append(key, String(value));
+          return;
+        }
+
+        if (key === 'parents' || key === 'organization' || key === 'owner') {
+          return;
+        }
+
+        if (key !== 'descriptions' && key !== 'price') {
           submitData.append(key, value.toString());
         }
       });
@@ -391,7 +468,9 @@ console.log(formData);
       if (animals_res.status === 200) {
         try {
           for (const p of oldParents) {
-            await AnimalsApi.clearAnimalParents(p.id);
+            if (p.id) {
+              await AnimalsApi.clearAnimalParents(p.id);
+            }
           }
           if (parents.length > 0) {
             for (const parent of parents) {
@@ -497,8 +576,8 @@ console.log(formData);
                 //     : null
                 // }}
                 initialState={{
-                  speciesOpt: formData?.species && {value: formData?.species.id, label: formData?.species.label},
-                  breedOpt: formData?.breed && {value: formData?.breed.id, label: formData?.breed.label}
+                  speciesOpt: formData.species ? { value: formData.species, label: formData.species } : undefined,
+                  breedOpt: formData.breed ? { value: formData.breed, label: formData.breed } : undefined
                 }}
                 handleChange={handleInputChange} 
                 isAdding

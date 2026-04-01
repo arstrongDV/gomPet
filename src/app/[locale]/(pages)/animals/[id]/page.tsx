@@ -5,6 +5,9 @@ import style from './AnimalProfile.module.scss';
 import { AnimalsApi, PostsApi } from 'src/api';
 import TabView from '../components/AnimalProfile/TabView';
 
+export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
+
 const getAnimalData = async (id: number): Promise<IAnimal | undefined> => {
   try {
     const animalProfileRes = await AnimalsApi.getAnimalProfile(id);
@@ -45,7 +48,7 @@ const getAnimalFamilyTree = async (id: number): Promise<IAnimal | undefined> => 
 //   }
 // }
 
-const getCommentData = async (id: number): Promise<IComment | undefined> => {
+const getCommentData = async (id: number): Promise<IComment[]> => {
   try {
     // const animalCommentsRes = await AnimalsApi.getAnimalComments(id);
     const animalCommentsRes = await PostsApi.getComments(id, "users.organization", {
@@ -59,7 +62,8 @@ const getCommentData = async (id: number): Promise<IComment | undefined> => {
   }
 };
 
-export const generateMetadata = async ({ params: { id } }: { params: { id: string } }) => {
+export const generateMetadata = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
   const animalData = await getAnimalData(Number(id));
   
   return {
@@ -71,13 +75,14 @@ export const generateMetadata = async ({ params: { id } }: { params: { id: strin
   };
 };
 
-const AnimalDetailPage = async ({ params }: { params: { id: string } }) => {
-  const animal = await getAnimalData(Number(params.id));
-  const familyTree = await getAnimalFamilyTree(Number(params.id));
+const AnimalDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+  const animal = await getAnimalData(Number(id));
+  const familyTree = await getAnimalFamilyTree(Number(id));
   const comments = animal?.organization
   ? await getCommentData(animal.organization.id)
   : [];
-  const followers = await getAnimalsFollowers(Number(params.id));
+  const followers = await getAnimalsFollowers(Number(id));
   // const posts = await getAnimalPosts(Number(params.id))
 
   if (!animal) {
@@ -88,7 +93,7 @@ const AnimalDetailPage = async ({ params }: { params: { id: string } }) => {
     <div className={style.mainContainer}>
       <div className={style.innerContainer}>
         {/* <AnimalProfile animal={animal} comment={comment} posts={posts} familyTree={familyTree} />  */}
-        <TabView animal={animal} followers={followers} comments={comments} familyTree={familyTree} /> 
+        <TabView animal={animal} posts={[]} followers={followers} comments={comments} familyTree={familyTree} /> 
       </div>
     </div>
   );

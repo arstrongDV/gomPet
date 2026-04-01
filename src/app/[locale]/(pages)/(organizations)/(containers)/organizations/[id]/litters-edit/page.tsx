@@ -19,7 +19,7 @@ const LittersEditPage = () => {
                 const res = await OrganizationsApi.getLitter(Number(params.id));
                 console.log("API response:", res);
                 setLitter(res.data);
-            } catch(err) {
+            } catch(err: any) {
                 console.log("FULL ERROR:", err);
                 console.log("STATUS:", err?.response?.status);
                 console.log("DATA:", err?.response?.data);

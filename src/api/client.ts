@@ -19,14 +19,92 @@ export const injectToken = (_token?: string) => {
   token = _token;
 };
 
+const isServerSide = typeof window === 'undefined';
+const resolvedBaseURL = isServerSide
+  ? (process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL)
+  : process.env.NEXT_PUBLIC_API_URL;
+const publicApiOrigin = (() => {
+  const value = process.env.NEXT_PUBLIC_API_URL;
+  if (!value) return '';
+  try {
+    return new URL(value).origin;
+  } catch {
+    return '';
+  }
+})();
+
+const internalApiHosts = (() => {
+  const hosts = new Set<string>(['web', 'web:8000']);
+  const internalApiUrl = process.env.INTERNAL_API_URL;
+  if (!internalApiUrl) return hosts;
+
+  try {
+    const parsed = new URL(internalApiUrl);
+    hosts.add(parsed.host);
+    hosts.add(parsed.hostname);
+  } catch {
+    // no-op
+  }
+
+  return hosts;
+})();
+
+const normalizeInternalMediaUrls = (value: unknown): unknown => {
+  if (!isServerSide || !publicApiOrigin) return value;
+
+  if (typeof value === 'string') {
+    try {
+      const parsed = new URL(value);
+      const isInternalHost = internalApiHosts.has(parsed.host) || internalApiHosts.has(parsed.hostname);
+      const isAssetPath = parsed.pathname.startsWith('/media/') || parsed.pathname.startsWith('/static/');
+
+      if (isInternalHost && isAssetPath) {
+        return `${publicApiOrigin}${parsed.pathname}${parsed.search}${parsed.hash}`;
+      }
+    } catch {
+      return value;
+    }
+
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeInternalMediaUrls(item));
+  }
+
+  if (value && typeof value === 'object') {
+    const output: Record<string, unknown> = {};
+    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
+      output[key] = normalizeInternalMediaUrls(item);
+    }
+    return output;
+  }
+
+  return value;
+};
+
 const client = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,   //NEXT_PUBLIC_API_BASE_URL
+  baseURL: resolvedBaseURL,
+  adapter: isServerSide ? 'fetch' : undefined,
   headers: {
     'Content-Type': 'application/json',
     'Accept-Language': 'en'
   },
   __tokenRequired: true
 });
+
+const RETRIABLE_NETWORK_CODES = new Set([
+  'ECONNREFUSED',
+  'ECONNRESET',
+  'ETIMEDOUT',
+  'EHOSTUNREACH',
+  'ENETUNREACH'
+]);
+
+const RETRIABLE_METHODS = new Set(['get', 'head', 'options']);
+const MAX_NETWORK_RETRIES = 2;
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 client.interceptors.request.use(async (config) => {
   const access = store?.getState()?.auth?.access_token || token;
@@ -38,13 +116,12 @@ client.interceptors.request.use(async (config) => {
 
 client.interceptors.response.use(
   (response) => {
+    if (response?.data) {
+      response.data = normalizeInternalMediaUrls(response.data);
+    }
     return response;
   },
   (error) => {
-    if (isNetworkError(error)) {
-      // throttledNotifyNetworkError();
-      console.log('network error');
-    }
     return Promise.reject(error);
   }
 );
@@ -54,10 +131,34 @@ client.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const originalRequest = error.config;
+    const originalRequest = (error.config ?? {}) as AxiosRequestConfig & {
+      _retry?: boolean;
+      __networkRetryCount?: number;
+    };
     
     if (!error.response) {
-      console.error('Network error:', error);
+      const method = String(originalRequest.method || 'get').toLowerCase();
+      const retryCount = Number(originalRequest.__networkRetryCount || 0);
+      const errorCode = String(error?.code || '');
+
+      if (
+        isNetworkError(error) &&
+        RETRIABLE_METHODS.has(method) &&
+        RETRIABLE_NETWORK_CODES.has(errorCode) &&
+        retryCount < MAX_NETWORK_RETRIES
+      ) {
+        originalRequest.__networkRetryCount = retryCount + 1;
+        await sleep((retryCount + 1) * 150);
+        return client(originalRequest);
+      }
+
+      console.error('Network error:', {
+        code: errorCode || 'UNKNOWN',
+        method: method.toUpperCase(),
+        url: originalRequest.url,
+        baseURL: originalRequest.baseURL,
+        retryCount
+      });
       return Promise.reject(error);
     }
 

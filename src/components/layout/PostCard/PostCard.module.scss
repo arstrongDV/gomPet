@@ -50,6 +50,8 @@
     .name {
       @include body1;
       color: $color-foreground;
+      display: flex;
+      flex-direction: column;
 
       @media (max-width: 480px) {
         font-size: $font-size-s;

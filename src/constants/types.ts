@@ -74,6 +74,7 @@ export interface IUser {
   phone: string | null;
   role: Role;
   created_at: string;
+  updated_at?: string;
 
   location: Location;
 }
@@ -177,6 +178,8 @@ export interface IPost {
   text: string;
   image: string | null;
   author: IUser | IOrganization;
+  animal?: number;
+  animal_name?: string;
   created_at: string | undefined;
   updated_at?: string | undefined;
   full_name?: string;
@@ -201,6 +204,8 @@ export interface IArticle {
   content: string;
   image: string | null;
   created_at: string;
+  categories: number[];
+  author?: IUser | IOrganization;
 }
 
 export interface withPagination<T = any> {

@@ -82,8 +82,8 @@
   }
   
 .aboutAnimalBlock {
-  @include info-blocks();
   color: #9f9b9b;
+  @include info-blocks();
 
   ul {
     display: flex;
@@ -116,8 +116,8 @@
 
   //Contacts Block
   .contactsBlock {
-    @include info-blocks();
     color: #000;
+    @include info-blocks();
     // @media (max-width: 550px) {
     //     font-size: $font-size-xxs;
     // }
@@ -219,9 +219,9 @@
 
 //Characteristics Block
 .characteristicsBlock {
-  @include info-blocks();
   position: relative;
   color: #000000;
+  @include info-blocks();
 
 
   @media (max-width: 550px) {

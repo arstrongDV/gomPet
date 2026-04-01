@@ -94,7 +94,7 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete, onReactionDe
 
         if (res?.status === 200 || res?.status === 204) {
           setReactionId(0);
-          onReactionDelete(animal.id);
+          onReactionDelete?.(animal.id);
         }
 
         console.log("Delete reaction res:", res);

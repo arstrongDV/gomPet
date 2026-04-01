@@ -1,6 +1,6 @@
-@import 'vars';
-@import 'responsive';
-@import 'colors';
+@import 'styles/vars';
+@import 'styles/responsive';
+@import 'styles/colors';
 
 @mixin line-height($font-size) {
   line-height: calc($font-size * 1.5);
@@ -71,11 +71,11 @@
 }
 
 @mixin disabled-ui {
+  @include disabled-styling;
+
   > * {
     @include disabled-styling;
   }
-
-  @include disabled-styling;
 }
 
 @mixin keyframe-fadeIn {
@@ -89,6 +89,8 @@
 }
 
 @mixin loading-spinner-animation {
+  animation: loading-spinner 1s linear infinite;
+
   @keyframes loading-spinner {
     from {
       transform: rotate(0deg);
@@ -97,8 +99,6 @@
       transform: rotate(360deg);
     }
   }
-
-  animation: loading-spinner 1s linear infinite;
 }
 
 @mixin appearance($value) {

@@ -2,16 +2,15 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Provider } from 'react-redux';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 import { injectStore } from 'src/api/client';
-import { logout } from 'src/app/[locale]/auth/logout/actions';
 import { clearAuth, setAuth } from 'src/app/[locale]/auth/slice';
 import { AppStore, makeStore } from 'src/lib/store';
 
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
   const session = useSession();
-  const storeRef = useRef<AppStore>();
+  const storeRef = useRef<AppStore | null>(null);
 
   // Inicjalizacja store tylko raz
   if (!storeRef.current) {
@@ -99,7 +98,7 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
       if (storeToken && storeToken !== sessionToken) {
         session.update({ access_token: storeToken }).catch(() => {
           store.dispatch(clearAuth());
-          logout();
+          void signOut({ callbackUrl: '/' });
         });
       }
     });
@@ -107,5 +106,5 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
     return () => unsubscribe();
   }, [session]);
 
-  return <Provider store={storeRef.current}>{children}</Provider>;
+  return <Provider store={storeRef.current!}>{children}</Provider>;
 }

@@ -1,5 +1,5 @@
 import React, { cache } from 'react';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 
 import { injectToken } from 'src/api/client';
 import { auth } from 'src/auth';
@@ -21,7 +21,8 @@ const getData = cache(async (slug: string) => {
   // return articlesMock[0];
 });
 
-export const generateMetadata = async ({ params: { slug } }: { params: { slug: string } }) => {
+export const generateMetadata = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
   const data = await getData(slug);
   console.log(data);
   if (!data) {
@@ -41,9 +42,10 @@ export const generateMetadata = async ({ params: { slug } }: { params: { slug: s
 };
 
 const BlogArticlePage = async ({
-  params: { locale, slug }
-}: Readonly<{ params: { locale: Locale; slug: string } }>) => {
-  unstable_setRequestLocale(locale);
+  params
+}: Readonly<{ params: Promise<{ locale: string; slug: string }> }>) => {
+  const { locale, slug } = await params;
+  setRequestLocale(locale as Locale);
   const session = await auth();
   const data = await getData(slug);
 

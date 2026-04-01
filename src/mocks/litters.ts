@@ -1,6 +1,6 @@
-import { ILitter, LitterStatus } from 'src/constants/types';
+import { LitterStatus } from 'src/constants/types';
 
-export const littersMock: ILitter[] = [
+export const littersMock: any[] = [
   {
     id: 1,
     species: 'dog',

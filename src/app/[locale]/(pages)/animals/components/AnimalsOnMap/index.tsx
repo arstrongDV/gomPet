@@ -4,12 +4,10 @@ import React, { Suspense } from 'react';
 import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps';
 
 import { Avatar, Loader } from 'src/components';
-import { IAnimal, IOrganization } from 'src/constants/types';
+import { IAnimal } from 'src/constants/types';
 
 import classNames from 'classnames';
 import style from './OrganizationOnMap.module.scss';
-import { Pin } from '@vis.gl/react-google-maps';
-import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Routes } from 'src/constants/routes';
@@ -19,21 +17,37 @@ type OrganizationOnMapProps = {
   animals?: IAnimal[];
 };
 
-const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
-  if (!animals.length || !animals[0].location) return null
+type AnimalWithLocation = IAnimal & {
+  location: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
+};
 
+const hasValidLocation = (animal: IAnimal): animal is AnimalWithLocation =>
+  Boolean(
+    animal.location &&
+      Array.isArray(animal.location.coordinates) &&
+      animal.location.coordinates.length === 2
+  );
+
+const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
   const router = useRouter();
   const { push } = router;
   const session = useSession();
   const user = session.data?.user;
-  console.log("user::", user);
+  const animalsWithLocation = animals.filter(hasValidLocation);
 
-    const center = user?.location && animals.length >= 2 ? {
+  if (!animalsWithLocation.length) {
+    return null;
+  }
+
+    const center = user?.location && animalsWithLocation.length >= 2 ? {
       lat: +user?.location.coordinates[1],
       lng: +user?.location.coordinates[0],
     } : {
-        lat: +animals[0].location.coordinates[1],
-        lng: +animals[0].location.coordinates[0],
+        lat: +animalsWithLocation[0].location.coordinates[1],
+        lng: +animalsWithLocation[0].location.coordinates[0],
     }
 
   return (
@@ -91,8 +105,7 @@ const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
       </AdvancedMarker>
           )}
 
-          {animals.map((animal) => (
-            animal.location && (
+          {animalsWithLocation.map((animal) => (
               <AdvancedMarker
                 key={animal.id}
                 position={{
@@ -113,13 +126,16 @@ const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
                   overflow: 'hidden',
                   border: '2px solid green',
                 }}>
-                <img
-                    src={animal.image || ''}
+                {animal.image ? (
+                  <img
+                    src={animal.image}
+                    alt={animal.name || 'animal'}
                     style={{
                       width: '60px',
                       height: '60px',
                     }}
-                />
+                  />
+                ) : null}
               </div>
               <div style={{
                 position: 'absolute',
@@ -138,7 +154,6 @@ const AnimalsOnMap = ({ animals=[], className }: OrganizationOnMapProps) => {
                 borderColor="#fff"
               /> */}
               </AdvancedMarker>
-            )
           ))}
         </Map>
       </APIProvider>

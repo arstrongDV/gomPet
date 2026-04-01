@@ -1,6 +1,6 @@
-import { IOrganization, OrganizationType } from 'src/constants/types';
+import { OrganizationType } from 'src/constants/types';
 
-export const organizationsMock: IOrganization[] = [
+export const organizationsMock: any[] = [
   {
     id: 1,
     type: OrganizationType.FUND,

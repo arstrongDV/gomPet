@@ -15,6 +15,7 @@ import RichTextViewer from "src/components/layout/Forms/RichTextViewer";
 
 const KnowledgePage = ({ data }: { data: IArticle }) => {
     console.log('data:', data);
+    const authorName = data.author?.full_name ?? 'Nieznany autor';
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -74,7 +75,7 @@ const KnowledgePage = ({ data }: { data: IArticle }) => {
           <h1>{data.title}</h1>
 
           <div className={style.autorInfo}>
-            <p>{data.author.full_name}</p>
+            <p>{authorName}</p>
             <Avatar
               className={style.image}
               profile={data.author}

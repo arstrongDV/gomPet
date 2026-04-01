@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
@@ -52,7 +52,13 @@ const TabView = ({ animal, posts, comments, familyTree, followers}: TabViewProps
       </SectionHeader>
 
       {tab.id === 'main' && <AnimalInformation animal={animal} followers={followers} comments={comments} familyTree={familyTree}  />}
-      {tab.id === 'activity' && <AnimalActivity postsData={posts} animalId={animal.id} animalOwnerId={animal.owner} />}
+      {tab.id === 'activity' && (
+        <AnimalActivity
+          postsData={posts}
+          animalId={animal.id}
+          animalOwnerId={typeof animal.owner === 'number' ? animal.owner : animal.owner?.id}
+        />
+      )}
     </>
   );
 };

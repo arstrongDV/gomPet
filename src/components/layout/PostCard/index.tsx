@@ -38,6 +38,9 @@ const PostCard = ({
     deletePosts,
     hideFollowButton
 }: PostCardProps) => {
+  const animalId = post.animal;
+  const followTargetId = post.organization_info ? post.organization_info.id : animalId;
+
   const { 
     id, 
     text, 
@@ -144,25 +147,31 @@ const PostCard = ({
           <div 
             className={style.avatarClick}
             onClick={() => {
-              post.organization_info ? 
-              push(Routes.ORGANIZATION_PROFILE(post.organization_info.id)) 
-                : 
-              push(Routes.ANIMAL_PROFILE(post.animal))}
-            }
+              if (post.organization_info) {
+                push(Routes.ORGANIZATION_PROFILE(post.organization_info.id));
+                return;
+              }
+
+              if (animalId != null) {
+                push(Routes.ANIMAL_PROFILE(animalId));
+              }
+            }}
           >
             <Avatar 
               className={style.avatar} 
               profile={author}
-              src={post?.organization_info ? post?.organization_info.image : undefined}  
+              src={post.organization_info?.image ?? undefined}  
             />
           </div>
           {post.organization_info ? (
-            <h3 className={style.name}>{post.organization_info.name} 
-              <p className={style.subAuthor}>{author.full_name ?? 'Unknown'}</p>
+            <h3 className={style.name}>
+              {post.organization_info.name} 
+              <span className={style.subAuthor}>{author.full_name ?? 'Unknown'}</span>
             </h3>
           ) : (
-            <h3 className={style.name}>{post.animal_name} 
-              <p className={style.subAuthor}>{author.full_name ?? 'Unknown'}</p>
+            <h3 className={style.name}>
+              {post.animal_name ?? author.full_name ?? 'Unknown'} 
+              <span className={style.subAuthor}>{author.full_name ?? 'Unknown'}</span>
             </h3>
             // <h3 className={style.name}>{author.full_name}</h3>
           )}
@@ -175,9 +184,9 @@ const PostCard = ({
               authId={author.id}
             />
             ) : (
-              !hideFollowButton && (
+              !hideFollowButton && followTargetId != null && (
                 <FollowingButton 
-                  authorId={post.organization_info ? post.organization_info.id : post.animal} 
+                  authorId={followTargetId} 
                   followedAuthors={followedAuthors}
                   setFollowedAuthors={setFollowedAuthors}
                   target_type={post.organization_info ? "users.organization" : "animals.animal"}
@@ -187,7 +196,7 @@ const PostCard = ({
         </div>
       </header>
 
-      <p className={style.text}>
+      <div className={style.text}>
 
         {slug && title && (
           <SectionHeader
@@ -208,7 +217,7 @@ const PostCard = ({
             <img className={style.image} src={image} alt={text} width={300} height={400} />
           )}
         </div>
-      </p>
+      </div>
       <footer className={style.footer}>
         {created_at && updated_at ? (
           getDaysAgo(created_at, true).toLowerCase() == getDaysAgo(updated_at, true).toLowerCase() ? (

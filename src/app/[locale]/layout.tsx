@@ -4,7 +4,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import { Raleway } from 'next/font/google';
 import { SessionProvider } from 'next-auth/react';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { auth } from 'src/auth';
 import { toastsConfig } from 'src/config/toasts';
@@ -21,32 +21,38 @@ const raleway = Raleway({
   subsets: ['latin', 'latin-ext']
 });
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
-  const t = await getTranslations({ locale });
+export const dynamicParams = true;
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const typedLocale = locale as Locale;
+  const t = await getTranslations({ locale: typedLocale });
 
   return {
-    title: 'Next App Template',
-    description: 'Next App Template description'
+    title: 'Gompet',
+    description: 'Gompet'
   };
-}
-
-export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
 }
 
 const RootLayout = async ({
   children,
-  params: { locale, ssrIsMobile = true }
+  params
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: Locale; ssrIsMobile: boolean };
+  params: Promise<{ locale: string }>;
 }>) => {
-  unstable_setRequestLocale(locale);
+  const { locale } = await params;
+  const typedLocale = locale as Locale;
+  setRequestLocale(typedLocale);
   const messages = await getMessages();
   const session = await auth();
 
   return (
-    <html lang={locale}>
+    <html lang={typedLocale}>
       <body className={raleway.className}>
         <NextIntlClientProvider messages={messages}>
           <SessionProvider session={session}>

@@ -12,7 +12,7 @@ type ImageShowProps = {
 };
 
 const ImageShow = ({ images, isOpen, onClose, currentPhoto }: ImageShowProps) => {
-  const imageUrls = images.map((item) => item.image);
+  const imageUrls = images;
   const [currentIndex, setCurrentIndex] = useState<number>(currentPhoto || 0);
 
   // Sync currentIndex when modal opens or currentPhoto changes

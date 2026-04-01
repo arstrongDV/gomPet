@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import { AccountsApi } from 'src/api';
 import { Avatar, AvatarCropper, Button, Card, Checkbox, Icon, ImageInput, Input, List, Loader, SectionHeader } from 'src/components';
-import { IAnimal, IOrganization, IUser } from 'src/constants/types';
+import { IAnimal, IOrganization, IUser, Location } from 'src/constants/types';
 import style from './profile.module.scss'
 import toast from 'react-hot-toast';
 import { AxiosError } from 'axios';
@@ -85,7 +85,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
         location: null as {
           type: 'Point';
           coordinates: [number, number];
-        } | null
+        } | Location | null
       });
       
     const [initialUserForm, setInitialUserForm] = useState<typeof userForm>(userForm);
@@ -187,7 +187,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
       };
 
     const isOrganizationOwner = userOrganizations.some(
-        (membership) => membership.organization.user === userData.id
+        (membership) => membership.user === userData.id
     );
 
     const handleDelete = async() => {
@@ -198,7 +198,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
             return;
         }
         try{
-            const res = await AccountsApi.deleteUserData(Number(userId));
+            const res = await AccountsApi.deleteUserData();
             onDelete();
             console.log(res)
 
@@ -228,7 +228,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                                       ? URL.createObjectURL(userForm.image)
                                       : undefined
                                   }
-                                profile={userForm && userForm} 
+                                profile={userData}
                             />
                             <p 
                                 className={style.imageChanger} 
@@ -248,7 +248,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
 
                     <div className={style.userData}>
                         <p>Stworzyl konto:   <span>{formatDate(userData.created_at)}</span></p>
-                        <p>Aktualizowano konto:  <span>{formatDate(userData.updated_at)}</span></p>
+                        <p>Aktualizowano konto:  <span>{formatDate(userData.updated_at ?? userData.created_at)}</span></p>
                     </div>
                 </div>
 

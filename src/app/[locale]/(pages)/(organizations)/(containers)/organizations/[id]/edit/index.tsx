@@ -92,7 +92,8 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
             city: '',
             street: '',
             house_number: '',
-            zip_code: ''
+            zip_code: '',
+            coordinates: ['', ''] as [string, string]
         }
     });
 
@@ -116,7 +117,11 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                           city: organization.address?.city ?? '',
                           street: organization.address?.street ?? '',
                           house_number: organization.address?.house_number ?? '',
-                          zip_code: organization.address?.zip_code ?? ''
+                          zip_code: organization.address?.zip_code ?? '',
+                          coordinates: [
+                            String(organization.address?.lng ?? ''),
+                            String(organization.address?.lat ?? '')
+                          ] as [string, string]
                       }
                   });
 

@@ -20,8 +20,8 @@
 }
 
 .title {
-  @include title2;
   color: $color-primary;
+  @include title2;
 }
 
 .subtitle {

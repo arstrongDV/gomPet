@@ -18,20 +18,29 @@ type MemberModalProps = {
     setShowModal?: (e: boolean) => void;
 }
 
+type OrganizationMember = {
+    id: number;
+    role: string;
+    user: IUser;
+    organization: {
+        user: number;
+    };
+};
+
 const MemberModal = ({ organizationId, setShowModal }: MemberModalProps) => {
     const [searchName, setSearchName] = useState<string>("");
-    const [allMembers, setAllMembers] = useState<IUser[]>([]);
-    const [members, setMembers] = useState<IUser[]>([]);
+    const [allMembers, setAllMembers] = useState<OrganizationMember[]>([]);
+    const [members, setMembers] = useState<OrganizationMember[]>([]);
 
     const [userId, setUserId] = useState<number>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    if(!organizationId) return;
+    if(!organizationId) return null;
 
     const getOrganizationMembers = async () => {
         setIsLoading(true);
         try {
-          const res = await OrganizationsApi.getOrganizationMembers(organizationId);
+          const res = await OrganizationsApi.getOrganizationMembers(organizationId, { page: 1 });
           setAllMembers(res.data.results);
           setMembers(res.data.results);
         } catch (err) {
@@ -67,7 +76,7 @@ const MemberModal = ({ organizationId, setShowModal }: MemberModalProps) => {
             await OrganizationsApi.changeOrganizationOwner(organizationId, {
                 user: userId
             })
-            setShowModal(false);
+            setShowModal?.(false);
             toast.success("Organizacja zostala przekazana")
         }catch(err){
             console.log(err)
@@ -90,7 +99,7 @@ const MemberModal = ({ organizationId, setShowModal }: MemberModalProps) => {
             isLoading={isLoading}
             className={style.list}
         >
-            {members.map((member: IUser) => (
+            {members.map((member: OrganizationMember) => (
                 member.user.id !== member.organization.user && (
                     <div
                         key={member.user.id}

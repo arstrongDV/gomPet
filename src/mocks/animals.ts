@@ -1,9 +1,9 @@
-import { AnimalSize, AnimalStatus, Gender, IAnimal } from 'src/constants/types';
+import { AnimalSize, AnimalStatus, Gender } from 'src/constants/types';
 
 import { organizationsMock } from './organizations';
 import { commentsMock } from './comments';
 
-export const animalsMock: IAnimal[] = [
+export const animalsMock: any[] = [
   {
     id: 1,
     name: 'Lobo',
@@ -67,7 +67,7 @@ export const animalsMock: IAnimal[] = [
             id: 2,
             name: 'Lobo 2.0',
             image: '',
-            parent: [
+            children: [
               {
                 id: 4,
                 name: 'Lobo 2.1',
@@ -86,7 +86,7 @@ export const animalsMock: IAnimal[] = [
             id: 3,
             name: 'Lobo 2.1',
             image: '',
-            parent: [
+            children: [
               {
                 id: 6,
                 name: 'Lobo 2.1',

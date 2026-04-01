@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Select } from "src/components";
-import { AnimalsApi, OrganizationsApi } from "src/api";
-import { IOrganization } from "src/constants/types";
+import { AnimalsApi } from "src/api";
 import style from './SelectOrganization.module.scss';
 import { OptionType } from "src/components/layout/Forms/Select";
 import { useTranslations } from "next-intl";
@@ -15,15 +14,23 @@ type SelectOrganizationProps = {
   initialOrganization?: OptionType;
 };
 
-type ExtendedOptionType = OptionType & {
+type ExtendedOptionType = {
+  label: string;
+  value: string | number;
   type: "ORGANIZATION" | "OWNER";
+};
+
+type UserOrganizationEntry = {
+  label: string;
+  organization_id?: number | null;
+  owner_id?: number | null;
 };
 
 const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization }: SelectOrganizationProps) => {
   const session = useSession();
   const t = useTranslations();
-  const [organizations, setOrganizations] = useState<IOrganization[]>([]);
-  const [selectedOrg, setSelectedOrg] = useState<OptionType | null>(null);
+  const [organizations, setOrganizations] = useState<UserOrganizationEntry[]>([]);
+  const [selectedOrg, setSelectedOrg] = useState<ExtendedOptionType | null>(null);
   const [hasSetInitial, setHasSetInitial] = useState(false); // <-- track if we applied initialOrganization
 
   // Fetch user's organizations
@@ -33,7 +40,7 @@ const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization 
     const fetchOrgs = async () => {
       try {
         const res = await AnimalsApi.getUsersOrganization(session.data.access_token);
-        setOrganizations(res.data.results || []);
+        setOrganizations((res.data?.results || []) as UserOrganizationEntry[]);
 
         console.log("ress: ", res.data.results);
         console.log("initialOrganization: ", initialOrganization);
@@ -77,13 +84,18 @@ const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization 
   }, [selectedOrg]);
 
   // Map organizations to Select options
-  const options: OptionType[] = organizations.map(org => ({
-      label: org.label === "noOrganization"
-      ? t(`pages.newAnimal.${org.label}`)
-      : org.label,
-    value: org.organization_id ?? org.owner_id,
-    type: org.organization_id ? "ORGANIZATION" : "OWNER"
-  }));
+  const options = organizations.reduce<ExtendedOptionType[]>((acc, org) => {
+    const value = org.organization_id ?? org.owner_id;
+    if (value == null) return acc;
+
+    acc.push({
+      label: org.label === "noOrganization" ? t(`pages.newAnimal.${org.label}`) : org.label,
+      value,
+      type: org.organization_id != null ? "ORGANIZATION" : "OWNER"
+    });
+
+    return acc;
+  }, []);
 
   useEffect(() => {
     if (!initialOrganization || hasSetInitial || options.length === 0) return;
@@ -106,8 +118,8 @@ const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization 
       wrapperStyle={style.select}
       label="Wybierz swoją organizację"
       options={options}
-      value={selectedOrg ? selectedOrg : options[0]}
-      onChange={(option: OptionType) => setSelectedOrg(option)}
+      value={selectedOrg ? selectedOrg : options[0] ?? null}
+      onChange={(option: OptionType) => setSelectedOrg(option as ExtendedOptionType | null)}
       // isClearable
       isSearchable
     />

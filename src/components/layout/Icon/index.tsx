@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import type { ComponentType, SVGProps } from 'react';
 
 import { IconNames, Icons } from 'src/assets/icons';
 import { Link } from 'src/navigation';
@@ -50,9 +51,12 @@ const Icon = (props: IconProps) => {
     ...svgProps
   };
 
-  const IconComponent = Icons[name];
+  const rawIcon = Icons[name] as unknown;
+  const resolvedIcon =
+    rawIcon && typeof rawIcon === 'object' && 'default' in rawIcon ? (rawIcon as { default?: unknown }).default : rawIcon;
 
-  if (!IconComponent) return null;
+  if (typeof resolvedIcon !== 'function') return null;
+  const IconComponent = resolvedIcon as ComponentType<SVGProps<SVGSVGElement>>;
 
   if (hrefOutside) {
     return (

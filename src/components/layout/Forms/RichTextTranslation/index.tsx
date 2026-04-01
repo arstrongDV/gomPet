@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback, useMemo } from "react";
+import type { JSX } from "react";
 import style from './AnimalDescription.module.scss';
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";

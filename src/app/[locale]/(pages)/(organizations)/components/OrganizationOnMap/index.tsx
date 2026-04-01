@@ -8,8 +8,6 @@ import { IOrganization } from 'src/constants/types';
 
 import classNames from 'classnames';
 import style from './OrganizationOnMap.module.scss';
-import { Pin } from '@vis.gl/react-google-maps';
-import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Routes } from 'src/constants/routes';
@@ -19,24 +17,41 @@ type OrganizationOnMapProps = {
   organizations?: IOrganization[];
 };
 
+type OrganizationWithAddress = IOrganization & {
+  address: {
+    lat: string | number;
+    lng: string | number;
+  };
+};
+
+const hasValidAddress = (organization: IOrganization): organization is OrganizationWithAddress => {
+  const address = (organization as any).address;
+  if (!address) return false;
+
+  const lat = Number(address.lat);
+  const lng = Number(address.lng);
+
+  return Number.isFinite(lat) && Number.isFinite(lng);
+};
+
 const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapProps) => {
-  if (!organizations.length || !organizations[0].address) return null
-  console.log(organizations);
   const router = useRouter();
   const { push } = router;
   const session = useSession();
   const user = session.data?.user;
-  console.log("user::", user);
-  // const center = {
-  //   lat: +organizations[0].address.lat,
-  //   lng: +organizations[0].address.lng,
-  // };
-    const center = user?.location && organizations.length >= 2 ? {
+
+  const organizationsWithAddress = organizations.filter(hasValidAddress);
+
+  if (!organizationsWithAddress.length) {
+    return null;
+  }
+
+    const center = user?.location && organizationsWithAddress.length >= 2 ? {
       lat: +user?.location.coordinates[1],
       lng: +user?.location.coordinates[0],
     } : {
-        lat: +organizations[0].address.lat,
-        lng: +organizations[0].address.lng,
+        lat: +organizationsWithAddress[0].address.lat,
+        lng: +organizationsWithAddress[0].address.lng,
     }
 
   return (
@@ -94,8 +109,7 @@ const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapPro
       </AdvancedMarker>
           )}
 
-          {organizations.map((org) => (
-            org.address && (
+          {organizationsWithAddress.map((org) => (
               <AdvancedMarker
                 key={org.id}
                 position={{
@@ -117,13 +131,16 @@ const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapPro
                   overflow: 'hidden',
                   border: '2px solid green',
                 }}>
-                <img
-                    src={org.image || ''}
+                {org.image ? (
+                  <img
+                    src={org.image}
+                    alt={org.name || 'organization'}
                     style={{
                       width: '60px',
                       height: '60px',
                     }}
-                />
+                  />
+                ) : null}
               </div>
               <div style={{
                 position: 'absolute',
@@ -142,7 +159,6 @@ const OrganizationOnMap = ({ organizations=[], className }: OrganizationOnMapPro
                 borderColor="#fff"
               /> */}
               </AdvancedMarker>
-            )
           ))}
         </Map>
       </APIProvider>

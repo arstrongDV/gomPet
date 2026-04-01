@@ -238,8 +238,21 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
         />
         <Select
           label={t('pages.animals.filters.gender')}
-          options={[toSelectOption(Gender.MALE), toSelectOption(Gender.FEMALE)]}
-          value={toSelectOption(searchParams.get(Params.GENDER))}
+          // options={[`pages.animals.gender.${toSelectOption(Gender.MALE)}`, `pages.animals.gender.${toSelectOption(Gender.FEMALE)}`]}
+            options={[
+            {
+              value: Gender.MALE,
+              label: t('pages.animals.gender.male'),
+            },
+            {
+              value: Gender.FEMALE,
+              label: t('pages.animals.gender.female'),
+            },
+          ]}
+          value={searchParams.get(Params.GENDER) ? {
+            value: searchParams.get(Params.GENDER) ?? '', // <-- coerce null to empty string
+            label: t(`pages.animals.gender.${searchParams.get(Params.GENDER)?.toLowerCase()}`)
+          } : null}
           onChange={(value: OptionType) => handleFilter(Params.GENDER, value ? String(value.value).toUpperCase() : '')}
           isClearable
         />

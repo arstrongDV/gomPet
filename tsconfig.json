@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+<<<<<<< HEAD
     "lib": ["dom", "dom.iterable", "esnext"],
+=======
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+>>>>>>> 1d841ed (fillters fixed)
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,13 +19,18 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+<<<<<<< HEAD
     "jsx": "preserve",
+=======
+    "jsx": "react-jsx",
+>>>>>>> 1d841ed (fillters fixed)
     "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
+<<<<<<< HEAD
     "typeRoots": ["node_modules/@types", "src/typings"],
     "baseUrl": "./",
     "paths": {
@@ -33,4 +46,48 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
+=======
+    "typeRoots": [
+      "node_modules/@types",
+      "src/typings"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "src": [
+        "./src"
+      ],
+      "src/*": [
+        "./src/*"
+      ],
+      "assets": [
+        "./src/assets"
+      ],
+      "assets/*": [
+        "./src/assets/*"
+      ],
+      "components": [
+        "./src/components"
+      ],
+      "components/*": [
+        "./src/components/*"
+      ],
+      "styles": [
+        "./src/styles"
+      ],
+      "styles/*": [
+        "./src/styles/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+>>>>>>> 1d841ed (fillters fixed)
 }

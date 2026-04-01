@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
-import Script from 'next/script';
+import { useMapsLibrary } from '@vis.gl/react-google-maps';
 import usePlacesAutocomplete, { getDetails, getGeocode, getLatLng, RequestOptions } from 'use-places-autocomplete';
 
 import { Input } from 'components';
@@ -31,26 +31,29 @@ const InputPlacesAutocomplete = ({
     value,
     suggestions: { status, data },
     setValue,
-    clearSuggestions
+    clearSuggestions,
+    init
   } = usePlacesAutocomplete({
-    callbackName: 'initPlacesAutocomplete',
+    initOnMount: false,
     requestOptions: {
       ...requestOptions,
       componentRestrictions: { country: 'pl' }
     },
     debounce: 300
   });
+
+  const placesLibrary = useMapsLibrary('places');
   const round6 = (value: number) => Math.round(value * 1e6) / 1e6;
   const handleSelect = async (suggestion: any) => {
     const { description } = suggestion;
-    let location = {
+    let location: Location = {
       lat: 0,
       lng: 0,
       city: '',
       street: '',
       house_number: '',
       zip_code: '',
-      country: ''
+      coordinates: [0, 0]
     };
 
     try {
@@ -60,6 +63,7 @@ const InputPlacesAutocomplete = ({
         ...location,
         lat: round6(lat),
         lng: round6(lng),
+        coordinates: [round6(lng), round6(lat)],
       };
 
       if (withDetails) {
@@ -76,16 +80,12 @@ const InputPlacesAutocomplete = ({
           '';
         const zip_code =
           details.address_components.find((component: any) => component.types.includes('postal_code'))?.long_name || '';
-        const country =
-          details.address_components.find((component: any) => component.types.includes('country'))?.long_name || '';
-
         location = {
           ...location,
           city,
           street,
           house_number,
-          zip_code,
-          country
+          zip_code
         };
       }
 
@@ -113,15 +113,17 @@ const InputPlacesAutocomplete = ({
   };
 
   useEffect(() => {
+    if (placesLibrary) {
+      init();
+    }
+  }, [placesLibrary, init]);
+
+  useEffect(() => {
     getPreselected();
   }, []);
 
   return (
     <>
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initPlacesAutocomplete`}
-      />
-
       <div className={classNames(style.wrapper, className)}>
         <Input
           className={style.input}

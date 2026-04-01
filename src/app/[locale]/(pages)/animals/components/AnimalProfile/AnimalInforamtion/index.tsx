@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react'
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
@@ -18,6 +19,8 @@ import { FamilyTreeWrapper } from './components/FamilyTree/FamilyTreeWrapper';
 import RelatedAnimals from './components/RelatedAnimals';
 
 import style from './AnimalProfile.module.scss';
+
+dayjs.extend(utc);
 
 type AnimalProfileProps = {
     animal: IAnimal;
@@ -40,7 +43,7 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
     console.log("animalanimalanimal:: ", animal);
 
     const formatDate = (dateString: string) => {
-        return dayjs(dateString).format('DD.MM.YYYY, godz. HH:mm');
+        return dayjs.utc(dateString).format('DD.MM.YYYY, godz. HH:mm');
       };
 
   return (
@@ -51,15 +54,15 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
                 <div className={style.blocksContainer}>
                     <div className={style.aboutAnimalBlock}>
                         <ul>
-                            <li key={animal?.name}>Imię: <span style={{color: '#000'}}>{animal?.name ?? "Brak danych"}</span></li>
-                            <li key={animal?.city}>Miasto: <span style={{color: '#000'}}>{animal?.city ?? "Brak danych"}</span></li>
-                            <li key={animal?.species}>Gatunek: <span style={{color: '#000'}}>{animal?.species.label ?? "Brak danych"}</span></li>
-                            <li key={animal?.gender}>Płeć: <span style={{color: '#000'}}>{animal?.gender ?? "Brak danych"}</span></li>
-                            <li key={animal?.age}>Wiek: <span style={{color: '#000'}}>{animal?.age ?? "Brak danych"}</span></li>
-                            <li key={animal?.size}>Wielkość: <span style={{color: '#000'}}>{animal?.size ?? "Brak danych"}</span></li>
-                            <li key={animal?.status}>Status: <span style={{color: '#000'}}>{animal?.status ?? "Brak danych"}</span></li>
-                            <li key={animal?.breed}>Rasa: <span style={{color: '#000'}}>{animal?.breed.label ?? "Nieznana"}</span></li>
-                            <li key={animal?.created_at}>Dodany dnia: <span style={{color: '#000'}}>
+                            <li>Imię: <span style={{color: '#000'}}>{animal?.name ?? "Brak danych"}</span></li>
+                            <li>Miasto: <span style={{color: '#000'}}>{animal?.city ?? "Brak danych"}</span></li>
+                            <li>Gatunek: <span style={{color: '#000'}}>{(animal?.species as any)?.label ?? animal?.species ?? "Brak danych"}</span></li>
+                            <li>Płeć: <span style={{color: '#000'}}>{animal?.gender ?? "Brak danych"}</span></li>
+                            <li>Wiek: <span style={{color: '#000'}}>{animal?.age ?? "Brak danych"}</span></li>
+                            <li>Wielkość: <span style={{color: '#000'}}>{animal?.size ?? "Brak danych"}</span></li>
+                            <li>Status: <span style={{color: '#000'}}>{animal?.status ?? "Brak danych"}</span></li>
+                            <li>Rasa: <span style={{color: '#000'}}>{(animal?.breed as any)?.label ?? animal?.breed ?? "Nieznana"}</span></li>
+                            <li>Dodany dnia: <span style={{color: '#000'}}>
                                 {animal?.created_at ? formatDate(`${animal.created_at}`) : "Brak danych"}
                             </span></li>
                         </ul>
@@ -105,7 +108,7 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
                                     {String(animal.price) !== '0.00' ? (
                                         <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
                                     ) : (
-                                        <p style={{color: '#798177'}}>Oddam w dobre rece!</p>
+                                        <p style={{color: '#798177'}}>Oddam w dobre ręce!</p>
                                     )}
 
                                     <div className={style.subscribtion}>
@@ -147,7 +150,7 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
                                         <Avatar  
                                             className={style.avatarImage}
                                             profile={animal.owner_info}
-                                            src={animal.owner_info ? animal.owner_info.image : undefined} 
+                                            src={animal.owner_info ? (animal.owner_info.image ?? undefined) : undefined} 
                                         />
                                     </div>
 
@@ -162,7 +165,7 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
                                     {String(animal.price) !== '0.00' ? (
                                         <p><span style={{color: '#798177'}}>Cena:</span> {animal.price} zł</p>
                                     ) : (
-                                        <p style={{color: '#798177'}}>Oddam w dobre rece!</p>
+                                        <p style={{color: '#798177'}}>Oddam w dobre ręce!</p>
                                     )}
 
                                     <div className={style.subscribtion}>
@@ -264,3 +267,5 @@ const AnimalInformation = ({ animal, followers, comments }: AnimalProfileProps) 
 }
 
 export default AnimalInformation
+
+

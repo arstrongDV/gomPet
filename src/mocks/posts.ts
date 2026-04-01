@@ -1,9 +1,7 @@
-import { IPost } from 'src/constants/types';
-
 import { organizationsMock } from './organizations';
 import { UsersMock } from './user';
 
-export const postsMock: IPost[] = [
+export const postsMock: any[] = [
   {
     id: 2,
     created_at: '2024-08-11T18:00:00Z',

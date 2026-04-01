@@ -1,6 +1,6 @@
-import { IUser, Role } from 'src/constants/types';
+import { Role } from 'src/constants/types';
 
-export const UsersMock: IUser[] = [
+export const UsersMock: any[] = [
   {
     id: 1,
     email: "sdefefe",

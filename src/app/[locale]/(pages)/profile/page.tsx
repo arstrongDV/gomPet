@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AccountsApi, AnimalsApi, OrganizationsApi } from 'src/api';
 import { IAnimal, IOrganization, IUser } from "src/constants/types";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import ProfileForm from "./UserProfile";
 import { Routes } from "src/constants/routes";
-import { logout } from "../../auth/logout/actions";
 import { Loader } from "src/components";
 
 const ProfilePage = () => {
@@ -81,8 +80,7 @@ useEffect(() => {
 
   const handleDelete = () => {
     toast.success("Profile zostal usuniety!")
-    logout();
-    router.push(Routes.LANDING);
+    void signOut({ callbackUrl: Routes.LANDING });
   };
 
   const handleCancel = (err: any) => {

@@ -17,14 +17,13 @@
   text-align: left;
 
   transition: background-color $transition-main, color $transition-main, fill $transition-main;
+  @include body2;
 
   @include tabletWidth {
     max-width: 40rem;
     word-break: normal;
     white-space: pre-wrap;
   }
-
-  @include body2;
   &.sectionTitle {
     @include label;
   }

@@ -1,0 +1,9 @@
+{
+  "title": "Powiadomienia",
+  "empty": "Brak powiadomień",
+  "maxFileSize": "Maksymalny rozmiar pliku to {{size}} MB.",
+  "allowedFileTypes": "Dozwolone formaty plików to: {{types}}.",
+  "types": {
+    "unknown": "Nieznany"
+  }
+}

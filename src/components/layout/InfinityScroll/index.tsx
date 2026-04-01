@@ -6,7 +6,7 @@ type InfinityScrollProps = {
     loadMore: () => Promise<void>;
     hasNext: boolean;
     children: React.ReactNode;
-    rootRef?: React.RefObject<HTMLElement>;
+    rootRef?: React.RefObject<HTMLElement | null>;
 };
 
 const InfinityScroll = ({ children, loadMore, hasNext, rootRef }: InfinityScrollProps) => {

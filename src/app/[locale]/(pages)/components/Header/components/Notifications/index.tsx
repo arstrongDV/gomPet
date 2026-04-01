@@ -10,7 +10,6 @@ import { CloseButton, Icon, Pill } from 'components';
 import useWebsocket from 'components/hooks/useWebsocket';
 
 import style from './Notifications.module.scss';
-import useWebsocket2 from 'src/app/[locale]/(pages)/ws/page';
 import NotificationItem from './components/NotificationItem';
 import { WebsocketRoutes } from 'src/api/routes';
 

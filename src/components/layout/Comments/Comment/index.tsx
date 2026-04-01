@@ -73,7 +73,7 @@ const Comment = ({ className, comment, noEditAllowed, commentDel, setUpdateId, i
       </div>
 
       <div className={style.content}>
-        <p className={style.text}>
+        <div className={style.text}>
           {showMore ? body : body?.substring(0, TEXT_LIMIT)}
           {!showMore && body?.length > TEXT_LIMIT && '...'}
           
@@ -95,7 +95,7 @@ const Comment = ({ className, comment, noEditAllowed, commentDel, setUpdateId, i
             />
           )}
 
-        </p>
+        </div>
 
         {body?.length > TEXT_LIMIT && (
           <LabelLink

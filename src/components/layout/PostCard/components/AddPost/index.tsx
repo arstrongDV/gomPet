@@ -17,6 +17,7 @@ type AddPostProps = {
 const AddPost = ({animalId, organizationId, animalOwnerId, organizationOwnerId, getPosts}: AddPostProps) => {
     const session = useSession();
     const myId = session.data?.user.id;
+    const targetId = animalId ?? organizationId;
 
     const [showAddPost, setShowAddPost] = useState<boolean>(false);
 
@@ -46,7 +47,11 @@ const AddPost = ({animalId, organizationId, animalOwnerId, organizationOwnerId, 
                     )}
                     animalId={animalId}
                     setShowAddPost={setShowAddPost} 
-                    refreshPosts={() => getPosts(animalId ? animalId : organizationId)}
+                    refreshPosts={() => {
+                      if (targetId != null) {
+                        getPosts(targetId);
+                      }
+                    }}
                 />
             </Modal>
         </>

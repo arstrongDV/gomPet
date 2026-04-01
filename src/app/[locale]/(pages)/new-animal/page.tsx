@@ -36,7 +36,7 @@ import style from './NewAnimalPage.module.scss';
 type Parent = {
   name: string;
   animal_id: number
-  relation: OptionType | string;
+  relation?: string | number;
   photos?: string;
 };
 
@@ -102,9 +102,6 @@ const NewAnimalPage = () => {
 
   const [organization, setOrganization] = useState<number | null>();
   const [owner, setOwner] = useState<number | null>();
-
-  const formData = new FormData(); ////
-
   const session = useSession();
   const user = session.data?.user;
 
@@ -128,26 +125,54 @@ const NewAnimalPage = () => {
 
   const handleApiError = (error: any) => {
     const data = error?.response?.data;
-  
-    if (!data) {
-      toast.error("Coś poszło nie tak");
+
+    if (!data || (typeof data === 'object' && Object.keys(data).length === 0)) {
+      toast.error(t('error.mainErrors.somethingWentWrong'));
       return;
     }
-  
+
+    if (typeof data === 'string') {
+      toast.error(data);
+      return;
+    }
+
     if (data.detail) {
       toast.error(data.detail);
       return;
     }
-  
+
     if (typeof data === 'object') {
+      let hasAnyMessage = false;
+
       Object.entries(data).forEach(([field, messages]) => {
         if (Array.isArray(messages)) {
           messages.forEach((msg) => {
             toast.error(`${field}: ${msg}`);
+            hasAnyMessage = true;
           });
+        } else if (typeof messages === 'string') {
+          toast.error(`${field}: ${messages}`);
+          hasAnyMessage = true;
         }
       });
+
+      if (!hasAnyMessage) {
+        toast.error(t('error.mainErrors.somethingWentWrong'));
+      }
     }
+  };
+
+  const getCreateAnimalErrorPayload = (error: any) => {
+    const data = error?.response?.data;
+    if (data && (typeof data !== 'object' || Object.keys(data).length > 0)) {
+      return data;
+    }
+
+    return {
+      status: error?.response?.status,
+      statusText: error?.response?.statusText,
+      message: error?.message
+    };
   };
 
   const isBtnDisabled =
@@ -172,6 +197,9 @@ const NewAnimalPage = () => {
       toast.error("Musisz udostepnic lokalizacje aby dodac zwierze albo podac wlasna organizacje")
       return;
     }
+
+    const formData = new FormData();
+
     try {
       const galleryWithBase64 = await Promise.all(
         photos.map(async (photo) => {
@@ -205,7 +233,7 @@ const NewAnimalPage = () => {
       // }
 
       if(hasMetrics){
-        formData.append('hasMetrics', true);
+        formData.append('hasMetrics', 'true');
       }
       // else{
       //   formData.append('organization_id', null);
@@ -302,7 +330,7 @@ const NewAnimalPage = () => {
       setIsParentsAdd(false);
       setDescriptions('');
     } catch (err: any) {
-      console.error('Failed to create animal:', err.response?.data || err);
+      console.error('Failed to create animal:', getCreateAnimalErrorPayload(err));
       handleApiError(err);
     }
   };
@@ -609,7 +637,7 @@ const NewAnimalPage = () => {
               setIsParentsAdd={setIsParentsAdd}
               parents={parents}
               onAddParent={(parent) => {
-                setParents((prev) => [...prev, parent as Parent]);
+                setParents((prev) => [...prev, parent]);
                 setIsParentsAdd(false); 
               }}
           />

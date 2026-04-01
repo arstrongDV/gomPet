@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { AdvancedMarker, APIProvider, Map, useMap } from '@vis.gl/react-google-maps';
+import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps';
 
 import { Input, InputPlacesAutocomplete, InputWrapper } from 'src/components';
 import { defaultMapPosition, defaultMapZoom } from 'src/constants/mapConfig';
@@ -15,10 +15,7 @@ type LocationInputProps = {
 };
 
 const LocationInput = ({ value, onChange }: LocationInputProps) => {
-  const map = useMap();
-
   const handleSelect = (selected: Location) => {
-    console.log("selected: ", selected);
     onChange({
       ...value,
       lat: selected.lat,
@@ -45,7 +42,10 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
   }, [value]);
 
   return (
-    <APIProvider apiKey={String(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)}>
+    <APIProvider
+      apiKey={String(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)}
+      libraries={['places']}
+    >
       <div className={style.container}>
         <div className={style.mapWrapper}>
           <InputWrapper label={'Wyszukaj adres'}>

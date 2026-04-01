@@ -19,8 +19,8 @@ const Members = () => {
     const [showNewRequests, setShowNewRequests] = useState<boolean>(false);
     const [showMembers, setShowMembers] = useState<boolean>(true);
 
-    const [members, setMembers] = useState([]);
-    const [userRequests, setUserRequests] = useState([]);
+    const [members, setMembers] = useState<any[]>([]);
+    const [userRequests, setUserRequests] = useState<any[]>([]);
 
     const requestCurrentPageRef = useRef(1);
     const memberCurrentPageRef = useRef(1);
@@ -186,7 +186,7 @@ const getMoreRequests = async () => {
               <InfinityScroll
                 loadMore={getMoreRequests}
                 hasNext={hasRequestNextPageRef.current}
-                rootRef={requestListRef}
+                rootRef={requestListRef as React.RefObject<HTMLElement>}
               >
                 {userRequests.map(request => (
                       <RequestElement 
@@ -232,7 +232,7 @@ const getMoreRequests = async () => {
               <InfinityScroll
                 loadMore={getMoreMembers}
                 hasNext={hasMemberNextPageRef.current}
-                rootRef={membertListRef}
+                rootRef={membertListRef as React.RefObject<HTMLElement>}
               >
                 {members.map(member => (
                     <MemberCard 

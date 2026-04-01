@@ -20,6 +20,13 @@ const useCategories = () => {
   const [data, setData] = useState<ApiCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const normalizeCategoryKey = (value: string) =>
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[\s-]+/g, '_')
+      .replace(/[^\w]/g, '');
+
   const getCategories = async () => {
     setLoading(true);
     try {
@@ -41,7 +48,19 @@ const useCategories = () => {
     () =>
       data.map((item) => ({
         id: item.id,
-        label: t(`categories.${item.name}`),
+        label: (() => {
+          const rawKey = `categories.${item.name}`;
+          if (t.has(rawKey)) {
+            return t(rawKey);
+          }
+
+          const normalizedKey = `categories.${normalizeCategoryKey(item.name)}`;
+          if (t.has(normalizedKey)) {
+            return t(normalizedKey);
+          }
+
+          return item.name;
+        })(),
       })),
     [data, t]
   );

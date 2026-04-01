@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import style from './AnimalDescription.module.scss';
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
@@ -87,7 +87,7 @@ const DescriptionTranslate = ({ text, maxLines = 5 }: Props) => {
 
               // Nagłówki
               if (node.type === "heading") {
-                const Tag = `h${node.tag || 2}` as keyof JSX.IntrinsicElements;
+                const Tag = `h${node.tag || 2}` as keyof React.JSX.IntrinsicElements;
                 return (
                   <Tag key={index} className={style.heading}>
                     {node.children?.map((child: any, i: number) => processNode(child, i))}

@@ -30,14 +30,13 @@
       align-items: flex-end;
       width: 100%;
       margin-bottom: 30px;
+      gap: clamp(16px, 5vw, 80px);
       
-      * > {
+      > * {
         flex: 1 1 0;  
         display: flex;
         justify-content: center;
       }
-
-      gap: clamp(16px, 5vw, 80px);
     
       @media (max-width: 1024px) { gap: clamp(12px, 4vw, 60px); }
       @media (max-width: 768px) { gap: clamp(8px, 3vw, 40px); }

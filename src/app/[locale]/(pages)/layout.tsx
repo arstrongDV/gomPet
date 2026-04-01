@@ -13,12 +13,12 @@ import style from './PagesLayout.module.scss';
 
 const limitedWidthRoutes = [Routes.ARTICLES, Routes.ORGANIZATION_PROFILE(''), Routes.NEW_ANIMAL, Routes.NEW_ORGANIZATION];
 
-const PagesLayout = ({
+const PagesLayout = async ({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const requestHeaders = headers();
+  const requestHeaders = await headers();
   const pathname = requestHeaders?.get('x-current-path') || '';
 
   let isLimitedWidth;

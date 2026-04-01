@@ -19,7 +19,7 @@ import RichTextViewer from 'src/components/layout/Forms/RichTextViewer';
 type ArticleCardProps = {
   className?: string;
   article: IArticle;
-  setKnowledge?: (e: any) => void;
+  setKnowledge?: React.Dispatch<React.SetStateAction<IArticle[]>>;
 };
 
 const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) => {
@@ -34,7 +34,7 @@ const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) =
       const res = await ArticlesApi.deleteArticlePage(slug);
       console.log(res);
       toast.success("Post zostal usuniaty")
-      if(setKnowledge) setKnowledge((prev: any) => prev.filter(p => p.slug !== slug));
+      if(setKnowledge) setKnowledge((prev) => prev.filter((p) => p.slug !== slug));
     }catch(err){
       toast.error("Nie udalo sie usunac posta")
       console.log(err)
@@ -42,6 +42,8 @@ const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) =
   }
 
   const updateArticleInState = (updated: IArticle) => {
+    if (!setKnowledge) return;
+
     setKnowledge(prev =>
       prev.map(item =>
         item.id === updated.id ? updated : item

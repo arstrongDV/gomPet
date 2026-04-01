@@ -1,0 +1,158 @@
+@import 'src/styles';
+
+.comment {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: $spacing-3 $spacing-4;
+}
+
+.image {
+  width: 4.8rem;
+  height: 4.8rem;
+
+  @include tabletWidth {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+.header {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-3 $spacing-4;
+  flex-wrap: wrap;
+
+  .info {
+    @include element-flex(column);
+
+    .name {
+      @include body1;
+    }
+
+    .date {
+      @include body2;
+      color: $color-foreground-dim;
+    }
+  }
+}
+
+.content {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-1;
+  padding: $spacing-4;
+  border-radius: $radius-m;
+  background-color: $color-background-3;
+  grid-column: 2 / -1;
+
+  @include tabletWidth {
+    grid-column: 1 / -1;
+  }
+
+  .text {
+    @include body1;
+    color: $color-foreground;
+    white-space: pre-wrap;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+// .settingsWrapper {
+//   position: relative; // teraz ikona = punkt odniesienia
+//   display: inline-block;
+//   align-self;
+// }
+
+// .settings {
+//   position: absolute;
+//   top: -90%;     // ustawiamy menu NAD ikoną
+//   right: -17rem;
+//   margin-top: -7rem; // mały odstęp
+//   display: flex;
+//   flex-direction: column;
+//   min-width: 170px;
+//   padding: 0.5rem 0;
+//   background-color: #fff;
+//   border: 1px solid rgba(0,0,0,0.1);
+//   border-radius: 0.8rem;
+//   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+//   z-index: 20;
+//   animation: fadeIn 0.2s ease;
+// }
+
+// .settingsBtn{
+//   width: 100%;
+//   padding: 0.75rem 1rem;
+//   background: transparent;
+//   border: none;
+//   text-align: left;
+//   font-size: 1.3rem;
+//   font-weight: 600;
+//   color: #333;
+//   cursor: pointer;
+//   transition: background-color 0.2s;
+
+//   &:hover {
+//     background-color: #f5f5f5;
+//   }
+
+//   &:active {
+//     background-color: #e0e0e0;
+//   }
+// }
+
+.settingsWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.settingsToggle {
+  display: flex;
+  cursor: pointer;
+  align-self: flex-end;
+  // padding: 0.4rem;
+  border-radius: 50%;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(0,0,0,0.05);
+  }
+}
+
+.settings {
+  @include element-flex(column, flex-start, flex-start);
+  position: absolute;
+  top: calc(100% + $spacing-2);
+  right: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 20;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+}
+
+.settingsBtn {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &:active {
+    background-color: #e0e0e0;
+  }
+}

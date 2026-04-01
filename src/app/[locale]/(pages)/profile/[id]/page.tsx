@@ -21,14 +21,15 @@ const getUserOrganizations = async(userId: number) => {
 
 const getUserAnimals = async(userId: number) => {
     try {
-        const userAnimalsRes = await AnimalsApi.getUsersAnimals(userId)
+        const userAnimalsRes = await AnimalsApi.getUsersAnimals(userId, {});
         return userAnimalsRes.data;
       } catch (error) {
         return null;
       } 
 }
 
-export const generateMetadata = async ({ params: { id } }: { params: { id: string } }) => {
+export const generateMetadata = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
     const userData = await getUserData(Number(id));
     
     if (!userData) {
@@ -47,12 +48,13 @@ export const generateMetadata = async ({ params: { id } }: { params: { id: strin
     };
 };
 
-const UserDetailPage = async ({ params }: { params: { id: string } }) => {
+const UserDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
     
     const [user, organizations, animals] = await Promise.all([
-      getUserData(Number(params.id)),
-      getUserOrganizations(Number(params.id)),
-      getUserAnimals(Number(params.id))
+      getUserData(Number(id)),
+      getUserOrganizations(Number(id)),
+      getUserAnimals(Number(id))
     ]);
   
     return (

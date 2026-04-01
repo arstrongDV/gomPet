@@ -1,5 +1,5 @@
 import React, { cache } from 'react';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 
 import { OffersApi, OrganizationsApi, PostsApi } from 'src/api';
 import { injectToken } from 'src/api/client';
@@ -23,7 +23,8 @@ const getData = cache(async (id: number) => {
   }
 });
 
-export const generateMetadata = async ({ params: { id } }: { params: { id: string } }) => {
+export const generateMetadata = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
   const data = await getData(+id);
 
   return {
@@ -36,8 +37,11 @@ export const generateMetadata = async ({ params: { id } }: { params: { id: strin
   };
 };
 
-const OrganizationPage = async ({ params: { locale, id } }: Readonly<{ params: { locale: Locale; id: string } }>) => {
-  unstable_setRequestLocale(locale);
+const OrganizationPage = async ({
+  params
+}: Readonly<{ params: Promise<{ locale: string; id: string }> }>) => {
+  const { locale, id } = await params;
+  setRequestLocale(locale as Locale);
   // const session = await auth();
   const data = await getData(+id);
 

@@ -54,7 +54,6 @@ const Avatar = (props: AvatarProps) => {
     }
   
     text = generateInitials(email);
-    console.log("Generating avatar for email:", email);
   
     const index = (text.charCodeAt(0) * 2) % avatarBackgrounds.length;
     const background = avatarBackgrounds[index];

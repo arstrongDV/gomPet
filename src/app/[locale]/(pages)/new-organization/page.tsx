@@ -96,11 +96,12 @@ const NewOrganizationPage = () => {
     city: '',
     street: '',
     house_number: '',
-    zip_code: ''
+    zip_code: '',
+    coordinates: ['', '']
   });
 
   // const [raceValue, setSelectRaceValue] = useState<OptionType>(null)
-  const [speciesValue, setSelectSpeciesValue] = useState<OptionType[]>([])
+  const [speciesValue, setSelectSpeciesValue] = useState<OptionType[]>([]);
 
   const handleChange = (selectedOptions: OptionType[]) => {
     const speciesIds = selectedOptions ? selectedOptions.map(opt => opt?.value) : [];
@@ -150,7 +151,7 @@ const NewOrganizationPage = () => {
 
       const res = await OrganizationsApi.addNewOrganization(payload);
       toast.success("Stworzono nową organizację!")
-      // push(Routes.ORGANIZATION_PROFILE(res.data.id));
+      push(Routes.ORGANIZATION_PROFILE(res.data.id));
       return;
     }catch(err){
       console.log(err)

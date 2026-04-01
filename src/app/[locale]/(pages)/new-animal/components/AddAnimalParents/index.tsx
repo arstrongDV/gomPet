@@ -31,7 +31,7 @@ type AnimalAddParentsProps = {
     className?: string;
     parents?: Parent[];
     onAddParent: (parent: Parent) => void;
-    childAnimal: IAnimal; 
+    childAnimal?: IAnimal; 
     setIsParentsAdd: (e: boolean) => void;
 };
 
@@ -127,7 +127,7 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal, setIsP
     }, [searchName, selectSpeciesValue, selectRaceValue, debouncedSearch]);
 
     const handleAdd = () => {
-        if (!selectedAnimal || parents?.length >= 2) return;
+        if (!selectedAnimal || (parents?.length ?? 0) >= 2) return;
 
         const newParent: Parent = {
             animal_id: selectedAnimal.id,
@@ -182,7 +182,7 @@ const AddAnimalParents = ({ className, onAddParent, parents, childAnimal, setIsP
             return;
         }
         
-        if (animal.age <= childAnimal?.age) {
+        if (childAnimal?.age != null && animal.age <= childAnimal.age) {
             toast.error("Rodzic musi być starszy");
             return;
         }

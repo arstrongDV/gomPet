@@ -14,7 +14,7 @@ type AddKnowledgeProps = {
   setIsOpen: (e: boolean) => void;
   initialState?: IArticle;
   refreshKnowledge?: () => void;
-  updateArticleInState?: () => void;
+  updateArticleInState?: (article: IArticle) => void;
   // categoriesProps: {
   //   id: number;
   //   label: string;
@@ -48,7 +48,7 @@ const AddKnowledge = ({ setIsOpen, initialState, refreshKnowledge, updateArticle
   const [selectValue, setSelectValue] = useState<OptionType | null>(null);
   const [title, setTitle] = useState<string>('');
   const [descriptions, setDescriptions] = useState<string>('');
-  const [images, setImages] = useState<File>(null);
+  const [images, setImages] = useState<File | null>(null);
   const [addImage, setAddImage] = useState<boolean>(false);
   const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
   // const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);

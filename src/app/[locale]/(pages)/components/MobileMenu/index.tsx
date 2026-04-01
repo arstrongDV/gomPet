@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from './MobileMenu.module.scss';
 
 import Notifications from '../Header/components/Notifications';
 import UserMenu from '../Header/components/UserMenu';
-import { logout } from 'src/app/[locale]/auth/logout/actions';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { RouteItemType } from '../Sidebar/components/RouteItem';
 import { Routes } from 'src/constants/routes';
 import RouteItem from '../Sidebar/components/RouteItem';
 import { Icon } from 'src/components';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 
 type MenuProps = {
   setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,6 +19,17 @@ type MenuProps = {
 const MobileMenu = ({setShowMenu}: MenuProps) => {
   const session = useSession();
   const t = useTranslations();
+
+const pathname = usePathname();
+const prevPathname = useRef(pathname);
+
+useEffect(() => {
+  if (prevPathname.current !== pathname) {
+    setShowMenu(false);
+  }
+
+  prevPathname.current = pathname;
+}, [pathname]);
 
   const highlightedRoute: RouteItemType = {
     title: t('navigation.sidebar.myAnimals'),
@@ -77,7 +88,9 @@ const MobileMenu = ({setShowMenu}: MenuProps) => {
     },
     {
       title: t('navigation.sidebar.logout'),
-      onClick: () => logout(),
+      onClick: () => {
+        void signOut({ callbackUrl: Routes.LANDING });
+      },
       icon: 'logout',
       hidden: session.status !== 'authenticated'
     }

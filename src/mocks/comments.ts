@@ -1,8 +1,6 @@
-import { IComment } from 'src/constants/types';
-
 import { UsersMock } from './user';
 
-export const commentsMock: IComment[] = [
+export const commentsMock: any[] = [
     {
       id: 2,
       created_at: '2024-08-11T18:00:00Z',

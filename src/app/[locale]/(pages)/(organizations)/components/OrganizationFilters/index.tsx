@@ -96,8 +96,9 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
   // }, [searchParams]);
 
   const applyLocationFilter = () => {
-    if (!session.data?.user?.location){
-      toast.error("Nie udalo się znalezc twojwj lokalizacji");
+    if (!session.data?.user?.location) {
+      toast.error("Nie udalo siÄ™ znalezc twojwj lokalizacji");
+      return;
     }
     if (!range) {
       params.delete(Params.RANGE);
@@ -106,10 +107,10 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
       return;
     }
 
-    const { coordinates } = session.data?.user.location;
+    const { coordinates } = session.data.user.location;
   
     // upewnij się, że lat i lng są liczby
-    if (coordinates[0] == null || coordinates[1] == null) return;
+    if (!coordinates || coordinates[0] == null || coordinates[1] == null) return;
   
     const locationValue = `SRID=4326;POINT(${coordinates[0]} ${coordinates[1]})`;
 

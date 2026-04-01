@@ -30,6 +30,10 @@ export class AuthApi {
   }
 
   static getLoginUser(token: string) {
+    if (typeof token !== 'string' || !token.trim()) {
+      throw new Error('Access token is required');
+    }
+
     const decoded = jwtDecode(token) as { user_id: number };
     const { user_id } = decoded;
     const url = AuthRoutes.GET_LOGIN_USER(user_id);
@@ -143,9 +147,8 @@ export class AnimalsApi {
   static async createNewAnimal(formData: FormData) {
     return ApiClient.post(AnimalsRouts.ANIMALS_ANIMALS, formData, {
       __tokenRequired: true,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      // Let the browser/axios set the multipart boundary for FormData.
+      headers: {}
     });
   }
   static async getAnimalParents() {
@@ -409,9 +412,9 @@ export class OrganizationsApi {
   }
 
   static async getUserOrganizations(userId: number) {
-    return ApiClient.get(OrganizationsRouts.USER_ORGANIZATIONS(userId)), {
+    return ApiClient.get(OrganizationsRouts.USER_ORGANIZATIONS(userId), {
       __tokenRequired: true,
-    }
+    });
   }
 
   static async postJoinRequest(payload: any) {

@@ -50,7 +50,7 @@ const NotificationItem = ({ data, close }: NotificationItemProps) => {
       </div>
       {!data.is_read && ( //seen
         <div className={style.col}>
-          <Pill>{t('common:state.new')}</Pill>
+          <Pill>{t('common.state.new')}</Pill>
         </div>
       )}
     </li>

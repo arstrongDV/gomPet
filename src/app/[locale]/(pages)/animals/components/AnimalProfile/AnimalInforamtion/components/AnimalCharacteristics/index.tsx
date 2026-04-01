@@ -10,9 +10,35 @@ export default function CharacteristicsBlock({ animal }: { animal: IAnimal }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
 
-  console.log(animal)
-
   const characteristicCheck = !!(animal.characteristicBoard && animal.characteristicBoard.length > 0);
+
+  const normalizeKey = (title: string) =>
+    title
+      .trim()
+      .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+      .replace(/[\s-]+/g, '_')
+      .toLowerCase();
+
+  const fallbackLabel = (key: string) =>
+    key
+      .split('_')
+      .filter(Boolean)
+      .map((token) => token.charAt(0).toUpperCase() + token.slice(1))
+      .join(' ');
+
+  const resolveLabel = (title: string) => {
+    const key = normalizeKey(title);
+
+    if (!key) {
+      return '';
+    }
+
+    if (t.has(key)) {
+      return t(key);
+    }
+
+    return fallbackLabel(key);
+  };
 
   useEffect(() => {
     const content = contentRef.current;
@@ -46,12 +72,12 @@ export default function CharacteristicsBlock({ animal }: { animal: IAnimal }) {
     <div className={style.characteristicsBlock}>
       <div className={style.characteristicContent} ref={characteristicCheck ? contentRef : null}>
         {characteristicCheck ? (
-          animal.characteristicBoard.map((c) => (
-            <div className={style.AnimalCharacter} key={c.title}>
+          animal.characteristicBoard.map((c, index) => (
+            <div className={style.AnimalCharacter} key={`${normalizeKey(c.title)}-${index}`}>
               <div className={style.caracteristicImage}>
                 {c.bool ? <Icon name="pawFilled" /> : null}
               </div>
-              <p className={style.caracteristicTitle}>{t(`${c.title.toLowerCase()}`)}</p>
+              <p className={style.caracteristicTitle}>{resolveLabel(c.title)}</p>
             </div>
           ))
         ) : (
