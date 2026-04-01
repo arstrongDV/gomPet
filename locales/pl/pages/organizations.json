@@ -1,9 +1,6 @@
 {
   "seeUs": "Zobacz nas",
-<<<<<<< HEAD
-=======
   "noAddress": "Brak adresu",
->>>>>>> 1d841ed (fillters fixed)
   "empty": "Nie znaleźliśmy żadnych organizacji",
   "filters": {
     "location": "Lokalizacja",
