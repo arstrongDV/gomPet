@@ -1,0 +1,50 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-6;
+}
+
+@include tabletWidth {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.description {
+  white-space: pre-wrap;
+}
+
+.actionButtons{
+  @include element-flex(row, flex-end, stretch);
+  gap: $spacing-2;
+}
+.editBtn{
+  width: 150px;
+}
+.delBtn{
+  width: 150px;
+  background-color: $color-danger;
+  &:hover{
+    background-color: $color-danger-dark;
+  }
+}
+
+.mapWrraper {
+  display: flex;
+  height: auto;
+  min-height: 300px;
+  border-radius: $radius-l;
+  overflow: hidden; 
+}
+.map {
+  width: 100%;
+  height: 100%; 
+}

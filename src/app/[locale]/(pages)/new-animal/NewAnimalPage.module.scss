@@ -1,0 +1,134 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+
+  @include phoneWidth {
+    font-size: $font-size-xxs;
+  }
+}
+
+.section {
+  @include element-flex(column);
+  gap: $spacing-6;
+
+  @include phoneWidth {
+    font-size: $font-size-xxs;
+  }
+}
+
+.genderSelect,
+.statusSelect {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-2;
+}
+
+.flexRow {
+  @include element-flex(row, flex-start, center);
+  flex-wrap: wrap;
+  gap: $spacing-4;
+}
+
+.fullWidth {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-4;
+  width: 100%;
+}
+
+.characteristics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  gap: $spacing-4;
+  width: 100%;
+
+  @include phoneWidth {
+    font-size: $font-size-xxs;
+  }
+}
+
+.caption {
+  @include body2;
+  color: $color-foreground-dim;
+}
+
+.submit {
+  align-self: flex-end;
+}
+
+.familyTreeBlock{
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+  flex-wrap: wrap
+}
+
+.addParents {
+  @include element-flex(row, center, center);
+  width: 150px;
+  height: 150px;
+  background-color: #FAFAFA;
+  border-radius: 16px;
+  transition: all 0.4s ease-in-out; 
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ededed;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0; // shorthand for top: 0; right: 0; bottom: 0; left: 0
+  background-color: rgba(0, 0, 0, 0.4); // or your theme color
+  z-index: 9; // should be below the comment card
+  backdrop-filter: blur(2px); // optional: blur for fancy look
+}
+
+.cardAddParents {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-4;
+}
+
+
+.parent {
+  @include element-flex(column, center, center);
+  position: relative;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.deleteIcon {
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  // padding: 4px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+  }
+}
+
+.modaParentsAddlWin{
+  max-width: 1200px;
+  height: 95vh;
+  gap: $spacing-3;
+}
+
+.statusSelect{
+  display: flex;
+  flex-wrap: wrap;
+}

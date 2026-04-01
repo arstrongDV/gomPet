@@ -1,0 +1,97 @@
+@import 'styles';
+
+.header {
+  width: calc(100% - 2 * $space-padding-around-page);
+  height: $size-top-navigation-height;
+  // position: sticky;
+  // top: $space-header-page-margin;
+  z-index: 2;
+  margin: $space-padding-around-page;
+  transition: $transition-main;
+
+  &.limitedWidth .inner {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding-inline: $spacing-4;
+  }
+}
+
+.mobileHeader {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  width: 100%;
+  background-color: $color-background-1;
+  height: unset;
+  padding: $spacing-2 $spacing-4;
+  transition: $transition-main;
+  transform: translateY(0);
+
+  &.sticky {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  &.inActive {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.inner {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-4;
+  width: 100%;
+}
+
+.iconButton {
+  padding: $spacing-2;
+  background-color: transparent;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.iconButton.rotate {
+  transform: rotate(180deg);
+}
+
+.stack {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+}
+
+.menu_open{
+  overflow: hidden;
+}
+
+.mobileMenu{
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 100;
+  transform: translateY(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+
+  &.active {
+    transform: translateX(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  &.inactive {
+    transform: translateX(100%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0; // shorthand for top: 0; right: 0; bottom: 0; left: 0
+  background-color: rgba(0, 0, 0, 0.4); // or your theme color
+  z-index: 9; // should be below the comment card
+  backdrop-filter: blur(2px); // optional: blur for fancy look
+}

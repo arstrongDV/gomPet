@@ -1,0 +1,16 @@
+{
+  "mainErrors": {
+    "oops": "Ups!",
+    "somethingWentWrong": "Coś poszło nie tak",
+    "unexpectedError": "Przepraszamy, wystąpił nieoczekiwany błąd.",
+    "routeNotFound": "Przepraszamy, nie znaleźliśmy strony, którą szukasz.",
+    "goToHomepage": "Przejdź do strony głównej",
+    "tryRefresh": "Spróbuj odświeżyć stronę"
+  },
+
+  "comments":{
+    "COMMENT_RATING_ALREADY_EXISTS": "Ocena komentarza już istnieje",
+    "COMMENT_TOO_SHORT": "Komentarz jest za krótki"
+  }
+
+}

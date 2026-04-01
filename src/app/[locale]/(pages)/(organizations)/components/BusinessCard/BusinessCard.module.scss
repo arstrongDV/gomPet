@@ -1,0 +1,207 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, space-between, stretch);
+  position: relative;
+  gap: $spacing-6;
+  min-width: 380px;
+}
+@include mobileWidth{
+  .container {
+    min-width: 140px;
+  }
+}
+
+.horizontal {
+  .header {
+    @include element-flex(row, space-between, stretch);
+
+    @include phoneWidth{
+      .name {
+        font-size: $font-size-m
+      }
+    }
+  }
+
+  .dataHeader{
+    @include element-flex(column);
+    gap: $spacing-2;
+  }
+
+  .contact {
+    @include element-flex(column, center, flex-end);
+    gap: $spacing-2;
+
+    @include desktopWidth {
+      @include element-flex(column, flex-start, center);  //row
+      // flex-wrap: wrap;
+    }
+  }
+}
+
+.vertical {
+  @include element-flex(column, flex-start, center);
+
+  .header {
+    @include element-flex(column, flex-start, center);
+    gap: $spacing-2;
+  }
+
+  .name {
+    text-align: center;
+  }
+  @include phoneWidth{
+    .name {
+      font-size: $font-size-m
+    }
+  }
+
+  .contact {
+    @include element-flex(column, center, center);
+    gap: $spacing-2;
+    width: 100%;
+  }
+
+  .location {
+    margin: 0 auto;
+  }
+}
+
+.row {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-6;
+  flex-wrap: wrap;
+
+  // @include desktopWidth {
+  //   @include element-flex(column, flex-start, flex-start);
+  // }
+}
+
+.name {
+  @include title3;
+  font-weight: $font-semiBold;
+}
+
+.logo {
+  height: 10rem;
+  object-fit: contain;
+}
+
+.contact {
+  @include element-flex(column, center, flex-end);
+  gap: $spacing-2;
+
+  @include desktopWidth {
+    @include element-flex(row, flex-start, center);
+    flex-wrap: wrap;
+  }
+}
+
+.location {
+  display: inline-block;
+
+  .icon {
+    display: inline-block;
+    margin-right: $spacing-1;
+    width: 2.4rem;
+    height: 2.4rem;
+    vertical-align: top;
+  }
+
+  .text {
+    @include body2;
+    color: $color-foreground;
+  }
+}
+@include tabletWidth{
+  .location {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  // .container {
+  //   gap: $spacing-4;
+  //   max-width: 90%; 
+  // }
+
+  // .contact {
+  //   gap: $spacing-1;
+
+  //   .location .icon {
+  //     width: 3rem;
+  //     height: 3rem;
+  //   }
+  // }
+
+  // .logo {
+  //   height: 6rem; // zmniejsz logo
+  // }
+
+  // .name {
+  //   font-size: 2rem; // lub użyj np. @include title4
+  // }
+
+  // .location .text {
+  //   font-size: 1.7rem;
+  // }
+
+  // .row {
+  //   gap: $spacing-4;
+  // }
+} 
+
+.modal{
+  position: fixed;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-height: 90vh;
+  max-width: 800px;
+  gap: $spacing-3;
+  background: $color-white;
+  color: $color-black;
+  padding: $spacing-6;
+  border-radius: $radius-l;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+
+  @media (max-width: 900px) {
+    max-width: 700px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 90%; 
+    padding: $spacing-5;
+  }
+
+  @media (max-width: 600px) {
+    padding: $spacing-4;
+  }
+
+  @media (max-width: 480px) {
+    padding: $spacing-3;
+  }
+}
+
+.subscribtion{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.followers{
+  display: flex;
+  gap: 0.6rem;
+}
+
+.settingsContainer{
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+}

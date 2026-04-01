@@ -1,0 +1,40 @@
+@import 'styles';
+
+.container {
+  width: calc(100% - $size-sidebar-width - $space-padding-around-page);
+  margin-left: calc($size-sidebar-width + $space-padding-around-page);
+  @include element-flex(column);
+
+  @include mobileWidth {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  &.isSidebarClose {
+    width: calc(100% - $size-sidebar-close-width);
+    margin-left: $size-sidebar-close-width;
+
+    @include mobileWidth {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  &.limitedWidth .inner {
+    max-width: 120rem;
+    margin-inline: auto;
+  }
+}
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  @include element-flex(column, space-between);
+}
+
+.inner {
+  width: 100%;
+  padding: $space-padding-around-page;
+  border-radius: $radius-l;
+  flex: 1;
+}

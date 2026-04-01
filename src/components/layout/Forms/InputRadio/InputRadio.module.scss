@@ -1,0 +1,86 @@
+@import 'src/styles';
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+
+  &:first-child {
+    margin-bottom: 1rem;
+  }
+}
+
+.disabled {
+  @include disabled-ui();
+
+  .label,
+  .label:hover {
+    cursor: not-allowed;
+  }
+}
+
+.label {
+  margin-top: $spacing-1;
+  font-size: $font-size-m;
+  color: $color-foreground;
+  @include body1;
+
+  &.small {
+    @include label;
+  }
+
+  &.colorDim {
+    color: $color-foreground-dim;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.checked:hover {
+    cursor: default;
+  }
+}
+
+.box {
+  border-radius: 50%;
+  min-width: 2.4rem;
+  height: 2.4rem;
+  border: 0.2rem solid $color-foreground-dim;
+  transition: $transition-duration-super-fast linear;
+  @include appearance(none);
+
+  &__error {
+    border-color: $border-input-error;
+    box-shadow: $shadow-input-error;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: $color-primary;
+    margin: 0.6rem;
+    transition: $transition-duration-super-fast linear;
+    transform: translate(0.4rem, 0.4rem);
+  }
+
+  &:checked {
+    border-color: $color-primary;
+    &::after {
+      width: 0.8rem;
+      height: 0.8rem;
+      transform: none;
+    }
+  }
+
+  &:checked:hover {
+    cursor: default;
+  }
+}

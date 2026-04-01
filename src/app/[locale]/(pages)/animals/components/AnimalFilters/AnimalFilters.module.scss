@@ -1,0 +1,44 @@
+@import 'styles';
+
+.filters {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-4;
+}
+
+.row {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+  flex-wrap: wrap;
+  margin-top: 2rem;///
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  gap: $spacing-4; //gap: 4.1rem;
+  width: 100%;
+}
+
+.ageInputs{
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-2;
+}
+
+.characteristics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  gap: $spacing-4;
+  margin-top: 2rem;///
+}
+
+@media (max-width: 570px) {
+  .filters {
+    width: 100%;
+  }
+
+  .inputs,
+  .characteristics {
+    grid-template-columns: 1fr; // 1 kolumna na wąskich ekranach
+  }
+}

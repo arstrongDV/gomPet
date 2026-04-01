@@ -1,0 +1,42 @@
+@import 'src/styles';
+
+.card {
+  padding: $spacing-6;
+  border-radius: $radius-l;
+  list-style: none;
+  background-color: $color-background-1;
+
+  @include dark-theme {
+    border: 0.1rem solid $color-gray-800;
+  }
+
+  &__shadow {
+    box-shadow: $shadow-soft;
+    @include dark-theme {
+      box-shadow: unset;
+    }
+  }
+
+  &__gray {
+    background-color: $color-background-3;
+  }
+
+  &__header {
+    @include element-flex(row, space-between, center);
+    gap: $spacing-4;
+    margin-bottom: $spacing-6;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: $spacing-3;
+    border-radius: $radius-m;
+    // max-width: 380px;
+  }
+
+  .card__header {
+    gap: $spacing-2;
+    margin-bottom: $spacing-4;
+  }
+}

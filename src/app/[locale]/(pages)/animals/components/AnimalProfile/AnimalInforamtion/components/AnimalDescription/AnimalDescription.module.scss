@@ -1,0 +1,227 @@
+// AnimalDescription.module.scss
+@import 'styles';
+
+.infoTextBlock {
+  margin-top: 1rem;
+  color: #333;
+  line-height: 1.6;
+  padding: 1.2rem;
+
+  .textDescription {
+    font-size: 1.4rem;
+    white-space: pre-wrap;
+
+    p {
+      margin: 0.8rem 0;
+      line-height: 1.6;
+    }
+
+    a {
+      color: #2a7ae2;
+      text-decoration: underline;
+      
+      &:hover {
+        color: #1d5ab9;
+      }
+    }
+
+    // Style dla formatowania tekstu wewnątrz textDescription
+    strong {
+      font-weight: 600;
+      color: #2c2c2c;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    u {
+      text-decoration: underline;
+    }
+
+    s {
+      text-decoration: line-through;
+      color: #666;
+    }
+  }
+
+  .readMoreBtn {
+    margin-top: 0.6rem;
+    background: none;
+    border: none;
+    color: #2a7ae2;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #1d5ab9;
+    }
+  }
+}
+
+.richTextContainer {
+  line-height: 1.6;
+  
+  p {
+    margin: 0.8rem 0;
+  }
+
+  // Style dla formatowania tekstu wewnątrz richTextContainer
+  strong {
+    font-weight: 600;
+    color: #2c2c2c;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  u {
+    text-decoration: underline;
+  }
+
+  s {
+    text-decoration: line-through;
+    color: #666;
+  }
+}
+
+.heading {
+  margin: 1.2rem 0 0.6rem 0;
+  font-weight: bold;
+  line-height: 1.3;
+  
+  &.h1 { 
+    font-size: 1.8em;
+    margin-top: 1.5rem;
+  }
+  &.h2 { 
+    font-size: 1.5em;
+    margin-top: 1.3rem;
+  }
+  &.h3 { 
+    font-size: 1.3em;
+    margin-top: 1.1rem;
+  }
+  &.h4 { 
+    font-size: 1.1em;
+  }
+}
+
+.alignLeft { 
+  text-align: left;
+  display: block;
+}
+.alignCenter { 
+  text-align: center;
+  display: block;
+}
+.alignRight { 
+  text-align: right;
+  display: block;
+}
+.alignJustify { 
+  text-align: justify;
+  display: block;
+}
+
+.list {
+  margin: 0.8rem 0;
+  padding-left: 1.8rem;
+}
+
+.listItem {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+
+.blockquote {
+  border-left: 4px solid #ddd;
+  padding: 0.8rem 1.2rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #666;
+  background: #f9f9f9;
+  border-radius: 0 4px 4px 0;
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  
+  &:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+}
+
+.inlineCode {
+  background: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  color: #d63384;
+}
+
+.codeBlock {
+  position: relative;
+  margin: 1.2rem 0;
+  background: #f8f9fa;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+  
+  pre {
+    margin: 0;
+    padding: 1.2rem;
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.4;
+  }
+  
+  code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    background: none !important;
+  }
+}
+
+.codeLanguage {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #e9ecef;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75em;
+  border-bottom-left-radius: 4px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.plainText {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 1rem;
+
+  // Style dla formatowania tekstu wewnątrz plainText
+  strong {
+    font-weight: 600;
+    color: #2c2c2c;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  u {
+    text-decoration: underline;
+  }
+
+  s {
+    text-decoration: line-through;
+    color: #666;
+  }
+}

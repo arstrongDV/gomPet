@@ -1,0 +1,366 @@
+@import 'styles';
+
+.card {
+  z-index: 0;
+  position: relative;
+
+  width: 100%;
+  min-width: 300px;
+  max-width: 300px;
+
+  height: auto;
+  height: 350px;
+  min-height: 300px;
+
+  border-radius: $radius-m;
+  padding: $spacing-4;
+
+  background-size: cover;
+  background-position: center;
+  transition: background $transition-main;
+
+  &:hover {
+    .gradient::after {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .hoverContent {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+  }
+
+  .settingsContainer {
+    position: absolute;
+    z-index: 1000;
+    top: $spacing-4;
+    right: $spacing-4;
+  }
+
+  &.card--map {
+    width: 200px;
+    height: 250px;
+  }
+}
+
+/* ======================
+   TABLET
+====================== */
+
+@include tabletWidth {
+
+  .card {
+    min-width: 230px;
+    min-height: 300px;
+    height: auto;
+    // min-height: 350px;
+  }
+
+}
+
+
+/* ======================
+   CONTENT
+====================== */
+
+.content {
+  z-index: 0;
+  position: absolute;
+  inset: $spacing-4;
+
+  @include element-flex(column, space-between, flex-start);
+  gap: $spacing-4;
+}
+
+@include tabletWidth {
+  .content {
+    inset: $spacing-2;
+    gap: $spacing-2;
+  }
+}
+
+
+/* ======================
+   GRADIENT
+====================== */
+
+.gradient {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: $radius-m;
+
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0) 65%,
+    rgba(0,0,0,0.55) 80%,
+    rgba(0,0,0,0.8) 100%
+  );
+
+  transition: $transition-main;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-m;
+
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,0.8) 0%,
+      rgba(0,0,0,0.8) 100%
+    );
+
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition-main;
+  }
+}
+
+
+/* ======================
+   TOP SECTION
+====================== */
+
+.top {
+  @include element-flex(row, space-between);
+  gap: $spacing-2;
+  width: 100%;
+}
+
+@include tabletWidth {
+  .top {
+    gap: $spacing-1;
+  }
+}
+
+
+/* ======================
+   ABOUT
+====================== */
+
+.about {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-1;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+
+/* ======================
+   BADGES
+====================== */
+
+.badge {
+
+  padding: $spacing-1 $spacing-3;
+  min-width: 3rem;
+
+  @include body1;
+
+  font-size: $font-size-s;
+  border-radius: $radius-m;
+  width: fit-content;
+  text-align: center;
+
+  &.title {
+    color: $color-white;
+    background-color: rgba(#000,0.8);
+    font-weight: $font-medium;
+  }
+
+  &.age {
+    color: $color-foreground;
+    background-color: rgba(#B1D800,0.8);
+    font-weight: $font-medium;
+  }
+
+  &.characteristics {
+    color: $color-white;
+    background-color: rgba(#277d23,0.8);
+  }
+
+  &.gender {
+    @include element-flex(row, center, flex-start);
+    gap: $spacing-1;
+    color: $color-foreground;
+    background-color: $color-background-3;
+  }
+
+  &.size,
+  &.ageText {
+    color: $color-white;
+    background-color: rgba(#4e4e4e,0.8);
+  }
+}
+
+@include tabletWidth {
+
+  .badge {
+    padding: $spacing-1 $spacing-2;
+    font-size: $font-size-xs;
+
+    &.characteristics {
+      font-size: $font-size-xxs;
+    }
+  }
+
+}
+
+
+/* ======================
+   HOVER CONTENT
+====================== */
+
+.hoverContent {
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  @include element-flex(column, center, center);
+
+  gap: $spacing-3;
+  width: 100%;
+
+  transition: $transition-main;
+
+  .data {
+    @include element-flex(column, flex-start, center);
+    gap: $spacing-1;
+  }
+
+}
+
+@include tabletWidth {
+  .hoverContent {
+    gap: $spacing-2;
+  }
+}
+
+
+/* ======================
+   BUTTON
+====================== */
+
+.buttonCard {
+  max-width: 16rem;
+  height: 4.3rem;
+  color: #000;
+}
+
+@include tabletWidth {
+
+  .buttonCard {
+    max-width: 14rem;
+    height: 3.7rem;
+  }
+
+}
+
+
+/* ======================
+   BOTTOM
+====================== */
+
+.bottom {
+  @include element-flex(row, center, center);
+  width: 100%;
+}
+
+
+/* ======================
+   LOCATION
+====================== */
+
+.location {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-1;
+  color: $color-white;
+  font-size: $font-size-s;
+}
+
+@include tabletWidth {
+
+  .location {
+    font-size: $font-size-xs;
+  }
+
+}
+
+
+/* ======================
+   BOOKMARK
+====================== */
+
+.addBookmark {
+
+  @include flex-center;
+
+  width: 3.5rem;
+  height: 3.5rem;
+
+  background-color: $color-background-1;
+  border-radius: 50%;
+  cursor: pointer;
+
+  svg {
+    transition: fill 0.3s ease;
+  }
+
+  &:hover svg {
+    fill: $color-accent;
+  }
+
+  &--active svg {
+    fill: $color-accent;
+  }
+
+}
+
+
+/* ======================
+   MAP VERSION
+====================== */
+
+.card--map {
+
+  .card {
+    width: 200px;
+    height: 250px;
+  }
+
+  .content {
+    inset: $spacing-2;
+    gap: $spacing-2;
+  }
+
+  .top {
+    gap: $spacing-1;
+  }
+
+  .badge {
+    font-size: $font-size-xs;
+    padding: $spacing-1 $spacing-2;
+
+    &.characteristics {
+      font-size: $font-size-xxs;
+    }
+  }
+
+  .hoverContent {
+    gap: $spacing-2;
+  }
+
+  .buttonCard {
+    max-width: 14rem;
+    height: 3.7rem;
+  }
+
+  .location {
+    font-size: $font-size-xs;
+  }
+
+}

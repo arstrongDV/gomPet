@@ -1,0 +1,36 @@
+@import 'src/styles';
+
+.btn {
+  cursor: pointer;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: 100rem;
+  width: 3.2rem;
+  height: 3.2rem;
+
+  transition: all $transition-main;
+
+  &:hover {
+    background-color: $color-background-3;
+  }
+
+  &:active {
+    background-color: $color-background-2;
+  }
+
+  &__open {
+    transform: rotate(0deg);
+  }
+
+  &__darkBackground {
+    background-color: $color-background-4;
+  }
+}
+
+.icon {
+  pointer-events: none;
+  flex-shrink: 0;
+}

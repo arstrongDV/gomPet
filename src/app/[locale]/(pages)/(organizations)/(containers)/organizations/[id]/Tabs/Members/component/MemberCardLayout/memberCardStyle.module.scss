@@ -1,0 +1,184 @@
+@import 'styles';
+
+.container{
+  @include element-flex(row, space-between, center);
+  gap: $spacing-5;
+  background-color: #f0f0f0;
+}
+
+@include customWidth(630px){
+  .container{
+    flex-wrap: wrap;
+  }
+}
+
+.memberInfocontainer{
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+@include phoneWidth{
+  .memberInfocontainer{
+    gap: 1.5rem;
+  }
+}
+
+.wrrapper{
+    @include element-flex(row, flex-start, center);
+    gap: 2rem;
+}
+
+.image {
+  width: 4.8rem;
+  height: 4.8rem;
+
+  @include tabletWidth {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+.header {
+  @include element-flex(row, space-between, center);
+  gap: $spacing-3 $spacing-4;
+  flex-wrap: wrap;
+
+  .info {
+    @include element-flex(column);
+
+    .name {
+      @include body1;
+    }
+
+    .date {
+      @include body2;
+      color: $color-foreground-dim;
+    }
+  }
+}
+
+.content {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-1;
+  padding: $spacing-4;
+  border-radius: $radius-m;
+  background-color: $color-background-3;
+  grid-column: 2 / -1;
+
+  @include tabletWidth {
+    grid-column: 1 / -1;
+  }
+
+  .text {
+    @include body1;
+    color: $color-foreground;
+    white-space: pre-wrap;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.deleteButton{
+    background-color: $color-danger-dark;
+}
+
+.info{
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  p{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    text-wrap: nowrap;
+  }
+
+  span{
+    margin-left: 1rem;
+    text-wrap: wrap;
+  }
+}
+
+@include phoneWidth{
+  .info{
+    gap: 0.5rem;
+    text-wrap: wrap;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  
+    p{
+      font-size: $font-size-xxs;
+    }
+  
+    span{
+      margin-left: 0.5rem;
+      font-size: $font-size-xxs;
+    }
+  }
+}
+
+.roleChange{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.modalIsAree{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: $radius-m;
+  width: 400px;
+  height: 200px;
+  padding: 1rem;
+  z-index: 100;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+  justify-content: center;
+
+  p{
+    font-size: $font-size-m;
+  }
+}
+
+.drop {
+  position: fixed;
+  inset: 0; // top: 0; right: 0; bottom: 0; left: 0;
+  background-color: rgba(0, 0, 0, 0.304);
+  z-index: 50;
+  
+}
+
+.btns{
+  @include element-flex(row, flex-end, stretch);
+  gap: 2rem;
+  flex-wrap: wrap-reverse;
+  align-self: flex-end;
+  width: 100%;
+
+  .btnDel{
+    background-color: $color-danger;
+  }
+  .btnDel:hover{
+    background-color: $color-danger-dark;
+  }
+}
+
+@include customWidth(630px){
+  .btns{
+    gap: 0.4rem;
+    align-self: center;
+    justify-content: center;
+  }
+}
+.submitButton, .deleteButton{
+  font-size: $font-size-xs;
+  padding: $spacing-3;
+}

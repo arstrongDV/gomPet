@@ -1,0 +1,27 @@
+{
+  "seeUs": "Zobacz nas",
+  "noAddress": "Brak adresu",
+  "empty": "Nie znaleźliśmy żadnych organizacji",
+  "filters": {
+    "location": "Lokalizacja",
+    "locationPlaceholder": "W jakim mieście szukasz?",
+    "range": "Zasięg",
+    "rangePlaceholder": "Do ilu kilometrów?",
+    "breedSpecies": "Gatunek",
+    "breedType": "Typ hodowli"
+  },
+  "showFilters": "Pokaż filtry",
+  "hideFilters": "Ukryj filtry",
+  "showMap": "Pokaż mapę",
+  "hideMap": "Ukryj mapę",
+  "litters": {
+    "anticipatedDate": "Przewidywana data",
+    "litterDate": "Data miotu",
+    "status": {
+      "available": "Dostępne",
+      "can_reserve": "Można zarezerwować",
+      "no_reserve_slots": "Brak miejsc do rezerwacji",
+      "already_given": "Wydane"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+// Basic colors
+$color-foreground: var(--color-foreground);
+$color-foreground-dim: var(--color-foreground-dim);
+$color-foreground-placeholder: var(--color-foreground-placeholder);
+$color-foreground-inverted: var(--color-foreground-inverted);
+
+$color-background-1: var(--color-background-1);
+$color-background-2: var(--color-background-2);
+$color-background-3: var(--color-background-3);
+$color-background-4: var(--color-background-4);
+
+$color-primary: var(--color-primary);
+$color-primary-hover: var(--color-primary-hover);
+$color-primary-active: var(--color-primary-active);
+$color-primary-disabled: var(--color-primary-disabled);
+
+$color-secondary: var(--color-secondary);
+$color-secondary-dark: var(--color-secondary-dark);
+$color-secondary-light: var(--color-secondary-light);
+
+$color-accent: var(--color-accent);
+$color-accent-hover: var(--color-accent-hover);
+$color-accent-active: var(--color-accent-active);
+$color-accent-disabled: var(--color-accent-disabled);
+
+$color-success: var(--color-success);
+$color-success-dark: var(--color-success-dark);
+$color-success-light: var(--color-success-light);
+
+$color-danger: var(--color-danger);
+$color-danger-dark: var(--color-danger-dark);
+$color-danger-light: var(--color-danger-light);
+
+$color-warning: var(--color-warning);
+$color-warning-dark: var(--color-warning-dark);
+$color-warning-light: var(--color-warning-light);
+
+$color-border: var(--color-border);
+
+$color-white: #fff;
+$color-black: #000;
+
+// Grayscale
+$color-gray-50: #ffffff;
+$color-gray-100: #e1e2ea;
+$color-gray-200: #b4b5cb;
+$color-gray-300: #9597ac;
+$color-gray-400: #797b96;
+$color-gray-500: #797b96;
+$color-gray-600: #474356;
+$color-gray-700: #282631;
+$color-gray-800: #000000;
+
+// Box shadows
+$shadow-main: 0px 4px 20px 0px #00000008;
+$shadow-hover: 0px 4px 20px 0px #00000018;
+$shadow-soft: rgba(0, 0, 0, 0.08) 0rem 0.2rem 1.2rem -0.3rem;
+$shadow-sharp: rgba(0, 0, 0, 0.24) 0rem 0.3rem 0.8rem;
+$shadow-outline: rgba(0, 0, 0, 0.05) 0rem 0rem 0rem 0.1rem;
+
+$shadow-input-active: 0 0 0 0.1rem $color-primary-hover;
+$shadow-input-error: 0 0 0 0.1rem $color-danger-dark;
+
+// Borders
+$border-input-active: 0.1rem solid $color-primary-hover;
+$border-input-error: 0.1rem solid $color-danger-dark;
+
+// Filters
+$filter-white: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(201deg) brightness(106%)
+  contrast(106%);
+$filter-black: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(7500%) hue-rotate(226deg) brightness(103%)
+  contrast(108%);
+
+// References
+// mui palette -> https://mui.com/material-ui/customization/palette/
+// white palette -> https://www.color-name.com/best-white.color
+// mui scale -> https://mui.com/material-ui/customization/color/
+// box shadows -> https://getcssscan.com/css-box-shadow-examples

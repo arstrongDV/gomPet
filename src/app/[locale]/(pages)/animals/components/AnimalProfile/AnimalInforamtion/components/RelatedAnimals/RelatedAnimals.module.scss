@@ -1,0 +1,51 @@
+@import 'styles';
+
+.relatedAnimals {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap; 
+}
+
+.relatedAnimals > * { 
+    flex: 0 0 300px; 
+    max-width: 300px;
+}
+
+.relatedAnimals::-webkit-scrollbar {
+    height: 5px;
+}
+
+.relatedAnimals::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 10px;
+}
+
+.relatedAnimals::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.list {
+  @include element-flex(row, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
+}
+
+.noAnimalsText{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  p{
+    font-size: $font-size-xs;
+    color: $color-foreground-dim;
+  }
+}

@@ -1,0 +1,22 @@
+@import 'styles';
+
+.container {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    gap: $spacing-3;
+
+    padding: $spacing-6;
+}
+@include tabletWidth{
+    .container {
+        padding: $spacing-3;
+    }
+}
+
+.postCreate{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}

@@ -1,0 +1,15 @@
+{
+  "sidebar": {
+    "landing": "Strona główna",
+    "myAnimals": "Moje zwierzaki",
+    "animals": "Zwierzaki",
+    "shelters": "Schroniska",
+    "breedings": "Hodowle",
+    "foundations": "Fundacje",
+    "bookmarks": "Polubione",
+    "posts": "Wpisy",
+    "knowledge": "Wiedza",
+    "login": "Zaloguj się",
+    "logout": "Wyloguj się"
+  }
+}

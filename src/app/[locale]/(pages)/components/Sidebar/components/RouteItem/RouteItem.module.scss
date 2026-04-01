@@ -1,0 +1,45 @@
+@import 'styles';
+
+.item {
+  position: relative;
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-3;
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  border-radius: $radius-m;
+  @include body1;
+  color: $color-foreground;
+  cursor: pointer;
+  word-break: normal;
+  transition: background-color $transition-smooth-end, color $transition-smooth-end, fill $transition-smooth-end;
+
+  &:hover,
+  &.active {
+    background: $color-background-2;
+  }
+
+  &.highlighted {
+    background: $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background: $color-primary-hover;
+    }
+
+    &.active {
+      background: $color-primary;
+    }
+  }
+
+  &.isClose {
+    padding: unset;
+    @include flex-center;
+  }
+
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+}

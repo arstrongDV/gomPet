@@ -1,0 +1,45 @@
+@import 'src/styles';
+
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+}
+
+.label {
+  display: block;
+  padding-bottom: 0.5rem;
+  @include body2;
+  color: $color-foreground;
+}
+
+.visuallyHidden {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 0.1rem;
+  margin: -0.1rem;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 0.1rem;
+}
+
+.required {
+  color: $color-danger;
+}
+
+.descriptionField {
+  padding-bottom: 0.6rem;
+  @include caption;
+  color: $color-foreground-dim;
+}
+
+.errorMessage {
+  margin-top: 0.5rem;
+  @include caption;
+  color: $color-danger;
+  animation: fadeIn 0.4s;
+}
+
+@keyframes fadeIn {
+  @include keyframe-fadeIn;
+}

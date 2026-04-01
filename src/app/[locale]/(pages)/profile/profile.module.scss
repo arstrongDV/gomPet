@@ -1,0 +1,211 @@
+@import 'styles';
+
+.container {
+    @include element-flex(column, center, stretch);
+    gap: $spacing-6;
+    width: 100%;
+}
+
+.InfoWrraper{
+    @include element-flex(row, space-between, stretch);
+    gap: $spacing-3;
+}
+
+@include tabletWidth{
+    .InfoWrraper{
+        @include element-flex(column, center, stretch);
+        gap: $spacing-3;
+    }
+}
+
+.avatarSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+@include tabletWidth{
+    .avatarSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+.infoSection{
+    @include element-flex(column, flex-end, flex-end);
+    gap: $spacing-5;
+    width: 100%;
+}
+
+@include tabletWidth{
+    .infoSection{
+        @include element-flex(column, center, center);
+        gap: $spacing-5;
+        width: 100%;
+    }
+}
+
+.inputWrraper{
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+}
+.inputIcon{
+    position: absolute;
+    top: 50%;
+    right: 2rem; 
+
+    cursor: pointer;
+}
+
+.inputs {
+    width: 100%;
+}
+
+.avatar {
+    width: 15rem;
+    height: 15rem;
+}
+
+.userData{
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    margin-top: 3rem;
+    text-wrap: nowrap;
+
+    p{
+        font-size: $font-size-xs;
+        color: $color-foreground-dim;
+    }
+
+    span{
+        color: $color-gray-700;
+        margin-left: 1rem;
+    }
+}
+@include tabletWidth{
+    .userData{
+        text-wrap: wrap;
+    }
+}
+
+.organizationList {
+    flex: 1; 
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: $spacing-4;
+    transition: $transition-main;
+    margin: 20px 0;
+  }
+
+.animalsList{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 2rem;
+    align-items: center;
+}
+
+.flexRow {
+    @include element-flex(row, flex-end, center);
+    width: 100%;
+    gap: $spacing-4;
+}
+@include smDesktopWidth{
+    .flexRow {
+        flex-wrap: wrap;
+    }
+}
+@include tabletWidth{
+    .flexRow {
+        @include element-flex(row, center, center);
+    }
+}
+
+.fullWidth {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-4;
+    width: 100%;
+}
+
+.btns{
+    display: flex;
+    gap: 2rem;
+    margin-top: 3rem;
+    width: 100%;
+    justify-content: flex-end;
+}
+@include tabletWidth{
+    .btns{
+        justify-content: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
+.btnDel{
+    background-color: $color-danger;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0; // full screen
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10;
+  }
+  
+  .DeleteCard {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    z-index: 100;
+  }
+  
+  .btns {
+    display: flex;
+    gap: 3rem;
+  }
+
+  .newAvatar{
+    border-radius: 100%;
+  }
+
+  .imageChanger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 130%;
+    color: $color-primary;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.25s ease, opacity 0.25s ease;
+  
+    &:hover {
+      color: $color-primary-hover;
+      opacity: 0.85;
+    }
+    &:focus {
+        color: $color-primary-active;
+        opacity: 0.85;
+      }
+  }
+
+  .usersStaff{
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }

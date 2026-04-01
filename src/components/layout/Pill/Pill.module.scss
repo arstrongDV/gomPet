@@ -1,0 +1,20 @@
+@import 'styles';
+
+.pill {
+  padding: $spacing-1 $spacing-2;
+  background-color: $color-primary;
+  color: $color-white;
+  border-radius: $radius-l;
+  flex-shrink: 0;
+  @include caption;
+  line-height: 1.2rem;
+  width: fit-content;
+
+  &.clickable {
+    cursor: pointer;
+  }
+
+  &.notSelected {
+    opacity: 0.5;
+  }
+}

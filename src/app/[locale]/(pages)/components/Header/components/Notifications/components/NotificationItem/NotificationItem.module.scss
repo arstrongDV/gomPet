@@ -1,0 +1,40 @@
+@import 'styles';
+
+.item {
+  @include element-flex(row, space-between);
+  gap: $spacing-4;
+  padding: $spacing-4;
+  transition: background-color $transition-main;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-background-4;
+  }
+
+  @include dark-theme {
+    &:hover {
+      background-color: $color-background-3;
+    }
+  }
+}
+
+.col {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-2;
+}
+
+.content {
+  @include body2;
+  font-weight: $font-regular;
+  color: $color-foreground;
+
+  b {
+    font-weight: $font-medium;
+  }
+}
+
+.date {
+  @include caption;
+  font-weight: $font-regular;
+  color: $color-foreground-dim;
+}

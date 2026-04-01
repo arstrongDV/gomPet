@@ -1,0 +1,24 @@
+@import 'styles';
+
+.tabs {
+  @include element-flex(row, flex-start, center);
+  gap: 0;
+  width: fit-content;
+}
+
+.button {
+  width: 100%;
+  background-color: transparent;
+  @include body2;
+  font-weight: $font-regular;
+  color: $color-foreground;
+  border-bottom: 0.2rem solid $color-border;
+  transition: border-color $transition-main;
+  padding: $spacing-2 $spacing-4;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &.active {
+    border-color: $color-primary;
+  }
+}

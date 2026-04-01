@@ -1,0 +1,60 @@
+@import 'styles';
+
+.button {
+  position: relative;
+  @include button;
+  text-align: center;
+  color: $color-white;
+  background-color: $color-primary;
+  white-space: nowrap;
+
+  border: 1px solid transparent;
+  column-gap: $spacing-3;
+  padding: $spacing-3;
+  border-radius: $radius-m;
+  height: $size-button-height;
+  width: $size-button-height;
+  cursor: pointer;
+
+  transition: $transition-main;
+
+  background-color: $color-background-2;
+  color: $color-foreground;
+
+  &:hover,
+  &:active {
+    background-color: $color-background-4;
+  }
+
+  &:hover {
+    width: 9rem;
+
+    .label {
+      opacity: 1;
+    }
+  }
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: $spacing-3;
+  transform: translateY(-50%);
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.label {
+  @include body1;
+  color: $color-foreground;
+  opacity: 0;
+  transition: $transition-main;
+  transform: translateX($spacing-4);
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+  }
+}

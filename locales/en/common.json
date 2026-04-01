@@ -1,0 +1,12 @@
+{
+    "roles": {
+        "OWNER": "Owner / Manager",
+        "STAFF": "Staff",
+        "VOLUNTEER": "Volunteer",
+        "MODERATOR": "Moderator",
+        "PARTNER": "Partner",
+        "FINANCE": "Finance",
+        "CONTENT": "Content creator",
+        "VIEWER": "Viewer"
+      }
+}

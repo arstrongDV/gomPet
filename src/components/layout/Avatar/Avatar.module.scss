@@ -1,0 +1,38 @@
+@import 'src/styles';
+
+.image {
+  border-radius: $radius-m;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.rounded {
+    border-radius: 50%;
+  }
+
+  &.contain img {
+    object-fit: contain;
+  }
+}
+
+.placeholder {
+  @include flex-center;
+  width: 100%;
+  height: 100%;
+  background-color: $color-background-4;
+  padding: $spacing-2;
+  pointer-events: none;
+
+  @include dark-theme {
+    background-color: $color-background-1;
+  }
+
+  .icon {
+    color: $color-foreground-dim;
+  }
+}

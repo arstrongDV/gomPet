@@ -1,0 +1,19 @@
+@import 'styles';
+
+.filters {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-4;
+}
+
+.row {
+  @include element-flex(row, flex-start, center);
+  gap: $spacing-4;
+  flex-wrap: wrap;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  gap: $spacing-4;
+  // gap: 5rem;
+}

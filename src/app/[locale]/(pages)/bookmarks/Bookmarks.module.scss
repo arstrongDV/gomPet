@@ -1,0 +1,78 @@
+@import 'styles';
+
+// .bookmarksWrapper{
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     width: 100%;
+//     align-items: center;
+//     gap: 2.4rem;
+// }
+
+
+// .list {
+//   flex: 1;
+//   display: grid;
+//   flex-wrap: wrap;
+//   gap: $spacing-4;
+//   margin: 20px 0;
+//   transition: $transition-main;
+//   justify-content: center;
+//   grid-template-columns: repeat(3, 1fr);
+
+//   &.withMap {
+//     grid-template-columns: repeat(2, 1fr); // 👈 zmiana tylko jeśli mapa włączona
+//   }
+//   // duże ekrany
+//   @include desktopWidth {
+//     grid-template-columns: repeat(3, 1fr);
+//   }
+
+//   // <= 1024px
+//   @include mobileWidth {
+//     grid-template-columns: repeat(3, 1fr);
+
+//     &.withMap {
+//       grid-template-columns: repeat(2, 1fr); // 👈 zmiana tylko jeśli mapa włączona
+//     }
+//   }
+
+//   // <= 768px
+//   @include tabletWidth {
+//     grid-template-columns: repeat(3, 1fr);
+//   }
+
+//   // <= 480px
+//   @include phoneWidth {
+//     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+//     gap: $spacing-3;
+//   }
+
+//   // <= 320px
+//   @include smPhoneWidth {
+//     grid-template-columns: 1fr;
+//     justify-items: center;
+//     gap: $spacing-2;
+//   }
+// }
+
+.list {
+  flex: 1; 
+  display: grid;
+  gap: $spacing-5;
+  margin-bottom: 20px;
+  transition: $transition-main;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+
+  @include tabletWidth {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 250px));
+      gap: $spacing-2;
+  }
+
+  @include phoneWidth {
+      grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+      justify-content: center;
+      justify-items: center;
+    }
+}

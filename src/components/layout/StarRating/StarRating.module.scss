@@ -1,0 +1,33 @@
+@import 'styles';
+
+.starList {
+  display: flex;
+  gap: $spacing-1;
+  flex-shrink: 0;
+}
+
+.starListItem {
+  display: flex;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  &.button {
+    cursor: pointer;
+  }
+}
+
+.starList {
+  &.readonly {
+    .starListItem {
+      cursor: default;
+    }
+  }
+}
+
+.message {
+  @include caption;
+  color: $color-foreground-dim;
+  line-height: unset;
+  margin-left: $spacing-1;
+}

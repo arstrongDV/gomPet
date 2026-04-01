@@ -1,0 +1,58 @@
+@import 'src/styles';
+
+.icon {
+  @include flex-center;
+  color: $color-foreground;
+  width: $size-icon;
+  height: $size-icon;
+}
+
+.small {
+  width: $size-icon-small;
+  height: $size-icon-small;
+}
+
+.gray path {
+  stroke: $color-foreground-dim;
+}
+
+.dark path {
+  stroke: $color-foreground;
+}
+
+.white {
+  color: $color-white;
+  filter: brightness(10000%);
+}
+
+.colored {
+  color: $color-primary;
+}
+
+.noPointerEvents {
+  pointer-events: none;
+}
+
+.link,
+.button {
+  transition: $transition-main;
+  cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    svg path {
+      color: $color-primary;
+      fill: $color-primary;
+    }
+  }
+}
+
+.button {
+  background-color: transparent;
+  padding: 0;
+}
+
+.currentColor {
+  fill: currentColor;
+}

@@ -1,0 +1,116 @@
+@import 'styles';
+
+.card{
+    width: 100%;
+    padding: 48px 24px;
+    border-radius: $radius-m;
+    background-color: $color-primary;
+    color: #000;
+}
+
+@include tabletWidth{
+    .card{
+        padding: 34px 15px;
+    }
+
+    .logo{
+        width: 110px;
+    }
+}
+
+.textContent{
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-width: 470px;
+    margin-bottom: 4.4rem;
+
+
+    h3{
+        font-weight: 700;
+        font-size: 16px;
+
+    }
+    h4{
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 130%;
+    }
+    p{
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 130%;
+    }
+}
+
+@include tabletWidth{
+    .textContent{
+        gap: 0.5rem;
+        margin-bottom: 3rem;
+    
+        h3{
+            font-size: 14px;
+    
+        }
+        h4{
+            font-size: 13px;
+        }
+        p{
+            font-size: 12px;
+        }
+    }
+}
+
+.divider{
+    background-color: #000;
+}
+
+.politic{
+    display: flex;
+    flex-direction: row;
+    gap: 2.4rem;
+    
+    .link{
+        font-weight: 700;
+        font-size: 14px;
+        color: #000;
+    }
+}
+
+.privicyBlock{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 4.4rem;
+
+    .footerGreenLink{
+        font-weight: 500;
+        font-size: 14px;
+        color: $color-accent;
+    }
+}
+
+@include tabletWidth{
+    .politic{
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+
+        .link{
+            line-height: 120%;
+            font-size: 12px;
+        }
+    }
+    
+    .privicyBlock{
+        margin-top: 3rem;
+        gap: 2rem;
+        font-size: 12px;
+    
+        .footerGreenLink{
+            text-align: end;
+            width: 120px;
+            font-weight: 500;
+        }
+    }
+}

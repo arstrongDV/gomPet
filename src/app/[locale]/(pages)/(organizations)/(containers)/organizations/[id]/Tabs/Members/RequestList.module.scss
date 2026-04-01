@@ -1,0 +1,95 @@
+@import 'styles';
+
+.container{
+  @include element-flex(column, flex-start, stretch);
+  gap: 4rem;
+}
+
+.list{
+    @include element-flex(column, flex-start, stretch);
+    gap: 2rem;
+}
+
+.labelContentContainer{
+  @include element-flex(row, space-between, center);
+  // flex-wrap: wrap;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.requestLabel{
+  @include element-flex(column, flex-start, stretch);
+  background-color: #fff;
+  border-radius: $radius-m;
+  padding: $spacing-5;
+  transition: $transition-main;
+}
+
+.labelContent{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem;
+
+  h3{
+    font-size: $font-size-m;
+  }
+
+  .newLabel{
+    color: $color-primary-hover;
+    white-space: nowrap; 
+    margin: 0;
+  }
+}
+@include phoneWidth{
+  .labelContent{
+    h3{
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+
+.requestsList {
+    max-height: 0rem;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    pointer-events: none;
+    transition: $transition-main;
+  
+    &.show {
+      margin-top: 2rem;
+      visibility: visible;
+      pointer-events: all;
+      max-height: 70rem;
+    }
+}
+
+.list{
+  @include element-flex(column, flex-start, stretch);
+  gap: 2rem;
+
+  max-height: 60rem;
+  overflow-y: auto; // 👈 pozwala scrollować
+  padding-right: 1.5rem;
+  @include custom-scrollbar($color-thumb: $color-foreground-dim, $color-track: transparent);
+}
+
+
+.membersList {
+    max-height: 0rem;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    pointer-events: none;
+    transition: $transition-main;
+  
+    &.show {
+      // max-height: 100rem;
+      max-height: 300rem;
+      overflow: visible;
+      visibility: visible;
+      pointer-events: all;
+    }
+}

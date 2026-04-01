@@ -1,0 +1,89 @@
+:root {
+  /* Colors */
+  --color-foreground: #180202;
+  --color-foreground-dim: #798177;
+  --color-foreground-placeholder: #d9d9d9;
+  --color-foreground-inverted: #ffffff;
+
+  --color-background-1: #ffffff;
+  --color-background-2: #fafafa;
+  --color-background-3: #f7f7f7;
+  --color-background-4: #f0f0f0;
+
+  --color-primary: #B1D800;
+  --color-primary-hover: #86a307;
+  --color-primary-active: #86a307;
+  --color-primary-disabled: #95d492;
+
+  --color-accent: #0EA306;
+  --color-accent-hover: #0d9706;
+  --color-accent-active: #19ba11;
+  --color-accent-disabled: #95d492;
+
+  --color-secondary: #9c27b0;
+  --color-secondary-dark: #7b1fa2;
+  --color-secondary-light: #ba68c8;
+
+  --color-success: #4caf50;
+  --color-success-dark: #1b5e20;
+  --color-success-light: #2e7d32;
+
+  --color-danger: #d32f2f;
+  --color-danger-dark: #c62828;
+  --color-danger-light: #ef5350;
+
+  --color-warning: #ed6c02;
+  --color-warning-dark: #e65100;
+  --color-warning-light: #ff9800;
+
+  --color-border: #dcdfd8;
+
+  /* Spacing */
+  --spacing-base: 0.8rem;
+  --spacing-1: calc(var(--spacing-base) * 0.5);
+  --spacing-2: calc(var(--spacing-base) * 1);
+  --spacing-3: calc(var(--spacing-base) * 1.5);
+  --spacing-4: calc(var(--spacing-base) * 2);
+  --spacing-5: calc(var(--spacing-base) * 2.5);
+  --spacing-6: calc(var(--spacing-base) * 3);
+  --spacing-7: calc(var(--spacing-base) * 4);
+  --spacing-8: calc(var(--spacing-base) * 5);
+  --spacing-9: calc(var(--spacing-base) * 7);
+  --spacing-10: calc(var(--spacing-base) * 10);
+
+  /* Sizes */
+  --size-button-height: 5rem;
+  --size-button-small-height: 2.4rem;
+  --size-sidebar-width: 32rem;
+  --size-sidebar-close-width: 7rem;
+  --size-page-max-width: 120rem;
+  --size-top-navigation-height: 5rem;
+  --size-footer-height: 5rem;
+
+  --radius-s: 1rem;
+  --radius-m: 1.6rem;
+  --radius-l: 2rem;
+}
+
+body.dark-mode {
+  --color-foreground: #ffffff;
+  --color-foreground-dim: #c8c8c8;
+  --color-foreground-inverted: #000000;
+
+  --color-background-1: #0f0f0f;
+  --color-background-2: #161616;
+  --color-background-3: #1c1c1c;
+  --color-background-4: #1c1c1c;
+
+  --color-success: #62c762;
+  --color-success-dark: #2e6e2e;
+  --color-success-light: #4ba84b;
+
+  --color-danger: #d85d5d;
+  --color-danger-dark: #c15252;
+  --color-danger-light: #f27c7c;
+
+  --color-warning: #f0985b;
+  --color-warning-dark: #e17d37;
+  --color-warning-light: #ffb14d;
+}

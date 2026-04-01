@@ -1,0 +1,69 @@
+@import 'src/styles';
+
+.container {
+  display: flex;
+  list-style-type: none;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-1;
+
+  .paginationItem {
+    @include element-flex(row, center, center);
+    width: 4.2rem;
+    height: 4rem;
+    border-radius: $radius-s;
+    color: $color-foreground;
+    background-color: $color-background-3;
+    transition: $transition-main;
+    @include body1;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-background-4;
+    }
+
+    @include dark-theme {
+      background-color: $color-background-1;
+
+      &:hover {
+        background-color: $color-background-2;
+      }
+    }
+
+    &.selected {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+
+    &.dots {
+      pointer-events: none;
+    }
+
+    .arrow {
+      &::before {
+        position: relative;
+        content: '';
+        display: inline-block;
+        width: 0.6em;
+        height: 0.6em;
+        border-right: 0.15em solid;
+        border-top: 0.15em solid;
+        border-color: $color-foreground-dim;
+      }
+
+      &.left {
+        transform: rotate(-135deg);
+        margin-left: 0.1em;
+      }
+
+      &.right {
+        transform: rotate(45deg);
+        margin-right: 0.1em;
+      }
+    }
+
+    &.disabled {
+      display: none;
+    }
+  }
+}

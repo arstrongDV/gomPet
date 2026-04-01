@@ -1,0 +1,102 @@
+.richTextContainer {
+    line-height: 1.8;
+    font-size: 1.8rem; // base text
+    color: #333;
+  
+    // Paragraphs
+    p {
+      margin: 1rem 0;
+      font-size: 1em; // relative to container
+    }
+  
+    // Headings scale relative to container
+    h1, h2, h3, h4 {
+      margin: 1.5rem 0 0.8rem 0;
+      font-weight: bold;
+      line-height: 1.3;
+    }
+    h1 { font-size: 2.2em; } // 2.2 × container
+    h2 { font-size: 1.8em; }
+    h3 { font-size: 1.4em; }
+    h4 { font-size: 1.2em; }
+  
+    // Text alignment
+    .alignLeft { text-align: left; }
+    .alignCenter { text-align: center; }
+    .alignRight { text-align: right; }
+    .alignJustify { text-align: justify; }
+  
+    // Inline styles inherit container
+    strong { font-weight: 700; color: #2c2c2c; font-size: inherit; }
+    em { font-style: italic; font-size: inherit; }
+    u { text-decoration: underline; font-size: inherit; }
+    s, .strikethrough { text-decoration: line-through; color: #666; font-size: inherit; }
+    a { color: #007bff; text-decoration: underline; font-size: inherit; &:hover { color: #0056b3; } }
+  
+    // Inline code
+    code, .inlineCode {
+      background: #f4f4f4;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'Monaco','Menlo','Ubuntu Mono', monospace;
+      font-size: 0.95em; // slightly smaller than surrounding text
+      color: #d63384;
+    }
+  
+    // Code block
+    pre {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      border: 1px solid #e9ecef;
+      margin: 1rem 0;
+      font-size: 1em; // relative to container
+    }
+  
+    .codeBlock {
+      margin: 1.5rem 0;
+      position: relative;
+      pre { margin: 0; font-size: 1em; }
+    }
+  
+    .codeLanguage {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #e9ecef;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.9em;
+      font-weight: 500;
+      border-bottom-left-radius: 4px;
+      color: #6c757d;
+    }
+  
+    // Blockquote
+    blockquote {
+      border-left: 4px solid #ddd;
+      padding: 1rem 1.5rem;
+      margin: 1.2rem 0;
+      font-style: italic;
+      color: #666;
+      background: #f9f9f9;
+      border-radius: 0 4px 4px 0;
+      font-size: 1em;
+    }
+  
+    // Lists
+    ul, ol {
+      margin: 1rem 0;
+      padding-left: 2rem;
+      font-size: 1em;
+    }
+  
+    li {
+      margin: 0.5rem 0;
+    }
+  
+    /* Text size modifiers */
+    &.smallText { font-size: 0.8rem; }
+    &.mediumText { font-size: 1.4rem; }
+    &.largeText { font-size: 2rem; }
+  }

@@ -1,0 +1,18 @@
+@import 'styles';
+
+.locationCity {
+  display: inline-block;
+}
+
+.icon {
+  display: inline-block;
+  margin-right: $spacing-1;
+  width: 2.4rem;
+  height: 2.4rem;
+  vertical-align: top;
+}
+
+.text {
+  @include body2;
+  color: $color-foreground;
+}

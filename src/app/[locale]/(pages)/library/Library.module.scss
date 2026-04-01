@@ -1,0 +1,12 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+}
+
+.hsCard {
+  width: 30rem;
+  flex-shrink: 0;
+}

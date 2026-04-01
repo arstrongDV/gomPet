@@ -1,0 +1,10 @@
+@import 'styles';
+
+.type {
+  @include element-flex(row, center, center);
+  width: fit-content;
+  gap: $spacing-2;
+  color: $color-foreground-dim;
+  @include body2;
+  font-weight: $font-semiBold;
+}

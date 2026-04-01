@@ -1,0 +1,81 @@
+@import 'styles';
+
+.container {
+  width: 100%;
+}
+
+.modaPostAddWin{
+  max-height: 90vh;
+  max-width: 1200px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 7fr 4fr;
+  gap: $spacing-6;
+  width: 100%;
+  align-items: start;
+  margin-bottom: $spacing-6;
+}
+@include tabletWidth{
+  .wrapper {
+    grid-template-columns: 1fr;
+    align-items: center;
+    // display: flex;
+    // flex-wrap: wrap-reverse;
+    // width: 100%;
+  }
+
+  .aside {
+    order: -1;
+    margin-bottom: $spacing-7;
+  }
+
+  .listWrraper {
+    order: 1;
+  }
+
+}
+
+.listWrraper {
+  width: 100%;
+}
+
+.aside {
+  position: sticky;
+  top: 25px;
+  align-self: start;
+}
+@include tabletWidth{
+  .aside {
+    position: relative;
+    align-self: center;
+  }
+}
+
+.listWrraper{
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%
+}
+
+.post {
+  width: 100%;
+}
+
+.list {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+}
+
+.mapWrraper {
+  height: 300px; // albo 350px / 400px
+  border-radius: $radius-l;
+  overflow: hidden;
+  margin-top: 2.4rem;
+}
+.map {
+  width: 100%;
+  height: 100%; 
+}

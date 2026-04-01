@@ -1,0 +1,15 @@
+@import 'styles';
+
+.textBlock{
+    @include element-flex(column, center, center);
+    width: 100%;
+    gap: 2.4rem;
+  
+    p{
+      text-align: center;
+    }
+}
+  
+.greenText{
+    color: $color-primary;
+}

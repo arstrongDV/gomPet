@@ -1,0 +1,30 @@
+@import 'styles';
+
+.container{
+    @include element-flex(column, center, center);
+    gap: $spacing-6;
+    width: 100%;
+}
+
+.header {  
+    .title {
+      @include title3;
+    }
+  
+    .highlight {
+      color: $color-primary;
+    }
+}
+
+.list {
+  @include element-flex(row, flex-start, stretch);
+  gap: $spacing-4;
+  width: 100%;
+}
+
+.noArticles {
+  text-align: center;
+  color: $color-foreground-dim;
+  font-size: $font-size-s;
+  width: 100%;
+}

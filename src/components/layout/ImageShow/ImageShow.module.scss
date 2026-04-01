@@ -1,0 +1,68 @@
+.modal {
+    background: rgba(22, 22, 22, 0.55); // półprzezroczyste tło
+    width: 100%;
+    max-width: 40vw;
+  }
+  
+  .slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .image {
+    width: 25vw;
+    max-height: 80vw;
+    min-height: 70vh;
+    object-fit: contain;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+  }
+  
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    z-index: 10;
+    user-select: none;
+    transition: background 0.2s ease;
+  
+    &:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
+  }
+  
+  .left {
+    left: 10px;
+  }
+  
+  .right {
+    right: 10px;
+  }
+  
+  // Dodatkowo responsywność dla małych ekranów
+  @media (max-width: 768px) {
+    .arrow {
+      width: 45px;
+      height: 45px;
+      font-size: 2rem;
+    }
+  
+    .image {
+      max-width: 90vw;
+      max-height: 70vh;
+    }
+  }
+  

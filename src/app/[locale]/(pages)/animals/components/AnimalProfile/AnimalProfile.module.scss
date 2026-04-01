@@ -1,0 +1,89 @@
+@import 'styles';
+
+$primary-green: #277D23;
+$secondary-green: #a1d39f;
+$text-muted: #a2a2a2;
+$text-dark: #333;
+
+@mixin responsive-font($desktop, $mobile) {
+  font-size: $desktop;
+
+  @media (max-width: 480px) {
+    font-size: $mobile;
+  }
+}
+
+.hello {
+  color: $primary-green;
+  font-weight: 700;
+  @include responsive-font(24px, 20px);
+
+  @media (max-width: 480px) {
+      @include responsive-font(20px, 16px);
+  }
+}
+
+.head {
+  margin: 0 auto 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+
+  @media (max-width: 768px) {
+    gap: 16px;
+    align-items: flex-start;
+  }
+}
+
+.name {
+  color: $text-muted;
+  @include responsive-font(18px, 16px);
+
+  span {
+    color: $text-dark;
+    font-weight: bold;
+  }
+}
+
+.tags {
+  display: flex;
+  position: relative;
+  gap: 20px;
+  cursor: pointer;
+  @include responsive-font(18px, 16px);
+
+  flex-direction: row;
+
+  @media (max-width: 480px) {
+    gap: 12px;
+    font-size: $font-size-s;
+  }
+
+  p {
+    position: relative;
+    padding-bottom: 8px;
+    transition: color 0.3s ease-in-out;
+
+    &:hover {
+      color: $primary-green;
+    }
+  }
+
+  .underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    transition: transform 0.4s ease-in-out;
+  }
+
+  .left {
+    background: linear-gradient(to right, $primary-green 50%, $secondary-green 50%);
+  }
+
+  .right {
+    background: linear-gradient(to right, $secondary-green 50%, $primary-green 50%);
+  }
+}

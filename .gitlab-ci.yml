@@ -1,0 +1,33 @@
+cache:
+  paths:
+    - node_modules/
+stages:
+  - build
+  - deploy
+build:
+  image: node:20.5.0
+  stage: build
+  script:
+    - npm install
+    - npm run build
+    - ls -la
+  artifacts:
+    paths:
+      - ./dist
+
+deploy:
+  image: node:20.5.0
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      variables:
+        DEPLOY_BRANCH: 'main'
+    - if: $CI_COMMIT_BRANCH == "staging"
+      variables:
+        DEPLOY_BRANCH: 'staging'
+  variables:
+    CLOUDFLARE_API_TOKEN: $CLOUDFLARE_API_TOKEN
+    CLOUDFLARE_ACCOUNT_ID: $CLOUDFLARE_ACCOUNT_ID
+  script:
+    - npm install -g wrangler
+    - npx wrangler pages publish ./dist --project-name=gompet --branch=$DEPLOY_BRANCH

@@ -1,0 +1,32 @@
+@import 'styles';
+
+// .selectContainer{
+//     @include element-flex(row, flex-start, center);
+//     // display: grid;
+//     // grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+//     gap: $spacing-3;
+//     width: 100%;
+//     min-width: 50px;
+// }
+
+.selectContainer {
+  display: flex;
+  gap: $spacing-4;
+  width: 100%;
+  grid-column: 1 / -1;
+
+  & > div {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .selectContainer {
+    flex-direction: column;
+
+    & > div {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+@import 'styles';
+
+.sidebar {
+  position: fixed;
+  top: $space-sidebar-page-margin;
+  left: $space-sidebar-page-margin;
+  bottom: $space-sidebar-page-margin;
+  @include element-flex(column, flex-start, flex-start);
+  gap: $spacing-6;
+  width: $size-sidebar-width;
+  padding: $spacing-6;
+  background: $color-background-1;
+  border-radius: $radius-m;
+  max-height: calc(100vh - 2 * $space-sidebar-page-margin);
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  transition: transform $transition-smooth-end background-color $transition-smooth-end, color $transition-smooth-end;
+  z-index: 3;
+
+  align-items: center; 
+
+  @include mobileWidth {
+    display: none;
+  }
+}
+
+.nav {
+  @include element-flex(column, space-between);
+  gap: $spacing-1;
+  width: 100%;
+  height: 100%;
+}
+
+.topNav,
+.bottomNav {
+  @include element-flex(column);
+  gap: $spacing-1;
+  width: 100%;
+}
+
+.bottomNav {
+  margin-top: auto;
+}

@@ -1,0 +1,54 @@
+@import 'styles';
+
+.container {
+  @include element-flex(column, flex-start, stretch);
+  gap: $spacing-6;
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-6;
+}
+
+@include tabletWidth {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.list {
+  flex: 1; 
+  display: grid;
+  gap: $spacing-5;
+  margin-bottom: 20px;
+  transition: $transition-main;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+
+  @include tabletWidth {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 250px));
+      gap: $spacing-2;
+  }
+
+  @include phoneWidth {
+      grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+      justify-content: center;
+      justify-items: center;
+      align-items: center;
+    }
+}
+
+.mapWrraper {
+  display: flex;
+  height: auto;
+  min-height: 300px;
+  border-radius: $radius-l;
+  overflow: hidden; 
+}
+.map {
+  width: 100%;
+  height: 100%; 
+}
