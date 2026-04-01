@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from './MobileMenu.module.scss';
 
 import Notifications from '../Header/components/Notifications';
@@ -10,6 +10,7 @@ import { Routes } from 'src/constants/routes';
 import RouteItem from '../Sidebar/components/RouteItem';
 import { Icon } from 'src/components';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 
 type MenuProps = {
   setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +19,17 @@ type MenuProps = {
 const MobileMenu = ({setShowMenu}: MenuProps) => {
   const session = useSession();
   const t = useTranslations();
+
+const pathname = usePathname();
+const prevPathname = useRef(pathname);
+
+useEffect(() => {
+  if (prevPathname.current !== pathname) {
+    setShowMenu(false);
+  }
+
+  prevPathname.current = pathname;
+}, [pathname]);
 
   const highlightedRoute: RouteItemType = {
     title: t('navigation.sidebar.myAnimals'),

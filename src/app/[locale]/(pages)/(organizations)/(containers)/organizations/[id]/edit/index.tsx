@@ -1,6 +1,8 @@
-'use client'
-import { useEffect, useRef, useState } from "react";
-import { IOrganization, OrganizationType } from "src/constants/types";
+'use client';
+import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+
+import { OrganizationsApi } from 'src/api';
 import { 
     AvatarCropper, 
     Button, 
@@ -12,12 +14,13 @@ import {
     RichTextEditor, 
     SectionHeader, 
     Select 
-} from "src/components";
-import LocationInput from "src/components/layout/LocationInput";
+} from 'src/components';
+import LocationInput from 'src/components/layout/LocationInput';
+import { IOrganization } from 'src/constants/types';
 
-import toast from "react-hot-toast";
-import style from './UpdateOrganizationProfile.module.scss'
-import { OrganizationsApi } from "src/api";
+import style from './UpdateOrganizationProfile.module.scss';
+import SpeciesSelect from 'src/app/[locale]/(pages)/new-organization/components/SpeciesSelect';
+import { OptionType } from 'src/components/layout/Forms/Select';
 
 interface OrganizationUpdateFormProps {
   organization: IOrganization;
@@ -68,32 +71,31 @@ const fileToBase64 = (file: File): Promise<string> => {
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
-}
+};
 
 const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: OrganizationUpdateFormProps) => {
     const editorRef = useRef(null);
     const [fileToCrop, setFileToCrop] = useState<File | null>(null);
     const [logo, setLogo] = useState<File | null>(null);
     const [logoUrl, setLogoUrl] = useState<string>('');
+    const [speciesValue, setSelectSpeciesValue] = useState<OptionType[]>([]); 
 
-    console.log("formDataformData: ", organization);
+    console.log('formDataformData: ', organization);
     const [formData, setFormData] = useState({
-        type: "",
+        type: '',
         logo: '',
         name: '',
         email: '',
         phoneNumber: '',
         description: '',
-        race: '',
-        breed: '',
+        race: [],
         location: {
             lat: '',
             lng: '',
             city: '',
             street: '',
             house_number: '',
-            zip_code: '',
-            coordinates: ['', ''] as [string, string]
+            zip_code: ''
         }
     });
 
@@ -109,19 +111,14 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                       email: organization.email ?? '',
                       phoneNumber: organization.phone ?? '',
                       description: organization.description ?? '',
-                      race: organization.race ?? '', 
-                      breed: organization.breed ?? '', 
+                      race: organization.address.species ?? [], 
                       location: {
                           lat: String(organization.address?.lat) ?? '',
                           lng: String(organization.address?.lng) ?? '',
                           city: organization.address?.city ?? '',
                           street: organization.address?.street ?? '',
                           house_number: organization.address?.house_number ?? '',
-                          zip_code: organization.address?.zip_code ?? '',
-                          coordinates: [
-                            String(organization.address?.lng ?? ''),
-                            String(organization.address?.lat ?? '')
-                          ] as [string, string]
+                          zip_code: organization.address?.zip_code ?? ''
                       }
                   });
 
@@ -135,7 +132,7 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                           );
                           setLogo(logoFile);
                       } catch (fileError) {
-                          console.error("Error converting image URL to file:", fileError);
+                          console.error('Error converting image URL to file:', fileError);
                           setLogo(null);
                       }
                   } else {
@@ -143,8 +140,8 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                   }
               }
           } catch (err) {
-              console.error("Error setting form data:", err);
-              toast.error("Can't reload the data");
+              console.error('Error setting form data:', err);
+              toast.error('Can\'t reload the data');
           }
       };
   
@@ -152,14 +149,19 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
   }, [organization]);
 
     useEffect(() => {
-        console.log("Updated formData:", formData);
-        console.log("Current logo file:", logo);
-        console.log("Logo URL:", logoUrl);
+        console.log('Updated formData:', formData);
+        console.log('Current logo file:', logo);
+        console.log('Logo URL:', logoUrl);
     }, [formData, logo, logoUrl]);
+
+    const handleSpeciesChange = (selectedOptions: OptionType[]) => {
+        const speciesIds = selectedOptions ? selectedOptions.map(opt => opt?.value) : [];
+        setFormData(prev => ({ ...prev, 'race': speciesIds }));
+    };
 
     const handleInputChange = (field: string, value: string | number) => {
       setFormData(prev => ({ ...prev, [field]: value }));
-    }
+    };
 
     const handleSelectChange = (field: string, option: any) => {
       setFormData(prev => ({ 
@@ -212,8 +214,9 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
         submitData.append('email', formData.email);
         submitData.append('phone', formData.phoneNumber);
         submitData.append('description', formData.description);
-        submitData.append('race', formData.race);
-        submitData.append('breed', formData.breed);
+        (formData.race as any[]).forEach((id, index) => {
+          submitData.append(`address[species][${index}]`, String(id));
+        });
   
         // Append location fields
         submitData.append('address[city]', formData.location.city);
@@ -237,7 +240,7 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
         onSuccess?.(); 
       } catch (err) {
         console.error('Update error:', err);
-        toast.error("Nie udalo sie aktualizowac organizacje");
+        toast.error('Nie udalo sie aktualizowac organizacje');
         // onCancel?.()
       }
     };
@@ -261,20 +264,20 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                 <Checkbox
                   id='type-animal-shelter'
                   label={'Schronisko'}
-                  checked={formData.type === "SHELTER"}
-                  onClick={() => handleCheckboxChange("SHELTER")}
+                  checked={formData.type === 'SHELTER'}
+                  onClick={() => handleCheckboxChange('SHELTER')}
                 />
                 <Checkbox
                   id='type-breeding'
                   label={'Hodowla'}
-                  checked={formData.type === "BREEDER"}
-                  onClick={() => handleCheckboxChange("BREEDER")}
+                  checked={formData.type === 'BREEDER'}
+                  onClick={() => handleCheckboxChange('BREEDER')}
                 />
                 <Checkbox
                   id='type-association'
                   label={'Fundacja'}
-                  checked={formData.type === "FUND"}
-                  onClick={() => handleCheckboxChange("FUND")}
+                  checked={formData.type === 'FUND'}
+                  onClick={() => handleCheckboxChange('FUND')}
                 />
               </div>
 
@@ -344,13 +347,13 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
             {/* CONTACT */}
 
             {/* BREEDING DETAILS */}
-            {formData.type === "BREEDER" && (
+            {formData.type === 'BREEDER' && (
               <Card className={style.section}>
                 <h3>
                   Szczegóły <mark>hodowli</mark>
                 </h3>
 
-                <div className={style.flexRow}>
+                {/* <div className={style.flexRow}>
                   <Select
                     label={'Gatunek'}
                     options={speciesOptions}
@@ -364,7 +367,8 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
                     onChange={(opt: any) => handleSelectChange('breed', opt)}
                     value={(animalRace[formData.race] || []).find(opt => opt.value === formData.breed) || null}
                   />
-                </div>
+                </div> */}
+                <SpeciesSelect handleChange={handleSpeciesChange} initialRace={formData.race} />
               </Card>
             )}
             {/* BREEDING DETAILS */}
@@ -416,6 +420,6 @@ const OrganizationUpdateForm = ({ organization, onSuccess, onCancel }: Organizat
           />
         </>
     );
-}
+};
 
 export default OrganizationUpdateForm;

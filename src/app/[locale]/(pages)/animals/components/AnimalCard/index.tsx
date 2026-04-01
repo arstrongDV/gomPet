@@ -148,7 +148,7 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete, onReactionDe
             <Icon name='heart' />
           </button>
           {(
-            pathname === Routes.MY_ANIMALS ||
+            pathname === ('/pl' + Routes.MY_ANIMALS) ||
             isOrganizationAnimalsPage
           ) && (
             <div onClick={(e) => e.stopPropagation()} >

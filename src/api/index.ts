@@ -159,9 +159,7 @@ export class AnimalsApi {
   static async updateAnimal(id: number, data: any) {
     return ApiClient.put(AnimalsRouts.ANIMAL_ID(id), data, {
       __tokenRequired: true,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {},
     });
   }
   static async clearAnimalParents(id: number) {

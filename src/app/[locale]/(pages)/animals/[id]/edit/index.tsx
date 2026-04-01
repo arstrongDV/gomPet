@@ -166,6 +166,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   console.log("animalanimal: ", animal);
 
   const [photos, setPhotos] = useState<File[]>([]);
+  const [initialPhotos, setInitialPhotos] = useState<File[]>([]);
   const [characteristics, setCharacteristics] = useState<CharacteristicItem[]>([]);
   const [description, setDescriptions] = useState<string>('');
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
@@ -269,6 +270,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
             }
           }
           setPhotos(imageFiles);
+          setInitialPhotos(imageFiles);
           console.log("Converted images:", imageFiles);
         } catch (error) {
           console.error("Failed to load existing images:", error);
@@ -355,7 +357,7 @@ console.log(formData);
       formData.birth_date !== (animal.birth_date ?? '') ||
       formData.size !== animal.size ||
       formData.status !== animal.status ||
-      initialOrganization?.id !== organization ||
+      (initialOrganization?.id ?? null) !== organization ||
       description !== (animal.descriptions ?? '');
   
     const priceChanged =
@@ -379,7 +381,11 @@ console.log(formData);
           .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
       );
   
-    return basicChanged || priceChanged || parentsChanged;
+    const photosChanged =
+      photos.length !== initialPhotos.length ||
+      photos.some((p, i) => p !== initialPhotos[i]);
+
+    return basicChanged || priceChanged || parentsChanged || photosChanged;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -387,14 +393,12 @@ console.log(formData);
     setLoading(true);
 
     const galleryWithBase64 = await Promise.all(
-      photos.map(async (photo) => {
+      photos.slice(1).map(async (photo) => {
         const base64 = await fileToBase64(photo);
-        return {
-          image: base64
-        };
+        return { image: base64 };
       })
     );
-  
+
     try {
       const submitData = new FormData();
   
@@ -413,7 +417,7 @@ console.log(formData);
           return;
         }
 
-        if (key === 'parents' || key === 'organization' || key === 'owner') {
+        if (key === 'parents' || key === 'organization' || key === 'owner' || key === 'image') {
           return;
         }
 
@@ -430,9 +434,10 @@ console.log(formData);
         return;
       }
 
+      console.log("photosphotos: ", photos[0]);
+
       if (photos.length > 0) {
-        const base64 = await fileToBase64(photos[0]);
-        submitData.append('image', base64);
+        submitData.append('image', photos[0]);
       }
 
       if (organization !== null && organization !== undefined) {
@@ -489,7 +494,7 @@ console.log(formData);
         }
       }
       toast.success('Animal updated successfully!');
-      // onSuccess?.(); 
+      onSuccess?.(); 
       // router.refresh();
     } catch (error) {
       console.error('Error updating animal:', error);

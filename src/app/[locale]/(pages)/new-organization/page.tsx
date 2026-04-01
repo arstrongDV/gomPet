@@ -103,10 +103,10 @@ const NewOrganizationPage = () => {
   // const [raceValue, setSelectRaceValue] = useState<OptionType>(null)
   const [speciesValue, setSelectSpeciesValue] = useState<Array<string | number>>([]);
 
-  const handleChange = (selectedOption: OptionType) => {
-    setSelectSpeciesValue(selectedOption ? [selectedOption.value] : []);
-  };
-
+  const handleChange = (selectedOptions: OptionType[]) => {
+    const speciesIds = selectedOptions ? selectedOptions.map(opt => opt?.value) : [];
+    setSelectSpeciesValue(speciesIds as any);
+};
   // const SaveEditText = (content: string) => {
   //   console.log("Editor content:", content);
   // }
@@ -150,7 +150,7 @@ const NewOrganizationPage = () => {
 
       const res = await OrganizationsApi.addNewOrganization(payload);
       toast.success("Stworzono nową organizację!")
-      // push(Routes.ORGANIZATION_PROFILE(res.data.id));
+      push(Routes.ORGANIZATION_PROFILE(res.data.id));
       return;
     }catch(err){
       console.log(err)
