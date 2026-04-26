@@ -1,0 +1,26 @@
+{
+  "published": "Published",
+  "edited": "Updated",
+  "addPost": "Add post",
+  "editPost": "Update post",
+  "Comments": {
+    "commentsLabel": "Comments",
+    "commentPlaceholder": "Share your thoughts..."
+  },
+  "shareLabel": "Share this post",
+  "placeholder": "Write something...",
+  "addImage": "Add image",
+  "removeImage": "Remove image",
+  "presentPhotos": "Present your photos",
+  "publishing": "Publishing...",
+  "updating": "Updating...",
+  "update": "Update",
+  "toast": {
+    "added": "Post has been added!",
+    "addError": "Failed to add post",
+    "updated": "Post updated!",
+    "updateError": "Failed to update post",
+    "deleted": "Post has been deleted!",
+    "deleteError": "Failed to delete post"
+  }
+}

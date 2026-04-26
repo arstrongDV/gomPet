@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl';
 import { Button, Card, FileDropzone, LabelLink, Textarea } from 'src/components'
 import style from './AddPost.module.scss'
 import PhotosOrganizer from 'src/components/layout/Forms/PhotosOrganizer'
@@ -11,9 +12,8 @@ type AddPostProps = {
   className?: string;
   animalId?: number;
   organizationId?: number;
-  // postOwnerId: number;
   setShowAddPost: React.Dispatch<React.SetStateAction<boolean>>;
-  refreshPosts: () => void; 
+  refreshPosts: () => void;
 };
 
 const fileToBase64 = (file: File): Promise<string> => {
@@ -26,10 +26,12 @@ const fileToBase64 = (file: File): Promise<string> => {
 };
 
 const AddPostComponent = ({ className, animalId, organizationId, setShowAddPost, refreshPosts }: AddPostProps) => {
+  const t = useTranslations('posts');
+  const tCommon = useTranslations('common');
+
   const [text, setText] = useState<string>("")
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
   const [addImage, setAddImage] = useState<boolean>(false)
 
   const createPost = async (): Promise<void> => {
@@ -38,79 +40,69 @@ const AddPostComponent = ({ className, animalId, organizationId, setShowAddPost,
 
       const base64 = images.length > 0 ? await fileToBase64(images[0]) : null;
 
-        const payloadId = animalId ? {
-            animal: animalId
-        } : {
-            organization: organizationId
-        };
+      const payloadId = animalId ? { animal: animalId } : { organization: organizationId };
 
-        const res = await PostsApi.addNewAnimalPost({
-          payload: {
-            ...payloadId,
-            content: text,
-            ...(base64 && { image: base64 })
-          }
-        });
+      await PostsApi.addNewAnimalPost({
+        payload: {
+          ...payloadId,
+          content: text,
+          ...(base64 && { image: base64 })
+        }
+      });
 
-      console.log("res::: ", res);
-      toast.success("Post został dodany!");
-
+      toast.success(t('toast.added'));
       setText("");
       setImages([]);
       setShowAddPost(false);
       refreshPosts()
     } catch (err: any) {
       console.error(err);
-      toast.error(err.message || "Nie udało się dodać posta");
+      toast.error(err.message || t('toast.addError'));
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if(!addImage){
+    if (!addImage) {
       setImages([])
     }
   }, [addImage])
 
   return (
-      <Card className={`${style.container} ${className || ''}`}>
-        <div className={style.postCreate}>
-            <Textarea
-            className={style.textarea}
-            placeholder={'Napisz coś...'}
-            onChangeText={setText}
-            value={text}
-            />
-
-          <LabelLink 
-            label={!addImage ? "Dodaj zdjecie" : "Usun zdjecie"} 
-            icon={!addImage ? 'plus' : 'x'} 
-            onClick={() => setAddImage(prev => !prev)}
-          />
-
-            {addImage && (
-              <div className={style.addImage}>
-                <h3>
-                    Zaprezentuj <mark>zdjęcia</mark>
-                </h3>
-  
-                <FileDropzone files={images} setFiles={setImages} oneImageOnly />
-                <PhotosOrganizer photos={images} setPhotos={setImages} />
-  
-                <span className={style.caption}>
-                    Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone formaty to .png, .jpg, .jpeg
-                </span>
-              </div>
-            )}
-        </div>
-        <Button
-            type="submit"
-            label={loading ? "Publikuję..." : "Opublikuj"}
-            disabled={loading}
-            onClick={createPost}
+    <Card className={`${style.container} ${className || ''}`}>
+      <div className={style.postCreate}>
+        <Textarea
+          className={style.textarea}
+          placeholder={t('placeholder')}
+          onChangeText={setText}
+          value={text}
         />
-      </Card>
+
+        <LabelLink
+          label={!addImage ? t('addImage') : t('removeImage')}
+          icon={!addImage ? 'plus' : 'x'}
+          onClick={() => setAddImage(prev => !prev)}
+        />
+
+        {addImage && (
+          <div className={style.addImage}>
+            <h3><mark>{t('presentPhotos')}</mark></h3>
+
+            <FileDropzone files={images} setFiles={setImages} oneImageOnly />
+            <PhotosOrganizer photos={images} setPhotos={setImages} />
+
+            <span className={style.caption}>{tCommon('imagesInfo')}</span>
+          </div>
+        )}
+      </div>
+      <Button
+        type="submit"
+        label={loading ? t('publishing') : tCommon('action.publish')}
+        disabled={loading}
+        onClick={createPost}
+      />
+    </Card>
   )
 };
 

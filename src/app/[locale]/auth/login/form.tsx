@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Button, Input } from 'src/components';
 import { Routes } from 'src/constants/routes';
@@ -11,6 +12,10 @@ import style from './Login.module.scss';
 import toast from 'react-hot-toast';
 
 const LoginForm = () => {
+  const t = useTranslations('pages.auth.login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const [state, action, isPending] = useActionState(login, {
     message: '',
     errors: undefined,
@@ -21,19 +26,23 @@ const LoginForm = () => {
   });
 
   useEffect(() => {
-    if(state.message == 'error'){
-      if(state.errors?.email) toast.error('Email is required');
-      if(state.errors?.password) toast.error('Password is required');
-    }
-    
-    if (state.message == 'wrong') {
-      toast.error("Nie udalo się zalogowac");
-    }
+    if (!state.message) return;
 
     if (state.message === 'success') {
       window.location.replace(Routes.LANDING);
+      return;
     }
-  }, [state.message]);
+
+    if (state.message === 'error') {
+      if (state.errors?.email) toast.error(t('toast.emailRequired'));
+      else if (state.errors?.password) toast.error(t('toast.passwordRequired'));
+      return;
+    }
+
+    toast.error(t('toast.loginFailed'));
+  }, [state]);
+
+  const isDisabled = email.trim() === '' || password.trim() === '';
 
   return (
     <form
@@ -44,8 +53,10 @@ const LoginForm = () => {
         type='email'
         key={'email'}
         name='email'
-        label='Email'
-        placeholder='Wpisz swój email'
+        label={t('emailLabel')}
+        placeholder={t('emailPlaceholder')}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         defaultValue={state.fields.email}
         disabled={isPending}
       />
@@ -53,14 +64,17 @@ const LoginForm = () => {
         type='password'
         key={'password'}
         name='password'
-        label='Hasło'
-        placeholder='Podaj hasło'
+        label={t('passwordLabel')}
+        placeholder={t('passwordPlaceholder')}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         defaultValue={state.fields.password}
         disabled={isPending}
       />
       <Button
         type='submit'
-        label='Zaloguj się'
+        label={t('submitButton')}
+        disabled={isDisabled}
         isLoading={isPending}
       />
     </form>

@@ -5,13 +5,20 @@ import { AnimalsApi } from 'src/api';
 import { Loader, Select } from 'src/components';
 import { OptionType } from 'src/components/layout/Forms/Select';
 
+interface RaceData {
+  id: number;
+  label?: string;
+}
+
 interface SpeciesSelectProps {
     handleChange: (species: OptionType[]) => void;
-    initialRace?: number[];
+    initialRace?: RaceData[];
 }
 
 const SpeciesSelect = ({ handleChange, initialRace }: SpeciesSelectProps) => {
     const t = useTranslations();
+
+    console.log(initialRace)
 
     const [speciesOpt, setSpeciesOpt] = useState([]);
     const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType[]>([]);
@@ -20,16 +27,19 @@ const SpeciesSelect = ({ handleChange, initialRace }: SpeciesSelectProps) => {
 
     const options = speciesOpt.map((s: any) => ({
         value: s.id,
-        label: s.name
+        label: t(`common.animalSpecies.${s.name}`)
     }));
 
-    useEffect(() => {
-      if (!initialized.current && initialRace && options.length > 0) {
-        const initialSelected = options.filter(opt => initialRace.includes(opt.value as number));
-        setSelectSpeciesValue(initialSelected);
-        initialized.current = true;
-      }
-    }, [initialRace, speciesOpt]);
+  useEffect(() => {
+    if (!initialized.current && initialRace && options.length > 0) {
+      const initialSelected = options.filter(opt =>
+        initialRace.some(race => race.id === opt.value)
+      );
+
+      setSelectSpeciesValue(initialSelected);
+      initialized.current = true;
+    }
+  }, [initialRace, speciesOpt]);
 
     useEffect(() => {
         const fetchSpecies = async () => {
@@ -48,7 +58,7 @@ const SpeciesSelect = ({ handleChange, initialRace }: SpeciesSelectProps) => {
           }
         };
         fetchSpecies();
-      }, []);
+      }, [initialRace]);
 
 
 

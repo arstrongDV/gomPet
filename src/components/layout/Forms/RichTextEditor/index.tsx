@@ -17,7 +17,7 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
-import { $createParagraphNode, $createTextNode, $getRoot, EditorState } from 'lexical';
+import { $createParagraphNode, $createTextNode, $getRoot, EditorState, $isElementNode } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
 // Import plugins (assuming these exist in your project)
@@ -69,7 +69,7 @@ function InitialContentSetter({ initialContent }: { initialContent?: string }) {
     
     try {
       // Handle the case where multiple JSON objects are concatenated
-      let contentToUse = initialContent;
+      let contentToUse = typeof initialContent === 'string' ? initialContent : JSON.stringify(initialContent);
       
       // If it looks like multiple JSON objects, take the last one
       if (typeof initialContent === 'string' && 
@@ -136,7 +136,6 @@ const RichTextEditor = forwardRef<EditorState, RichTextEditorProps>(
     const handleChange = useCallback((editorState: EditorState) => {
       editorState.read(() => {
         const json = JSON.stringify(editorState.toJSON());
-        setEditorStateJson(json);
         onChange(json);
       });
     }, [onChange]);

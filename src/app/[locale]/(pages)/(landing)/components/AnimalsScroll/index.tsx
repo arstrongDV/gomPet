@@ -21,8 +21,8 @@ const AnimalsScroll = () => {
   const fetchAnimals = async () => {
     setIsLoading(true);
     try {
-      const response = await AnimalsApi.getAnimalsLatest(5, {});
-      const animalsData = response.data || [];
+      const response = await AnimalsApi.getAnimalsLatest(5);
+      const animalsData = response.data?.results || [];
       console.log("response:::", animalsData);
       setAnimals(animalsData);
     } catch (err) {

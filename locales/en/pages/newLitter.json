@@ -1,0 +1,39 @@
+{
+  "header": {
+    "title": "Add a litter",
+    "subtitle": "Present the litter on the platform"
+  },
+  "basicInfo": {
+    "heading": "Basic information",
+    "caption": "The species and breed covered by this litter."
+  },
+  "title": {
+    "heading": "Short title",
+    "label": "Title",
+    "placeholder": "Enter title"
+  },
+  "description": {
+    "heading": "Short description",
+    "label": "Short description (optional)",
+    "placeholder": "Briefly describe the litter..."
+  },
+  "date": {
+    "heading": "Expected litter date",
+    "label": "When will the litter appear?"
+  },
+  "status": {
+    "heading": "Current status",
+    "label": "Status",
+    "caption": "The status is visible in the organization profile view under the \"Litters\" tab.",
+    "options": {
+      "ACTIVE": "Active",
+      "CLOSED": "Closed",
+      "DRAFT": "Draft"
+    }
+  },
+  "submit": "Create litter",
+  "toast": {
+    "success": "New litter added",
+    "error": "Error adding litter"
+  }
+}

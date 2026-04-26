@@ -9,7 +9,7 @@ import { IArticle } from 'src/constants/types';
 import { Routes } from 'src/constants/routes';
 
 const KnowledgeScroll = () => {
-    const t = useTranslations('pages.landing');
+    const t = useTranslations('pages.landing.knowledgeScroll');
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [knowledges, setKnowledge] = useState<IArticle[]>([]);
@@ -32,7 +32,7 @@ const KnowledgeScroll = () => {
         <div className={style.container}>
             <header className={style.header}>
                 <h3 className={style.title}>
-                    {t.rich('knowledgeScroll.title', {
+                    {t.rich('title', {
                         highlight: (chunks) => <span className={style.highlight}>{chunks}</span>
                     })}
                 </h3>
@@ -49,12 +49,12 @@ const KnowledgeScroll = () => {
                     ))}
                 </HorizontalScroll>
             ) : (
-                <p className={style.noArticles}>Brak artyklow</p>
+                <p className={style.noArticles}>{t('noArticles')}</p>
             )}
 
             <LabelLink
                 href={Routes.KNOWLEDGE}
-                label={t('knowledgeScroll.seeAll')}
+                label={t('seeAll')}
                 color='dimmed'
             />
         </div>

@@ -1,27 +1,115 @@
 {
-  "seeUs": "Zobacz nas",
-  "noAddress": "Brak adresu",
-  "empty": "Nie znaleźliśmy żadnych organizacji",
+  "seeUs": "See us",
+  "noAddress": "No address",
+  "empty": "No organizations found",
   "filters": {
-    "location": "Lokalizacja",
-    "locationPlaceholder": "W jakim mieście szukasz?",
-    "range": "Zasięg",
-    "rangePlaceholder": "Do ilu kilometrów?",
-    "breedSpecies": "Gatunek",
-    "breedType": "Typ hodowli"
+    "location": "Location",
+    "locationPlaceholder": "In which city are you looking?",
+    "range": "Range",
+    "rangePlaceholder": "How many kilometers?",
+    "breedSpecies": "Species",
+    "breedType": "Breeding type"
   },
-  "showFilters": "Pokaż filtry",
-  "hideFilters": "Ukryj filtry",
-  "showMap": "Pokaż mapę",
-  "hideMap": "Ukryj mapę",
+  "showFilters": "Show filters",
+  "hideFilters": "Hide filters",
+  "showMap": "Show map",
+  "hideMap": "Hide map",
   "litters": {
-    "anticipatedDate": "Przewidywana data",
-    "litterDate": "Data miotu",
+    "anticipatedDate": "Anticipated date",
+    "litterDate": "Litter date",
     "status": {
-      "available": "Dostępne",
-      "can_reserve": "Można zarezerwować",
-      "no_reserve_slots": "Brak miejsc do rezerwacji",
-      "already_given": "Wydane"
+      "available": "Available",
+      "can_reserve": "Can reserve",
+      "no_reserve_slots": "No reserve slots",
+      "already_given": "Already given",
+      "ACTIVE": "Active",
+      "CLOSED": "Closed",
+      "DRAFT": "Draft"
     }
+  },
+  "tabs": {
+    "information": "Information",
+    "animals": "Animals",
+    "litters": "Litters",
+    "activity": "Activity",
+    "members": "Members"
+  },
+  "tabView": {
+    "greeting": "Hey!",
+    "welcome": "Welcome to our profile"
+  },
+  "littersTab": {
+    "addLitter": "Add litter",
+    "plannedLitters": "Planned litters",
+    "previousLitters": "Previous litters"
+  },
+  "addLitter": {
+    "title": "Title",
+    "titlePlaceholder": "Enter title",
+    "birthDate": "Birth date",
+    "describeTitle": "Describe the animal",
+    "descriptionPlaceholder": "Write something about the litter",
+    "status": "Status",
+    "statusOptions": {
+      "ACTIVE": "Active",
+      "CLOSED": "Closed",
+      "DRAFT": "Draft"
+    }
+  },
+  "addPost": {
+    "placeholder": "Write something...",
+    "addImage": "Add image",
+    "removeImage": "Remove image",
+    "presentImages": "Present your photos",
+    "publishing": "Publishing...",
+    "publish": "Publish",
+    "successToast": "Post has been added!",
+    "errorToast": "Failed to add post"
+  },
+  "memberCard": {
+    "name": "Name:",
+    "email": "Email:",
+    "phone": "Phone:",
+    "role": "Role:",
+    "addedOn": "Added on:",
+    "update": "Update",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to remove this member from your organization?",
+    "yes": "Yes",
+    "no": "No",
+    "deleteSuccess": "Member has been removed",
+    "deleteError": "Failed to remove member",
+    "updateSuccess": "Member has been updated",
+    "updateError": "Failed to update member"
+  },
+  "requestCard": {
+    "noMessage": "-No message sent-",
+    "added": "Added",
+    "add": "Add",
+    "remove": "Remove",
+    "invitationRemoved": "Invitation has been removed",
+    "memberAdded": "New member added",
+    "errorMessage": "Something went wrong"
+  },
+  "litterCard": {
+    "deleteSuccess": "Litter has been removed",
+    "deleteError": "Failed to remove litter"
+  },
+  "description": {
+    "noText": "No description available",
+    "readMore": "Read more",
+    "collapse": "Collapse"
+  },
+  "membersPage": {
+    "hideRequests": "Hide new requests from users",
+    "showRequests": "Show new requests from users",
+    "newBadge": "New",
+    "requestsTitle": "View submitted requests",
+    "requestsSubtitle": "Grow your organization",
+    "noRequests": "No requests",
+    "hideMembers": "Hide organization members",
+    "showMembers": "Show organization members",
+    "membersTitle": "View your members",
+    "membersSubtitle": "Grow your organization"
   }
 }

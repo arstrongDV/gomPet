@@ -1,0 +1,80 @@
+@import 'styles';
+
+.container {
+  min-height: 100vh;
+  background-color: $color-background-1;
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  width: 100%;
+  max-width: 860px;
+  padding: 3rem 2rem 5rem;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 2.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: $color-accent;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1.5rem;
+      line-height: 1.8;
+      color: $color-gray-400;
+    }
+  }
+}
+
+@include tabletWidth {
+  .main {
+    padding: 2rem 1.2rem 3rem;
+  }
+
+  .title {
+    font-size: 2.8rem;
+  }
+
+  .content section {
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    p {
+      font-size: 1.25rem;
+    }
+  }
+}

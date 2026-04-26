@@ -1,12 +1,110 @@
 {
-    "roles": {
-        "OWNER": "Owner / Manager",
-        "STAFF": "Staff",
-        "VOLUNTEER": "Volunteer",
-        "MODERATOR": "Moderator",
-        "PARTNER": "Partner",
-        "FINANCE": "Finance",
-        "CONTENT": "Content creator",
-        "VIEWER": "Viewer"
-      }
+  "action": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "choose": "Choose",
+    "select": "Select...",
+    "open": "Open",
+    "close": "Close",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "search": "Search",
+    "chooseFile": "Choose file",
+    "publish": "Publish",
+    "writeMessage": "Write a message",
+    "seeAll": "See all"
+  },
+  "state": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "isLoading": "Loading",
+    "new": "New"
+  },
+  "empty": {
+    "default": "No data available",
+    "noResult": "No results",
+    "searchResults": "No results found for \"{query}\""
+  },
+  "organization": {
+    "SHELTER": "Shelter",
+    "FUND": "Foundation",
+    "BREEDER": "Breeder"
+  },
+
+  "noLocation": "No location",
+
+  "roles": {
+    "OWNER": "Owner / Manager",
+    "STAFF": "Staff",
+    "MEMBER": "Member",
+    "VOLUNTEER": "Volunteer",
+    "MODERATOR": "Moderator",
+    "PARTNER": "Partner",
+    "FINANCE": "Finance",
+    "CONTENT": "Content creator",
+    "VIEWER": "Viewer"
+  },
+
+  "animalSpecies": {
+    "DOG": "Dog",
+    "CAT": "Cat",
+    "RABBIT": "Rabbit",
+    "GUINEA PIG": "Guinea pig",
+    "HAMSTER": "Hamster",
+    "RAT": "Rat",
+    "MOUSE": "Mouse",
+    "BIRD": "Bird",
+    "REPTILE": "Reptile",
+    "AMPHIBIAN": "Amphibian"
+  },
+    "animalBreeds": {
+        "MINIATURE_SHEPHERD_AMERICAN": "Miniature American Shepherd",
+        "AUSTRALIAN_CATTLE_DOG": "Australian Cattle Dog",
+        "AUSTRALIAN_STUMPY_TAIL_CATTLE_DOG": "Australian Stumpy Tail Cattle Dog",
+        "BEARDED_COLLIE": "Bearded Collie",
+        "BERGAMASCO": "Bergamasco Shepherd",
+        "BIAY_SHEPHERD_SWISS": "White Swiss Shepherd",
+        "BORDER_COLLIE": "Border Collie",
+        "BOUVIER_DES_ARDENNES": "Bouvier des Ardennes",
+        "BOUVIER_DES_FLANDRES_VLAAMSE_KOEHOND": "Bouvier des Flandres",
+        "CESKOSLOVENSKY_VLCAK": "Czechoslovakian Wolfdog"
+
+
+  },
+
+  "imagesInfo": "Images look best in a 4:3 format. The maximum file size is 5 MB. Allowed formats are .png, .jpg, .jpeg.",
+  
+"settings": {
+    "delete": "Delete",
+    "edit": "Edit",
+    "organizationTransfer": "Transfer ownership"
+},
+
+"subscribe": "Follow",
+"subscribed": "Following",
+"noReaction": "None",
+
+"ui": {
+  "imageInput": "Click to add photo",
+  "breedLabel": "Breed",
+  "findAddress": "Find address",
+  "savePhoto": "Save photo",
+  "dropzone": {
+    "drop": "Drop files here",
+    "dragAndDrop": "Drag and drop files or click here to add them"
+  },
+  "photosOrganizer": {
+    "main": "Main"
+  }
+},
+
+"comments": {
+  "noComments": "No comments",
+  "editing": "Editing your comment",
+  "reviews": "Reviews",
+  "averageRating": "Average rating: {rating} out of 5",
+  "added": "Comment added",
+  "updated": "Comment updated!"
+}
 }

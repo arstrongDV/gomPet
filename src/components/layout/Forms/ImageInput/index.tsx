@@ -41,7 +41,7 @@ const ImageInput = (props: ImageInputProps) => {
     fileMaxSize = DEFAULT_MAX_SIZE
   } = props;
 
-  const t = useTranslations();
+  const t = useTranslations('common');
 
   const fileInput = React.useRef<HTMLInputElement>(null);
   const handleLoadFile = () => fileInput.current?.click();
@@ -129,7 +129,7 @@ const ImageInput = (props: ImageInputProps) => {
               onClick={handleLoadFile}
             >
               <Icon name='camera' />
-              <span className={style.info}>Kliknij, aby dodać zdjęcie</span>
+              <span className={style.info}>{t('ui.imageInput')}</span>
             </div>
           )}
           {file && (

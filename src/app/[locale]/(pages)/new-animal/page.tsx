@@ -40,63 +40,27 @@ type Parent = {
   photos?: string;
 };
 
-// const animalSpecies = [
-//   {
-//     value: 'dog',
-//     label: 'Pies'
-//   },
-//   {
-//     value: 'cat',
-//     label: 'Kot'
-//   }
-// ]
-// const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-//   dog: [
-//     { value: 'beagle', label: 'Beagle' },
-//     { value: 'terrier', label: 'Terrier' },
-//     { value: 'labrador', label: 'Labrador' },
-//   ],
-//   cat: [
-//     { value: 'british', label: 'British Shorthair' },
-//     { value: 'siamese', label: 'Siamese' },
-//     { value: 'persian', label: 'Persian' },
-//   ],
-//   other: [
-//     { value: 'other', label: 'Other' },
-//   ]
-// };
-
 const genderMap: Record<string, string> = {
   male: 'MALE',
   female: 'FEMALE'
 };
 
-const statusMap: Record<string, string> = {
-  'Do adopcji': 'AVAILABLE',
-  'Ma właściciela': 'ADOPTED',
-  'Kwarantanna': 'RESERVED'
-};
-
-type AnimalKey = string;
-
 const NewAnimalPage = () => {
   const t = useTranslations();
-  // const editorRef = useRef(null);
 
-  // const [type, setType] = useState<OrganizationType | null>(OrganizationType.BREEDING);
   const [name, setName] = useState<string>('');
   const [gender, setGender] = useState<Gender>(Gender.MALE);
   const [size, setSize] = useState<AnimalSize>(AnimalSize.SMALL);
   const [price, setPrice] = useState<string>('');
   const [birthDate, setBirthDate] = useState<string>('');
-  const [status, setStatus] = useState<string>('Do adopcji');
+  const [status, setStatus] = useState<string>('AVAILABLE');
   const [hasMetrics, setHasMetrics] = useState<boolean>(false);
   const [hasPrice, setHasPrice] = useState<boolean>(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
   const [selectRaceValue, setSelectRaceValue] = useState<OptionType>(null);
   const [selectedCharacteristics, setSelectedCharacteristics] = useState<string[]>([]);
-  const [descriptions, setDescriptions] = useState<string>("")
+  const [descriptions, setDescriptions] = useState<string>('');
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
 
@@ -105,13 +69,12 @@ const NewAnimalPage = () => {
   const session = useSession();
   const user = session.data?.user;
 
-  const router = useRouter()
+  const router = useRouter();
   const { push } = router;
 
-
   const selectedSpecies = selectSpeciesValue?.value
-  ? selectSpeciesValue.label.toUpperCase()
-  : undefined;
+    ? selectSpeciesValue.label.toUpperCase()
+    : undefined;
   const { characteristics } = useAnimalInfo(selectedSpecies);
 
   const fileToBase64 = (file: File): Promise<string> => {
@@ -121,7 +84,7 @@ const NewAnimalPage = () => {
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = (error) => reject(error);
     });
-  }
+  };
 
   const handleApiError = (error: any) => {
     const data = error?.response?.data;
@@ -176,25 +139,24 @@ const NewAnimalPage = () => {
   };
 
   const isBtnDisabled =
-  !name ||
-  !birthDate ||
-  !selectSpeciesValue?.label ||
-  !selectRaceValue?.label ||
-  photos.length === 0 ||
-  !status;
+    !name ||
+    !birthDate ||
+    !selectSpeciesValue?.label ||
+    !selectRaceValue?.label ||
+    photos.length === 0 ||
+    !status;
 
   const handleChange = (field: string, value: string, label?: string) => {
-    if(field === 'breed'){
+    if (field === 'breed') {
       setSelectRaceValue({ value, label } as OptionType);
-    } 
-    else if(field === 'species'){
+    } else if (field === 'species') {
       setSelectSpeciesValue({ value, label } as OptionType);
     }
   };
-  
+
   const handleSubmit = async () => {
-    if(!user?.location && !organization){
-      toast.error("Musisz udostepnic lokalizacje aby dodac zwierze albo podac wlasna organizacje")
+    if (!user?.location && !organization) {
+      toast.error(t('pages.newAnimal.toast.noLocation'));
       return;
     }
 
@@ -204,46 +166,39 @@ const NewAnimalPage = () => {
       const galleryWithBase64 = await Promise.all(
         photos.map(async (photo) => {
           const base64 = await fileToBase64(photo);
-          return {
-            image: base64
-          };
+          return { image: base64 };
         })
       );
-  
+
       formData.append('name', name);
       formData.append('species', String(selectSpeciesValue?.value ?? ''));
       formData.append('breed', String(selectRaceValue?.value ?? ''));
       formData.append('gender', genderMap[gender]);
       formData.append('size', size);
       formData.append('birth_date', birthDate);
-      formData.append('status', statusMap[status]);
+      formData.append('status', status);
       formData.append('descriptions', descriptions);
 
-        if (organization !== null && organization !== undefined) {
-          formData.append('organization_id', String(organization));
-        } else {
-          formData.append('organization_id', '');
-        }
-        
-        if (owner !== null && owner !== undefined) {
-          formData.append('owner_id', String(owner));
-        } else {
-          formData.append('owner_id', '');
-        }
-      // }
+      if (organization !== null && organization !== undefined) {
+        formData.append('organization_id', String(organization));
+      } else {
+        formData.append('organization_id', '');
+      }
 
-      if(hasMetrics){
+      if (owner !== null && owner !== undefined) {
+        formData.append('owner_id', String(owner));
+      } else {
+        formData.append('owner_id', '');
+      }
+
+      if (hasMetrics) {
         formData.append('hasMetrics', 'true');
       }
-      // else{
-      //   formData.append('organization_id', null);
-      // }
 
-      if(!hasPrice || price == ''){
+      if (!hasPrice || price === '') {
         setPrice('0');
         formData.append('price', '0');
-      }
-      else{
+      } else {
         formData.append('price', price);
       }
 
@@ -255,27 +210,16 @@ const NewAnimalPage = () => {
         formData.append(`gallery[${index}][image]`, item.image);
       });
 
-      // const characteristicsBoard = Object.entries(characteristics).map(
-      //   ([key, value]) => ({
-      //     title: value,
-      //     bool: selectedCharacteristics.includes(key)
-      //   })
-      // );
       const characteristicsBoard = characteristics.map((char) => ({
         title: char.value,
         bool: selectedCharacteristics.includes(String(char.id))
       }));
-      console.log("characteristicsBoard: ", characteristicsBoard);
-      console.log("characteristics: ", characteristics);
       characteristicsBoard.forEach((char, index) => {
         formData.append(`characteristicBoard[${index}][title]`, char.title);
         formData.append(`characteristicBoard[${index}][bool]`, char.bool.toString());
       });
 
       const animals_res = await AnimalsApi.createNewAnimal(formData);
-      console.log('animals_res: ', animals_res);
-
-      console.log('parents: ', parents)
 
       if (animals_res.status === 201 || animals_res.statusText === 'Created') {
         const animalId = animals_res.data?.id;
@@ -285,34 +229,28 @@ const NewAnimalPage = () => {
 
           for (const [index, parent] of parentsToAdd.entries()) {
             try {
-              const parentData = {
+              await AnimalsApi.addAnimalParents({
                 animal: animalId,
                 parent: parent.animal_id,
                 relation: parent.relation
-              };
-              console.log(`parent.relation: `, parent);
-              console.log(`Adding parent ${index + 1}:`, parentData);
-              
-              await AnimalsApi.addAnimalParents(parentData);
+              });
               successCount++;
-              console.log(`Parent ${index + 1} added successfully`);
-              
             } catch (parentError) {
-              console.error(`Failed to add parent ${index + 1}:`, parentError);
-              toast.error("Failed to add parent")
+              toast.error(t('pages.newAnimal.toast.addParentError'));
             }
           }
 
           if (successCount === 0) {
-            toast.error("Animal created but failed to add any parents");
+            toast.error(t('pages.newAnimal.toast.createdButParentsFailed'));
           } else if (successCount < parentsToAdd.length) {
-            toast.error(`Animal created, added ${successCount} of ${parentsToAdd.length} parents`);
+            toast.error(t('pages.newAnimal.toast.createdWithSomeParents', { success: successCount, total: parentsToAdd.length }));
           } else {
-            toast.success("Animal created with all parents");
+            toast.success(t('pages.newAnimal.toast.createdWithAllParents'));
           }
         }
       }
-      toast.success("Animal created");
+
+      toast.success(t('pages.newAnimal.toast.created'));
       push(Routes.ANIMAL_PROFILE(animals_res.data.id));
 
       setName('');
@@ -320,7 +258,7 @@ const NewAnimalPage = () => {
       setSize(AnimalSize.SMALL);
       setBirthDate('');
       setPrice('');
-      setStatus('');
+      setStatus('AVAILABLE');
       setHasMetrics(false);
       setPhotos([]);
       setSelectSpeciesValue(null);
@@ -336,10 +274,10 @@ const NewAnimalPage = () => {
   };
 
   useEffect(() => {
-    if(parents.length >= 2){
-      setIsParentsAdd(false)
+    if (parents.length >= 2) {
+      setIsParentsAdd(false);
     }
-  }, [])
+  }, [parents]);
 
   return (
     <>
@@ -353,9 +291,9 @@ const NewAnimalPage = () => {
         {/* BASIC DATA */}
         <Card className={style.section}>
           <h3>
-          {t.rich('pages.newAnimal.basicInfo', {
-            mark: (chunks) => <mark>{chunks}</mark>,
-          })}
+            {t.rich('pages.newAnimal.basicInfo', {
+              mark: (chunks) => <mark>{chunks}</mark>,
+            })}
           </h3>
 
           <div className={style.fullWidth}>
@@ -371,21 +309,6 @@ const NewAnimalPage = () => {
           </div>
 
           <div className={style.flexRow}>
-            {/* <Select
-              label={t('pages.animals.speciesLabel')}
-              options={filteredSpeciesOpt}
-              onChange={setSelectSpeciesValue}
-              value={selectSpeciesValue}
-              isClearable
-            />
-
-            <Select
-              label={t('pages.animals.breed')}
-              options={filteredRaceOpt}
-              onChange={setSelectRaceValue}
-              value={selectRaceValue}
-              isClearable
-            /> */}
             <AnimalSelect handleChange={handleChange} isAdding />
 
             <Input
@@ -477,19 +400,10 @@ const NewAnimalPage = () => {
             })}
           </h3>
 
-          <FileDropzone
-            files={photos}
-            setFiles={setPhotos}
-          />
-
-          <PhotosOrganizer
-            photos={photos}
-            setPhotos={setPhotos}
-          />
+          <FileDropzone files={photos} setFiles={setPhotos} />
+          <PhotosOrganizer photos={photos} setPhotos={setPhotos} />
 
           <span className={style.caption}>
-            {/* Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
-            formaty to .png, .jpg, .jpeg */}
             {t('common.imagesInfo')}
           </span>
         </Card>
@@ -504,24 +418,8 @@ const NewAnimalPage = () => {
           </h3>
 
           <div className={style.characteristics}>
-            {/* {Object.entries(characteristics.dog).map(([key, value]) => (
-              <Checkbox
-                key={key}
-                id={key}
-                className={style.checkbox}
-                checked={selectedCharacteristics.includes(key)}
-                onChange={() => {
-                  setSelectedCharacteristics((prev) =>
-                    prev.includes(key)
-                      ? prev.filter((item) => item !== key)
-                      : [...prev, key] 
-                  );
-                }}
-                label={value}
-              />
-            ))} */}
             {(!selectSpeciesValue || characteristics.length === 0) ? (
-              <p>Musisz najpierw wybrać gatunek</p>
+              <p>{t('pages.newAnimal.selectSpeciesFirst')}</p>
             ) : (
               characteristics.map(({ id, label }) => (
                 <Checkbox
@@ -541,7 +439,6 @@ const NewAnimalPage = () => {
               ))
             )}
           </div>
-
         </Card>
         {/* CHARACTERISTICS */}
 
@@ -567,22 +464,22 @@ const NewAnimalPage = () => {
 
           <div className={style.statusSelect}>
             <Tag
-              onClick={() => {setStatus('Ma właściciela')}}
-              selected={status === 'Ma właściciela'}
+              onClick={() => setStatus('ADOPTED')}
+              selected={status === 'ADOPTED'}
             >
-              {t('pages.newAnimal.statusOwned')}
+              {t('pages.newAnimal.ADOPTED')}
             </Tag>
             <Tag
-              onClick={() => {setStatus('Kwarantanna')}}
-              selected={status === 'Kwarantanna'}
+              onClick={() => setStatus('RESERVED')}
+              selected={status === 'RESERVED'}
             >
-               {t('pages.newAnimal.statusQuarantine')}
+              {t('pages.newAnimal.RESERVED')}
             </Tag>
             <Tag
-              onClick={() => {setStatus('Do adopcji')}}
-              selected={status === 'Do adopcji'}
+              onClick={() => setStatus('AVAILABLE')}
+              selected={status === 'AVAILABLE'}
             >
-              {t('pages.newAnimal.statusAvailable')}
+              {t('pages.newAnimal.AVAILABLE')}
             </Tag>
           </div>
 
@@ -599,52 +496,56 @@ const NewAnimalPage = () => {
           </h3>
 
           <div className={style.familyTreeBlock}>
-            {parents.length < 2  && (
-              <div className={style.addParents} onClick={() => setIsParentsAdd((prev) => !prev)} aria-disabled={parents.length == 2}>
+            {parents.length < 2 && (
+              <div
+                className={style.addParents}
+                onClick={() => setIsParentsAdd((prev) => !prev)}
+                aria-disabled={parents.length === 2}
+              >
                 <Icon name='plus' />
               </div>
             )}
 
             {parents.map((p, index) => (
               <div key={index} className={style.parent}>
-                <Icon 
+                <Icon
                   className={style.deleteIcon}
-                  name='x' 
+                  name='x'
                   onClick={() => {
                     setParents(prev => prev.filter((_, i) => i !== index));
-                  }} 
+                  }}
                 />
-                <img 
+                <img
                   className={style.image}
-                  src={p.photos ? p.photos : ''} 
-                  draggable={false} 
+                  src={p.photos ? p.photos : ''}
+                  draggable={false}
                   alt="parent_photo"
                 />
                 <p>{p.name}</p>
               </div>
             ))}
           </div>
-      {/* PARENTS */}
 
-      <Modal
-        className={style.modaParentsAddlWin} 
-        isOpen={isParentsAdd} 
-        closeModal={() => setIsParentsAdd(false)}
-        title={t('pages.newAnimal.parentsAdd')}
-      >
-          <AddAnimalParents 
-              className={classNames(style.cardAddParents)} 
+          <Modal
+            className={style.modaParentsAddlWin}
+            isOpen={isParentsAdd}
+            closeModal={() => setIsParentsAdd(false)}
+            title={t('pages.newAnimal.parentsAdd')}
+          >
+            <AddAnimalParents
+              className={classNames(style.cardAddParents)}
               setIsParentsAdd={setIsParentsAdd}
               parents={parents}
               onAddParent={(parent) => {
                 setParents((prev) => [...prev, parent]);
-                setIsParentsAdd(false); 
+                setIsParentsAdd(false);
               }}
-          />
-      </Modal>
+            />
+          </Modal>
 
           <span className={style.caption}>{t('pages.newAnimal.familyTreeInfo')}</span>
         </Card>
+        {/* PARENTS */}
 
         <Button
           className={style.submit}

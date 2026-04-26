@@ -52,7 +52,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     }
   };
 
-  const otherProps = _.omit(rest, ['wrapperStyle', 'hideLabel', 'onClick']);
+  const { defaultValue, value, ...restWithoutDefaults } = rest;
+  const otherProps = _.omit(
+    { ...restWithoutDefaults, ...(value !== undefined ? { value } : { defaultValue }) },
+    ['wrapperStyle', 'hideLabel', 'onClick']
+  );
   const wrapperClasses = icon ? classNames(style.inputWrapper, style[`inputWrapper__${icon}`]) : '';
   const inputClasses = classNames(style.input, className, {
     [style.error]: wrapperProps.hasError || showError,

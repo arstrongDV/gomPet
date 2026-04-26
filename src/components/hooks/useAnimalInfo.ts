@@ -30,16 +30,20 @@ const useAnimalInfo = (type?: string) => {
   }, [type]);
 
   const characteristics = useMemo(
-    () => data.map((char: {id: number, name: string, label: string}) => ({
-      id: char.id,
-      label: t(`characteristics.${char.name}`),
-      value: char.label
-    })),
+    () => data
+      .filter((char: {id: number, name: string, label: string}) => char.name)
+      .map((char: {id: number, name: string, label: string}) => ({
+        id: char.id,
+        label: String(t(`characteristics.${char.name}`) ?? char.name),
+        value: char.label || char.name,
+        name: char.name,
+      })),
     [data, t]
   );
 
   return {
-    characteristics
+    characteristics,
+    isLoading,
   };
 };
 

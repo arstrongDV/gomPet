@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import classNames from "classnames";
 import MemberModal from './memberModal';
 import Modal from '../Modal';
+import { useTranslations } from 'next-intl';
 
 type SettingsButtonProps = {
   className?: string;
@@ -41,6 +42,7 @@ export default function SettingsButton({
 
   const session = useSession();
   const myId = Number(session.data?.user?.id);
+  const t = useTranslations('common.settings')
 
   const canEdit =
   (authId !== undefined && myId === authId) ||
@@ -89,7 +91,7 @@ if (!canEdit) return null;
             className={style.settingsBtn}
             onClick={() => { onEdit?.(); setIsOpen(false); }}
           >
-            Edytuj
+            {t('edit')}
           </button>
           {organizationId && (
             <button
@@ -99,14 +101,14 @@ if (!canEdit) return null;
                 setIsOpen(false);
               }}
             >
-              Przekaz organizacje
+              {t('organizationTransfer')}
             </button>
           )}
           <button
             className={style.settingsBtn}
             onClick={() => { onDelete?.(); setIsOpen(false); }}
           >
-            Usuń
+           {t('delete')}
           </button>
         </div>
       )}

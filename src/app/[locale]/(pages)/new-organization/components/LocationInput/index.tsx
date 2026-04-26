@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps';
+import { useTranslations } from 'next-intl';
 
 import { Input, InputPlacesAutocomplete, InputWrapper } from 'src/components';
 import { defaultMapPosition, defaultMapZoom } from 'src/constants/mapConfig';
@@ -15,6 +16,8 @@ type LocationInputProps = {
 };
 
 const LocationInput = ({ value, onChange }: LocationInputProps) => {
+  const t = useTranslations('pages.newOrganization.locationInput');
+
   const handleSelect = (selected: Location) => {
     onChange({
       ...value,
@@ -48,11 +51,10 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
     >
       <div className={style.container}>
         <div className={style.mapWrapper}>
-          <InputWrapper label={'Wyszukaj adres'}>
+          <InputWrapper label={t('searchLabel')}>
             <InputPlacesAutocomplete
               setSelected={handleSelect}
               withDetails
-              // preselected={preselected}
             />
           </InputWrapper>
 
@@ -62,10 +64,7 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
             defaultZoom={position ? 16 : defaultMapZoom}
             defaultCenter={
               position
-                ? {
-                    lat: position.lat,
-                    lng: position.lng
-                  }
+                ? { lat: position.lat, lng: position.lng }
                 : defaultMapPosition
             }
             zoom={position ? 16 : undefined}
@@ -78,8 +77,8 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
           <Input
             id='city'
             name='city'
-            label={'Miasto'}
-            placeholder={'Wpisz miasto'}
+            label={t('cityLabel')}
+            placeholder={t('cityPlaceholder')}
             required
             value={value.city}
             onChangeText={(city) => onChange({ ...value, city })}
@@ -87,8 +86,8 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
           <Input
             id='address'
             name='address'
-            label={'Adres'}
-            placeholder={'Wpisz ulicę i numer budynku'}
+            label={t('streetLabel')}
+            placeholder={t('streetPlaceholder')}
             value={value.street}
             onChangeText={(street) => onChange({ ...value, street })}
             required
@@ -96,8 +95,8 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
           <Input
             id='house-number'
             name='house-number'
-            label={'Numer budinku'}
-            placeholder={'Wpisz numer budynku'}
+            label={t('houseNumberLabel')}
+            placeholder={t('houseNumberPlaceholder')}
             value={value.house_number}
             onChangeText={(house_number) => onChange({ ...value, house_number })}
             required
@@ -105,8 +104,8 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
           <Input
             id='zip-code'
             name='zip-code'
-            label={'Kod pocztowy'}
-            placeholder={'Wpisz kod pocztowy'}
+            label={t('zipCodeLabel')}
+            placeholder={t('zipCodePlaceholder')}
             required
             value={value.zip_code}
             onChangeText={(zip_code) => onChange({ ...value, zip_code })}
@@ -114,8 +113,8 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
           <Input
             id='lat'
             name='lat'
-            label={'Szerokość geograficzna'}
-            placeholder={'np. 52.2297700'}
+            label={t('latLabel')}
+            placeholder={t('latPlaceholder')}
             required
             value={value.lat}
             onChangeText={(lat) => onChange({ ...value, lat: +lat })}
@@ -123,8 +122,8 @@ const LocationInput = ({ value, onChange }: LocationInputProps) => {
           <Input
             id='lng'
             name='lng'
-            label={'Długość geograficzna'}
-            placeholder={'np. 21.0117800'}
+            label={t('lngLabel')}
+            placeholder={t('lngPlaceholder')}
             required
             value={value.lng}
             onChangeText={(lng) => onChange({ ...value, lng: +lng })}

@@ -3,6 +3,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
+import { useTranslations } from 'next-intl';
 
 import { Icon } from 'src/components';
 import { createSwapy, SlotItemMap, Swapy } from 'src/plugins/swapy/instance';
@@ -15,6 +16,7 @@ type PhotosOrganizerProps = {
 };
 
 const PhotosOrganizer = ({ photos, setPhotos }: PhotosOrganizerProps) => {
+  const t = useTranslations('common.ui.photosOrganizer');
   const swapyRef = useRef<Swapy | null>(null);
 
   const items = useMemo(
@@ -114,7 +116,7 @@ const PhotosOrganizer = ({ photos, setPhotos }: PhotosOrganizerProps) => {
                   alt=''
                 />
 
-                {isMain && <div className={style.badge}>Główne</div>}
+                {isMain && <div className={style.badge}>{t('main')}</div>}
 
                 <div className={style.overlay}>
                   <button

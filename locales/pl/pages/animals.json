@@ -3,6 +3,16 @@
   "breed": "Rasa",
   "genderLabel": "Płeć",
   "sizeLabel": "Rozmiar",
+  "animalYear": "Rok",
+  "ageLable": "Wiek",
+
+  "SeeMoreLabelBtn": "Poznaj szczegóły",
+
+  "lifePeriod": {
+    "PUPPY": "Szczeniak",
+    "ADULT": "Dorosły",
+    "SENIOR": "Senior"
+  },
 
   "gender": {
     "male": "On",
@@ -13,12 +23,7 @@
     "medium": "Średni",
     "large": "Duży"
   },
-  "species": {
-    "DOG": "Pies",
-    "CAT": "Kot"
-  },
   "characteristics": {
-
       "vaccinated": "zaszczepiony",
       "neutered": "wykastrowany",
       "dewormed": "odrobaczony",
@@ -59,5 +64,48 @@
   "showFilters": "Pokaż filtry",
   "hideFilters": "Ukryj filtry",
   "showMap": "Pokaż mapę",
-  "hideMap": "Ukryj mapę"
+  "hideMap": "Ukryj mapę",
+
+  "profile": {
+    "tabs": {
+      "information": "Informacje",
+      "activity": "Aktywność"
+    },
+    "greeting": "Hej!",
+    "myNameIs": "Nazywam się {name}",
+    "noData": "Brak danych",
+    "fields": {
+      "name": "Imię",
+      "city": "Miasto",
+      "species": "Gatunek",
+      "gender": "Płeć",
+      "age": "Wiek",
+      "size": "Wielkość",
+      "status": "Status",
+      "breed": "Rasa",
+      "addedOn": "Dodany dnia"
+    },
+
+    "ADOPTED": "Ma właściciela",
+    "RESERVED": "Kwarantanna",
+    "AVAILABLE": "Do adopcji",
+
+    "price": "Cena",
+    "priceCurrency": "{price} zł",
+    "freeAdoption": "Oddam w dobre ręce!",
+    "callUs": "Zadzwoń i zapytaj",
+    "writeToUs": "Napisz do nas",
+    "organizationRating": "Średnia ocen: {rating} na 5",
+    "organizationOpinions": "Opinie o fundacji",
+    "relatedTitle": "Inni <highlight>podopieczni</highlight> fundacji",
+    "relatedLink": "Zobacz stronę fundacji",
+    "ageLessThanYear": "Mniej niż rok",
+    "ageYears": "{age} lat",
+    "noImages": "Brak zdjęć",
+    "noCharacteristics": "Brak informacji",
+    "notFound": "Nie znaleziono zwierzęcia",
+    "familyTitle": "Poznaj moją rodzinę",
+    "familySubtitle": "Aby poznać dalszych przodków, poruszaj się pomiędzy profilami zwierząt z poniższego drzewa genealogicznego",
+    "noFamily": "Brak dostępnych danych o rodzinie"
+  }
 }

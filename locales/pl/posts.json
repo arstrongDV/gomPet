@@ -1,0 +1,26 @@
+{
+  "published": "Opublikowane",
+  "edited": "Aktualizowane",
+  "addPost": "Dodaj Post",
+  "editPost": "Actualizuj Post",
+  "Comments": {
+    "commentsLabel": "Komentarzy",
+    "commentPlaceholder": "Przekaż swoją opinię..."
+  },
+  "shareLabel": "Podzieli sie postem",
+  "placeholder": "Napisz coś...",
+  "addImage": "Dodaj zdjęcie",
+  "removeImage": "Usuń zdjęcie",
+  "presentPhotos": "Zaprezentuj zdjęcia",
+  "publishing": "Publikuję...",
+  "updating": "Aktualizuję...",
+  "update": "Aktualizuj",
+  "toast": {
+    "added": "Post został dodany!",
+    "addError": "Nie udało się dodać posta",
+    "updated": "Post zaktualizowany!",
+    "updateError": "Nie udało się zaktualizować posta",
+    "deleted": "Post został usunięty!",
+    "deleteError": "Nie udało się usunąć posta"
+  }
+}

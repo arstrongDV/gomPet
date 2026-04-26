@@ -8,6 +8,7 @@ import { TabMenuItem } from 'src/components/layout/TabMenu';
 import { IAnimal, IComment, IPost } from 'src/constants/types';
 import AnimalInformation from '../AnimalInforamtion';
 import AnimalActivity from '../AnimalActivity';
+import { notFound } from 'next/navigation';
 
 type TabViewProps = {
     animal: IAnimal;
@@ -18,15 +19,15 @@ type TabViewProps = {
 };
 
 const TabView = ({ animal, posts, comments, familyTree, followers}: TabViewProps) => {
-  const t = useTranslations();
+  const t = useTranslations('pages.animals.profile');
   const menu: TabMenuItem[] = useMemo(
     () => [
       {
-        label: 'Informacje',
+        label: t('tabs.information'),
         id: 'main'
       },
       {
-        label: 'Aktywność',
+        label: t('tabs.activity'),
         id: 'activity'
       }
     ],
@@ -35,13 +36,13 @@ const TabView = ({ animal, posts, comments, familyTree, followers}: TabViewProps
 
   const [tab, setTab] = useState(menu[0]);
 
-  if (!animal) return null;
+  if (!animal) notFound();
 
   return (
     <>
       <SectionHeader
-        title='Hej!'
-        subtitle={`Nazywam się ${animal?.name}`}
+        title={t('greeting')}
+        subtitle={t('myNameIs', { name: animal?.name })}
         margin
       >
         <TabMenu

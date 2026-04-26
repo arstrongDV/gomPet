@@ -1,1 +1,22 @@
-{}
+{
+  "title": "Stwórz nowe konto",
+  "subtitle": "i dołącz do naszej społeczności",
+  "hasAccount": "Masz już konto? Zaloguj się",
+  "emailLabel": "Email",
+  "emailPlaceholder": "Wpisz swój email",
+  "firstNameLabel": "Imię",
+  "firstNamePlaceholder": "Wpisz swoje imię",
+  "lastNameLabel": "Nazwisko",
+  "lastNamePlaceholder": "Wpisz swoje nazwisko",
+  "passwordLabel": "Hasło",
+  "passwordPlaceholder": "Utwórz hasło",
+  "passwordRepeatLabel": "Powtórz hasło",
+  "passwordRepeatPlaceholder": "Powtórz hasło",
+  "locationCheckbox": "Czy możemy korzystać z twojej lokalizacji",
+  "submitButton": "Utwórz konto",
+  "toast": {
+    "error": "Wystąpił błąd",
+    "success": "Profil został stworzony",
+    "locationError": "Nie udało się pobrać lokalizacji"
+  }
+}

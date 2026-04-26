@@ -15,6 +15,7 @@ export class Params {
   static readonly AGE_MAX = 'age-max';
   static readonly SIZE = 'size';
   static readonly BREED = 'breed';
+  static readonly BREED_FILLTER = 'species-type';
   static readonly CHARACTERISTICS = 'characteristics';
 
   static readonly CITY = 'city'; /////////////

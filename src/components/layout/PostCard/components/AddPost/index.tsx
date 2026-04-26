@@ -4,6 +4,7 @@ import style from './AddPost.module.scss'
 import { useState } from "react";
 import Button from "src/components/layout/Buttons/Button";
 import { useSession } from "next-auth/react";
+import { useTranslations } from 'next-intl';
 import AddPostComponent from "./AddPostComponent";
 
 type AddPostProps = {
@@ -15,6 +16,7 @@ type AddPostProps = {
   };
 
 const AddPost = ({animalId, organizationId, animalOwnerId, organizationOwnerId, getPosts}: AddPostProps) => {
+    const t = useTranslations('posts');
     const session = useSession();
     const myId = session.data?.user.id;
     const targetId = animalId ?? organizationId;
@@ -29,24 +31,21 @@ const AddPost = ({animalId, organizationId, animalOwnerId, organizationOwnerId, 
             ) && (
                 <Button
                     icon="plus"
-                    label="Dodaj post"
+                    label={t('addPost')}
                     width="200px"
                     onClick={() => setShowAddPost(true)}
                 />
             )}
-            <Modal 
-                className={style.modaPostAddWin} 
-                isOpen={showAddPost} 
+            <Modal
+                className={style.modaPostAddWin}
+                isOpen={showAddPost}
                 closeModal={() => setShowAddPost(false)}
-                title='Dodaj Post'
+                title={t('addPost')}
             >
-                <AddPostComponent 
-                      {...(animalId 
-                        ? { animalId } 
-                        : { organizationId }
-                    )}
+                <AddPostComponent
+                    {...(animalId ? { animalId } : { organizationId })}
                     animalId={animalId}
-                    setShowAddPost={setShowAddPost} 
+                    setShowAddPost={setShowAddPost}
                     refreshPosts={() => {
                       if (targetId != null) {
                         getPosts(targetId);

@@ -6,66 +6,106 @@ import { ArticlesApi } from 'src/api';
 import toast from 'react-hot-toast';
 
 export type Category = {
-  id: number;
-  label: string;
+    value: string,
+    label: string,
 };
 
-type ApiCategory = {
-  id: number;
-  name: string;
+export type Subcategory = {
+    value: number,
+    label: string,
 };
 
-const useCategories = () => {
-  const t = useTranslations('common');
-  const [data, setData] = useState<ApiCategory[]>([]);
+type ApiCategoryResponse = {
+    value: string,
+    label: string,
+    categories_count: number
+};
+
+interface ApiSubcategoryGroupResponse {
+    id: number;
+    group: string;
+    code: string;
+    name: string;
+    slug: string;
+    description: string;
+}
+
+const useCategories = (selectedCategories: string[]) => {
+  const t = useTranslations('pages.knowledge.categories');
+  const tSub = useTranslations('pages.knowledge.subcategories');
+  const [categoriesGroups, setCategoriesGroups] = useState<ApiCategoryResponse[]>([]);
+  const [subategoriesGroups, setSubcategoriesGroups] = useState<ApiSubcategoryGroupResponse[]>([]);
+
   const [loading, setLoading] = useState<boolean>(false);
-
-  const normalizeCategoryKey = (value: string) =>
-    value
-      .trim()
-      .toLowerCase()
-      .replace(/[\s-]+/g, '_')
-      .replace(/[^\w]/g, '');
+  const [subcategoriesLoading, setSubcategoriesLoading] = useState<boolean>(false);
 
   const getCategories = async () => {
     setLoading(true);
     try {
       const res = await ArticlesApi.getArticlesCategories();
-      setData(res.data.results);
+      setCategoriesGroups(res.data);
     } catch (err) {
+      setCategoriesGroups([]);
       toast.error('Nie udało się pobrać kategorii');
-      setData([]);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     getCategories();
   }, []);
 
+  const getSubcategory = async(selectedCategories: string[]) => {
+    if (selectedCategories.length === 0) {
+      setSubcategoriesGroups([]);
+      return;
+    }
+    setSubcategoriesLoading(true);
+    try{
+      const group = await ArticlesApi.getArticlesCategories(selectedCategories);
+      setSubcategoriesGroups(group.data.results ?? group.data ?? []);
+    } catch (err){
+      setSubcategoriesGroups([]);
+      toast.error("Nie udalo sie pobrac group kategorii");
+    } finally{
+      setSubcategoriesLoading(false);
+    }
+  }
+  const categoriesKey = selectedCategories.join(',');
+  useEffect(() => {
+    getSubcategory(selectedCategories)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoriesKey])
+
+
   const categories: Category[] = useMemo(
     () =>
-      data.map((item) => ({
-        id: item.id,
+      categoriesGroups.map((item) => ({
+        value: item.value,
         label: (() => {
-          const rawKey = `categories.${item.name}`;
-          if (t.has(rawKey)) {
-            return t(rawKey);
-          }
-
-          const normalizedKey = `categories.${normalizeCategoryKey(item.name)}`;
-          if (t.has(normalizedKey)) {
-            return t(normalizedKey);
-          }
-
-          return item.name;
+          return t(item.label);
         })(),
       })),
-    [data, t]
+    [categoriesGroups, t]
   );
 
-  return { categories, loading };
+  const subcategories: Subcategory[] = useMemo(
+    () =>
+      (subategoriesGroups ?? []).map((item) => ({
+        value: item.id,
+        label: (() => {
+          try { return tSub(item.code as any); } catch { return item.name; }
+        })(),
+      })),
+    [subategoriesGroups, tSub]
+  );
+
+  return {
+    categories,
+    subcategories,
+    loading,
+    subcategoriesLoading
+  };
 };
 
 export default useCategories;

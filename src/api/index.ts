@@ -142,7 +142,9 @@ export class AnimalsApi {
     });
   }
   static async getAnimalProfile(id: number) {
-    return ApiClient.get(AnimalsRouts.ANIAML_PROFILE(id));
+    return ApiClient.get(AnimalsRouts.ANIAML_PROFILE(id), undefined, {
+      __tokenRequired: false,
+    });
   }
   static async createNewAnimal(formData: FormData) {
     return ApiClient.post(AnimalsRouts.ANIMALS_ANIMALS, formData, {
@@ -157,9 +159,11 @@ export class AnimalsApi {
     });
   }
   static async updateAnimal(id: number, data: any) {
-    return ApiClient.put(AnimalsRouts.ANIMAL_ID(id), data, {
+    return ApiClient.patch(AnimalsRouts.ANIMAL_ID(id), data, {
       __tokenRequired: true,
-      headers: {},
+      // headers: {
+      //   'Content-Type': 'multipart/form-data',
+      // },
     });
   }
   static async clearAnimalParents(id: number) {
@@ -196,7 +200,9 @@ export class AnimalsApi {
   }
 
   static async getAnimalFamilyTree(id: number) {
-    return ApiClient.get(AnimalsRouts.ANIMAL_FAMILY_TREE(id));
+    return ApiClient.get(AnimalsRouts.ANIMAL_FAMILY_TREE(id), undefined, {
+      __tokenRequired: false,
+    });
   }
 
   static async getAnimalComments(id: number) {
@@ -205,36 +211,32 @@ export class AnimalsApi {
 
   static async getAnimalsLatest(
     limit: number = 5,
-    filters?: {
-      species?: string[];
-      organizationType?: string[];
-      characteristics?: string[];
-    }
   ) {
     const params = {
-      limit,
-      ...(filters?.species && { species: filters.species.join(',') }),
-      ...(filters?.organizationType && { 'organization-type': filters.organizationType.join(',') }),
-      ...(filters?.characteristics && { characteristics: filters.characteristics.join(',') })
+      limit
     };
 
-    try {
-      const response = await ApiClient.get(AnimalsRouts.ANIAML_LATEST, params, {
+    return ApiClient.get(AnimalsRouts.ANIMALS_ANIMALS, params, {
         __tokenRequired: false
       });
 
-      const data = response.data?.results || response.data || [];
-      return { 
-        success: true,
-        data: Array.isArray(data) ? data : [],
-        error: null
-      };
-    } catch (error) {
-      return {
-        success: false,
-        data: [],
-      };
-    }
+    // try {
+    //   const response = await ApiClient.get(AnimalsRouts.ANIMALS_ANIMALS, params, {
+    //     __tokenRequired: false
+    //   });
+
+    //   const data = response.data?.results || response.data || [];
+    //   return { 
+    //     success: true,
+    //     data: Array.isArray(data) ? data : [],
+    //     error: null
+    //   };
+    // } catch (error) {
+    //   return {
+    //     success: false,
+    //     data: [],
+    //   };
+    // }
   }
   static async getAnimalsFilter(filters?: {
     // limit?: number;
@@ -360,33 +362,30 @@ export class AnimalsApi {
 
 
 export class OrganizationsApi {
-  static async getLatestOrganizations(limit: number, filters?: {
-    organizationType?: string[];
-  }) {
+  static async getLatestOrganizations(limit: number) {
     const params = new URLSearchParams();
 
     if (limit) params.append('limit', String(limit));
-    if (filters?.organizationType) {
-      params.append('organization-type', filters.organizationType.join(','));
-    }
+
+    return ApiClient.get(OrganizationsRouts.ORGANIZATIONS, params, { __tokenRequired: false });
   
-    try {
-      const response = await ApiClient.get(OrganizationsRouts.ORGANIZATION_LATEST, { __tokenRequired: false });
-      const { results, count } = response?.data;
-      return {
-        success: true,
-        data: Array.isArray(results) ? results : [],
-        total: count || 0,
-        error: null,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        data: [],
-        total: 0,
-        error,
-      };
-    }
+    // try {
+    //   const response = await ApiClient.get(OrganizationsRouts.ORGANIZATION_LATEST, { __tokenRequired: false });
+    //   const { results, count } = response?.data;
+    //   return {
+    //     success: true,
+    //     data: Array.isArray(results) ? results : [],
+    //     total: count || 0,
+    //     error: null,
+    //   };
+    // } catch (error) {
+    //   return {
+    //     success: false,
+    //     data: [],
+    //     total: 0,
+    //     error,
+    //   };
+    // }
   }
 
   static async getOrganizations(params?: object) {
@@ -537,6 +536,12 @@ export class OrganizationsApi {
       __tokenRequired: true
     });
   }
+
+  static async verifyUserMembership(organization_id: number) {
+    return ApiClient.get(OrganizationsRouts.CHECK_MEMBERSHIP(organization_id), {
+      __tokenRequired: true
+    })
+  }
 }
 
 export class ArticlesApi {
@@ -579,11 +584,19 @@ export class ArticlesApi {
     });
   }
 
-  static getArticlesCategories() {
-    return ApiClient.get(ArticlesRouts.ARTICLES_CATEGORIES, {
+  static getArticlesCategories(category?: string[]) {
+    const params = category ? `?groups=${category.join(',')}` : "groups"
+
+    return ApiClient.get(ArticlesRouts.ARTICLES_CATEGORIES_GROUPS + params, {
       __tokenRequired: false,
     });
   }
+
+  // static getCategoryGroup(category: string[]){
+  //   return ApiClient.get(ArticlesRouts.ARTICLES_CATEGORIES_GROUP(category), {
+  //     __tokenRequired: false,
+  //   })
+  // }
 
   static postNewArticle(payload: any) {
     return ApiClient.post(ArticlesRouts.ARTICLES_LIST, payload, {
@@ -661,15 +674,21 @@ export class PostsApi {
     const params: Record<string, any> = {
       page: filters?.page ?? 1,
     };
-    if (filters.limit) {
+    if (filters?.limit) {
       params.limit = filters.limit;
     }
-    const response = await ApiClient.get(
-      CommonRouts.COMMENTS_ID(PostId, content_type), params,
-      { __tokenRequired: false }
-    );
-
-    return response.data;
+    try {
+      const response = await ApiClient.get(
+        CommonRouts.COMMENTS_ID(PostId, content_type), params,
+        { __tokenRequired: false }
+      );
+      return response.data;
+    } catch (error: any) {
+      if (error?.response?.status === 404) {
+        return { results: [], next: null, count: 0 };
+      }
+      throw error;
+    }
   }
 
   static async addNewComments({ content_type, object_id, body, rating }: { content_type: string; object_id: number; body: string; rating?:number }) {

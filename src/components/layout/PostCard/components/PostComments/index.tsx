@@ -26,6 +26,7 @@ type PostCommentsProps = {
 
 const PostComments = ({ postId, className, type, isOrganizationPage }: PostCommentsProps) => {
   const t = useTranslations('error');
+  const tCommon = useTranslations('common');
 
   const [comments, setComments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -97,7 +98,7 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
           if (updateId) {
             if (text !== current.body) {
               await PostsApi.updateComment(updateId, { body: text });
-              toast.success('Komentarz zaktualizowany!');
+              toast.success(tCommon('comments.updated'));
               setUpdateId(null);
               setComments?.((prev: any) =>
                 prev.map((c: any) =>
@@ -125,7 +126,7 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
         
         const res = await PostsApi.addNewComments(payload);
         setComments(prev => [res, ...prev]);
-        toast.success('Komentarz zostal dodany');
+        toast.success(tCommon('comments.added'));
       }
     } catch (err: any) {
       if (err.response.data.error)(
@@ -151,17 +152,17 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
     <Card className={`${isOrganizationPage ? style.commentsContainer : style.container } ${className || ''}`}>
       {isOrganizationPage && (
         <header className={style.header}>
-          <h3 className={style.title}>{isOrganizationPage.title || 'Opinie'}</h3>
-          {isOrganizationPage.averageRating && 
-            <span className={style.averageRating}>średnia ocen: {isOrganizationPage.averageRating} na 5</span>
+          <h3 className={style.title}>{isOrganizationPage.title || tCommon('comments.reviews')}</h3>
+          {isOrganizationPage.averageRating &&
+            <span className={style.averageRating}>{tCommon('comments.averageRating', { rating: isOrganizationPage.averageRating })}</span>
           }
         </header>
       )}
 
       {updateId && (
         <div className={style.editBanner}>
-          <span>✏️ Edytujesz swój komentarz</span>
-          <button onClick={() => setUpdateId(null)}>Anuluj</button>
+          <span>✏️ {tCommon('comments.editing')}</span>
+          <button onClick={() => setUpdateId(null)}>{tCommon('action.cancel')}</button>
         </div>
       )}
 
@@ -177,7 +178,7 @@ const PostComments = ({ postId, className, type, isOrganizationPage }: PostComme
         <List
           ref={listRef}
           className={style.comments}
-          emptyText='Brak komentarzy'
+          emptyText={tCommon('comments.noComments')}
           isLoading={isLoading}
           isEmpty={!isLoading && comments.length === 0}
         >

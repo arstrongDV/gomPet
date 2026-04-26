@@ -1,5 +1,6 @@
 'use client'
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { OrganizationsApi, PostsApi } from "src/api";
@@ -22,6 +23,8 @@ const FollowingButton = ({ authorId, followedAuthors, setFollowedAuthors, target
 
     const followId = followedAuthors && followedAuthors[authorId];
     const isFollowed = !!followId;
+
+    const t = useTranslations();
 
     const IsFollow = async() => {
         try{
@@ -96,7 +99,7 @@ const FollowingButton = ({ authorId, followedAuthors, setFollowedAuthors, target
         <>
             <Button 
                 icon={isFollowed ?  "starFilled" : "star"}
-                label={isFollowed ? 'Obserwujesz' : 'Obserwuj'} 
+                label={isFollowed ? t('common.subscribed') : t('common.subscribe')} 
                 onClick={handleFollowing}
                 gray 
             />

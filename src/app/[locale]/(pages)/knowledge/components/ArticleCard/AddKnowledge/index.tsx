@@ -1,12 +1,11 @@
 'use client';
-import { Button, Card, FileDropzone, ImageInput, Input, LabelLink, RichTextEditor, Select } from 'src/components';
-import PhotosOrganizer from 'src/components/layout/Forms/PhotosOrganizer';
+import { Button, Card, FileDropzone, Icon, Input, RichTextEditor, Select } from 'src/components';
 import style from './addKnowledge.module.scss';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { OptionType } from 'src/components/layout/Forms/Select';
 import { ArticlesApi } from 'src/api';
 import toast from 'react-hot-toast';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { IArticle } from 'src/constants/types';
 import useCategories from 'src/components/hooks/useCategories';
 
@@ -15,171 +14,119 @@ type AddKnowledgeProps = {
   initialState?: IArticle;
   refreshKnowledge?: () => void;
   updateArticleInState?: (article: IArticle) => void;
-  // categoriesProps: {
-  //   id: number;
-  //   label: string;
-  // }[];
 };
 
-const urlToFile = async (url: string, filename: string): Promise<File> => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch image: ${response.status}`);
-    }
-    const blob = await response.blob();
-    return new File([blob], filename, { type: blob.type });
-  } catch (error) {
-    console.error('Error converting URL to File:', error);
-    throw error;
-  }
-};
-
-const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
+const fileToBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
+    reader.onerror = reject;
   });
-};
+
+const TITLE_MAX = 50;
 
 const AddKnowledge = ({ setIsOpen, initialState, refreshKnowledge, updateArticleInState }: AddKnowledgeProps) => {
-  const [selectValue, setSelectValue] = useState<OptionType | null>(null);
-  const [title, setTitle] = useState<string>('');
-  const [descriptions, setDescriptions] = useState<string>('');
-  const [images, setImages] = useState<File | null>(null);
-  const [addImage, setAddImage] = useState<boolean>(false);
-  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
-  // const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const t = useTranslations('pages.knowledge.form');
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(true);
+  const [categoryValue, setCategoryValue] = useState<OptionType | null>(null);
+  const [subcategoryValue, setSubcategoryValue] = useState<OptionType | null>(null);
+  const [title, setTitle] = useState(initialState?.title ?? '');
+  const [descriptions, setDescriptions] = useState(initialState?.content ?? '');
+  const [images, setImages] = useState<File[]>([]);
+  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(initialState?.image || null);
+  const [loading, setLoading] = useState(false);
+  const [initDone, setInitDone] = useState(false);
+  const [editorInitialContent] = useState<string | undefined>(initialState?.content ?? undefined);
+
+  console.log("initialStateinitialState: ", initialState);
 
   const isEditMode = Boolean(initialState);
-  const { categories } = useCategories();
-  // const categories = categoriesProps ?? [];
-  console.log('categoriescategoriescategories::: ', categories);
-
-  const loadExistingImage = async () => {
-    // const imageFiles: File[] = [];
-    try {
-      if (initialState?.image) {
-        const mainImageFile = await urlToFile(initialState.image, 'main-image.jpg');
-        // imageFiles.push(mainImageFile);
-        setImages(mainImageFile);
-      }
-      // console.log("Converted images:", imageFiles);
-    } catch (error) {
-      console.error('Failed to load existing images:', error);
-      toast.error('Could not load existing images');
-    }
-  };
+  const selectedCategoryIds = categoryValue ? [String(categoryValue.value)] : [];
+  const { categories, subcategories, subcategoriesLoading } = useCategories(selectedCategoryIds);
 
   useEffect(() => {
     if (!initialState || categories.length === 0) return;
 
-    const categoryId = initialState.categories[0];
+    const targetSubcategoryId = initialState.categories?.[0];
+    if (!targetSubcategoryId) return;
 
-    const category = categories.find((c: any) => c.id === categoryId);
+    const allGroupValues = categories.map(c => String(c.value));
+    ArticlesApi.getArticlesCategories(allGroupValues).then(res => {
+      const allSubs: any[] = res.data.results ?? res.data ?? [];
+      const found = allSubs.find((s: any) => s.id === targetSubcategoryId);
+      if (!found) return;
 
-    if (category) {
-      setSelectValue({
-        label: category.label,
-        value: category.id
-      });
-    }
-
-    setTitle(initialState?.title);
-    setDescriptions(initialState?.content);
-    setAddImage(Boolean(initialState.image));
-    setOriginalImageUrl(initialState.image ?? null);
-
-    loadExistingImage();
+      const parentCategory = categories.find(c => String(c.value) === found.group);
+      if (parentCategory) setCategoryValue({ label: parentCategory.label, value: parentCategory.value });
+      setSubcategoryValue({ label: found.name, value: found.id });
+      setInitDone(true);
+    }).catch(() => {});
   }, [initialState, categories]);
+
+  useEffect(() => {
+    if (isEditMode && !initDone) return;
+    setSubcategoryValue(null);
+  }, [categoryValue]);
+
+  const previewUrl = images[0]
+    ? URL.createObjectURL(images[0])
+    : originalImageUrl ?? null;
+
+  const hasImage = Boolean(previewUrl);
+
+  const removeImage = () => {
+    setImages([]);
+    setOriginalImageUrl(null);
+  };
 
   const hasChanged = () => {
     if (!initialState) return true;
-
-    const titleChanged = title !== initialState.title;
-    const contentChanged = descriptions !== initialState.content;
-    const categoryChanged = selectValue?.value !== initialState.categories?.[0];
-
-    // image logic
-    const imageRemoved = !images && originalImageUrl;
-    const imageAdded = images && !originalImageUrl;
-    const imageReplaced = images instanceof File && originalImageUrl !== null;
-
-    return titleChanged || contentChanged || categoryChanged || imageRemoved || imageAdded || imageReplaced;
+    return (
+      title !== initialState.title ||
+      descriptions !== initialState.content ||
+      String(subcategoryValue?.value) !== String(initialState.categories?.[0]) ||
+      images.length > 0 ||
+      (!originalImageUrl && Boolean(initialState.image))
+    );
   };
 
-  // const getCategories = async() => {
-  // setLoading(true)
-  //   try{
-  //     const res = await ArticlesApi.getArticlesCategories();
-  //     setLoading(false)
-  //     setCategories(res.data.results)
-  //   }catch(err){
-  //     toast.error("Nie udalo sie pobrac kategorii")
-  //     setLoading(false)
-  //     setCategories([])
-  //   }
-  // }
+  const isFormValid =
+    title.trim() !== '' &&
+    title.length <= TITLE_MAX &&
+    descriptions.trim() !== '' &&
+    subcategoryValue !== null &&
+    !loading;
 
-  useEffect(() => {
-    const isFormValid =
-      title.trim() !== '' && descriptions.trim() !== '' && selectValue !== null && title.length <= 50 && !loading;
-
-    if (!isEditMode) {
-      setIsDisabledButton(!isFormValid);
-      return;
-    }
-
-    if (!initialState) {
-      setIsDisabledButton(true);
-      return;
-    }
-
-    setIsDisabledButton(!(isFormValid && hasChanged()));
-  }, [title, descriptions, selectValue, loading, images, initialState]);
+  const isDisabled = isEditMode ? !(isFormValid && hasChanged()) : !isFormValid;
 
   const addKnowledge = async () => {
-    if (isDisabledButton) {
-      toast.error('Wypelnij wszystkie pola');
-      return;
-    }
+    if (isDisabled) return;
     setLoading(true);
     try {
-      const base64 = images ? await fileToBase64(images) : null;
+      const base64 = images[0] ? await fileToBase64(images[0]) : null;
+      const payload = {
+        title,
+        content: descriptions,
+        categories: [subcategoryValue?.value],
+        ...(base64 && { image: base64 }),
+      };
 
       if (isEditMode && initialState) {
-        const res = await ArticlesApi.updateKnowledge(
-          {
-            title: title,
-            ...(base64 && { image: base64 }),
-            content: descriptions,
-            categories: [selectValue?.value]
-          },
-          initialState.slug
-        );
-        if (updateArticleInState) updateArticleInState(res?.data);
-        toast.success('Wiedza została zaktualizowana!');
+        const res = await ArticlesApi.updateKnowledge(payload, initialState.slug);
+        updateArticleInState?.(res?.data);
+        toast.success(t('toast.updated'));
       } else {
-        await ArticlesApi.postNewArticle({
-          title: title,
-          ...(base64 && { image: base64 }),
-          content: descriptions,
-          categories: [selectValue?.value]
-        });
-        if (refreshKnowledge) refreshKnowledge();
-        toast.success('Wiedza została dodana!');
+        await ArticlesApi.postNewArticle(payload);
+        refreshKnowledge?.();
+        toast.success(t('toast.added'));
       }
+
       setTitle('');
-      setImages(null);
+      setImages([]);
       setIsOpen(false);
-    } catch (err: any) {
-      console.error(err);
-      toast.error('Nie udało się dodać posta');
+    } catch (err) {
+      toast.error(t('toast.error'));
     } finally {
       setLoading(false);
     }
@@ -188,67 +135,76 @@ const AddKnowledge = ({ setIsOpen, initialState, refreshKnowledge, updateArticle
   return (
     <Card className={style.container}>
       <div className={style.postCreate}>
-        <Input
-          label='Title'
-          name='title'
-          placeholder={'Title...'}
-          value={title}
-          onChangeText={setTitle}
-          required
-        />
 
-        <Select
-          label='Kategoria'
-          options={categories.map((c: any) => ({
-            label: c.label,
-            value: c.id
-          }))}
-          value={selectValue}
-          onChange={setSelectValue}
-          isSearchable
-          isClearable
-          isLoading={loading}
-        />
+        <div className={style.inputWrapper}>
+          <Input
+            label={t('titleLabel')}
+            name='title'
+            placeholder={t('titlePlaceholder')}
+            value={title}
+            onChangeText={setTitle}
+            required
+          />
+          <span className={`${style.counter} ${title.length > TITLE_MAX ? style.counterError : ''}`}>
+            {title.length} / {TITLE_MAX}
+          </span>
+        </div>
+
+        <div className={style.categoryGroup}>
+          <Select
+            label={t('categoryLabel')}
+            options={categories.map((c: any) => ({ label: c.label, value: c.value }))}
+            value={categoryValue}
+            onChange={setCategoryValue}
+            isSearchable
+            isClearable
+          />
+
+          {categoryValue && (
+            <div className={style.subcategoryWrapper}>
+              {subcategoriesLoading ? (
+                <div className={style.subcategoryLoading}>{t('subcategoryLoading')}</div>
+              ) : (
+                <Select
+                  label={t('subcategoryLabel')}
+                  options={subcategories.map((c: any) => ({ label: c.label, value: c.value }))}
+                  value={subcategoryValue}
+                  onChange={setSubcategoryValue}
+                  isSearchable
+                  isClearable
+                />
+              )}
+            </div>
+          )}
+        </div>
 
         <RichTextEditor
-          placeholder={'Napisz coś...'}
+          placeholder={t('contentPlaceholder')}
           onChange={setDescriptions}
-          initialContent={descriptions}
+          initialContent={editorInitialContent}
         />
 
-        <LabelLink
-          label={!addImage ? 'Dodaj zdjecie' : 'Usun zdjecie'}
-          icon={!addImage ? 'plus' : 'x'}
-          onClick={() => setAddImage((prev) => !prev)}
-        />
-
-        {addImage && (
-          <div className={style.addImage}>
-            <h3>
-              Zaprezentuj <mark>zdjęcia</mark>
-            </h3>
-
-            {/* <FileDropzone files={images} setFiles={setImages} />
-                <PhotosOrganizer photos={images} setPhotos={setImages} /> */}
-            <ImageInput
-              className={style.addImage}
-              file={images}
-              setFile={(file) => setImages(file)}
-              onClear={() => setImages(null)}
-            />
-
-            <span className={style.caption}>
-              Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
-              formaty to .png, .jpg, .jpeg
-            </span>
-          </div>
-        )}
+        <div className={style.imageSection}>
+          {hasImage ? (
+            <div className={style.imagePreview}>
+              <img src={previewUrl!} alt='preview' className={style.previewImg} />
+              <button className={style.removeBtn} onClick={removeImage} type='button'>
+                <Icon name='x' />
+              </button>
+            </div>
+          ) : (
+            <FileDropzone files={images} setFiles={setImages} oneImageOnly />
+          )}
+          <span className={style.caption}>{t('photosCaption')}</span>
+        </div>
+        
       </div>
+
       <Button
         type='submit'
-        // label={loading ? "Publikuję..." : "Opublikuj"}
-        label={loading ? 'Zapisywanie...' : isEditMode ? 'Zapisz zmiany' : 'Opublikuj'}
-        disabled={isDisabledButton}
+        label={isEditMode ? t('saveChanges') : t('publish')}
+        isLoading={loading}
+        disabled={isDisabled}
         onClick={addKnowledge}
       />
     </Card>

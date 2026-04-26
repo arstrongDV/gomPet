@@ -3,6 +3,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import classNames from 'classnames';
+import { useTranslations } from 'next-intl';
 
 import { Icon } from 'src/components';
 
@@ -15,6 +16,8 @@ type FileDropzoneProps = {
 };
 
 const FileDropzone = ({ files, setFiles, oneImageOnly }: FileDropzoneProps) => {
+  const t = useTranslations('common.ui.dropzone');
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       setFiles([...files, ...acceptedFiles]);
@@ -24,7 +27,7 @@ const FileDropzone = ({ files, setFiles, oneImageOnly }: FileDropzoneProps) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  if(oneImageOnly && files.length >= 1){
+  if (oneImageOnly && files.length >= 1) {
     return;
   }
 
@@ -43,12 +46,12 @@ const FileDropzone = ({ files, setFiles, oneImageOnly }: FileDropzoneProps) => {
             className={style.animateArrow}
             name='arrowDown'
           />
-          <span className={style.text}>Upuść pliki tutaj</span>
+          <span className={style.text}>{t('drop')}</span>
         </>
       ) : (
         <>
           <Icon name='upload' />
-          <span className={style.text}>Przeciągnij i upuść pliki lub kliknij tutaj, aby je dodać</span>
+          <span className={style.text}>{t('dragAndDrop')}</span>
         </>
       )}
     </div>

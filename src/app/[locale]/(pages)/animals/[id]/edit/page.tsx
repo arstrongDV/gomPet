@@ -9,6 +9,7 @@ import { AnimalsApi } from 'src/api';
 import { IAnimal } from "src/constants/types";
 
 import AnimalUpdateForm from './index'
+import { Loader } from "src/components";
 
 type Parent = {
   name: string;
@@ -29,7 +30,7 @@ const AnimalEditPage = () => {
     const fetchAnimal = async () => {
       try {
         const response_animal = await AnimalsApi.getAnimalProfile(Number(params.id));
-        console.error('Error fetching animal:', response_animal);
+        console.log('response_animal:', response_animal);
         setAnimal(response_animal.data);
       } catch (error) {
         console.error('Error fetching animal:', error);
@@ -41,7 +42,7 @@ const AnimalEditPage = () => {
   }, [params.id]);
 
   const handleSuccess = () => {
-    toast.success('Animal updated successfully!');
+    router.refresh();
     router.push(`/animals/${params.id}`);
   };
 
@@ -50,7 +51,7 @@ const AnimalEditPage = () => {
   };
 
   if (!animal) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (

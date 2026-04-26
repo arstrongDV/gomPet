@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useActionState, useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { Button, Input, Loader } from 'src/components';
@@ -11,7 +11,7 @@ import style from './PasswordForget.module.scss';
 import toast from 'react-hot-toast';
 
 const PasswordForgetForm = () => {
-  const t = useTranslations();
+  const t = useTranslations('pages.auth.passwordForget');
 
   const [state, action, isPending] = useActionState(passwordForget, {
     message: 'idle',
@@ -20,10 +20,10 @@ const PasswordForgetForm = () => {
   });
 
   useEffect(() => {
-    if(state.message === 'success'){
-      toast.success("Jeśli email istnieje, wysłaliśmy link do resetu hasła")
+    if (state.message === 'success') {
+      toast.success(t('toast.success'));
     }
-  }, [state.message])
+  }, [state.message]);
 
   return (
     <form
@@ -34,13 +34,13 @@ const PasswordForgetForm = () => {
         type='email'
         key={'email'}
         name='email'
-        label='Email'
-        placeholder='Wpisz swój email'
+        label={t('emailLabel')}
+        placeholder={t('emailPlaceholder')}
         defaultValue={state.fields.email}
       />
       <Button
         type='submit'
-        label='Wyślij link do resetu hasła'
+        label={t('submitButton')}
       />
       {isPending && <Loader />}
     </form>

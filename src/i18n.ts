@@ -18,13 +18,22 @@ export default getRequestConfig(async ({ locale, requestLocale }) => {
   const form = (await import(`../locales/${typedLocale}/form.json`)).default;
   const navigation = (await import(`../locales/${typedLocale}/navigation.json`)).default;
   const notifications = (await import(`../locales/${typedLocale}/notifications.json`)).default;
+  const posts = (await import(`../locales/${typedLocale}/posts.json`)).default;
+
+  // header translations
+  const header = (await import(`../locales/${typedLocale}/header.json`)).default;
 
   // page translations
   const landing = (await import(`../locales/${typedLocale}/pages/landing.json`)).default;
   const animals = (await import(`../locales/${typedLocale}/pages/animals.json`)).default;
+  const knowledge = (await import(`../locales/${typedLocale}/pages/knowledge.json`)).default;
   const newAnimal = (await import(`../locales/${typedLocale}/pages/newAnimal.json`)).default;
   const myAnimals = (await import(`../locales/${typedLocale}/pages/myAnimals.json`)).default;
   const organizations = (await import(`../locales/${typedLocale}/pages/organizations.json`)).default;
+  const documents = (await import(`../locales/${typedLocale}/pages/documents.json`)).default;
+  const newOrganization = (await import(`../locales/${typedLocale}/pages/newOrganization.json`)).default;
+  const newLitter = (await import(`../locales/${typedLocale}/pages/newLitter.json`)).default;
+  const profile = (await import(`../locales/${typedLocale}/pages/profile.json`)).default;
 
   // auth page translations
   const authLogin = (await import(`../locales/${typedLocale}/pages/auth/login.json`)).default;
@@ -38,6 +47,8 @@ export default getRequestConfig(async ({ locale, requestLocale }) => {
   return {
     locale: typedLocale,
     messages: {
+      header,
+      posts,
       common,
       error,
       form,
@@ -45,10 +56,15 @@ export default getRequestConfig(async ({ locale, requestLocale }) => {
       notifications,
       pages: {
         landing,
+        knowledge,
         animals,
         myAnimals,
         newAnimal,
         organizations,
+        documents,
+        newOrganization,
+        newLitter,
+        profile,
         auth: {
           login: authLogin,
           signup: authSignup,

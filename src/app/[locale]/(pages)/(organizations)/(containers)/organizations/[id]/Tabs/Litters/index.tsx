@@ -95,12 +95,12 @@ const Litters = ({ organization }: LittersProps) => {
       </div>
 
       {organization.user == myId && (
-      <Button label="Dodaj miot" icon='plus' width="200px" onClick={() => push(Routes.NEW_LITTER(organization.id))} />
+      <Button label={t('pages.organizations.littersTab.addLitter')} icon='plus' width="200px" onClick={() => push(Routes.NEW_LITTER(organization.id))} />
       )}
 
       <section className={style.section}>
         <h2 className={style.title}>
-          <mark>Planowane</mark> mioty
+          {t('pages.organizations.littersTab.plannedLitters')}
         </h2>
 
         <List
@@ -120,7 +120,7 @@ const Litters = ({ organization }: LittersProps) => {
 
       <section className={style.section}>
         <h2 className={style.title}>
-          <mark>Poprzednie</mark> mioty
+          {t('pages.organizations.littersTab.previousLitters')}
         </h2>
 
         <List

@@ -33,7 +33,7 @@ const fileToBase64 = (file: File): Promise<string> => {
   }
 
 const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuccess, onDelete, onCancel}: ProfileFormProps) => {
-    const t = useTranslations();
+    const t = useTranslations('pages.profile');
     const [fileToCrop, setFileToCrop] = useState<File | null>(null);
     const [logo, setLogo] = useState<File | null>(null);
     const [showDeleteCard, setShowDeleteCard] = useState<boolean>(false);
@@ -108,7 +108,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                     setLocationAllowed(!!userData.location);
                 }
             } catch (err) {
-                toast.error("Can't reload the data");
+                toast.error(t('toast.loadError'));
             }
         };
   
@@ -178,7 +178,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                 email: true,
                 phone: true,
             });
-            toast.success('Profile updated successfully!');
+            toast.success(t('toast.updated'));
             // onSuccess();
           } catch (err: any) {
             onCancel(err?.response?.data);
@@ -192,9 +192,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
 
     const handleDelete = async() => {
         if (isOrganizationOwner) {
-            toast.error(
-              'Usuń lub przekaż swoje organizacje innemu użytkownikowi przed usunięciem konta'
-            );
+            toast.error(t('toast.deleteOrgError'));
             return;
         }
         try{
@@ -234,7 +232,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                                 className={style.imageChanger} 
                                 onClick={() => setChangeImage(true)}
                             >
-                                Zmienic zdjecie <Icon name='pencil' />
+                                {t('changePhoto')} <Icon name='pencil' />
                             </p>
                         </>
                     ) : (
@@ -247,8 +245,8 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                     )}
 
                     <div className={style.userData}>
-                        <p>Stworzyl konto:   <span>{formatDate(userData.created_at)}</span></p>
-                        <p>Aktualizowano konto:  <span>{formatDate(userData.updated_at ?? userData.created_at)}</span></p>
+                        <p>{t('accountCreated')} <span>{formatDate(userData.created_at)}</span></p>
+                        <p>{t('accountUpdated')} <span>{formatDate(userData.updated_at ?? userData.created_at)}</span></p>
                     </div>
                 </div>
 
@@ -264,8 +262,8 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                                 id="name"
                                 name="name"
                                 className={style.inputs}
-                                label="Imie"
-                                placeholder="Wpisz imie"
+                                label={t('firstName')}
+                                placeholder={t('firstNamePlaceholder')}
                                 value={userForm?.first_name}
                                 onChange={(e: any) => handleChange('first_name', e.target.value)}
                                 disabled={disable.first_name}
@@ -282,8 +280,8 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                                 id="surname"
                                 name="surname"
                                 className={style.inputs}
-                                label="Nazwisko"
-                                placeholder="Wpisz nazwisko"
+                                label={t('lastName')}
+                                placeholder={t('lastNamePlaceholder')}
                                 value={userForm?.last_name}
                                 onChange={(e: any) => handleChange('last_name', e.target.value)}
                                 disabled={disable.last_name}
@@ -303,8 +301,8 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                                 id="email"
                                 name="email"
                                 className={style.inputs}
-                                label="Email"
-                                placeholder="Wpisz email"
+                                label={t('email')}
+                                placeholder={t('emailPlaceholder')}
                                 value={userForm?.email}
                                 onChange={(e: any) => handleChange('email', e.target.value)}
                                 disabled={disable.email}
@@ -321,8 +319,8 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                             <Input
                                 id='phone'
                                 name='phone'
-                                label={'Numer telefonu'}
-                                placeholder={'Wpisz numer telefonu'}
+                                label={t('phone')}
+                                placeholder={t('phonePlaceholder')}
                                 className={style.inputs}
                                 value={String(userForm?.phone)}
                                 onChange={(e: any) => handleChange('phone', e.target.value)}
@@ -334,7 +332,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                     <div>
                         <Checkbox
                             id="location"
-                            label="Czy możemy korzystać z twojej lokalizacji"
+                            label={t('locationConsent')}
                             checked={locationAllowed}
                             onChange={async (e: any) => {
                                 const checked = e.target.checked;
@@ -358,7 +356,7 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
                                     }
                                 }));
                                 } catch {
-                                toast.error('Nie udało się pobrać lokalizacji');
+                                toast.error(t('toast.locationError'));
                                 setLocationAllowed(false);
                                 }
                             }}
@@ -370,18 +368,16 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
             <div className={style.btns}>
                 <Button
                     className={style.submit}
-                    label={'Zapisz zmiany'}
+                    label={t('saveChanges')}
                     onClick={handleSubmit}
                     disabled={!isFormChanged()} 
                 />
                 <Button
                     className={style.btnDel}
-                    label={'Usunac profile'}
+                    label={t('deleteProfile')}
                     onClick={() => {
                         if (isOrganizationOwner) {
-                          toast.error(
-                            'Nie możesz usunąć konta, ponieważ jesteś właścicielem organizacji'
-                          );
+                          toast.error(t('toast.isOwnerError'));
                           return;
                         }
                         setShowDeleteCard(true);
@@ -409,17 +405,17 @@ const ProfileForm = ({userData, userOrganizations, userAnimals, isLoading, onSuc
         {showDeleteCard && (
             <div className={style.backdrop}>
             <Card className={style.DeleteCard}>
-                <p>Chces napewno usunąc swoje konto ?</p>
+                <p>{t('deleteConfirm')}</p>
 
                 <div className={style.btns}>
                     <Button
                         className={style.btnDel}
-                        label={'Tak'}
+                        label={t('deleteYes')}
                         onClick={handleDelete}
                     />
                     <Button
                         className={style.btnNo}
-                        label={'Nie'}
+                        label={t('deleteNo')}
                         onClick={() => setShowDeleteCard(false)}
                     />
                 </div>

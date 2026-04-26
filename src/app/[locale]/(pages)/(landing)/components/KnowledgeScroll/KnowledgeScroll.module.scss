@@ -17,7 +17,7 @@
 }
 
 .list {
-  @include element-flex(row, flex-start, stretch);
+  @include element-flex(row, center, stretch);
   gap: $spacing-4;
   width: 100%;
 }

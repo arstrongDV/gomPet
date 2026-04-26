@@ -24,7 +24,7 @@ type ArticleCardProps = {
 
 const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) => {
   const { id, title, content, image = null, created_at, slug } = article;
-  console.log(article);
+  
   const session = useSession();
   const myId = session.data?.user.id
   const pathname = usePathname();
@@ -55,7 +55,7 @@ const KnowledgeCard = ({ article, className, setKnowledge }: ArticleCardProps) =
 
   return (
     <article className={classNames(style.article, className)}>
-      {article?.author?.id == myId && pathname == '/knowledge' && (
+      {article?.author?.id == myId && pathname.endsWith('/knowledge') && (
         <div className={style.modalSettings}>
           <SettingsButton 
             authId={article?.author?.id} 

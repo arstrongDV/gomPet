@@ -1,5 +1,4 @@
-import React from 'react';
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Card, LabelLink } from 'src/components';
 import { Routes } from 'src/constants/routes';
@@ -12,18 +11,19 @@ import style from './PasswordForget.module.scss';
 const PasswordForget = async ({ params }: Readonly<{ params: Promise<{ locale: string }> }>) => {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
+  const t = await getTranslations('pages.auth.passwordForget');
 
   return (
     <Card className={style.card}>
       <header className={style.header}>
-        <h1 className={style.title}>Nie pamiętasz hasła?</h1>
-        <span className={style.subtitle}>Podaj swój email, wyślemy Tobie link resetujący hasło</span>
+        <h1 className={style.title}>{t('title')}</h1>
+        <span className={style.subtitle}>{t('subtitle')}</span>
       </header>
       <PasswordForgetForm />
       <LabelLink
         className={style.labelLink}
         href={Routes.LOGIN}
-        label='Powrót do logowania'
+        label={t('backToLogin')}
         color='dimmed'
         small
       />

@@ -5,9 +5,11 @@ import style from './Banner.module.scss';
 import image from '../../../../../../assets/banner.png';
 import { useRouter } from "next/navigation";
 import { Routes } from "src/constants/routes";
+import { useTranslations } from "next-intl";
 
 const Banner = () => {
 const { push } = useRouter()
+const t = useTranslations('pages.landing.banner')
   // const cardStyles = {
   //   backgroundImage: `
   //     linear-gradient(
@@ -25,13 +27,16 @@ const { push } = useRouter()
   return (
     <Card className={style.baner} >
         <div className={style.container}>
-            <h1>Znajdź swojego nowego <span className={style.greenText}>przyjaciela</span></h1>
+            {/* <h1>Znajdź swojego nowego <span className={style.greenText}>przyjaciela</span></h1> */}
+            <h1>
+              {t.rich('findYourFriend', {
+                highlight: (chunks) => <span className={style.greenText}>{chunks}</span>
+              })}
+            </h1>
             <p>
-                Poznaj wyjątkowe zwierzęta do adopcji z lokalnych schronisk, hodowli i fundacji. 
-                Odkryj historię, temperament i cechy swojego przyszłego towarzysza, aby znaleźć idealne 
-                dopasowanie dla Twojej rodziny.
+              {t(`findFriendBannerText`)}
             </p>
-            <Button className={style.buttonCard} icon="paw" label="Znajdź kompana" onClick={() => push(Routes.ANIMALS)} />
+            <Button className={style.buttonCard} icon="paw" label={t('findYourFriendBtn')} onClick={() => push(Routes.ANIMALS)} />
         </div>
     </Card>
   );

@@ -1,1 +1,16 @@
-{}
+{
+  "title": "Sign in",
+  "subtitle": "to the application",
+  "noAccount": "Don't have an account? Sign up",
+  "forgotPassword": "Forgot your password?",
+  "emailLabel": "Email",
+  "emailPlaceholder": "Enter your email",
+  "passwordLabel": "Password",
+  "passwordPlaceholder": "Enter your password",
+  "submitButton": "Sign in",
+  "toast": {
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "loginFailed": "Failed to sign in"
+  }
+}

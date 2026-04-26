@@ -1,1 +1,16 @@
-{}
+{
+  "title": "Logowanie",
+  "subtitle": "do aplikacji",
+  "noAccount": "Nie masz konta? Zarejestruj się",
+  "forgotPassword": "Nie pamiętasz hasła?",
+  "emailLabel": "Email",
+  "emailPlaceholder": "Wpisz swój email",
+  "passwordLabel": "Hasło",
+  "passwordPlaceholder": "Podaj hasło",
+  "submitButton": "Zaloguj się",
+  "toast": {
+    "emailRequired": "Email jest wymagany",
+    "passwordRequired": "Hasło jest wymagane",
+    "loginFailed": "Nie udało się zalogować"
+  }
+}

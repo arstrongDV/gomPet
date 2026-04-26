@@ -43,9 +43,9 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete, onReactionDe
 
   const myId = session.data?.user?.id;
 
-  const isOrganizationAnimalsPage = 
-  pathname.startsWith('/organizations/') && 
-  searchParams.get('tab') === 'animals';
+  const isOrganizationAnimalsPage =
+    pathname.includes('/organizations/') &&
+    searchParams.get('tab') === 'animals';
 
   console.log("animalanimal: ", animal);
 
@@ -131,13 +131,13 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete, onReactionDe
           <div className={style.about}>
 
             <h2 className={classNames(style.badge, style.title)}>{animal.name}</h2>
-            <div className={classNames(style.badge, style.age)}>{animal.age >= 1 ? (`${animal.age}+`) : '< 1 rok'}</div>
+            <div className={classNames(style.badge, style.age)}>{animal.age >= 1 ? (`${animal.age}+`) : `< 1 ${t('animalYear')}`}</div>
 
             {animal.characteristicBoard.find(item => item.bool === true) && (
               <div className={classNames(style.badge, style.characteristics)}>
                 {(() => {
                   const firstTrue = animal.characteristicBoard.find(item => item.bool === true);
-                  return firstTrue ? firstTrue.title : null;
+                  return firstTrue ? t(`characteristics.${firstTrue.title.toLowerCase()}`) : null;
                 })()}
               </div>
             )}
@@ -148,10 +148,10 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete, onReactionDe
             <Icon name='heart' />
           </button>
           {(
-            pathname === ('/pl' + Routes.MY_ANIMALS) ||
+            pathname.endsWith(Routes.MY_ANIMALS) ||
             isOrganizationAnimalsPage
           ) && (
-            <div onClick={(e) => e.stopPropagation()} >
+            <div onClick={(e) => e.stopPropagation()}>
               <SettingsButton
                 authId={Number(animal.owner)}
                 ownerId={animal.organization && Number(animal.organization.user)}
@@ -169,15 +169,15 @@ const AnimalCard = ({ className, animal, setOpenedCardId, onDelete, onReactionDe
         <div className={style.hoverContent} >
           <div className={style.data}>
             <div className={classNames(style.badge, style.gender)}>
-              <span>Płeć:  {t(`gender.${(animal.gender).toLowerCase()}`)}</span>
+              <span>{t('genderLabel')}:  {t(`gender.${(animal.gender).toLowerCase()}`)}</span>
               <Icon name={genderIconNames[animal.gender]} />
             </div>
-            <div className={classNames(style.badge, style.size)}>Wielkość: {t(`size.${animal.size.toLowerCase()}`)}</div>
-            <div className={classNames(style.badge, style.ageText)}>Wiek: Dorosły</div>
+            <div className={classNames(style.badge, style.size)}>{t('sizeLabel')}: {t(`size.${animal.size.toLowerCase()}`)}</div>
+            {animal.life_period && <div className={classNames(style.badge, style.ageText)}>{t('ageLable')}: {t(`lifePeriod.${animal.life_period}`)}</div>}
           </div>
           <Button 
             className={style.buttonCard} 
-            label="Poznaj szczegóły" 
+            label={t('SeeMoreLabelBtn')}
             onClick={() => push(`/animals/${animal.id}`)} 
           />
         </div>

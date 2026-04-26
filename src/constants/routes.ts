@@ -4,6 +4,7 @@ export class Routes {
   static readonly LIBRARY = '/library';
   static readonly DOC_STATUTE = '/documents/statute';
   static readonly DOC_PRIVACY = '/documents/privacy-policy';
+  static readonly DOC_COPYRIGHT = '/documents/copyright';
   static readonly SHELTERS = '/shelters';
   static readonly FOUNDATIONS = '/foundations';
   static readonly BREEDINGS = '/breedings';

@@ -534,7 +534,7 @@ export default function ToolbarPlugin() {
     );
   }, [editor, updateToolbar]);
 
-  const codeLanguges = useMemo(() => getCodeLanguages(), []);
+  const codeLanguges = useMemo(() => (typeof window !== 'undefined' ? getCodeLanguages() : []), []);
   const onCodeLanguageSelect = useCallback(
     (e) => {
       editor.update(() => {

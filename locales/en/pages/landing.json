@@ -1,5 +1,38 @@
 {
   "title": "NextJS Template",
   "subtitle": "Page in {locale} version",
-  "withLink": "Go to <link>login</link> page."
+  "withLink": "Go to <link>login</link> page.",
+  "textBlock": {
+    "titleHighlight": "We are",
+    "titleRest": "here to...",
+    "description": "GomPet is a platform connecting people looking for an animal companion with local shelters, breeders, and foundations. Browse animal profiles, learn about their story and personality, and reach out to an organization to give them a loving new home. We support responsible adoption and help animals find the families they deserve."
+  },
+  "banner": {
+    "findYourFriend": "Find your new <highlight>friend</highlight>",
+    "findYourFriendBtn": "Find a companion",
+    "findFriendBannerText": "Discover unique animals available for adoption from local shelters, breeders, and foundations. Explore the story, temperament, and traits of your future companion to find the perfect match for your family."
+  },
+  "animalsScroll": {
+    "title": "Looking for a <highlight>new</highlight> home",
+    "myAnimals": "My <highlight>animals</highlight>",
+    "seeAll": "See all"
+  },
+  "organizationsScroll": {
+    "title": "We <highlight>cooperate</highlight> with",
+    "myOrganizations": "My <highlight>organizations</highlight>",
+    "seeAll": "See all"
+  },
+  "knowledgeScroll": {
+    "title": "Latest <highlight>publications</highlight>",
+    "seeAll": "Go to blog",
+    "noArticles": "No articles"
+  },
+  "footer": {
+    "aboutThePlatformTitle": "About the platform",
+    "tagline": "Connecting animals with loving homes.",
+    "description": "GomPet is a place where adoption becomes simple and transparent. We partner with shelters, breeders, and foundations across the country so every animal can find a responsible caretaker. Join our community and change a pet's life.",
+    "rules": "Terms of service",
+    "privatePolitic": "Privacy policy",
+    "toCnange": "All rights reserved"
+  }
 }

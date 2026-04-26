@@ -8,6 +8,9 @@ import { IAnimal } from 'src/constants/types';
 import 'yet-another-react-lightbox/styles.css';
 import style from './AnimalPhotos.module.scss';
 
+import { useTranslations } from 'next-intl';
+import classNames from 'classnames';
+
 // import ImageShow from 'src/components/layout/ImageShow';
 
 type AnimalProfileProps = {
@@ -15,6 +18,7 @@ type AnimalProfileProps = {
 }
 
 const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
+  const t = useTranslations('pages.animals.profile');
 
   const gallerySlides = (animal.gallery || [])
     .map((item: any) => (typeof item === 'string' ? item : item?.image))
@@ -28,7 +32,7 @@ const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!slides.length) return <p>No images available</p>;
+  if (!slides.length) return <p>{t('noImages')}</p>;
 
   return (
     <div className={style.photos}>
@@ -50,7 +54,7 @@ const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
               key={i}
               src={img.src}
               alt={`${animal.name} photo ${i}`}
-              className={style.thumbnail}
+              className={classNames(style.thumbnail, currentIndex == i && style.active)}
               onClick={() => setCurrentIndex(i)}
             />
           ))}
@@ -85,7 +89,6 @@ const AnimalPhotos = ({ animal }: AnimalProfileProps) => {
           },
         }}
       />
-
     </div>
   );
 }

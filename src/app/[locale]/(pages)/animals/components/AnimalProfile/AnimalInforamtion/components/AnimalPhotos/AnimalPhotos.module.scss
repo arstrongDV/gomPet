@@ -39,6 +39,7 @@
     //     border-radius: $radius-m;
     //   }
   }
+
   
   .mainImage {
     display: flex;
@@ -101,6 +102,10 @@
     object-fit: cover;
     cursor: pointer;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &.active {
+      border: 3px solid #b7b7b7;
+    }
   
     &:hover {
       transform: scale(1.1);

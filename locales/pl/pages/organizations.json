@@ -21,7 +21,95 @@
       "available": "Dostępne",
       "can_reserve": "Można zarezerwować",
       "no_reserve_slots": "Brak miejsc do rezerwacji",
-      "already_given": "Wydane"
+      "already_given": "Wydane",
+      "ACTIVE": "Aktywny",
+      "CLOSED": "Zamknięty",
+      "DRAFT": "Szkic"
     }
+  },
+  "tabs": {
+    "information": "Informacje",
+    "animals": "Podopieczni",
+    "litters": "Mioty",
+    "activity": "Aktywność",
+    "members": "Członkowie"
+  },
+  "tabView": {
+    "greeting": "Hej!",
+    "welcome": "Witamy na naszym profilu"
+  },
+  "littersTab": {
+    "addLitter": "Dodaj miot",
+    "plannedLitters": "Planowane mioty",
+    "previousLitters": "Poprzednie mioty"
+  },
+  "addLitter": {
+    "title": "Tytuł",
+    "titlePlaceholder": "Wpisz tytuł",
+    "birthDate": "Data urodzenia",
+    "describeTitle": "Opisz zwierzaka",
+    "descriptionPlaceholder": "Napisz coś o miocie",
+    "status": "Status",
+    "statusOptions": {
+      "ACTIVE": "Aktywny",
+      "CLOSED": "Zamknięty",
+      "DRAFT": "Szkic"
+    }
+  },
+  "addPost": {
+    "placeholder": "Napisz coś...",
+    "addImage": "Dodaj zdjęcie",
+    "removeImage": "Usuń zdjęcie",
+    "presentImages": "Zaprezentuj zdjęcia",
+    "publishing": "Publikuję...",
+    "publish": "Opublikuj",
+    "successToast": "Post został dodany!",
+    "errorToast": "Nie udało się dodać posta"
+  },
+  "memberCard": {
+    "name": "Imię:",
+    "email": "Email:",
+    "phone": "Telefon:",
+    "role": "Rola:",
+    "addedOn": "Dodany dnia:",
+    "update": "Zaktualizuj",
+    "delete": "Usuń",
+    "deleteConfirm": "Czy naprawdę chcesz usunąć tego członka ze swojej organizacji?",
+    "yes": "Tak",
+    "no": "Nie",
+    "deleteSuccess": "Członek został usunięty",
+    "deleteError": "Nie udało się usunąć członka",
+    "updateSuccess": "Członek został zaktualizowany",
+    "updateError": "Nie udało się zaktualizować członka"
+  },
+  "requestCard": {
+    "noMessage": "-Nie nadesłano wiadomości-",
+    "added": "Dodano",
+    "add": "Dodaj",
+    "remove": "Usuń",
+    "invitationRemoved": "Zaproszenie zostało usunięte",
+    "memberAdded": "Nowy członek dodany",
+    "errorMessage": "Coś poszło nie tak"
+  },
+  "litterCard": {
+    "deleteSuccess": "Miot został usunięty",
+    "deleteError": "Błąd usunięcia miotu"
+  },
+  "description": {
+    "noText": "Brak opisu",
+    "readMore": "Czytaj więcej",
+    "collapse": "Zwiń opis"
+  },
+  "membersPage": {
+    "hideRequests": "Schowaj nowe requesty od użytkowników",
+    "showRequests": "Zobacz nowe requesty od użytkowników",
+    "newBadge": "Nowe",
+    "requestsTitle": "Zobacz nadesłane requesty do was",
+    "requestsSubtitle": "Zwiększajcie waszą organizację",
+    "noRequests": "Brak",
+    "hideMembers": "Schowaj członków waszej organizacji",
+    "showMembers": "Pokaż członków waszej organizacji",
+    "membersTitle": "Zobacz waszych członków",
+    "membersSubtitle": "Zwiększajcie waszą organizację"
   }
 }

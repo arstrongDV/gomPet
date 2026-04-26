@@ -1,5 +1,7 @@
 // import { IComment } from './types';
 
+import { OptionType } from "src/components/layout/Forms/Select";
+
 export enum Role {
   ADMIN = 'admin',
   USER = 'user',
@@ -58,9 +60,11 @@ export type Location = {
   lat: string | number;
   lng: string | number;
   coordinates: [lng: string | number, lat: string | number]
+  species?: OptionType[];
   location?: {
     type: string,
     coordinates: [lng: string | number, lat: string | number]
+    species?: number[];
   }
 };
 
@@ -137,8 +141,8 @@ export interface IAnimal {
   parents: IAnimal[];
   status: AnimalStatus;
   descriptions: string;
-  characteristicsBoard: string[];
   organization: IOrganization;
+  life_period: string;
   owner_info: IUser;
 
   price: number;

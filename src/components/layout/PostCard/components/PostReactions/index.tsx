@@ -6,6 +6,7 @@ import { Icon, useOrganization } from 'src/components';
 import style from './PostReactions.module.scss';
 import { ArticlesApi } from 'src/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 type PostReactionsProps = {
   postId: number;
@@ -21,6 +22,8 @@ const PostReactions = ({ postId, reactionsCount, type }: PostReactionsProps) => 
   const [likeCount, setLikeCount] = useState<number>();
 
   const myId = session.data?.user?.id;
+
+  const t = useTranslations();
 
   useEffect(() => {
     setLikeCount(reactionsCount);
@@ -93,7 +96,7 @@ const PostReactions = ({ postId, reactionsCount, type }: PostReactionsProps) => 
         name={reactionId !== 0 ? 'pawFilled' : 'paw'}
       />
       <span className={style.label}>
-        {likeCount && likeCount > 0 ? likeCount : 'brak'}
+        {likeCount && likeCount > 0 ? likeCount : t('common.noReaction')}
       </span>
     </button>
   );

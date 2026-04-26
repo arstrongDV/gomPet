@@ -79,7 +79,7 @@ const CommentInput = ({ className, onSubmit, placeholder, withRating = false, va
             className={style.textarea}
             name='comment'
             id='comment-input'
-            placeholder={placeholder || 'Przekaż swoją opinię...'}
+            placeholder={placeholder || t('posts.Comments.commentPlaceholder')}
             altStyle
             rule='required'
             value={text}

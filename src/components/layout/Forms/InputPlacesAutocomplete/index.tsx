@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { useTranslations } from 'next-intl';
 import { useMapsLibrary } from '@vis.gl/react-google-maps';
 import usePlacesAutocomplete, { getDetails, getGeocode, getLatLng, RequestOptions } from 'use-places-autocomplete';
 
@@ -26,6 +27,7 @@ const InputPlacesAutocomplete = ({
   withDetails = false,
   preselected
 }: InputPlacesAutocompleteProps) => {
+  const t = useTranslations('common.ui');
   const {
     ready,
     value,
@@ -130,7 +132,7 @@ const InputPlacesAutocomplete = ({
           value={value}
           onChangeText={setValue}
           disabled={!ready}
-          placeholder={'Znajdź adres'}
+          placeholder={t('findAddress')}
         />
 
         {status === 'OK' && data.length > 0 && (

@@ -1,0 +1,62 @@
+{
+  "statute": {
+    "title": "Regulamin",
+    "back": "Powrót",
+    "section1": {
+      "title": "§1 Postanowienia ogólne",
+      "content": "Niniejszy Regulamin określa zasady korzystania z platformy GomPet, dostępnej pod adresem gompet.pl. Korzystając z platformy, użytkownik akceptuje warunki niniejszego Regulaminu w całości."
+    },
+    "section2": {
+      "title": "§2 Rejestracja i konto użytkownika",
+      "content": "Korzystanie z pełnej funkcjonalności platformy wymaga założenia konta. Użytkownik zobowiązuje się do podania prawdziwych danych oraz nieudostępniania danych logowania osobom trzecim. Konto może zostać usunięte w przypadku naruszenia Regulaminu."
+    },
+    "section3": {
+      "title": "§3 Zasady korzystania z platformy",
+      "content": "Użytkownicy platformy zobowiązują się do korzystania z niej zgodnie z obowiązującym prawem i zasadami współżycia społecznego. Zabrania się zamieszczania treści niezgodnych z prawem, wprowadzających w błąd lub naruszających prawa osób trzecich."
+    },
+    "section4": {
+      "title": "§4 Postanowienia końcowe",
+      "content": "Regulamin wchodzi w życie z dniem opublikowania. Operator zastrzega sobie prawo do zmiany Regulaminu. O wszelkich zmianach użytkownicy zostaną poinformowani z odpowiednim wyprzedzeniem."
+    }
+  },
+  "copyright": {
+    "title": "Wszelkie prawa zastrzeżone",
+    "back": "Powrót",
+    "section1": {
+      "title": "1. Własność intelektualna",
+      "content": "Wszelkie treści zamieszczone na platformie GomPet, w tym teksty, grafiki, logotypy, ikony, zdjęcia oraz oprogramowanie, stanowią własność intelektualną operatora platformy lub jej partnerów i są chronione przepisami prawa autorskiego."
+    },
+    "section2": {
+      "title": "2. Zakaz kopiowania",
+      "content": "Żadna część platformy GomPet nie może być reprodukowana, dystrybuowana, modyfikowana ani publikowana bez uprzedniej pisemnej zgody operatora. Niedozwolone jest również tworzenie dzieł pochodnych na podstawie materiałów dostępnych na platformie."
+    },
+    "section3": {
+      "title": "3. Treści użytkowników",
+      "content": "Użytkownicy publikujący treści na platformie zachowują prawa autorskie do swoich materiałów, jednocześnie udzielając operatorowi niewyłącznej, bezpłatnej licencji na ich wyświetlanie i przechowywanie w ramach świadczonych usług."
+    },
+    "section4": {
+      "title": "4. Naruszenia praw autorskich",
+      "content": "W przypadku stwierdzenia naruszenia praw autorskich prosimy o kontakt z administratorem platformy. Operator zobowiązuje się do niezwłocznego rozpatrzenia zgłoszenia i podjęcia odpowiednich działań zgodnie z obowiązującym prawem."
+    }
+  },
+  "privacy": {
+    "title": "Polityka prywatności",
+    "back": "Powrót",
+    "section1": {
+      "title": "1. Administrator danych osobowych",
+      "content": "Administratorem danych osobowych użytkowników platformy GomPet jest jej operator. Dane przetwarzane są zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO) oraz obowiązującymi przepisami prawa polskiego."
+    },
+    "section2": {
+      "title": "2. Zakres i cel przetwarzania danych",
+      "content": "Zbieramy dane niezbędne do świadczenia usług platformy: adres e-mail, imię, dane profilu. Dane są wykorzystywane wyłącznie w celu obsługi konta użytkownika, umożliwienia adopcji zwierząt oraz komunikacji z organizacjami partnerskimi."
+    },
+    "section3": {
+      "title": "3. Prawa użytkownika",
+      "content": "Użytkownik ma prawo dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania oraz wniesienia sprzeciwu. Użytkownik może w każdej chwili wycofać zgodę na przetwarzanie danych kontaktując się z administratorem."
+    },
+    "section4": {
+      "title": "4. Pliki cookies",
+      "content": "Platforma GomPet korzysta z plików cookies w celu zapewnienia prawidłowego działania serwisu oraz analizy ruchu. Użytkownik może zarządzać ustawieniami cookies w swojej przeglądarce internetowej."
+    }
+  }
+}

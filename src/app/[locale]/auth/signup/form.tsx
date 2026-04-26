@@ -15,8 +15,16 @@ import toast from 'react-hot-toast';
 
 
 const SignUpForm = () => {
-  const t = useTranslations();
+  const t = useTranslations('pages.auth.signup');
+  const tForm = useTranslations('form');
   const router = useRouter();
+
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordRepeat, setPasswordRepeat] = useState('');
+  const [isStatuteChecked, setIsStatuteChecked] = useState(false);
 
   const [state, action, isPending] = useActionState(signup, {
     message: '',
@@ -45,7 +53,7 @@ const SignUpForm = () => {
         reject(new Error('Geolocation not supported'));
         return;
       }
-  
+
       navigator.geolocation.getCurrentPosition(
         (position) => resolve(position),
         (error) => reject(error),
@@ -56,32 +64,37 @@ const SignUpForm = () => {
       );
     });
   };
-  
+
+  const lastMessage = useRef<string | null>(null);
+
   useEffect(() => {
     if(state.message == 'error'){
-      toast.error(state.errors?.email || "Wystąpił błąd.");
+      toast.error(state.errors?.email || t('toast.error'));
     }
-    console.log(state)
 
     if (state.message === 'success') {
-      toast.success(state.text || "Profile zostal stworzony");
+      toast.success(state.text || t('toast.success'));
       router.push('/auth/login');
     }
   }, [state.message, router]);
 
-  const lastMessage = useRef<string | null>(null);
+  useEffect(() => {
+    if (state.message && state.message !== lastMessage.current) {
+      lastMessage.current = state.message;
 
-useEffect(() => {
-  if (state.message && state.message !== lastMessage.current) {
-    lastMessage.current = state.message;
-
-    if (state.message === 'error') return; //toast.error()
-    if (state.message === 'success') {
-      // toast.success(...);
-      router.push('/auth/login');
+      if (state.message === 'error') return;
+      if (state.message === 'success') {
+        router.push('/auth/login');
+      }
     }
-  }
-}, [state.message]);
+  }, [state.message]);
+
+  const isDisabled = email.trim() === '' || 
+                    firstName.trim() === '' || 
+                    lastName.trim() === '' || 
+                    password.trim() === '' || 
+                    passwordRepeat.trim() === '' || 
+                    !isStatuteChecked;
 
   return (
     <form
@@ -92,46 +105,56 @@ useEffect(() => {
         type='email'
         key={'email'}
         name='email'
-        label='Email'
-        placeholder='Wpisz swój email'
+        label={t('emailLabel')}
+        placeholder={t('emailPlaceholder')}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         defaultValue={state.fields.email}
       />
       <Input
         key={'firstName'}
         name='firstName'
-        label='Imię'
-        placeholder='Wpisz swoje imię'
+        label={t('firstNameLabel')}
+        placeholder={t('firstNamePlaceholder')}
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
         defaultValue={state.fields.firstName}
       />
       <Input
         key={'lastName'}
         name='lastName'
-        label='Nazwisko'
-        placeholder='Wpisz swoje nazwisko'
+        label={t('lastNameLabel')}
+        placeholder={t('lastNamePlaceholder')}
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
         defaultValue={state.fields.lastName}
       />
       <Input
         type='password'
         key={'password'}
         name='password'
-        label='Hasło'
-        placeholder='Utwórz hasło'
+        label={t('passwordLabel')}
+        placeholder={t('passwordPlaceholder')}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         defaultValue={state.fields.password}
       />
       <Input
         type='password'
         key={'passwordRepeat'}
         name='passwordRepeat'
-        label='Powtórz hasło'
-        placeholder='Powtórz hasło'
+        label={t('passwordRepeatLabel')}
+        placeholder={t('passwordRepeatPlaceholder')}
+        value={passwordRepeat}
+        onChange={(e) => setPasswordRepeat(e.target.value)}
         defaultValue={state.fields.passwordRepeat}
       />
 
       <Checkbox
         id="location"
-        label="Czy możemy korzystać z twojej lokalizacji"
+        label={t('locationCheckbox')}
         checked={locationAlowed}
-        onChange={async (e: any) => {
+        onChange={async (e) => {
           const checked = e.target.checked;
           setLocationAllowed(checked);
 
@@ -150,7 +173,7 @@ useEffect(() => {
               ],
             });
           } catch {
-            toast.error('Nie udało się pobrać lokalizacji');
+            toast.error(t('toast.locationError'));
             setLocationAllowed(false);
           }
         }}
@@ -165,7 +188,7 @@ useEffect(() => {
       <Checkbox
         id='statute'
         name='statute'
-        label={t.rich('form.termsAndConditions', {
+        label={tForm.rich('termsAndConditions', {
           statute: (chunks) => (
             <Link
               href={Routes.DOC_STATUTE}
@@ -183,11 +206,13 @@ useEffect(() => {
             </Link>
           )
         })}
+        onChange={(e) => setIsStatuteChecked(e.target.checked)}
         defaultChecked={state.fields.statute}
       />
       <Button
         type='submit'
-        label='Utwórz konto'
+        disabled={isDisabled}
+        label={t('submitButton')}
       />
       {isPending && <Loader />}
     </form>

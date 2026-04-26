@@ -1,5 +1,6 @@
 'use client';
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import style from './AnimalDescription.module.scss';
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
@@ -17,27 +18,21 @@ type Props = {
 };
 
 const DescriptionTranslate = ({ text, maxLines = 5 }: Props) => {
+  const t = useTranslations('pages.organizations.description');
   const [expanded, setExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [formattedText, setFormattedText] = useState<React.ReactNode>(null);
-  
-  // Safely convert text to string
+
   const textContent = useMemo(() => {
     if (typeof text === 'string') return text;
     if (text === null || text === '') return '';
-    if (typeof text === 'object') return text; // Allow object input
+    if (typeof text === 'object') return text;
     try {
       return String(text);
     } catch {
       return '';
     }
   }, [text]);
-
-  console.log("text: ", textContent);
-
-  if(textContent == ''){
-    return "No text there"
-  }
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 550);
@@ -237,17 +232,14 @@ const DescriptionTranslate = ({ text, maxLines = 5 }: Props) => {
   }, [textContent]);
 
   const isLongText = typeof textContent === 'string' && textContent.length > 200;
-  const clampStyle = !expanded && isMobile && isLongText ? {
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    WebkitLineClamp: maxLines,
-  } : {};
+
+  if (textContent === '') {
+    return <p className={style.noText}>{t('noText')}</p>;
+  }
 
   return (
     <div className={style.infoTextBlock}>
-      <div 
-        // style={clampStyle}
+      <div
         className={style.textDescription}
       >
         {formattedText}
@@ -259,7 +251,7 @@ const DescriptionTranslate = ({ text, maxLines = 5 }: Props) => {
             className={style.readMoreBtn}
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? "Zwiń opis" : "Czytaj więcej"}
+            {expanded ? t('collapse') : t('readMore')}
           </button>
         </div>
       )}

@@ -2,6 +2,7 @@
 import React from 'react';
 import styles from './FamilyTree.module.scss';
 import { FamilyTreePyramid } from './FamilyTreePyramid';
+import { useTranslations } from 'next-intl';
 
 interface FamilyTreeWrapperProps {
   familyTree: any[];
@@ -25,22 +26,21 @@ const normalizeFamilyTree = (parents: any[]) => {
 };
 
 export const FamilyTreeWrapper: React.FC<FamilyTreeWrapperProps> = ({ familyTree, rootName, rootImages }) => {
+  const t = useTranslations('pages.animals.profile');
   const normalizedTree = normalizeFamilyTree(familyTree);
 
   return (
     <div className={styles.myFamilly}>
       <div className={styles.aboutFamilly}>
-        <h3>Poznaj moją rodzinę</h3>
-        <p>Aby poznać dalszych przodków, poruszaj się pomiędzy profilami zwierząt z poniższego drzewa genealogicznego</p>
+        <h3>{t('familyTitle')}</h3>
+        <p>{t('familySubtitle')}</p>
       </div>
 
       <div className={styles.pyramidWrapper}>
         {normalizedTree.length > 0 ? (
           <>
-            {/* Rodzice i dziadkowie */}
             <FamilyTreePyramid node={{ children: normalizedTree }} depth={0} />
 
-            {/* Główne zwierzę na dole */}
             <div className={styles.rootNode}>
               {rootImages?.[0] ? (
                 <img src={rootImages} alt={rootName} />
@@ -51,7 +51,7 @@ export const FamilyTreeWrapper: React.FC<FamilyTreeWrapperProps> = ({ familyTree
             </div>
           </>
         ) : (
-          <div className={styles.noFamily}>Brak dostępnych danych o rodzinie</div>
+          <div className={styles.noFamily}>{t('noFamily')}</div>
         )}
       </div>
     </div>

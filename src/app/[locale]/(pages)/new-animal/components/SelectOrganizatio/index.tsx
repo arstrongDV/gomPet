@@ -116,7 +116,7 @@ const SelectMyOrganizations = ({ setOrganization, setOwner, initialOrganization 
   return (
     <Select
       wrapperStyle={style.select}
-      label="Wybierz swoją organizację"
+      label={t('pages.newAnimal.selectOrganization')}
       options={options}
       value={selectedOrg ? selectedOrg : options[0] ?? null}
       onChange={(option: OptionType) => setSelectedOrg(option as ExtendedOptionType | null)}

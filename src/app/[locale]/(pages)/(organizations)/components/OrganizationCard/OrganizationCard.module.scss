@@ -3,6 +3,7 @@
 .card {
   @include element-flex(column, space-between, center);
   gap: $spacing-4;
+  max-height: 300px;
   position: relative;
   border-radius: $radius-m;
   padding: $spacing-6;

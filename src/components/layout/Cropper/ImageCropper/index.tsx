@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from 'react';
 import Cropper, { Area } from 'react-easy-crop';
 import classNames from 'classnames';
+import { useTranslations } from 'next-intl';
 
 import { Button } from 'components';
 
@@ -12,6 +13,8 @@ import 'react-easy-crop/react-easy-crop.css';
 import style from './ImageCropper.module.scss';
 
 const ImageCropper = ({ image, onSubmit, isLoading, showRound, onCancel }: any) => {
+  const t = useTranslations('common');
+
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({
     x: 0,
     y: 0,
@@ -46,12 +49,12 @@ const ImageCropper = ({ image, onSubmit, isLoading, showRound, onCancel }: any) 
       </div>
       <div className={style.control}>
         <Button
-          label={'Zapisz zdjęcie'}
+          label={t('ui.savePhoto')}
           onClick={() => handleSubmit()}
           isLoading={isLoading}
         />
         <Button
-          label={'Anuluj'}
+          label={t('action.cancel')}
           onClick={onCancel}
           gray
         />

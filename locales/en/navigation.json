@@ -1,5 +1,13 @@
 {
   "sidebar": {
+    "myAnimals": "My animals",
+    "animals": "Animals",
+    "shelters": "Shelters",
+    "breedings": "Breeding farms",
+    "foundations": "Foundations",
+    "bookmarks": "Favorites",
+    "posts": "Posts",
+    "knowledge": "Knowledge",
     "landing": "Home page",
     "login": "Log in",
     "library": "Library",

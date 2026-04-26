@@ -1,0 +1,69 @@
+{
+  "header": {
+    "title": "Create new profile",
+    "subtitle": "Welcome to the profile creator. Customize it to your needs"
+  },
+  "type": {
+    "heading": "Choose profile type",
+    "shelter": "Animal shelter",
+    "breeder": "Breeding",
+    "fund": "Foundation",
+    "caption": "Each profile type is tailored to the organization's needs, so choose one that matches your activity."
+  },
+  "presentation": {
+    "heading": "How do you want to present yourself?",
+    "logoLabel": "Organization logo",
+    "nameLabel": "Organization name",
+    "namePlaceholder": "Enter organization name",
+    "caption": "The organization name will be visible on the profile page. Add a logo to stand out from other organizations."
+  },
+  "contact": {
+    "heading": "How to contact you",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter email address",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "Enter phone number"
+  },
+  "breedingDetails": {
+    "heading": "Breeding details"
+  },
+  "description": {
+    "heading": "Describe your activity",
+    "placeholder": "Write something...",
+    "caption": "This will be the description of your profile."
+  },
+  "location": {
+    "heading": "Indicate your location",
+    "caption": "You can search for a location using Google Maps or fill in the fields manually."
+  },
+  "locationInput": {
+    "searchLabel": "Search address",
+    "cityLabel": "City",
+    "cityPlaceholder": "Enter city",
+    "streetLabel": "Street",
+    "streetPlaceholder": "Enter street and building number",
+    "houseNumberLabel": "Building number",
+    "houseNumberPlaceholder": "Enter building number",
+    "zipCodeLabel": "Zip code",
+    "zipCodePlaceholder": "Enter zip code",
+    "latLabel": "Latitude",
+    "latPlaceholder": "e.g. 52.2297700",
+    "lngLabel": "Longitude",
+    "lngPlaceholder": "e.g. 21.0117800"
+  },
+  "submit": "Create organization profile",
+  "saveChanges": "Save changes",
+  "editHeader": {
+    "title": "Edit profile",
+    "subtitle": "Welcome to the profile creator. Customize it to your needs"
+  },
+  "toast": {
+    "missingLogo": "Please add a photo",
+    "success": "New organization created!",
+    "error": "Error creating organization",
+    "updateSuccess": "Organization updated successfully!",
+    "updateError": "Failed to update organization",
+    "loadError": "Can't reload the data",
+    "notFound": "Organization not found"
+  }
+}

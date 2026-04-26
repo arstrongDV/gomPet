@@ -24,16 +24,9 @@ const Footer = () => {
                 />
             </Link>
             <div className={style.textContent}>
-                <h3>O platformie</h3>
-                <h4>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra nisl ut accumsan tristique.
-                </h4>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra nisl ut accumsan tristique. 
-                    Integer hendrerit id sem sit amet rutrum. Ut vitae nibh mi. Etiam pellentesque arcu sed justo commodo, 
-                    ac dignissim ante aliquam. Duis suscipit a urna ut euismod. Morbi tempor mi lobortis 
-                    orci condimentum vulputate sit amet vitae magna.
-                </p>
+                <h3>{t('footer.aboutThePlatformTitle')}</h3>
+                <h4>{t('footer.tagline')}</h4>
+                <p>{t('footer.description')}</p>
             </div>
 
 
@@ -42,20 +35,20 @@ const Footer = () => {
 
             <div className={style.privicyBlock}>
                 <div className={style.politic}>
-                    <LabelLink 
-                        className={style.link} 
-                        href={Routes.LANDING}
+                    <LabelLink
+                        className={style.link}
+                        href={Routes.DOC_STATUTE}
                         label={t('footer.rules')}
                     />
-                    <LabelLink 
-                        className={style.link} 
-                        href={Routes.LANDING}
+                    <LabelLink
+                        className={style.link}
+                        href={Routes.DOC_PRIVACY}
                         label={t('footer.privatePolitic')}
                     />
                 </div>
-                <LabelLink 
-                    className={style.footerGreenLink} 
-                    href={Routes.LANDING}
+                <LabelLink
+                    className={style.footerGreenLink}
+                    href={Routes.DOC_COPYRIGHT}
                     label={t('footer.toCnange')}
                 />
             </div>

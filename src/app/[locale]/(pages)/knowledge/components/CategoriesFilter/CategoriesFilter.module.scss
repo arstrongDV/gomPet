@@ -1,0 +1,109 @@
+@import 'styles';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+    width: 100%;
+    align-items: center;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+}
+
+.categoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-4;
+  border-radius: $radius-l;
+  border: 1.5px solid $color-border;
+  background: $color-background-1;
+  color: $color-foreground-dim;
+  font-size: $font-size-xs;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: all $transition-main;
+  white-space: nowrap;
+  user-select: none;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-foreground;
+    background: $color-background-2;
+  }
+
+  &.active {
+    background: $color-primary;
+    border-color: $color-primary;
+    color: $color-white;
+    box-shadow: $shadow-hover;
+  }
+}
+
+.subcategoriesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: $color-background-2;
+  border-radius: $radius-m;
+  border: 1px solid $color-border;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.subcategoriesLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-semiBold;
+  color: $color-foreground-dim;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-6;
+}
+
+.subcategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+}
+
+.subcategoryBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-1 $spacing-3;
+  border-radius: $radius-l;
+  border: 1.5px solid $color-border;
+  background: $color-background-1;
+  color: $color-foreground-dim;
+  font-size: $font-size-xxs;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: all $transition-main;
+  white-space: nowrap;
+  user-select: none;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-foreground;
+  }
+
+  &.active {
+    background: $color-primary-active;
+    border-color: $color-primary-active;
+    color: $color-white;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

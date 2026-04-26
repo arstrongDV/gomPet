@@ -36,13 +36,13 @@ interface SelectProps extends InnerWrapperProps {
 }
 
 const Select = (props: SelectProps) => {
-  const t = useTranslations();
+  const t = useTranslations('common');
 
   const {
     wrapperStyle,
-    noOptionsMessage = 'Brak wyników',
+    noOptionsMessage = t("empty.noResult"),
     isLoading,
-    placeholder = 'Wybierz...',
+    placeholder = t('action.select'),
     options,
     isSearchable = false,
     value,

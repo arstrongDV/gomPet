@@ -1,0 +1,9 @@
+{
+    "searchBar": {
+        "search": "Wyszukaj..."
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "newOrganization": "Nowa organizacja"
+    }
+}

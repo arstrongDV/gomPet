@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useActionState, useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button, Input, Loader } from 'src/components';
 import { passwordReset, PasswordResetFormState } from './actions';
 
@@ -24,23 +25,24 @@ const initialState: PasswordResetFormState = {
 };
 
 const PasswordForgetResetForm = ({ uid, token }: PasswordForgetResetFormProps) => {
+  const t = useTranslations('pages.auth.passwordForgetReset');
   const [state, action, isPending] = useActionState(passwordReset, initialState);
   const router = useRouter();
-
-  if (!uid || !token) {
-    return <p>Nieprawidłowy lub wygasły link resetu hasła</p>;
-  }
 
   useEffect(() => {
     if (state.message === 'error' && state.errors) {
       Object.values(state.errors).forEach(err => toast.error(err));
     }
-  
+
     if (state.message === 'success') {
-      toast.success('Hasło zaktualizowane!');
+      toast.success(t('toast.success'));
       router.push(Routes.LOGIN);
     }
   }, [state.message, state.errors, router]);
+
+  if (!uid || !token) {
+    return <p>{t('invalidLink')}</p>;
+  }
 
   return (
     <form
@@ -54,21 +56,21 @@ const PasswordForgetResetForm = ({ uid, token }: PasswordForgetResetFormProps) =
         type='password'
         key={'password'}
         name='password'
-        label='Nowe hasło'
-        placeholder='Utwórz nowe hasło'
+        label={t('newPasswordLabel')}
+        placeholder={t('newPasswordPlaceholder')}
         defaultValue={state.fields.password}
       />
       <Input
         type='password'
         key={'passwordRepeat'}
         name='passwordRepeat'
-        label='Powtórz hasło'
-        placeholder='Powtórz hasło'
+        label={t('repeatPasswordLabel')}
+        placeholder={t('repeatPasswordPlaceholder')}
         defaultValue={state.fields.passwordRepeat}
       />
       <Button
         type='submit'
-        label='Ustaw nowe hasło'
+        label={t('submitButton')}
       />
       {isPending && <Loader />}
     </form>

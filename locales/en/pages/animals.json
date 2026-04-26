@@ -1,63 +1,114 @@
 {
-  "speciesLabel": "Gatunek",
-  "breed": "Rasa",
-  "genderLabel": "Płeć",
-  "sizeLabel": "Rozmiar",
+  "speciesLabel": "Species",
+  "breed": "Breed",
+  "genderLabel": "Gender",
+  "sizeLabel": "Size",
+  "animalYear": "Year",
+  "ageLable": "Age",
+
+  "SeeMoreLabelBtn": "Learn more",
+
+  "lifePeriod": {
+    "PUPPY": "Puppy",
+    "ADULT": "Adult",
+    "SENIOR": "Senior"
+  },
 
   "gender": {
-    "male": "On",
-    "female": "Ona"
+    "male": "Male",
+    "female": "Female"
   },
   "size": {
-    "small": "Mały",
-    "medium": "Średni",
-    "large": "Duży"
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large"
   },
   "species": {
-    "DOG": "Pies",
-    "CAT": "Kot"
+    "DOG": "Dog",
+    "CAT": "Cat"
   },
   "characteristics": {
-
-      "vaccinated": "zaszczepiony",
-      "neutered": "wykastrowany",
-      "dewormed": "odrobaczony",
-      "hasChip": "ma mikroczip",
-      "acceptsCats": "akceptuje koty",
-      "acceptsDogs": "akceptuje inne psy",
-      "clean": "nauczony czystości",
-      "hypoallergenic": "hipoalergiczny",
-      "noSeparationAnxiety": "nie ma lęku separacyjnego",
-      "suitableForApartment": "odpowiedni do mieszkania",
-      "vigorous": "energiczny",
-      "childrenFriendly": "przyjazny dzieciom",
-      "learnsFast": "łatwo się uczy",
-      "specialDiet": "specjalna dieta",
-      "calmAtHome": "spokojny w domu",
-      "canLiveInACity": "może mieszkać w mieście",
-      "needsMentalStimulation": "potrzeba mentalnej stymulacji",
-      "gentle": "łagodny",
-      "watchdog": "instynkt stróża",
-      "hasHealthBook": "książeczka zdrowia"
-
+    "vaccinated": "vaccinated",
+    "neutered": "neutered",
+    "dewormed": "dewormed",
+    "hasChip": "microchipped",
+    "acceptsCats": "gets along with cats",
+    "acceptsDogs": "gets along with other dogs",
+    "clean": "house-trained",
+    "hypoallergenic": "hypoallergenic",
+    "noSeparationAnxiety": "no separation anxiety",
+    "suitableForApartment": "suitable for apartment living",
+    "vigorous": "energetic",
+    "childrenFriendly": "good with children",
+    "learnsFast": "learns quickly",
+    "specialDiet": "requires a special diet",
+    "calmAtHome": "calm at home",
+    "canLiveInACity": "can live in a city",
+    "needsMentalStimulation": "needs mental stimulation",
+    "gentle": "gentle",
+    "watchdog": "good watchdog",
+    "hasHealthBook": "has a health record book"
   },
-  "empty": "Brak dostępnych zwierząt",
+  "empty": "No animals available",
   "filters": {
-    "location": "Lokalizacja",
-    "locationPlaceholder": "W jakim mieście szukasz?",
-    "range": "Zasięg",
-    "rangePlaceholder": "Do ilu kilometrów?",
-    "name": "Imię",
-    "namePlaceholder": "Jak się wabi?",
-    "gender": "Płeć",
-    "species": "Gatunek",
-    "breed": "Rasa",
-    "age": "Wiek",
-    "size": "Rozmiar"
+    "location": "Location",
+    "locationPlaceholder": "Which city are you searching in?",
+    "range": "Range",
+    "rangePlaceholder": "Up to how many kilometers?",
+    "name": "Name",
+    "namePlaceholder": "What is the animal's name?",
+    "gender": "Gender",
+    "species": "Species",
+    "breed": "Breed",
+    "age": "Age",
+    "size": "Size"
   },
 
-  "showFilters": "Pokaż filtry",
-  "hideFilters": "Ukryj filtry",
-  "showMap": "Pokaż mapę",
-  "hideMap": "Ukryj mapę"
+  "showFilters": "Show filters",
+  "hideFilters": "Hide filters",
+  "showMap": "Show map",
+  "hideMap": "Hide map",
+
+  "profile": {
+    "tabs": {
+      "information": "Information",
+      "activity": "Activity"
+    },
+    "greeting": "Hey!",
+    "myNameIs": "My name is {name}",
+    "noData": "No data",
+    "fields": {
+      "name": "Name",
+      "city": "City",
+      "species": "Species",
+      "gender": "Gender",
+      "age": "Age",
+      "size": "Size",
+      "status": "Status",
+      "breed": "Breed",
+      "addedOn": "Added on"
+    },
+
+    "ADOPTED": "Has an owner",
+    "RESERVED": "Quarantine",
+    "AVAILABLE": "For adoption",
+
+    "price": "Price",
+    "priceCurrency": "{price} PLN",
+    "freeAdoption": "Free to a good home!",
+    "callUs": "Call and ask",
+    "writeToUs": "Write to us",
+    "organizationRating": "Average rating: {rating} out of 5",
+    "organizationOpinions": "Reviews about the shelter",
+    "relatedTitle": "Other <highlight>animals</highlight> from this shelter",
+    "relatedLink": "See shelter page",
+    "ageLessThanYear": "Less than a year",
+    "ageYears": "{age} years",
+    "noImages": "No images available",
+    "noCharacteristics": "No info",
+    "notFound": "Animal not found",
+    "familyTitle": "Meet my family",
+    "familySubtitle": "To learn about more distant ancestors, navigate between animal profiles in the family tree below",
+    "noFamily": "No family data available"
+  }
 }

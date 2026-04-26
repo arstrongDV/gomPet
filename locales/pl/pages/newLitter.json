@@ -1,0 +1,39 @@
+{
+  "header": {
+    "title": "Dodaj miot",
+    "subtitle": "Zaprezentuj miot na platformie"
+  },
+  "basicInfo": {
+    "heading": "Informacje podstawowe",
+    "caption": "Gatunek i rasa, którą obejmuje ten miot."
+  },
+  "title": {
+    "heading": "Krótki tytuł",
+    "label": "Tytuł",
+    "placeholder": "Wpisz tytuł"
+  },
+  "description": {
+    "heading": "Krótki opis",
+    "label": "Krótki opis (opcjonalnie)",
+    "placeholder": "Opisz krótko miot..."
+  },
+  "date": {
+    "heading": "Przewidywana data miotu",
+    "label": "Kiedy pojawi się miot?"
+  },
+  "status": {
+    "heading": "Aktualny status",
+    "label": "Status",
+    "caption": "Status jest widoczny w widoku profilu hodowli w zakładce \"Mioty\".",
+    "options": {
+      "ACTIVE": "Aktywny",
+      "CLOSED": "Zamknięty",
+      "DRAFT": "Szkic"
+    }
+  },
+  "submit": "Utwórz miot",
+  "toast": {
+    "success": "Nowy miot dodany",
+    "error": "Błąd z dodawaniem miotu"
+  }
+}

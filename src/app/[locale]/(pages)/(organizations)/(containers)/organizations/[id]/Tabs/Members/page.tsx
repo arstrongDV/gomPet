@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { OrganizationsApi } from 'src/api';
 import { Icon, List, SectionHeader } from 'src/components';
@@ -14,6 +15,7 @@ import style from './RequestList.module.scss';
 
 const Members = () => {
     const params = useParams();
+    const t = useTranslations('pages.organizations.membersPage');
     const [isRequestLoading, setIsRequestLoading] = useState<boolean>(false);
     const [isMemberLoading, setIsMemberLoading] = useState<boolean>(false);
     const [showNewRequests, setShowNewRequests] = useState<boolean>(false);
@@ -156,11 +158,11 @@ const getMoreRequests = async () => {
         <div className={style.labelContentContainer} onClick={() => setShowNewRequests((prev) => !prev)}>
           <span className={style.labelContent}>
             <h3>
-              {showNewRequests ? 'Schowaj nowe requesty od uzytkownikow' : 'Zobacz nowe requesty od uzytkownikow'}
+              {showNewRequests ? t('hideRequests') : t('showRequests')}
             </h3>
 
             {userRequests.length > 0 && (
-                <span className={style.newLabel}>( Nowe )</span>
+                <span className={style.newLabel}>( {t('newBadge')} )</span>
             )}
           </span>
 
@@ -172,8 +174,8 @@ const getMoreRequests = async () => {
         {showNewRequests && (
           <div className={classNames(style.requestsList, { [style.show]: showNewRequests })}>
             <SectionHeader
-              title={'Zobacz nadeslane requesty do was'}
-              subtitle={'Zwiekszajcie wasza organizacje'}
+              title={t('requestsTitle')}
+              subtitle={t('requestsSubtitle')}
               margin
             />
 
@@ -182,7 +184,7 @@ const getMoreRequests = async () => {
                 className={style.list}
                 ref={requestListRef}
             >  
-            Brak
+            {userRequests.length !== 0 ? (
               <InfinityScroll
                 loadMore={getMoreRequests}
                 hasNext={hasRequestNextPageRef.current}
@@ -197,6 +199,9 @@ const getMoreRequests = async () => {
                       />
                   ))}
               </InfinityScroll>
+            ) : (
+              <p>{t('noRequests')}</p>
+            )}
             </List> 
           </div>
         )} 
@@ -208,7 +213,7 @@ const getMoreRequests = async () => {
         <div className={style.labelContentContainer} onClick={() => setShowMembers((prev) => !prev)}>
           <span className={style.labelContent}>
             <h3>
-              {showNewRequests ? 'Showaj memberow waszej organizacji' : 'Pokaz memberow waszej organizacji'}
+              {showMembers ? t('hideMembers') : t('showMembers')}
             </h3>
           </span>
 
@@ -220,8 +225,8 @@ const getMoreRequests = async () => {
         {showMembers && (
           <div className={classNames(style.requestsList, { [style.show]: showMembers })}>
             <SectionHeader
-              title={'Zobacz waszych memberow'}
-              subtitle={'Zwiekszajcie wasza organizacje'}
+              title={t('membersTitle')}
+              subtitle={t('membersSubtitle')}
               margin
             />
             <List 

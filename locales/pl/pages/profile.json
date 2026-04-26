@@ -1,0 +1,26 @@
+{
+  "changePhoto": "Zmień zdjęcie",
+  "accountCreated": "Stworzył konto:",
+  "accountUpdated": "Zaktualizowano konto:",
+  "firstName": "Imię",
+  "firstNamePlaceholder": "Wpisz imię",
+  "lastName": "Nazwisko",
+  "lastNamePlaceholder": "Wpisz nazwisko",
+  "email": "Email",
+  "emailPlaceholder": "Wpisz email",
+  "phone": "Numer telefonu",
+  "phonePlaceholder": "Wpisz numer telefonu",
+  "locationConsent": "Czy możemy korzystać z Twojej lokalizacji?",
+  "saveChanges": "Zapisz zmiany",
+  "deleteProfile": "Usuń profil",
+  "deleteConfirm": "Czy na pewno chcesz usunąć swoje konto?",
+  "deleteYes": "Tak",
+  "deleteNo": "Nie",
+  "toast": {
+    "updated": "Profil zaktualizowany pomyślnie!",
+    "loadError": "Nie udało się wczytać danych",
+    "locationError": "Nie udało się pobrać lokalizacji",
+    "deleteOrgError": "Usuń lub przekaż swoje organizacje innemu użytkownikowi przed usunięciem konta",
+    "isOwnerError": "Nie możesz usunąć konta, ponieważ jesteś właścicielem organizacji"
+  }
+}

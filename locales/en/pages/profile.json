@@ -1,0 +1,26 @@
+{
+  "changePhoto": "Change photo",
+  "accountCreated": "Account created:",
+  "accountUpdated": "Account updated:",
+  "firstName": "First name",
+  "firstNamePlaceholder": "Enter first name",
+  "lastName": "Last name",
+  "lastNamePlaceholder": "Enter last name",
+  "email": "Email",
+  "emailPlaceholder": "Enter email",
+  "phone": "Phone number",
+  "phonePlaceholder": "Enter phone number",
+  "locationConsent": "Can we use your location?",
+  "saveChanges": "Save changes",
+  "deleteProfile": "Delete profile",
+  "deleteConfirm": "Are you sure you want to delete your account?",
+  "deleteYes": "Yes",
+  "deleteNo": "No",
+  "toast": {
+    "updated": "Profile updated successfully!",
+    "loadError": "Can't reload the data",
+    "locationError": "Could not retrieve your location",
+    "deleteOrgError": "Remove or transfer your organizations to another user before deleting your account",
+    "isOwnerError": "You cannot delete your account because you are an organization owner"
+  }
+}

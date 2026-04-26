@@ -4,10 +4,12 @@
   width: 100%;
   min-height: 100vh;
   @include flex-center;
+  align-items: center;
   padding: $spacing-6;
 
   @include mobileWidth {
     width: 100%;
+    // align-items: flex-start;
     padding: $spacing-3;
   }
 

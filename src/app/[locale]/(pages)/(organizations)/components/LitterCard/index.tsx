@@ -20,7 +20,8 @@ type LitterCardProps = {
 };
 
 const LitterCard = ({ litter, organizationUser, onDelete }: LitterCardProps) => {
-  const t = useTranslations('pages');
+  const t = useTranslations('pages.organizations');
+  const tCommon = useTranslations('common');
   const session = useSession();
   const myId = Number(session.data?.user.id)
   const route = useRouter();
@@ -32,11 +33,11 @@ const LitterCard = ({ litter, organizationUser, onDelete }: LitterCardProps) => 
   
       if (!res || (res.status && res.status >= 400)) {
         console.error("API returned an error:", res);
-        toast.error("Błąd usunięcia");
+        toast.error(t('litterCard.deleteError'));
         return;
       }
       onDelete?.(litter.id);
-      toast.success("Miot został usunięty");
+      toast.success(t('litterCard.deleteSuccess'));
     } catch (err) {
       console.error("Delete litter error:", err);
       // toast.error("Błąd usunięcia");
@@ -63,20 +64,20 @@ const LitterCard = ({ litter, organizationUser, onDelete }: LitterCardProps) => 
 
       <div className={style.group}>
       <span className={style.label}>
-        {t(`animals.species.${litter.species?.label?.toLowerCase?.() || 'unknown'}`)}
+        {tCommon(`animalSpecies.${litter.species?.label?.toUpperCase() || 'DOG'}`)}
       </span>
         <span className={style.text}>{litter.breed?.label}</span>
       </div>
 
       <div className={style.group}>
         <span className={style.label}>
-          {isAfter ? t('organizations.litters.litterDate') : t('organizations.litters.anticipatedDate')}
+          {isAfter ? t('litters.litterDate') : t('litters.anticipatedDate')}
         </span>
         <span className={style.text}>{new Date(litter.birth_date).toLocaleDateString()}</span>
       </div>
 
       <div className={classNames(style.status, style[litter.status])}>
-        {t(`organizations.litters.status.${litter.status}`)}
+        {t(`litters.status.${litter.status}`)}
       </div>
       <p className={style.description}>{litter.description}</p>
     </Card>

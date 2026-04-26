@@ -1,33 +1,94 @@
 {
-    "addNew": "Dodaj zwierzaka",
-    "RegisterNewAnimal": "Zaprezentuj zwierzę na platformie",
+    "addNew": "Add animal",
+    "RegisterNewAnimal": "Present your animal on the platform",
 
-    "basicInfo": "Informacje <mark>podstawowe</mark>",
-    "addImages": "Zaprezentuj <mark>zdjęcia</mark>",
-    "characteristics": "<mark>Cechy</mark> charakterystyczne",
-    "animalsDescription": "<mark>Opisz</mark> zwierzaka",
-    "activeStatus": "Aktualny <mark>status</mark>",
-    "findAnimalParents": "Znajdź <mark>rodzinę</mark> zwierzaka",
+    "basicInfo": "Basic <mark>information</mark>",
+    "addImages": "Present <mark>photos</mark>",
+    "characteristics": "<mark>Characteristic</mark> traits",
+    "animalsDescription": "<mark>Describe</mark> the animal",
+    "activeStatus": "Current <mark>status</mark>",
+    "findAnimalParents": "Find the animal's <mark>family</mark>",
 
-    "inputAnimalName": "Nazwij zwierzaka",
-    "animalsName": "Jak się wabi?",
-    "birthDate": "Data urodzenia",
-    "addPrice": "Ustawic cennę?",
-    "price": "Cena",
-    "inputPrice": "Napisz cennę...",
-    "hasMetrics": "Czy zwierzak ma metrykę?",
-    "writeSth": "Napisz coś...",
-    "descriptionVisibleInfo": "Opis będzie widoczny w jego profilu.",
-    "familyTreeInfo": "Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.",
-    
-    "statusOwned": "Ma właściciela",
-    "statusQuarantine": "Kwarantanna",
-    "statusAvailable": "Do adopcji",
+    "inputAnimalName": "Name the animal",
+    "animalsName": "What's its name?",
+    "birthDate": "Date of birth",
+    "addPrice": "Set a price?",
+    "price": "Price",
+    "inputPrice": "Enter price...",
+    "hasMetrics": "Does the animal have a certificate?",
+    "writeSth": "Write something...",
+    "descriptionVisibleInfo": "The description will be visible on its profile.",
+    "familyTreeInfo": "This will be used to display the animal's family tree.",
 
-    "statusVisibleInfo": "Status jest widoczny w widoku profilu zwierzaka.",
+    "ADOPTED": "Has an owner",
+    "RESERVED": "Quarantine",
+    "AVAILABLE": "For adoption",
 
-    "noOrganization": "Prywatne",
+    "statusVisibleInfo": "The status is visible in the animal profile view.",
 
-    "parentsAdd": "Dodawanie rodziny",
-    "addAnimal": "Dodaj zwierzaka"
+    "noOrganization": "Private",
+    "selectOrganization": "Select your organization",
+
+    "selectSpeciesFirst": "You must first select a species",
+
+    "parentsAdd": "Add family",
+    "addAnimal": "Add animal",
+
+    "editTitle": "Update Animal Information",
+    "editSubtitle": "Edit the details for {name}",
+    "nameLabel": "Name",
+    "genderLabel": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "sizeLabel": "Size",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
+    "cancelButton": "Cancel",
+    "updateButton": "Update Animal",
+    "noAnimalData": "Animal data not available",
+    "goBack": "Go Back",
+    "mustAddPhotos": "You must add photos",
+
+    "addParents": {
+        "searchLabel": "Search animal",
+        "searchPlaceholder": "Enter name...",
+        "speciesLabel": "Species",
+        "breedLabel": "Breed",
+        "availableAnimals": "Available animals:",
+        "noAnimals": "No animals matching the criteria",
+        "genderLabel": "Gender:",
+        "addAsParent": "Add as parent",
+        "selectRelation": "Select relation",
+        "selectedAnimal": "Selected animal:",
+        "relation": {
+            "MOTHER": "Mother",
+            "FATHER": "Father"
+        },
+        "species": {
+            "dog": "Dog",
+            "cat": "Cat"
+        },
+        "toast": {
+            "mustSelectRelation": "You must select a relation!",
+            "relationGenderMismatch": "The relation does not match the animal's gender!",
+            "alreadySelected": "This animal has already been selected",
+            "sameGender": "Cannot have two animals of the same gender",
+            "cannotBeSelf": "The selected animal cannot be its own parent",
+            "parentMustBeOlder": "The parent must be older"
+        }
+    },
+
+    "toast": {
+        "noLocation": "You need to share your location to add an animal, or provide your own organization",
+        "created": "Animal created",
+        "createdWithAllParents": "Animal created with all parents",
+        "createdButParentsFailed": "Animal created but failed to add any parents",
+        "createdWithSomeParents": "Animal created, added {success} of {total} parents",
+        "addParentError": "Failed to add parent"
+    },
+    "updated": "Animal updated successfully!",
+    "updateError": "Failed to update animal. Please try again.",
+    "updateParentsError": "Failed to update parents",
+    "imageLoadError": "Could not load existing images"
 }

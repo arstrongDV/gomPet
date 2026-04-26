@@ -15,6 +15,7 @@ import {
   Icon,
   Input,
   InputWrapper,
+  Loader,
   Modal,
   RichTextEditor,
   SectionHeader,
@@ -46,7 +47,9 @@ interface AnimalUpdateFormProps {
 }
 
 interface CharacteristicItem {
+  id: number;
   title: string;
+  label: string;
   bool: boolean;
 }
 
@@ -92,28 +95,6 @@ const getSelectId = (value: SelectLikeValue): string => {
   return value === undefined || value === null ? '' : String(value);
 };
 
-// const speciesOptions = [
-//   { value: 'dog', label: 'Dog' },
-//   { value: 'cat', label: 'Cat' },
-//   { value: 'other', label: 'Other' },
-// ];
-
-// const breedOptions = {
-//   dog: [
-//     { value: 'beagle', label: 'Beagle' },
-//     { value: 'terrier', label: 'Terrier' },
-//     { value: 'labrador', label: 'Labrador' },
-//   ],
-//   cat: [
-//     { value: 'british', label: 'British Shorthair' },
-//     { value: 'siamese', label: 'Siamese' },
-//     { value: 'persian', label: 'Persian' },
-//   ],
-//   other: [
-//     { value: 'other', label: 'Other' },
-//   ],
-// };
-
 const urlToFile = async (url: string, filename: string): Promise<File> => {
   try {
     const response = await fetch(url);
@@ -128,21 +109,22 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
   }
 };
 
-const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
+const fileToBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
+    reader.onerror = reject;
   });
-}
+
 
 const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({ 
   animal, 
   onSuccess, 
   onCancel 
 }) => {
-  const t = useTranslations();
+  const t = useTranslations('pages.newAnimal');
+  const tCommon = useTranslations('common');
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -156,19 +138,17 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
     size: '',
     descriptions: '',
     status: 'AVAILABLE',
-    // city: '',
     parents: [],
     price: '',
     organization: null,
     owner: null
   });
 
-  console.log("animalanimal: ", animal);
-
   const [photos, setPhotos] = useState<File[]>([]);
   const [initialPhotos, setInitialPhotos] = useState<File[]>([]);
   const [characteristics, setCharacteristics] = useState<CharacteristicItem[]>([]);
   const [description, setDescriptions] = useState<string>('');
+  const [initialDescription, setInitialDescription] = useState<string | null>(null);
   const [isParentsAdd, setIsParentsAdd] = useState<boolean>(false);
   const [parents, setParents] = useState<Parent[]>([]);
   const [oldParents, setOldParents] = useState<Parent[]>([]);
@@ -179,10 +159,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
   const [organization, setOrganization] = useState<number | null>(null);
   const [owner, setOwner] = useState<number | null>();
 
-  // const [selectSpeciesValue, setSelectSpeciesValue] = useState<OptionType>(null);
-  // const [selectRaceValue, setSelectRaceValue] = useState<OptionType>(null);
-
-  const { characteristics: animalCharacteristics } = useAnimalInfo("DOG");
+  const { characteristics: animalCharacteristics, isLoading: characteristicsLoading } = useAnimalInfo(formData.species);
 
   useEffect(() => {
       if (animal) {
@@ -217,7 +194,7 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
 
         setInitialOrganization(animal.organization ?? null);
 
-        setDescriptions(animal.descriptions ?? '');
+        setInitialDescription(animal.descriptions ?? '');
 
         if (normalizedPrice > 0) {
           setHasPrice(true);
@@ -244,51 +221,36 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
 
       const loadExistingImages = async () => {
         const imageFiles: File[] = [];
-        try {
-          if (animal.image) {
-            const mainImageFile = await urlToFile(
-              animal.image, 
-              'main-image.jpg'
-            );
-            imageFiles.push(mainImageFile);
-          }
-          if (animal.gallery?.length) {
-            const animalSlice = (animal.gallery as GalleryLikeItem[]).slice(1);
-            for (const galleryItem of animalSlice) {
-              const galleryImage =
-                typeof galleryItem === 'string' ? galleryItem : galleryItem.image;
-              const galleryId =
-                typeof galleryItem === 'string' ? 'legacy' : String(galleryItem.id ?? 'legacy');
 
-              if (galleryImage) {
-                const galleryFile = await urlToFile(
-                  galleryImage,
-                  `gallery-${galleryId}.jpg`
-                );
+        if (animal.image) {
+          try {
+            const mainImageFile = await urlToFile(animal.image, 'main-image.jpg');
+            imageFiles.push(mainImageFile);
+          } catch {
+            console.error("Failed to load main image");
+          }
+        }
+
+        if (animal.gallery?.length) {
+          const animalSlice = (animal.gallery as GalleryLikeItem[]).slice(1);
+          for (const galleryItem of animalSlice) {
+            const galleryImage = typeof galleryItem === 'string' ? galleryItem : galleryItem.image;
+            const galleryId = typeof galleryItem === 'string' ? 'legacy' : String(galleryItem.id ?? 'legacy');
+            if (galleryImage) {
+              try {
+                const galleryFile = await urlToFile(galleryImage, `gallery-${galleryId}.jpg`);
                 imageFiles.push(galleryFile);
+              } catch {
+                console.error(`Failed to load gallery image ${galleryId}`);
               }
             }
           }
-          setPhotos(imageFiles);
-          setInitialPhotos(imageFiles);
-          console.log("Converted images:", imageFiles);
-        } catch (error) {
-          console.error("Failed to load existing images:", error);
-          toast.error("Could not load existing images");
         }
+
+        setPhotos(imageFiles);
+        setInitialPhotos(imageFiles);
       }
       loadExistingImages();
-  
-      if (animal.characteristicBoard?.length > 0) {
-        setCharacteristics(animal.characteristicBoard);
-      } else if (animalCharacteristics) {
-        setCharacteristics(
-          Object.entries(animalCharacteristics).map(([key]) => ({
-            title: key,
-            bool: false,
-          }))
-        );
-      }
 
       if (animal.parents) {
         // Mark existing parents as not new
@@ -308,7 +270,22 @@ const AnimalUpdateForm: React.FC<AnimalUpdateFormProps> = ({
       console.log(parents)
     };
 
-  }, [animal, animalCharacteristics]);
+  }, [animal]);
+
+  useEffect(() => {
+    if (!animal || !animalCharacteristics?.length) return;
+    const boardByName = Object.fromEntries(
+      (animal.characteristicBoard ?? []).map(item => [item.title, item.bool])
+    );
+    setCharacteristics(
+      animalCharacteristics.map((char) => ({
+        id: char.id,
+        title: char.name,
+        label: char.label,
+        bool: boardByName[char.name] ?? boardByName[char.value] ?? false,
+      }))
+    );
+  }, [animalCharacteristics]);
 
   // const handleChange = (field: string, value: string, label?: string) => {
   //   if(field === 'breed'){
@@ -385,91 +362,62 @@ console.log(formData);
       photos.length !== initialPhotos.length ||
       photos.some((p, i) => p !== initialPhotos[i]);
 
-    return basicChanged || priceChanged || parentsChanged || photosChanged;
+    const originalBools = Object.fromEntries(
+      (animal.characteristicBoard ?? []).map(item => [item.title, item.bool])
+    );
+    const characteristicsChanged = characteristics.some(
+      char => char.bool !== (originalBools[char.title] ?? false)
+    );
+
+    return basicChanged || priceChanged || parentsChanged || photosChanged || characteristicsChanged;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const galleryWithBase64 = await Promise.all(
-      photos.slice(1).map(async (photo) => {
-        const base64 = await fileToBase64(photo);
-        return { image: base64 };
-      })
-    );
 
     try {
-      const submitData = new FormData();
-  
-      // Object.entries(formData).forEach(([key, value]) => {
-      //   if (key !== 'descriptions' && key !== 'price' && value !== null && value !== undefined) {
-      //     submitData.append(key, value.toString());
-      //   }
-      // });  
-
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value === null || value === undefined) return;
-      
-        if (key === 'species' || key === 'breed') {
-          // Sprawdzamy, czy value jest obiektem, czy już gotowym ID (string/number)
-          submitData.append(key, String(value));
-          return;
-        }
-
-        if (key === 'parents' || key === 'organization' || key === 'owner' || key === 'image') {
-          return;
-        }
-
-        if (key !== 'descriptions' && key !== 'price') {
-          submitData.append(key, value.toString());
-        }
-      });
-      
-      submitData.append('descriptions', description);
-
       if (photos.length === 0) {
-        toast.error('Musisz nadac zdjecia')
+        toast.error(t('mustAddPhotos'));
         setLoading(false);
         return;
       }
 
-      console.log("photosphotos: ", photos[0]);
+      const submitData = new FormData();
 
-      if (photos.length > 0) {
-        submitData.append('image', photos[0]);
+      submitData.append('name', formData.name);
+      submitData.append('species', formData.species);
+      submitData.append('breed', formData.breed);
+      submitData.append('gender', formData.gender);
+      submitData.append('birth_date', formData.birth_date);
+      submitData.append('size', formData.size);
+      submitData.append('status', formData.status);
+      submitData.append('descriptions', description || initialDescription || '');
+      submitData.append('price', hasPrice && price !== '' ? price : '0');
+      submitData.append('organization_id', String(organization ?? ''));
+
+      const photosChanged =
+        photos.length !== initialPhotos.length ||
+        photos.some((p, i) => p !== initialPhotos[i]);
+
+      if (photosChanged) {
+        const imageBase64 = await fileToBase64(photos[0]);
+        submitData.append('image', imageBase64);
+
+        for (let i = 0; i < photos.length; i++) {
+          const base64 = await fileToBase64(photos[i]);
+          submitData.append(`gallery[${i}][image]`, base64);
+        }
       }
 
-      if (organization !== null && organization !== undefined) {
-        submitData.append('organization_id', String(organization));
-      } else {
-        submitData.append('organization_id', '');
-      }
-      if (owner !== null && owner !== undefined) {
-        submitData.append('owner_id', String(owner));
-      } else {
-        submitData.append('owner_id', '');
-      }
-
-      if (!hasPrice || price == '') {
-        setPrice('0');
-        submitData.append('price', '0'); 
-      } else {
-        submitData.append('price', price);
-      }
-      galleryWithBase64.forEach((item, index) => {
-        submitData.append(`gallery[${index}][image]`, item.image);
+      characteristics.forEach((char, i) => {
+        submitData.append(`characteristicBoard[${i}][title]`, char.title);
+        submitData.append(`characteristicBoard[${i}][bool]`, char.bool.toString());
       });
 
-      characteristics.forEach((char, index) => {
-        submitData.append(`characteristicBoard[${index}][title]`, char.title);
-        submitData.append(`characteristicBoard[${index}][bool]`, char.bool.toString());
-      });
-  
       const animals_res = await AnimalsApi.updateAnimal(animal.id, submitData);
 
-      console.log("parents: ", parents)
-      console.log("animal: ", animal)
       if (animals_res.status === 200) {
         try {
           for (const p of oldParents) {
@@ -490,23 +438,23 @@ console.log(formData);
           }
         } catch (err) {
           console.error("Failed to update parents", err);
-          toast.error("Failed to update parents");
+          toast.error(t('updateParentsError'));
         }
       }
-      toast.success('Animal updated successfully!');
-      onSuccess?.(); 
+      toast.success(t('updated'));
+      onSuccess?.();
       // router.refresh();
     } catch (error) {
       console.error('Error updating animal:', error);
-      toast.error('Failed to update animal. Please try again.');
+      toast.error(t('updateError'));
     } finally {
       setLoading(false);
     }
   };
 
   const handleCharacteristicChange = (title: string, bool: boolean) => {
-    setCharacteristics(prev => 
-      prev.map(char => 
+    setCharacteristics(prev =>
+      prev.map(char =>
         char.title === title ? { ...char, bool } : char
       )
     );
@@ -521,26 +469,26 @@ console.log(formData);
   if (!animal) {
     return (
       <div className={style.loadingContainer}>
-        <p>Animal data not available</p>
-        <Button onClick={onCancel}>Go Back</Button>
+        <p>{t('noAnimalData')}</p>
+        <Button onClick={onCancel} label={t('goBack')} />
       </div>
     );
   }
   return (
     <div className={style.animalUpdateForm}>
         <SectionHeader
-          title={'Update Animal Information'}
-          subtitle={`Edit the details for ${animal.name}`}
+          title={t('editTitle')}
+          subtitle={t('editSubtitle', { name: animal.name })}
           margin
         />
         <div className={style.container}>
           <Card className={style.section}>
             <h3>
-              Informacje <mark>podstawowe</mark>
+              {t.rich('basicInfo', { mark: (chunks) => <mark>{chunks}</mark> })}
             </h3>
             <div className={style.fullWidth}>
               <Input
-                label="Name"
+                label={t('nameLabel')}
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 required
@@ -589,7 +537,7 @@ console.log(formData);
               />
 
               <Input
-                label="Birth date"
+                label={t('birthDate')}
                 type="date"
                 value={formData.birth_date}
                 onChange={(e) => handleInputChange('birth_date', e.target.value)}
@@ -605,44 +553,44 @@ console.log(formData);
               />
             </div> */}
 
-            <InputWrapper label="Gender">
+            <InputWrapper label={t('genderLabel')}>
               <div className={style.genderSelect}>
                 <Tag
                   selected={formData.gender === "MALE"}
                   onClick={() => handleInputChange('gender', "MALE")}
                 >
-                  Male
+                  {t('male')}
                   <Icon name="genderMale" />
                 </Tag>
                 <Tag
                   selected={formData.gender === "FEMALE"}
                   onClick={() => handleInputChange('gender', "FEMALE")}
                 >
-                  Female
+                  {t('female')}
                   <Icon name="genderFemale" />
                 </Tag>
               </div>
             </InputWrapper>
 
-            <InputWrapper label={'Rozmiar'}>
+            <InputWrapper label={t('sizeLabel')}>
               <div className={style.genderSelect}>
                 <Tag
                   selected={formData.size === AnimalSize.SMALL}
                   onClick={() => handleInputChange('size', AnimalSize.SMALL)}
                 >
-                  Mały
+                  {t('small')}
                 </Tag>
                 <Tag
                   selected={formData.size === AnimalSize.MEDIUM}
                   onClick={() => handleInputChange('size', AnimalSize.MEDIUM)}
                 >
-                  Średni
+                  {t('medium')}
                 </Tag>
                 <Tag
                   selected={formData.size === AnimalSize.LARGE}
                   onClick={() => handleInputChange('size', AnimalSize.LARGE)}
                 >
-                  Duży
+                  {t('large')}
                 </Tag>
               </div>
             </InputWrapper>
@@ -660,7 +608,7 @@ console.log(formData);
 
           <Checkbox
             id='animal-has-prise'
-            label={'Ustawic cennę?'}
+            label={t('addPrice')}
             checked={hasPrice}
             onClick={() => setHasPrice((prev) => !prev)}
           />
@@ -669,8 +617,8 @@ console.log(formData);
             <Input
               id='animal-price'
               name='animal-price'
-              label={'Cena'}
-              placeholder='Napisz cennę...'
+              label={t('price')}
+              placeholder={t('inputPrice')}
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
@@ -692,7 +640,7 @@ console.log(formData);
 
           <Card className={style.section}>
             <h3>
-              Zaprezentuj <mark>zdjęcia</mark>
+              {t.rich('addImages', { mark: (chunks) => <mark>{chunks}</mark> })}
             </h3>
 
             <FileDropzone
@@ -705,68 +653,72 @@ console.log(formData);
             />
 
             <span className={style.caption}>
-              Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone
-              formaty to .png, .jpg, .jpeg
+              {tCommon('imagesInfo')}
             </span>
           </Card>
           <Card className={style.section}>
             <h3>
-              <mark>Cechy</mark> charakterystyczne
+              {t.rich('characteristics', { mark: (chunks) => <mark>{chunks}</mark> })}
             </h3>
               <div className={style.characteristics}>
-                {characteristics.map((char) => (
-                  <Checkbox
-                    key={char.title}
-                    id={`char-${char.title}`}
-                    label={char.title}
-                    checked={char.bool}
-                    onChange={(e) => handleCharacteristicChange(char.title, e.target.checked)}
-                  />
-                ))}
+                {characteristicsLoading
+                  ? <Loader />
+                  : characteristics.map((char) => (
+                    <Checkbox
+                      key={char.id}
+                      id={String(char.id)}
+                      label={char.label}
+                      checked={char.bool}
+                      onChange={(e) => handleCharacteristicChange(char.title, e.target.checked)}
+                    />
+                  ))
+                }
               </div>
           </Card>
           <Card className={style.section}>
             <h3>
-              <mark>Opisz</mark> zwierzaka
+              {t.rich('animalsDescription', { mark: (chunks) => <mark>{chunks}</mark> })}
             </h3>
-            <RichTextEditor
-              initialContent={description}
-              placeholder="Napisz coś..."
-              onChange={setDescriptions}
-            />
-            <span className={style.caption}>Opis będzie widoczny w jego profilu.</span>
+            {initialDescription !== null && (
+              <RichTextEditor
+                initialContent={initialDescription}
+                placeholder={t('writeSth')}
+                onChange={setDescriptions}
+              />
+            )}
+            <span className={style.caption}>{t('descriptionVisibleInfo')}</span>
           </Card>
         
         <Card className={style.section}>
           <h3>
-            Aktualny <mark>status</mark>
+            {t.rich('activeStatus', { mark: (chunks) => <mark>{chunks}</mark> })}
           </h3>
           <div className={style.statusSelect}>
             <Tag
               selected={formData.status === "ADOPTED"}
               onClick={() => handleInputChange('status', "ADOPTED")}
             >
-              Ma właściciela
+              {t('statusOwned')}
             </Tag>
 
             <Tag
               selected={formData.status === "RESERVED"}
               onClick={() => handleInputChange('status', "RESERVED")}
             >
-              Kwarantanna
+              {t('statusQuarantine')}
             </Tag>
 
             <Tag
               selected={formData.status === "AVAILABLE"}
               onClick={() => handleInputChange('status', "AVAILABLE")}
             >
-              Do adopcji
+              {t('statusAvailable')}
             </Tag>
           </div>
         </Card>
         <Card className={style.section}>
           <h3>
-            Znajdź <mark>rodzinę</mark> zwierzaka
+            {t.rich('findAnimalParents', { mark: (chunks) => <mark>{chunks}</mark> })}
           </h3>
           <div className={style.familyTreeBlock}>
             <div 
@@ -804,7 +756,7 @@ console.log(formData);
           className={style.modaParentsAddlWin} 
           isOpen={isParentsAdd} 
           closeModal={() => setIsParentsAdd(false)}
-          title={t('pages.newAnimal.parentsAdd')}
+          title={t('parentsAdd')}
         >
             <AddAnimalParents 
               className={classNames(style.cardAddParents, { [style.show]: isParentsAdd })} 
@@ -818,7 +770,7 @@ console.log(formData);
               }}
             />
         </Modal>
-          <span className={style.caption}>Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.</span>
+          <span className={style.caption}>{t('familyTreeInfo')}</span>
         </Card>
 
         <form onSubmit={handleSubmit} className={style.formContainer}>
@@ -828,14 +780,14 @@ console.log(formData);
                 className={style.submit}
                 onClick={onCancel}
                 disabled={loading}
-                label="Cancel"
+                label={t('cancelButton')}
               />
-                
+
               <Button
                 type="submit"
                 className={style.submit}
-                disabled={loading || !hasChanged()}
-                label="Update Animal"
+                disabled={loading || characteristicsLoading || !hasChanged()}
+                label={t('updateButton')}
               />
             </div>
           </form>

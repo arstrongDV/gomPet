@@ -5,9 +5,9 @@
   gap: $spacing-6;
   width: 35rem;
 
-  @include phoneWidth {
-    width: 100%;
-  }
+  // @include phoneWidth {
+  //   width: 100%;
+  // }
 }
 
 .header {

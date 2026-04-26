@@ -16,52 +16,17 @@ import {
   Select,
   Textarea
 } from 'src/components';
-import { Location, OrganizationType } from 'src/constants/types';
+import { Location } from 'src/constants/types';
 
-// import LocationInput from './components/LocationInput';
 import LocationInput from './components/LocationInput';
 
 import style from './NewOrganizationPage.module.scss';
 import type { OptionType } from 'src/components/layout/Forms/Select';
 import toast from 'react-hot-toast';
 import { OrganizationsApi } from 'src/api';
-import { redirect } from 'next/navigation';
 import { Routes } from 'src/constants/routes';
 import { useRouter } from 'next/navigation';
-import Animals from '../(organizations)/(containers)/organizations/[id]/Tabs/Animals';
-import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
 import SpeciesSelect from './components/SpeciesSelect';
-
-// type RichTextEditorRef = {
-//   getContent: () => string;
-// };
-
-// const animalSpecies: {value: string, label: string}[] = [
-//   {
-//     value: 'dog',
-//     label: 'Pies'
-//   },
-//   {
-//     value: 'cat',
-//     label: 'Kot'
-//   }
-// ]
-
-// const animalRace: Record<AnimalKey, { value: string; label: string }[]> = {
-//   dog: [
-//     { value: 'beagle', label: 'Beagle' },
-//     { value: 'terrier', label: 'Terrier' },
-//     { value: 'labrador', label: 'Labrador' },
-//   ],
-//   cat: [
-//     { value: 'british', label: 'British Shorthair' },
-//     { value: 'siamese', label: 'Siamese' },
-//     { value: 'persian', label: 'Persian' },
-//   ],
-//   other: [
-//     { value: 'other', label: 'Other' },
-//   ]
-// };
 
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -72,10 +37,8 @@ const fileToBase64 = (file: File): Promise<string> => {
   });
 }
 
-type AnimalKey = string;
-
 const NewOrganizationPage = () => {
-  const t = useTranslations();
+  const t = useTranslations('pages.newOrganization');
   const editorRef = useRef(null);
   const router = useRouter();
   const { push } = router;
@@ -83,8 +46,7 @@ const NewOrganizationPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fileToCrop, setFileToCrop] = useState<File | null>(null);
 
-  //DATA
-  const [type, setType] = useState<string>("BREEDER"); //<OrganizationType> OrganizationType.BREEDING
+  const [type, setType] = useState<string>("BREEDER");
   const [logo, setLogo] = useState<File | null>(null);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -100,25 +62,32 @@ const NewOrganizationPage = () => {
     coordinates: ['', '']
   });
 
-  // const [raceValue, setSelectRaceValue] = useState<OptionType>(null)
   const [speciesValue, setSelectSpeciesValue] = useState<Array<string | number>>([]);
 
   const handleChange = (selectedOptions: OptionType[]) => {
     const speciesIds = selectedOptions ? selectedOptions.map(opt => opt?.value) : [];
     setSelectSpeciesValue(speciesIds as any);
-};
-  // const SaveEditText = (content: string) => {
-  //   console.log("Editor content:", content);
-  // }
-  const handleSubmit = async() => {
+  };
 
+  const isSubmitDisabled =
+    !logo ||
+    !name.trim() ||
+    !email.trim() ||
+    !location.city ||
+    !location.street ||
+    !location.house_number ||
+    !location.zip_code ||
+    (type === 'BREEDER' && speciesValue.length === 0) ||
+    isLoading;
+
+  const handleSubmit = async() => {
     if (!logo) {
-      toast.error("Proszę dodać zdjecie");
+      toast.error(t('toast.missingLogo'));
       return;
     }
 
     setIsLoading(true);
-  try{
+    try {
       const logoBase64 = await fileToBase64(logo);
 
       const address = {
@@ -149,16 +118,12 @@ const NewOrganizationPage = () => {
       };
 
       const res = await OrganizationsApi.addNewOrganization(payload);
-      toast.success("Stworzono nową organizację!")
+      toast.success(t('toast.success'));
       push(Routes.ORGANIZATION_PROFILE(res.data.id));
       return;
-    }catch(err){
-      console.log(err)
-      // if(err?.response?.data.name[0]){
-      //   console.log(err?.response?.data.name[0])
-      //   toast.error(err?.response?.data.name[0]);
-      // }
-      toast.error("Bląd dowawania");
+    } catch(err) {
+      console.error(err);
+      toast.error(t('toast.error'));
     }
     setIsLoading(false);
   };
@@ -166,55 +131,47 @@ const NewOrganizationPage = () => {
   return (
     <>
       <SectionHeader
-        title={'Stwórz nowy profil'}
-        subtitle={'Witamy w kreatorze profilu. Dostosuj go do własnych potrzeb'}
+        title={t('header.title')}
+        subtitle={t('header.subtitle')}
         margin
       />
 
       <div className={style.container}>
         {/* TYPE */}
         <Card className={style.section}>
-          <h3>
-            Wybierz <mark>rodzaj</mark> profilu
-          </h3>
+          <h3>{t('type.heading')}</h3>
 
           <div className={style.flexRow}>
             <Checkbox
               id='type-animal-shelter'
-              label={'Schronisko'}
+              label={t('type.shelter')}
               checked={type === "SHELTER"}
               onClick={() => setType("SHELTER")}
             />
             <Checkbox
               id='type-breeding'
-              label={'Hodowla'}
+              label={t('type.breeder')}
               checked={type === "BREEDER"}
               onClick={() => setType("BREEDER")}
             />
             <Checkbox
               id='type-association'
-              label={'Fundacja'}
-              checked={type ==="FUND"}
+              label={t('type.fund')}
+              checked={type === "FUND"}
               onClick={() => setType("FUND")}
             />
           </div>
 
-          <span className={style.caption}>
-            Każdy rodzaj profilu jest dostosowany do potrzeb organizacji, zatem wybierz go zgodnie ze swoją
-            działalnością.
-          </span>
+          <span className={style.caption}>{t('type.caption')}</span>
         </Card>
-        {/* TYPE */}
 
         {/* NAME AND LOGO */}
         <Card className={style.section}>
-          <h3>
-            Jak chcesz się <mark>prezentować</mark>?
-          </h3>
+          <h3>{t('presentation.heading')}</h3>
 
           <div className={style.basicData}>
             <ImageInput
-              label={'Logotyp organizacji'}
+              label={t('presentation.logoLabel')}
               file={logo}
               setFile={(file) => setFileToCrop(file)}
               onClear={() => setLogo(null)}
@@ -222,33 +179,27 @@ const NewOrganizationPage = () => {
             <Input
               id='organization-name'
               name='organization-name'
-              label={'Nazwa organizacji'}
-              placeholder={'Wpisz nazwę organizacji'}
+              label={t('presentation.nameLabel')}
+              placeholder={t('presentation.namePlaceholder')}
               value={name}
               onChangeText={setName}
               required
             />
           </div>
 
-          <span className={style.caption}>
-            Nazwa organizacji będzie widoczna na stronie profilu. Dodaj logo, aby wyróżnić się na tle innych
-            organizacji.
-          </span>
+          <span className={style.caption}>{t('presentation.caption')}</span>
         </Card>
-        {/* NAME AND LOGO */}
 
         {/* CONTACT */}
         <Card className={style.section}>
-          <h3>
-            Jak się z Tobą <mark>skontaktować</mark>
-          </h3>
+          <h3>{t('contact.heading')}</h3>
 
           <div className={style.flexRow}>
             <Input
               id='email'
               name='email'
-              label={'Email'}
-              placeholder={'Wpisz adres email'}
+              label={t('contact.emailLabel')}
+              placeholder={t('contact.emailPlaceholder')}
               value={email}
               onChangeText={setEmail}
               required
@@ -257,74 +208,50 @@ const NewOrganizationPage = () => {
             <PhoneInput
               id='phone'
               name='phone'
-              label={'Numer telefonu'}
-              placeholder={'Wpisz numer telefonu'}
+              label={t('contact.phoneLabel')}
+              placeholder={t('contact.phonePlaceholder')}
               value={phoneNumber}
               onChange={setPhoneNumber}
             />
           </div>
         </Card>
-        {/* CONTACT */}
 
         {/* BREEDING DETAILS */}
         {type === "BREEDER" && (
           <Card className={style.section}>
-            <h3>
-              Szczegóły <mark>hodowli</mark>
-            </h3>
+            <h3>{t('breedingDetails.heading')}</h3>
 
             <div className={style.flexRow}>
-              {/* <Select
-                label={'Gatunek'}
-                options={animalSpecies}
-                onChange={(opt: any) => setRace(opt)}
-                value={race}
-              />
-
-              <Select
-                label={'Rasa'}
-                options={animalRace[race?.value as AnimalKey] || []}
-                onChange={(opt: any) => setBreed(opt)}
-                value={breed}
-              /> */}
-              {/* <AnimalSelect handleChange={handleChange} /> */}
               <SpeciesSelect handleChange={handleChange} />
             </div>
           </Card>
         )}
-        {/* BREEDING DETAILS */}
 
         {/* DESCRIPTION */}
         <Card className={style.section}>
-          <h3>
-            <mark>Opisz</mark> swoją działalność
-          </h3>
-         <RichTextEditor ref={editorRef} placeholder={'Napisz coś...'} onChange={setDescription} />
-          <span className={style.caption}>To będzie opisem Twojego profilu.</span>
+          <h3>{t('description.heading')}</h3>
+          <RichTextEditor ref={editorRef} placeholder={t('description.placeholder')} onChange={setDescription} />
+          <span className={style.caption}>{t('description.caption')}</span>
         </Card>
-        {/* DESCRIPTION */}
 
         {/* LOCATION */}
         <Card className={style.section}>
-          <h3>
-            Wskaż <mark>lokalizację</mark>, w której działasz
-          </h3>
+          <h3>{t('location.heading')}</h3>
 
-          <span className={style.caption}>
-            Możesz wyszukać lokalizację z pomocą Google Maps lub wypełnij pola ręcznie.
-          </span>
+          <span className={style.caption}>{t('location.caption')}</span>
 
           <LocationInput
             value={location}
             onChange={setLocation}
           />
         </Card>
-        {/* LOCATION */}
 
         <Button
           className={style.submit}
-          label={'Utwórz profil organizacji'}
+          label={t('submit')}
           onClick={handleSubmit}
+          disabled={isSubmitDisabled}
+          isLoading={isLoading}
         />
       </div>
 

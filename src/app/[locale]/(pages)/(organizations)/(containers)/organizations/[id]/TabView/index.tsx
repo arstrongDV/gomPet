@@ -42,60 +42,21 @@ const TabView = ({ data }: TabViewProps) => {
   const router = useRouter();
   const { push } = router;
 
-  // const deleteOrganization = async() => {
-  //   try{
-  //     const res_delete = await OrganizationsApi.deleteOrganizationProfile(data.id)
-  //     console.log(res_delete);
-  //     push('/my-animals')
-  //     toast.success("Organizacja usunieta")
-  //   }catch(err){
-  //     console.log(err);
-  //     toast.error("Nie udalo sie usunac organizacje")
-  //   }
-  // }
-
-  // const handleUpdateClick = () => {
-  //   push(Routes.ORGANIZATION_EDIT(data.id))
-  // };
-
-  // const menu: TabMenuItem[] = useMemo(
-  //   () => [
-  //     {
-  //       label: 'Informacje',
-  //       id: 'main'
-  //     },
-  //     {
-  //       label: 'Podopieczni',
-  //       id: 'animals'
-  //     },
-  //     {
-  //       label: 'Mioty',
-  //       id: 'litters'
-  //     },
-  //     {
-  //       label: 'Aktywność',
-  //       id: 'activity'
-  //     }
-      
-  //   ],
-  //   [t]
-  // );
-
   const menu: TabMenuItem[] = useMemo(() => {
     const baseMenu: TabMenuItem[] = [
-      { label: 'Informacje', id: 'main' },
-      { label: 'Podopieczni', id: 'animals' },
-      { label: 'Mioty', id: 'litters' },
-      { label: 'Aktywność', id: 'activity' }
+      { label: t('pages.organizations.tabs.information'), id: 'main' },
+      { label: t('pages.organizations.tabs.animals'), id: 'animals' },
+      { label: t('pages.organizations.tabs.litters'), id: 'litters' },
+      { label: t('pages.organizations.tabs.activity'), id: 'activity' }
     ];
-  
+
     if (isOwner) {
       baseMenu.push({
-        label: 'Members',
+        label: t('pages.organizations.tabs.members'),
         id: 'members'
       });
     }
-  
+
     return baseMenu;
   }, [t, isOwner]);
 
@@ -114,8 +75,8 @@ const TabView = ({ data }: TabViewProps) => {
   return (
     <>
       <SectionHeader
-        title='Hej!'
-        subtitle='Witamy na naszym profilu'
+        title={t('pages.organizations.tabView.greeting')}
+        subtitle={t('pages.organizations.tabView.welcome')}
         margin
       >
         <TabMenu

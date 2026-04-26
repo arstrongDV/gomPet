@@ -1,9 +1,11 @@
 import { IAnimal, IPost } from 'src/constants/types';
 import { IComment } from 'src/constants/types';
-import { commentsMock } from 'src/mocks/comments';
 import style from './AnimalProfile.module.scss';
 import { AnimalsApi, PostsApi } from 'src/api';
+import { injectToken } from 'src/api/client';
+import { auth } from 'src/auth';
 import TabView from '../components/AnimalProfile/TabView';
+import { getTranslations } from 'next-intl/server';
 
 export const dynamicParams = true;
 export const dynamic = 'force-dynamic';
@@ -77,6 +79,11 @@ export const generateMetadata = async ({ params }: { params: Promise<{ id: strin
 
 const AnimalDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
+  const t = await getTranslations('pages.animals.profile');
+  const session = await auth();
+  if (session?.access_token) {
+    injectToken(session.access_token as string);
+  }
   const animal = await getAnimalData(Number(id));
   const familyTree = await getAnimalFamilyTree(Number(id));
   const comments = animal?.organization
@@ -86,7 +93,7 @@ const AnimalDetailPage = async ({ params }: { params: Promise<{ id: string }> })
   // const posts = await getAnimalPosts(Number(params.id))
 
   if (!animal) {
-    return <div className={style.notFound}>Animal not found</div>;
+    return <div className={style.notFound}>{t('notFound')}</div>;
   }
 //posts={posts}
   return (

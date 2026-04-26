@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import OutsideClickHandler from 'react-outside-click-handler';
 import classNames from 'classnames';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 
 import { OrganizationsApi, PostsApi } from 'src/api';
-import { Button, Card, Icon, Input, LabelLink, OrganizationTypeName } from 'src/components';
+import { Button, Card, Icon, Input, LabelLink, Loader, OrganizationTypeName } from 'src/components';
 import FollowingButton from 'src/components/layout/PostCard/components/FollowingButton';
 import SettingsButton from 'src/components/layout/Settings';
 import { Routes } from 'src/constants/routes';
@@ -22,20 +22,55 @@ type BusinessCardProps = {
   variant?: 'horizontal' | 'vertical';
 };
 
+interface userDataResponse {
+  organization_id: number,
+  user_id: number,
+  is_member: boolean,
+  membership_id: number,
+  role: string,
+  invitation_confirmed: boolean
+}
+
 const BusinessCard = ({ organization, variant = 'horizontal' }: BusinessCardProps) => {
   const { name, image, phone, email, address, id } = organization;
   const t = useTranslations();
   const { push } = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const params = useParams();
 
   const [invitationMessage, setInvitationMessage] = useState<string>('Chce dolaczyc');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [followedAuthors, setFollowedAuthors] = useState<Record<number, number>>({});
   const [followers, setFollowers] = useState<number>(0);
 
+  const [membersData, setMembersData] = useState<userDataResponse | null>(null);
+
   const session = useSession();
 
   const organizationId = Number(session.data?.user.id);
   const isOwner = organizationId === organization.user;
+
+  useEffect(() => {
+    if(!params.id) return;
+    const checkIsMember = async(id: number) => {
+      try{
+        setIsLoading(true);
+        const { data } = await OrganizationsApi.verifyUserMembership(id);
+        setIsLoading(false);
+        setMembersData(data);
+      } catch(error) {
+        setIsLoading(false);
+        setMembersData(null);
+        console.log("err", error)
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    checkIsMember(Number(params.id))
+  }, [params.id]);
 
   const [isMobile, setIsMobile] = useState(false);
   const currentVariant = isMobile ? "vertical" : variant;
@@ -97,14 +132,23 @@ const BusinessCard = ({ organization, variant = 'horizontal' }: BusinessCardProp
   }
 
   const handleUpdateClick = () => {
-    push(Routes.ORGANIZATION_EDIT(id))
+    push(Routes.ORGANIZATION_EDIT(id));
   };
 
   const vertical = (
     <>
       <header className={style.header}>
         <div className={style.dataHeader}>
-          <OrganizationTypeName type={organization.type} />
+          <span className={style.dataHeaderInfo}>
+            <OrganizationTypeName type={organization.type} />
+
+            <p>
+                {organization.address.species ? organization.address.species
+                ?.map(spacie => spacie?.label)
+                .join(" · ") : null}
+            </p>
+          </span>
+
           <h1 className={style.name}>{name}</h1>
         </div>
 
@@ -170,14 +214,16 @@ const BusinessCard = ({ organization, variant = 'horizontal' }: BusinessCardProp
             empty
           />
         )}
-        {!isOwner && session.status === 'authenticated' && (
+        {session.status === 'authenticated' ? (!membersData?.is_member ? (
           <LabelLink 
             className={style.link} 
             onClick={() => setShowModal(prev => !prev)}
             label={'Dolacz do nas'}
             icon='arrowRight'
           />
-        )}
+        ) : (
+          <p>Role: <span>{t(`common.roles.${membersData?.role}`)}</span></p>
+        )) : null}
 
       </div>
     </>
@@ -187,7 +233,15 @@ const BusinessCard = ({ organization, variant = 'horizontal' }: BusinessCardProp
     <>
       <header className={style.header}>
         <div className={style.dataHeader}>
-          <OrganizationTypeName type={organization.type} />
+          <span className={style.dataHeaderInfo}>
+            <OrganizationTypeName type={organization.type} />
+
+            <p>
+                {organization.address.species ? organization.address.species
+                ?.map(spacie => spacie?.label)
+                .join(" · ") : null}
+            </p>
+          </span>
           <h1 className={style.name}>{name}</h1>
         </div>
 
@@ -244,14 +298,16 @@ const BusinessCard = ({ organization, variant = 'horizontal' }: BusinessCardProp
               empty
             />
           )}
-          {!isOwner && session.status === 'authenticated' && (
-            <LabelLink 
-              className={style.link} 
-              onClick={() => setShowModal(prev => !prev)}
-              label={'Dolacz do nas'}
-              icon='arrowRight'
-            />
-          )}
+        {session.status === 'authenticated' ? (!membersData?.is_member ? (
+          <LabelLink 
+            className={style.link} 
+            onClick={() => setShowModal(prev => !prev)}
+            label={'Dolacz do nas'}
+            icon='arrowRight'
+          />
+        ) : (
+          <p>Role: <span>{t(`common.roles.${membersData?.role}`)}</span></p>
+        )) : null}
 
             {/* <Button
               icon='plus'
@@ -273,6 +329,8 @@ const BusinessCard = ({ organization, variant = 'horizontal' }: BusinessCardProp
       </div>
     </>
   );
+
+  if(isLoading) return <Loader />
 
   return (
     <Card className={classNames(style.container, style[variant])}>

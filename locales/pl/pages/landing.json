@@ -2,6 +2,12 @@
   "title": "Paczka NextJS",
   "subtitle": "Strona w wersji {locale}",
   "withLink": "Przejdź do <link>logowania</link>.",
+  "youAreHereTitle": "Jesteśmy tutaj, aby...",
+  "banner": {
+    "findYourFriend": "Znajdź swojego nowego <highlight>przyjaciela</highlight>",
+    "findYourFriendBtn": "Znajdź kompana",
+    "findFriendBannerText": "Poznaj wyjątkowe zwierzęta do adopcji z lokalnych schronisk, hodowli i fundacji. Odkryj historię, temperament i cechy swojego przyszłego towarzysza, aby znaleźć idealne dopasowanie dla Twojej rodziny."
+  },
   "animalsScroll": {
     "title": "Poszukują <highlight>nowego</highlight> domu",
     "myAnimals": "Moje <highlight>zwierza</highlight>",
@@ -14,9 +20,18 @@
   },
   "knowledgeScroll": {
     "title": "Najnowsze <highlight>publikacje</highlight>",
-    "seeAll": "Przejdź do bloga"
+    "seeAll": "Przejdź do bloga",
+    "noArticles": "Brak artyklow"
+  },
+  "textBlock": {
+    "titleHighlight": "Jesteśmy",
+    "titleRest": "tutaj, aby...",
+    "description": "GomPet to platforma łącząca osoby szukające zwierzęcego towarzysza z lokalnymi schroniskami, hodowlami i fundacjami. Przeglądaj profile zwierząt, poznaj ich historię i temperament, a następnie skontaktuj się z organizacją, by dać im nowy, kochający dom. Wspieramy odpowiedzialną adopcję i pomagamy zwierzętom znaleźć rodziny, na które zasługują."
   },
   "footer": {
+    "aboutThePlatformTitle": "O platformie",
+    "tagline": "Łączymy zwierzęta z kochającymi domami.",
+    "description": "GomPet to miejsce, gdzie adopcja staje się prosta i przejrzysta. Współpracujemy ze schroniskami, hodowlami i fundacjami w całej Polsce, aby każde zwierzę mogło znaleźć odpowiedzialnego opiekuna. Dołącz do naszej społeczności i zmień życie czworonoga.",
     "rules": "Regulamin",
     "privatePolitic": "Polityka prywatności",
     "toCnange": "Wszelkie prawa zastrzeżone"

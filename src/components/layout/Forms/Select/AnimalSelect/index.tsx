@@ -34,16 +34,14 @@ const AnimalSelect = ({ className, handleChange, initialState, isAdding }: Anima
 
   const species = speciesOpt.map(opt => ({
     value: String(opt.id),
-    label: opt.name,
+    label: t(`common.animalSpecies.${opt.name}`)
   }));
 
   const breeds = breedsOpt.map(opt => ({
     value: String(opt.id),
-    label: opt.group_name,
+    label: t(`common.animalBreeds.${opt.label}`),
   }));
 
-  // 1. Pobranie gatunków (raz na starcie)
-// 1. Pobranie gatunków
 useEffect(() => {
   const fetchSpecies = async () => {
     try {
@@ -62,7 +60,7 @@ useEffect(() => {
   if (speciesOpt.length > 0 && initialState?.speciesOpt?.value && !selectSpeciesValue) {
     const matched = speciesOpt.find(s => String(s.id) === String(initialState.speciesOpt?.value));
     if (matched) {
-      setSelectSpeciesValue({ value: String(matched.id), label: matched.name });
+      setSelectSpeciesValue({ value: String(matched.id), label: t(`common.animalSpecies.${matched.name}`) });
     }
   }
 }, [speciesOpt, initialState?.speciesOpt?.value]);
@@ -145,7 +143,7 @@ useEffect(() => {
         isSearchable
       />
       <Select
-        label='Rasa'
+        label={t('common.ui.breedLabel')}
         options={breeds}
         value={selectBreedsValue}
         onChange={(option: OptionType | null) => {

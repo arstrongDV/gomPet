@@ -12,6 +12,19 @@
   }
 }
 
+.dataHeaderInfo{
+  display: flex;
+  flex-direction: column;
+
+
+  p{
+    color: $color-foreground-dim;
+    font-size: $font-size-xxs;
+    font-weight: $font-semiBold;
+    max-width: 250px;
+  }
+}
+
 .horizontal {
   .header {
     @include element-flex(row, space-between, stretch);

@@ -3,7 +3,7 @@
     "add": "Dodaj",
     "cancel": "Anuluj",
     "choose": "Wybierz",
-    "select": "Wybierz",
+    "select": "Wybierz...",
     "open": "Otwórz",
     "close": "Zamknij",
     "delete": "Usuń",
@@ -23,6 +23,7 @@
   },
   "empty": {
     "default": "Brak danych",
+    "noResult": "Brak wyników",
     "searchResults": "Brak wyników wyszukiwania dla \"{query}\""
   },
   "organization": {
@@ -32,11 +33,6 @@
   },
 
   "noLocation": "Brak lokalizacji",
-
-  "categories": {
-    "breeding": "hodowla",
-    "walking": "spacer"
-  },
 
   "roles": {
     "OWNER": "Właściciel / Kierownik",
@@ -50,5 +46,65 @@
     "VIEWER": "Obserwator"
   },
 
-  "imagesInfo": "Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone formaty to .png, .jpg, .jpeg"
+  "animalSpecies": {
+    "DOG": "Pies",
+    "CAT": "Kot",
+    "RABBIT": "Królik",
+    "GUINEA PIG": "świnka morska",
+    "HAMSTER": "Chomik",
+    "RAT": "Szczur",
+    "MOUSE": "Mysz",
+    "BIRD": "Ptak",
+    "REPTILE": "Gad",
+    "AMPHIBIAN": "Płaz"
+  },
+  "animalBreeds": {
+    "MINIATURE_SHEPHERD_AMERICAN": "Owczarek amerykański miniaturowy",
+    "AUSTRALIAN_CATTLE_DOG": "Australijski pies pasterski",
+    "AUSTRALIAN_STUMPY_TAIL_CATTLE_DOG": "Australijski pies pasterski krótkogonowy",
+    "BEARDED_COLLIE": "Bearded collie",
+    "BERGAMASCO": "Owczarek bergamasco",
+    "BIAY_SHEPHERD_SWISS": "Biały owczarek szwajcarski",
+    "BORDER_COLLIE": "Border collie",
+    "BOUVIER_DES_ARDENNES": "Bouvier des Ardennes",
+    "BOUVIER_DES_FLANDRES_VLAAMSE_KOEHOND": "Bouvier des Flandres",
+    "CESKOSLOVENSKY_VLCAK": "Wilczak czechosłowacki"
+
+
+  },
+
+  "imagesInfo": "Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone formaty to .png, .jpg, .jpeg",
+
+  "settings": {
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "organizationTransfer": "Przekaz organizacje"
+  },
+
+  "subscribe": "Obserwuj",
+  "subscribed": "Obserwujesz",
+  "noReaction": "brak",
+
+  "ui": {
+    "imageInput": "Kliknij, aby dodać zdjęcie",
+    "breedLabel": "Rasa",
+    "findAddress": "Znajdź adres",
+    "savePhoto": "Zapisz zdjęcie",
+    "dropzone": {
+      "drop": "Upuść pliki tutaj",
+      "dragAndDrop": "Przeciągnij i upuść pliki lub kliknij tutaj, aby je dodać"
+    },
+    "photosOrganizer": {
+      "main": "Główne"
+    }
+  },
+
+  "comments": {
+    "noComments": "Brak komentarzy",
+    "editing": "Edytujesz swój komentarz",
+    "reviews": "Opinie",
+    "averageRating": "Średnia ocen: {rating} na 5",
+    "added": "Komentarz został dodany",
+    "updated": "Komentarz zaktualizowany!"
+  }
 }

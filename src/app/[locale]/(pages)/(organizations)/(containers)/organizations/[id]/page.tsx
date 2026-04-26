@@ -11,6 +11,7 @@ import { Locale } from 'src/navigation';
 import TabView from './TabView';
 
 import style from './OrganizationPage.module.scss';
+import { error } from 'console';
 
 const getData = cache(async (id: number) => {
   const session = await auth();

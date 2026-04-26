@@ -19,15 +19,76 @@
     "writeSth": "Napisz coś...",
     "descriptionVisibleInfo": "Opis będzie widoczny w jego profilu.",
     "familyTreeInfo": "Posłuży to do wyświetlenia drzewa genealogicznego zwierzęcia.",
-    
-    "statusOwned": "Ma właściciela",
-    "statusQuarantine": "Kwarantanna",
-    "statusAvailable": "Do adopcji",
+
+    "ADOPTED": "Ma właściciela",
+    "RESERVED": "Kwarantanna",
+    "AVAILABLE": "Do adopcji",
 
     "statusVisibleInfo": "Status jest widoczny w widoku profilu zwierzaka.",
 
     "noOrganization": "Prywatne",
+    "selectOrganization": "Wybierz swoją organizację",
 
     "parentsAdd": "Dodawanie rodziny",
-    "addAnimal": "Dodaj zwierzaka"
+    "addAnimal": "Dodaj zwierzaka",
+
+    "editTitle": "Edytuj zwierzaka",
+    "editSubtitle": "Edytuj dane dla {name}",
+    "nameLabel": "Imię",
+    "genderLabel": "Płeć",
+    "male": "Samiec",
+    "female": "Samica",
+    "sizeLabel": "Rozmiar",
+    "small": "Mały",
+    "medium": "Średni",
+    "large": "Duży",
+    "cancelButton": "Anuluj",
+    "updateButton": "Zaktualizuj zwierzaka",
+    "noAnimalData": "Brak danych zwierzęcia",
+    "goBack": "Powrót",
+    "mustAddPhotos": "Musisz dodać zdjęcia",
+
+    "selectSpeciesFirst": "Musisz najpierw wybrać gatunek",
+
+    "addParents": {
+        "searchLabel": "Wyszukaj zwierzę",
+        "searchPlaceholder": "Wpisz nazwę...",
+        "speciesLabel": "Gatunek",
+        "breedLabel": "Rasa",
+        "availableAnimals": "Dostępne zwierzęta:",
+        "noAnimals": "Brak zwierząt spełniających kryteria",
+        "genderLabel": "Płeć:",
+        "addAsParent": "Dodaj jako rodzica",
+        "selectRelation": "Wybierz relację",
+        "selectedAnimal": "Wybrane zwierzę:",
+        "relation": {
+            "MOTHER": "Matka",
+            "FATHER": "Ojciec"
+        },
+        "species": {
+            "dog": "Pies",
+            "cat": "Kot"
+        },
+        "toast": {
+            "mustSelectRelation": "Musisz wybrać relację!",
+            "relationGenderMismatch": "Relacja nie zgadza się z płcią zwierzęcia!",
+            "alreadySelected": "To zwierzę zostało już wybrane",
+            "sameGender": "Nie może być dwóch zwierząt tej samej płci",
+            "cannotBeSelf": "Wybrane zwierzę nie może być rodzicem samego siebie",
+            "parentMustBeOlder": "Rodzic musi być starszy"
+        }
+    },
+
+    "toast": {
+        "noLocation": "Musisz udostępnić lokalizację aby dodać zwierzę albo podać własną organizację",
+        "created": "Zwierzak został dodany",
+        "createdWithAllParents": "Zwierzak dodany ze wszystkimi rodzicami",
+        "createdButParentsFailed": "Zwierzak dodany, ale nie udało się dodać żadnego rodzica",
+        "createdWithSomeParents": "Zwierzak dodany, dodano {success} z {total} rodziców",
+        "addParentError": "Nie udało się dodać rodzica"
+    },
+    "updated": "Zwierzak został zaktualizowany!",
+    "updateError": "Nie udało się zaktualizować zwierzaka. Spróbuj ponownie.",
+    "updateParentsError": "Nie udało się zaktualizować rodziców",
+    "imageLoadError": "Nie udało się załadować zdjęć"
 }

@@ -1,0 +1,72 @@
+{
+  "addKnowledge": "Dodaj wiedze",
+
+  "categories": {
+    "BASICS": "Podstawy",
+    "DAILY_CARE": "Codzienna pielęgnacja",
+    "HEALTH": "Zdrowie",
+    "LIFESTYLE": "Styl życia",
+    "BY_SPECIES": "Według gatunku",
+    "TRAINING": "Tresura",
+    "SHOPPING": "Zakupy"
+  },
+
+  "subcategories": {
+    "ANIMAL_HUSBANDRY": "Żywienie zwierząt",
+    "ANIMAL_NUTRITION": "Pielęgnacja (higiena, sierść, pazury)",
+    "VETERINARY_HEALTH": "Akcesoria i wyposażenie",
+    "HABITATS": "Zdrowie i weterynaria",
+    "GROOMING_HYGIENE_CLAW_CARE": "Zachowanie zwierząt",
+    "AQUARIUM_FISH": "Karmienie",
+    "HYGIENE_CLEANING": "Bezpieczeństwo w domu",
+    "FEEDING": "Higiena i czyszczenie",
+    "WALKS_ACTIVITY": "Sen i odpoczynek",
+    "REPTILES_AMPHIBIANS": "Spacery i aktywność",
+    "DOGS": "Gryzonie (chomiki, świnki morskie)",
+    "CATS": "Ptaki",
+    "BIRDS": "Gady i płazy",
+    "RODENTS": "Ryby akwariowe",
+    "ACCESSORIES_EQUIPMENT": "Psy",
+    "ANIMAL_BEHAVIOR": "Koty",
+    "DOG_TRAINING": "Socjalizacja",
+    "HOME_SAFETY": "Nauka czystości",
+    "SLEEP_REST": "Tresura psów",
+    "HOUSE_TRAINING": "Zabawy i stymulacja",
+    "SOCIALIZATION": "Szczepienia",
+    "PLAY_ENRICHMENT": "Choroby i objawy",
+    "VACCINATIONS": "Pierwsza pomoc",
+    "DISEASES_SYMPTOMS": "Wizyty u weterynarza",
+    "FIRST_AID": "Karma",
+    "PET_FOOD": "Legowiska",
+    "PET_BEDS": "Kosmetyki dla zwierząt",
+    "TOYS": "Transportery",
+    "VETERINARY_VISITS": "Zabawki",
+    "PET_TRAVEL": "Opieka nad starszymi zwierzętami",
+    "CARRIERS": "Podróże ze zwierzętami",
+    "PET_COSMETICS": "Adopcja zwierząt",
+    "PET_ADOPTION": "Opieka nad szczeniakami/kociętami"
+  },
+
+  "form": {
+    "titleLabel": "Tytuł",
+    "titlePlaceholder": "Tytuł...",
+    "categoryLabel": "Kategoria",
+    "subcategoryLabel": "Podkategoria",
+    "subcategoryLoading": "Ładowanie podkategorii...",
+    "contentPlaceholder": "Napisz coś...",
+    "addImage": "Dodaj zdjęcie",
+    "removeImage": "Usuń zdjęcie",
+    "presentPhotos": "Zaprezentuj zdjęcia",
+    "photosCaption": "Najlepiej na platformie będą wyglądać zdjęcia w formacie 4:3. Zdjęcia nie mogą przekraczać 5 MB. Dozwolone formaty to .png, .jpg, .jpeg",
+    "saving": "Zapisywanie...",
+    "saveChanges": "Zapisz zmiany",
+    "publish": "Opublikuj",
+    "toast": {
+      "fillAllFields": "Wypełnij wszystkie pola",
+      "updated": "Wiedza została zaktualizowana!",
+      "added": "Wiedza została dodana!",
+      "error": "Nie udało się dodać posta",
+      "imageLoadError": "Nie udało się załadować zdjęć"
+    }
+  }
+}

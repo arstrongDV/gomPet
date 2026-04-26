@@ -136,7 +136,6 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
   
     const locationValue = `SRID=4326;POINT(${coordinates[0]} ${coordinates[1]})`;
 
-  
     params.set(Params.LOCATION, locationValue);
     params.set(Params.RANGE, range);
     params.set(Params.PAGE, '1');
@@ -193,7 +192,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
             key={key}
             id={key}
             className={style.checkbox}
-            checked={searchParams.get(Params.ORGANIZATION_TYPE)?.split(',').includes(key)}
+            checked={!!searchParams.get(Params.ORGANIZATION_TYPE)?.split(',').includes(key)}
             onChange={() => handleFilter(Params.ORGANIZATION_TYPE, key, true)}
             label={value}
           />
@@ -341,7 +340,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
             id={id}
             className={style.checkbox}
             // POPRAWKA: split(',') zamiast split('&')
-            checked={searchParams.get(Params.CHARACTERISTICS)?.split(',').includes(label)}
+            checked={!!searchParams.get(Params.CHARACTERISTICS)?.split(',').includes(label)}
             onChange={() => handleFilter(Params.CHARACTERISTICS, value, true)}
             label={value}
           />
@@ -351,7 +350,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
             key={id}
             id={String(id)}
             className={style.checkbox}
-            checked={searchParams
+            checked={!!searchParams
               .get(Params.CHARACTERISTICS)
               ?.split(',')
               .includes(value)}

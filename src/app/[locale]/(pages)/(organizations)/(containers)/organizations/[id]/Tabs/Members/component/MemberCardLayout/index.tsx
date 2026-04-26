@@ -1,96 +1,89 @@
-'use client'
+'use client';
 
-import { useEffect, useState, useTransition } from "react";
-import toast from "react-hot-toast";
-import OutsideClickHandler from "react-outside-click-handler";
-import { useParams, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import OutsideClickHandler from 'react-outside-click-handler';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 
-import { OrganizationsApi } from "src/api";
-import { Avatar, Button, Card, Icon } from "src/components";
-import { Role } from "src/components/hooks/useRoles";
-import { IOrganization, IUser } from "src/constants/types";
-import { getDaysAgo } from "src/utils/helpers";
+import { OrganizationsApi } from 'src/api';
+import { Avatar, Button, Card, Icon } from 'src/components';
+import { Role } from 'src/components/hooks/useRoles';
+import { IOrganization, IUser } from 'src/constants/types';
+import { getDaysAgo } from 'src/utils/helpers';
 
-import RoleSelector from "./RoleSelector";
+import RoleSelector from './RoleSelector';
 
-import style from './memberCardStyle.module.scss'
+import style from './memberCardStyle.module.scss';
 
-type DataElements = {
+interface IMember {
     id: number;
-    invitation_confirmed: boolean;
-    invitation_message: string;
-    organization: IOrganization;
-    user: IUser;
+    role: string;
     joined_at: string;
     updated_at: string;
-    role: string;
+    user: IUser;
+    invitation_confirmed?: boolean;
+    invitation_message?: string;
+    organization?: IOrganization;
 }
 
 type RequestElementProps = {
-    data: DataElements;
+    data: IMember;
     onDelete: (e: number) => void;
-} 
+}
 
 const MemberCard = ({ data, onDelete }: RequestElementProps) => {
     const {
       id,
       role,
-      updated_at,
       user,
       joined_at,
     } = data;
     const date = getDaysAgo(joined_at, true);
-    const t = useTranslations();
-    const router = useRouter();
-
-    const session = useSession()
+    const t = useTranslations('pages.organizations.memberCard');
+    const tRoles = useTranslations('common.roles');
+    const session = useSession();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [selectedRole, setSelectedRole] = useState<Role | null>(null);
-
     const [showSelector, setShowSelector] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
 
-    console.log("data: ", data);
-    console.log("selectedRole: ", selectedRole);
-
-    const MemberDelete = async() => {
-        setIsLoading(true)
-        try{
+    const MemberDelete = async () => {
+        setIsLoading(true);
+        try {
             await OrganizationsApi.deleteOrganizationMember(id);
-            toast.success("Member zostal usuniety");
+            toast.success(t('deleteSuccess'));
             onDelete(id);
-            setIsLoading(false);
             setShowModal(false);
-        }catch(err: any){
-            toast.error("Nie udalo sie usunac membera");
-            setIsLoading(false)
-        }
-        finally{
+        } catch (err: any) {
+            toast.error(t('deleteError'));
+        } finally {
             setIsLoading(false);
         }
-    }
+    };
 
-    const MemberUpdate = async() => {
-        setIsLoading(true)
-        try{
+    const MemberUpdate = async () => {
+        setIsLoading(true);
+        try {
             await OrganizationsApi.updateOrganizationMember(id, {
-                role: selectedRole?.label
+                role: selectedRole?.value
             });
             setSelectedRole(selectedRole);
-            toast.success("Member zostal aktualizowany");
-            setIsLoading(false);
+            toast.success(t('updateSuccess'));
             setShowSelector(false);
-        }catch(err: any){
-            toast.error("Nie udalo sie aktualizowac membera");
-            setIsLoading(false)
-        }
-        finally{
+        } catch (err: any) {
+            toast.error(t('updateError'));
+        } finally {
             setIsLoading(false);
         }
-    }
+    };
+
+    useEffect(() => {
+        if (role && !selectedRole) {
+            setSelectedRole(null);
+        }
+    }, [role]);
 
     return (
       <Card className={style.container} key={id}>
@@ -103,44 +96,45 @@ const MemberCard = ({ data, onDelete }: RequestElementProps) => {
 
             <div className={style.InfoSide}>
                 <div className={style.info}>
-                    <p>Imie: <span className={style.name}>{user?.first_name || '-'}</span></p>
-                    <p>Email: <span className={style.name}>{user?.email || '-'}</span></p>
-                    <p>Phone: <span className={style.name}>{user?.phone || '-'}</span></p>
+                    <p>{t('name')} <span className={style.name}>{user?.first_name || '-'}</span></p>
+                    <p>{t('email')} <span className={style.name}>{user?.email || '-'}</span></p>
+                    <p>{t('phone')} <span className={style.name}>{user?.phone || '-'}</span></p>
                     <div className={style.roleChange}>
-                        <p>Role: 
+                        <p>{t('role')}
                             <span className={style.date}>
-                                {!showSelector ?  t(`common.roles.${data.role}`) || t(`common.roles.${selectedRole?.label}`)
-                                : 
-                                (
-                                    <RoleSelector 
-                                        selectedRole={selectedRole} 
-                                        setSelectedRole={setSelectedRole} 
-                                        initialRole={role} 
-                                    />
-                                )}
+                                {!showSelector
+                                    ? (selectedRole?.label ? selectedRole?.label : (role ? tRoles(role) : '-'))
+                                    : (
+                                        <RoleSelector
+                                            selectedRole={selectedRole}
+                                            setSelectedRole={setSelectedRole}
+                                            initialRole={selectedRole && selectedRole.value ? selectedRole.value : role}
+                                        />
+                                    )
+                                }
                             </span>
                         </p>
                         {user.id !== Number(session.data?.user.id) && (
-                            <Icon name="pencil" onClick={() => setShowSelector(prev => !prev)} />
+                            <Icon name='pencil' onClick={() => setShowSelector(prev => !prev)} />
                         )}
                     </div>
-                    <p>Dodany dnia: <span className={style.date}>{date}</span></p>
+                    <p>{t('addedOn')} <span className={style.date}>{date}</span></p>
                 </div>
             </div>
         </div>
 
         {user.id !== Number(session.data?.user.id) && (
             <div className={style.btns}>
-                <Button 
+                <Button
                     className={style.submitButton}
-                    label={"Update"}
+                    label={t('update')}
                     icon='plus'
                     onClick={MemberUpdate}
                     disabled={isLoading || !showSelector || selectedRole?.value == role}
                 />
-                <Button 
+                <Button
                     className={style.deleteButton}
-                    label={"Delete"}
+                    label={t('delete')}
                     onClick={() => setShowModal(prev => !prev)}
                     disabled={isLoading}
                 />
@@ -151,18 +145,17 @@ const MemberCard = ({ data, onDelete }: RequestElementProps) => {
             <OutsideClickHandler onOutsideClick={() => setShowModal(false)}>
                 <div className={style.drop}>
                     <Card className={style.modalIsAree}>
-                        <p>Czy naprawde chcesz usunac membera ze swojej organizacji? </p>
+                        <p>{t('deleteConfirm')}</p>
                         <div className={style.btns}>
-                            <Button 
+                            <Button
                                 className={style.btnDel}
-                                label={"Tak"}
+                                label={t('yes')}
                                 onClick={MemberDelete}
                                 disabled={isLoading}
                             />
-
-                            <Button 
+                            <Button
                                 className={style.btn}
-                                label={"Nie"}
+                                label={t('no')}
                                 onClick={() => setShowModal(false)}
                                 disabled={isLoading}
                             />

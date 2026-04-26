@@ -1,0 +1,62 @@
+{
+  "statute": {
+    "title": "Terms of Service",
+    "back": "Back",
+    "section1": {
+      "title": "§1 General Provisions",
+      "content": "These Terms of Service govern the use of the GomPet platform available at gompet.pl. By using the platform, the user accepts these Terms in their entirety."
+    },
+    "section2": {
+      "title": "§2 Registration and User Account",
+      "content": "Full use of the platform requires creating an account. The user agrees to provide accurate information and not to share login credentials with third parties. Accounts may be removed in case of a breach of these Terms."
+    },
+    "section3": {
+      "title": "§3 Rules of Use",
+      "content": "Users agree to use the platform in accordance with applicable law and social norms. It is prohibited to post content that is unlawful, misleading, or that infringes on the rights of third parties."
+    },
+    "section4": {
+      "title": "§4 Final Provisions",
+      "content": "These Terms take effect upon publication. The operator reserves the right to amend the Terms. Users will be notified of any changes with adequate notice."
+    }
+  },
+  "copyright": {
+    "title": "All Rights Reserved",
+    "back": "Back",
+    "section1": {
+      "title": "1. Intellectual Property",
+      "content": "All content on the GomPet platform, including texts, graphics, logos, icons, photos, and software, is the intellectual property of the platform operator or its partners and is protected by copyright law."
+    },
+    "section2": {
+      "title": "2. Prohibition of Copying",
+      "content": "No part of the GomPet platform may be reproduced, distributed, modified, or published without the prior written consent of the operator. Creating derivative works based on materials available on the platform is also prohibited."
+    },
+    "section3": {
+      "title": "3. User Content",
+      "content": "Users who publish content on the platform retain copyright to their materials, while granting the operator a non-exclusive, royalty-free license to display and store them as part of the services provided."
+    },
+    "section4": {
+      "title": "4. Copyright Infringement",
+      "content": "If you believe your copyright has been infringed, please contact the platform administrator. The operator is committed to promptly reviewing the report and taking appropriate action in accordance with applicable law."
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "back": "Back",
+    "section1": {
+      "title": "1. Data Controller",
+      "content": "The controller of personal data of GomPet platform users is its operator. Data is processed in accordance with the General Data Protection Regulation (GDPR) and applicable Polish law."
+    },
+    "section2": {
+      "title": "2. Scope and Purpose of Data Processing",
+      "content": "We collect data necessary to provide platform services: email address, name, and profile data. Data is used solely for account management, facilitating animal adoptions, and communication with partner organizations."
+    },
+    "section3": {
+      "title": "3. User Rights",
+      "content": "Users have the right to access, correct, delete, restrict processing, and object to the processing of their data. Users may withdraw their consent to data processing at any time by contacting the administrator."
+    },
+    "section4": {
+      "title": "4. Cookies",
+      "content": "The GomPet platform uses cookies to ensure proper service functionality and traffic analysis. Users can manage cookie settings in their web browser."
+    }
+  }
+}

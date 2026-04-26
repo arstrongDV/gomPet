@@ -18,6 +18,7 @@ import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import AnimalSelect from 'src/components/layout/Forms/Select/AnimalSelect';
 import { ValueOf } from 'next/dist/shared/lib/constants';
+import SpeciesSelect from '../../../new-organization/components/SpeciesSelect';
 
 type OrganizationFiltersProps = {
   className?: string;
@@ -113,7 +114,6 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
     if (!coordinates || coordinates[0] == null || coordinates[1] == null) return;
   
     const locationValue = `SRID=4326;POINT(${coordinates[0]} ${coordinates[1]})`;
-
   
     params.set(Params.LOCATION, locationValue);
     params.set(Params.RANGE, range);
@@ -132,6 +132,14 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
   // const [rangeInput, setRangeInput] = useState(searchParams.get(Params.RANGE) ?? '')
   const [range, setRange] = useState(searchParams.get(Params.RANGE) ?? '');
 
+  const [speciesValue, setSelectSpeciesValue] = useState<Array<string | number>>([]);
+  
+  const handleChange = (selectedOptions: OptionType[]) => {
+      const speciesIds = selectedOptions ? selectedOptions.map(opt => opt?.label) : [];
+      //setSelectSpeciesValue(speciesIds as any);
+      handleFilter(Params.BREED_FILLTER, String(speciesIds).toLocaleLowerCase());
+  };     
+                                                         
   return (
     <div className={classNames(style.filters, className)}>
       <div className={style.row}>
@@ -171,30 +179,8 @@ const OrganizationFilters = ({ className, needFullFilters }: OrganizationFilters
               }
             }}
           />
-          {/* <Select
-            label={t('pages.organizations.filters.breedSpecies')}
-            options={[toSelectOption('dog'), toSelectOption('cat')]}
-            value={toSelectOption(searchParams.get(Params.SPECIES))}
-            onChange={(value: OptionType) => handleFilter(Params.SPECIES, value ? String(value.value) : '')}
-            isClearable
-          /> */}
-          {/* <AnimalSelect
-              handleChange={(type, value) => {
-                handleFilter(
-                  type === 'species' ? Params.SPECIES : Params.BREED,
-                  value
-                );
-              }}
-            /> */}
 
-          <Select
-            label={t('pages.organizations.filters.breedType')}
-            options={[toSelectOption('dog'), toSelectOption('cat')]}
-            value={toSelectOption(searchParams.get(Params.BREED))}
-            onChange={(value: OptionType) => handleFilter(Params.BREED, value ? String(value.value) : '')}
-            isClearable
-            isSearchable
-          />
+          <SpeciesSelect handleChange={handleChange}/>
         </div>
       ) : (
         <div className={style.inputs}>

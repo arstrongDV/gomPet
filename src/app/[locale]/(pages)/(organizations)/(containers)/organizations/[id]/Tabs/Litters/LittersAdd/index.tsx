@@ -1,8 +1,8 @@
 'use client'
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent } from "react";
+import { useTranslations } from "next-intl";
 import { Button, Card, Icon, Input, RichTextEditor, Select } from "src/components";
 import style from './littersAdd.module.scss';
-import { OptionType } from "dayjs";
 import { OrganizationsApi } from "src/api";
 import { IOrganization } from "src/constants/types";
 import AnimalSelect from "src/components/layout/Forms/Select/AnimalSelect";
@@ -13,36 +13,16 @@ type AddLittersProps = {
   onLitterAdded: (data: any) => void;
 };
 
-
-const statusOptions = [
-    { value: 'ACTIVE', label: 'Active' },
-    { value: 'CLOSED', label: 'Closed' },
-    { value: 'DRAFT', label: 'Draft' },
-];
-
-const speciesOptions = [
-  { value: 'dog', label: 'Dog' },
-  { value: 'cat', label: 'Cat' },
-  { value: 'other', label: 'Other' },
-];
-  
-const breedOptions = {
-    dog: [
-      { value: 'beagle', label: 'Beagle' },
-      { value: 'terrier', label: 'Terrier' },
-      { value: 'labrador', label: 'Labrador' },
-    ],
-    cat: [
-      { value: 'british', label: 'British Shorthair' },
-      { value: 'siamese', label: 'Siamese' },
-      { value: 'persian', label: 'Persian' },
-    ],
-    other: [
-      { value: 'other', label: 'Other' },
-    ],
-};
-
 const AddLitters = ({ setAddLitter, organization, onLitterAdded }: AddLittersProps) => {
+  const t = useTranslations('pages.organizations.addLitter');
+  const tCommon = useTranslations('common.action');
+
+  const statusOptions = [
+    { value: 'ACTIVE', label: t('statusOptions.ACTIVE') },
+    { value: 'CLOSED', label: t('statusOptions.CLOSED') },
+    { value: 'DRAFT', label: t('statusOptions.DRAFT') },
+  ];
+
   const [litterForm, setLitterForm] = useState({
     title: '',
     birth_date: '',
@@ -53,22 +33,16 @@ const AddLitters = ({ setAddLitter, organization, onLitterAdded }: AddLittersPro
     organization: organization.id
   });
 
-  const currentBreedOptions = litterForm.species 
-  ? breedOptions[litterForm.species as keyof typeof breedOptions] || breedOptions.other
-  : breedOptions.other;
-
   const handleChange = (field: string, value: string) => {
     setLitterForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async() => {
-    try{
-      
-      const res = await OrganizationsApi.postOrganizationLitters(litterForm);
+  const handleSubmit = async () => {
+    try {
+      await OrganizationsApi.postOrganizationLitters(litterForm);
       onLitterAdded(litterForm);
-      console.log(res)
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -86,60 +60,41 @@ const AddLitters = ({ setAddLitter, organization, onLitterAdded }: AddLittersPro
           id="title"
           name="title"
           className={style.titleInput}
-          label="Title"
-          placeholder="Wpisz tytuł"
+          label={t('title')}
+          placeholder={t('titlePlaceholder')}
           value={litterForm.title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('title', e.target.value)}
           required
         />
 
         <Input
-          label="Birth date"
+          label={t('birthDate')}
           type="date"
           value={litterForm.birth_date}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange('birth_date', e.target.value)}
         />
       </div>
+
       <div className={style.flexRow}>
-        {/* <Select
-            label="Species"
-            options={speciesOptions}
-            value={speciesOptions.find(opt => opt.value === litterForm.species) || null}
-            onChange={(option: OptionType | null) => {
-                handleChange('species', 1)
-                }
-            }
-        />
-            
-        <Select
-            label="Breed"
-            options={currentBreedOptions}
-            value={currentBreedOptions.find(opt => opt.value === litterForm.breed) || null}
-            onChange={(option: OptionType | null) => 
-                handleChange('breed', 2)
-            }
-        /> */}
         <AnimalSelect handleChange={handleChange} />
       </div>
 
       <div>
-        <h3>
-          <mark>Opisz</mark> zwierzaka
-        </h3>
+        <h3>{t('describeTitle')}</h3>
         <RichTextEditor
-          placeholder="Napisz coś o miocie"
+          placeholder={t('descriptionPlaceholder')}
           onChange={(value: string) => handleChange('description', value)}
         />
       </div>
 
-    <Select 
-        label="Status"
+      <Select
+        label={t('status')}
         options={statusOptions}
         value={statusOptions.find((opt: any) => opt.value === litterForm.status) || null}
         onChange={(option: any) => handleChange('status', option?.value || '')}
-    />
+      />
 
-      <Button label="Dodaj" width="200px" onClick={handleSubmit} />
+      <Button label={tCommon('add')} width="200px" onClick={handleSubmit} />
     </Card>
   );
 };

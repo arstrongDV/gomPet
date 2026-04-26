@@ -109,7 +109,7 @@ const SheltersPage = () => {
         />
       </div>
 
-      <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} needFullFilters={true} />
+      <OrganizationFilters className={classNames(style.filters, { [style.show]: showFilters })} needFullFilters={false} />
 
         <div>
           <div className={style.content}>

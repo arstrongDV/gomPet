@@ -1,0 +1,69 @@
+{
+  "header": {
+    "title": "Stwórz nowy profil",
+    "subtitle": "Witamy w kreatorze profilu. Dostosuj go do własnych potrzeb"
+  },
+  "type": {
+    "heading": "Wybierz rodzaj profilu",
+    "shelter": "Schronisko",
+    "breeder": "Hodowla",
+    "fund": "Fundacja",
+    "caption": "Każdy rodzaj profilu jest dostosowany do potrzeb organizacji, zatem wybierz go zgodnie ze swoją działalnością."
+  },
+  "presentation": {
+    "heading": "Jak chcesz się prezentować?",
+    "logoLabel": "Logotyp organizacji",
+    "nameLabel": "Nazwa organizacji",
+    "namePlaceholder": "Wpisz nazwę organizacji",
+    "caption": "Nazwa organizacji będzie widoczna na stronie profilu. Dodaj logo, aby wyróżnić się na tle innych organizacji."
+  },
+  "contact": {
+    "heading": "Jak się z Tobą skontaktować",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Wpisz adres email",
+    "phoneLabel": "Numer telefonu",
+    "phonePlaceholder": "Wpisz numer telefonu"
+  },
+  "breedingDetails": {
+    "heading": "Szczegóły hodowli"
+  },
+  "description": {
+    "heading": "Opisz swoją działalność",
+    "placeholder": "Napisz coś...",
+    "caption": "To będzie opisem Twojego profilu."
+  },
+  "location": {
+    "heading": "Wskaż lokalizację, w której działasz",
+    "caption": "Możesz wyszukać lokalizację z pomocą Google Maps lub wypełnij pola ręcznie."
+  },
+  "locationInput": {
+    "searchLabel": "Wyszukaj adres",
+    "cityLabel": "Miasto",
+    "cityPlaceholder": "Wpisz miasto",
+    "streetLabel": "Adres",
+    "streetPlaceholder": "Wpisz ulicę i numer budynku",
+    "houseNumberLabel": "Numer budynku",
+    "houseNumberPlaceholder": "Wpisz numer budynku",
+    "zipCodeLabel": "Kod pocztowy",
+    "zipCodePlaceholder": "Wpisz kod pocztowy",
+    "latLabel": "Szerokość geograficzna",
+    "latPlaceholder": "np. 52.2297700",
+    "lngLabel": "Długość geograficzna",
+    "lngPlaceholder": "np. 21.0117800"
+  },
+  "submit": "Utwórz profil organizacji",
+  "saveChanges": "Zapisz zmiany",
+  "editHeader": {
+    "title": "Edytuj profil",
+    "subtitle": "Witamy w kreatorze profilu. Dostosuj go do własnych potrzeb"
+  },
+  "toast": {
+    "missingLogo": "Proszę dodać zdjęcie",
+    "success": "Stworzono nową organizację!",
+    "error": "Błąd tworzenia organizacji",
+    "updateSuccess": "Organizacja została zaktualizowana!",
+    "updateError": "Nie udało się zaktualizować organizacji",
+    "loadError": "Nie udało się załadować danych",
+    "notFound": "Nie znaleziono organizacji"
+  }
+}

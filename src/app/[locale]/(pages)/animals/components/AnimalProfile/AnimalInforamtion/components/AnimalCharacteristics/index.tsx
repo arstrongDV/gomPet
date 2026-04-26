@@ -4,65 +4,67 @@ import { Icon } from "src/components";
 import { IAnimal } from "src/constants/types";
 import { useTranslations } from "next-intl";
 
-export default function CharacteristicsBlock({ animal }: { animal: IAnimal }) {
+interface CharacteristicsBlockProps {
+    title: string;
+    bool: boolean;
+}
+
+export default function CharacteristicsBlock({ characteristicBoard }: { characteristicBoard: CharacteristicsBlockProps[] }) {
   const t = useTranslations('pages.animals.characteristics');
+  const tProfile = useTranslations('pages.animals.profile');
 
   const contentRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
 
-  const characteristicCheck = !!(animal.characteristicBoard && animal.characteristicBoard.length > 0);
-
-  const normalizeKey = (title: string) =>
-    title
-      .trim()
-      .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-      .replace(/[\s-]+/g, '_')
-      .toLowerCase();
-
-  const fallbackLabel = (key: string) =>
-    key
-      .split('_')
-      .filter(Boolean)
-      .map((token) => token.charAt(0).toUpperCase() + token.slice(1))
-      .join(' ');
-
-  const resolveLabel = (title: string) => {
-    const key = normalizeKey(title);
-
-    if (!key) {
-      return '';
-    }
-
-    if (t.has(key)) {
-      return t(key);
-    }
-
-    return fallbackLabel(key);
-  };
+  const characteristicCheck = !!(characteristicBoard && characteristicBoard.length > 0);
 
   useEffect(() => {
     const content = contentRef.current;
     const thumb = thumbRef.current;
     if (!content || !thumb) return;
 
-
     const updateThumb = () => {
-      const scrollHeight = content.scrollHeight;
-      const clientHeight = content.clientHeight;
-      const scrollTop = content.scrollTop;
-
+      const { scrollHeight, clientHeight, scrollTop } = content;
+      if (scrollHeight <= clientHeight) {
+        thumb.style.display = 'none';
+        return;
+      }
+      thumb.style.display = 'block';
       const thumbHeight = (clientHeight / scrollHeight) * clientHeight;
       thumb.style.height = `${thumbHeight}px`;
-
-      const thumbTop = (scrollTop / scrollHeight) * clientHeight;
-      thumb.style.top = `${thumbTop}px`;
+      thumb.style.top = `${(scrollTop / scrollHeight) * clientHeight}px`;
     };
 
+    let startY = 0;
+    let startScrollTop = 0;
+
+    const onThumbMouseDown = (e: MouseEvent) => {
+      e.preventDefault();
+      startY = e.clientY;
+      startScrollTop = content.scrollTop;
+
+      const onMouseMove = (e: MouseEvent) => {
+        const delta = e.clientY - startY;
+        const scrollRatio = content.scrollHeight / content.clientHeight;
+        content.scrollTop = startScrollTop + delta * scrollRatio;
+      };
+
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    };
+
+    thumb.addEventListener('mousedown', onThumbMouseDown);
     content.addEventListener("scroll", updateThumb);
     window.addEventListener("resize", updateThumb);
     updateThumb();
 
     return () => {
+      thumb.removeEventListener('mousedown', onThumbMouseDown);
       content.removeEventListener("scroll", updateThumb);
       window.removeEventListener("resize", updateThumb);
     };
@@ -72,16 +74,16 @@ export default function CharacteristicsBlock({ animal }: { animal: IAnimal }) {
     <div className={style.characteristicsBlock}>
       <div className={style.characteristicContent} ref={characteristicCheck ? contentRef : null}>
         {characteristicCheck ? (
-          animal.characteristicBoard.map((c, index) => (
-            <div className={style.AnimalCharacter} key={`${normalizeKey(c.title)}-${index}`}>
+          characteristicBoard.map((c, index) => (
+            <div className={style.AnimalCharacter} key={`${(c.title)}-${index}`}>
               <div className={style.caracteristicImage}>
                 {c.bool ? <Icon name="pawFilled" /> : null}
               </div>
-              <p className={style.caracteristicTitle}>{resolveLabel(c.title)}</p>
+              <p className={style.caracteristicTitle}>{t(c.title)}</p>
             </div>
           ))
         ) : (
-          <div>No info</div>
+          <div>{tProfile('noCharacteristics')}</div>
         )}
       </div>
       {characteristicCheck && (

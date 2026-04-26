@@ -66,14 +66,17 @@ export class OrganizationsRouts {
   static MY_ORGANIZATIONS = (myOrg: boolean) => `/users/organization-members/?mine=${myOrg}`;
   static USER_ORGANIZATIONS = (userId: number) => `/users/organization-members/?organizations-user-by-id=${userId}`;
   static CHANGE_OWNER = (orgId: number) => `/users/organizations/${orgId}/change-owner/`;
+
+  static CHECK_MEMBERSHIP = (organization_id: number) => `/users/organization/check-membership/${organization_id}`;  
 }
 
 export class ArticlesRouts {
   static ARTICLES_LATEST = '/articles/articles-latest/';
   static ARTICLES_LIST = '/articles/articles/';
   static ARTICLES_SLUG = (slug: string) => `/articles/articles/${slug}/`;
-  static ARTICLES_KNOWLEDGE_LIST = (category: any) => `/articles/articles/?${category}`; 
-  static ARTICLES_CATEGORIES = '/articles/article-categories/';
+  static ARTICLES_KNOWLEDGE_LIST = (category: any) => `/articles/articles/?${category}`;
+  static ARTICLES_CATEGORIES_GROUPS = '/articles/article-categories/';
+  // static ARTICLES_CATEGORIES_GROUP = (category: string[]) =>  `/articles/article-categories/?groups=${category}`;
 }
 
 export class PostsRouts {

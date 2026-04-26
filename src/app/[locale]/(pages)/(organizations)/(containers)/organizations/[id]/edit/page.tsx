@@ -3,14 +3,15 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { AnimalsApi, OrganizationsApi } from 'src/api';
-import { IAnimal, IOrganization } from "src/constants/types";
-import AnimalUpdateForm from './index'
+import { useTranslations } from "next-intl";
+import { OrganizationsApi } from 'src/api';
+import { IOrganization } from "src/constants/types";
 import { useParams } from "next/navigation";
-import { OptionType } from "dayjs";
 import OrganizationUpdateForm from "./index";
+import { Loader } from "src/components";
 
 const OrganizationEditPage = () => {
+  const t = useTranslations('pages.newOrganization');
   const [organization, setOrganization] = useState<IOrganization | null>(null);
 
   const params = useParams();
@@ -24,14 +25,14 @@ const OrganizationEditPage = () => {
         setOrganization(res_org.data);
       } catch (error) {
         console.error('Error fetching organization:', error);
-        toast.error('Organization not found');
+        toast.error(t('toast.notFound'));
       }
     };
     fetchOrganization();
   }, [params.id]);
 
   const handleSuccess = () => {
-    toast.success('Organization updated successfully!');
+    toast.success(t('toast.updateSuccess'));
     router.push(`/organizations/${params.id}`);
   };
 
@@ -40,7 +41,7 @@ const OrganizationEditPage = () => {
   };
 
   if (!organization) {
-    return <div>Loading...</div>;
+    return <Loader />
   }
 
   return (

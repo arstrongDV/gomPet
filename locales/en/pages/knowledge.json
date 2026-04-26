@@ -1,0 +1,72 @@
+{
+  "addKnowledge": "Add knowledge",
+
+  "categories": {
+    "BASICS": "Basics",
+    "DAILY_CARE": "Daily Care",
+    "HEALTH": "Health",
+    "LIFESTYLE": "Lifestyle",
+    "BY_SPECIES": "By Species",
+    "TRAINING": "Training",
+    "SHOPPING": "Shopping"
+  },
+
+  "subcategories": {
+    "ANIMAL_HUSBANDRY": "Animal Nutrition",
+    "ANIMAL_NUTRITION": "Grooming (Hygiene, Coat, Claws)",
+    "VETERINARY_HEALTH": "Accessories & Equipment",
+    "HABITATS": "Health & Veterinary Care",
+    "GROOMING_HYGIENE_CLAW_CARE": "Animal Behavior",
+    "AQUARIUM_FISH": "Feeding",
+    "HYGIENE_CLEANING": "Home Safety",
+    "FEEDING": "Hygiene & Cleaning",
+    "WALKS_ACTIVITY": "Sleep & Rest",
+    "REPTILES_AMPHIBIANS": "Walks & Activity",
+    "DOGS": "Rodents (Hamsters, Guinea Pigs)",
+    "CATS": "Birds",
+    "BIRDS": "Reptiles & Amphibians",
+    "RODENTS": "Aquarium Fish",
+    "ACCESSORIES_EQUIPMENT": "Dogs",
+    "ANIMAL_BEHAVIOR": "Cats",
+    "DOG_TRAINING": "Socialization",
+    "HOME_SAFETY": "House Training",
+    "SLEEP_REST": "Dog Training",
+    "HOUSE_TRAINING": "Play & Enrichment",
+    "SOCIALIZATION": "Vaccinations",
+    "PLAY_ENRICHMENT": "Diseases & Symptoms",
+    "VACCINATIONS": "First Aid",
+    "DISEASES_SYMPTOMS": "Veterinary Visits",
+    "FIRST_AID": "Pet Food",
+    "PET_FOOD": "Pet Beds",
+    "PET_BEDS": "Pet Cosmetics",
+    "TOYS": "Carriers",
+    "VETERINARY_VISITS": "Toys",
+    "PET_TRAVEL": "Senior Pet Care",
+    "CARRIERS": "Traveling with Pets",
+    "PET_COSMETICS": "Pet Adoption",
+    "PET_ADOPTION": "Puppy & Kitten Care"
+  },
+
+  "form": {
+    "titleLabel": "Title",
+    "titlePlaceholder": "Title...",
+    "categoryLabel": "Category",
+    "subcategoryLabel": "Subcategory",
+    "subcategoryLoading": "Loading subcategories...",
+    "contentPlaceholder": "Write something...",
+    "addImage": "Add image",
+    "removeImage": "Remove image",
+    "presentPhotos": "Present your photos",
+    "photosCaption": "Photos look best in 4:3 format. Photos cannot exceed 5 MB. Allowed formats: .png, .jpg, .jpeg",
+    "saving": "Saving...",
+    "saveChanges": "Save changes",
+    "publish": "Publish",
+    "toast": {
+      "fillAllFields": "Please fill in all fields",
+      "updated": "Knowledge has been updated!",
+      "added": "Knowledge has been added!",
+      "error": "Failed to save post",
+      "imageLoadError": "Could not load existing images"
+    }
+  }
+}

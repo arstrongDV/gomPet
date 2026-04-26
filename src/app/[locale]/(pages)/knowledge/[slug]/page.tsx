@@ -12,19 +12,19 @@ import { ArticlesApi } from 'src/api';
 import KnowledgePage from '.';
 
 const getData = cache(async (slug: string) => {
-  const session = await auth();
-  injectToken(session?.access_token);
-  // const { data } = await OffersApi.getOffer(slug);
-  const { data } = await ArticlesApi.getArticlePage(slug);
-  return data;
-  
-  // return articlesMock[0];
+  try {
+    const session = await auth();
+    injectToken(session?.access_token);
+    const { data } = await ArticlesApi.getArticlePage(slug);
+    return data;
+  } catch {
+    return null;
+  }
 });
 
 export const generateMetadata = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
   const data = await getData(slug);
-  console.log(data);
   if (!data) {
     return {
       title: 'Article not found'
@@ -53,16 +53,6 @@ const BlogArticlePage = async ({
   return (
     <div>
       <KnowledgePage data={data} />
-      {/* <h1>Offer</h1>
-
-      {data.image && (
-        <img
-          src={data.image}
-          alt={data.title}
-        />
-      )}
-      <h2>{data.title}</h2>
-      <p>{data.content}</p> */}
     </div>
   );
 };

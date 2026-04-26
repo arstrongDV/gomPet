@@ -1,9 +1,12 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { Select } from 'src/components'
-import useRoles, { Role } from 'src/components/hooks/useRoles'
-import style from './roleSelector.module.scss'
+import React, { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+
+import { Select } from 'src/components';
+import useRoles, { Role } from 'src/components/hooks/useRoles';
+
+import style from './roleSelector.module.scss';
 
 type RoleSelectorProps = {
   initialRole: string;
@@ -12,25 +15,32 @@ type RoleSelectorProps = {
 };
 
 const RoleSelector = ({ initialRole, selectedRole, setSelectedRole }: RoleSelectorProps) => {
-  // const [role, setRole] = useState<Role | null>(null);
+  const t = useTranslations();
   const { roles, loading } = useRoles();
 
-  console.log("roles: ", roles);
-  console.log("initialRole: ", initialRole);
+  const options = roles.map(role => ({
+    value: role.value,
+    label: t(`common.roles.${role.label}`),
+    key: role.label
+  }));
 
   useEffect(() => {
-    if (!initialRole || roles.length === 0) return;
+    const isObject = typeof selectedRole === 'object' && selectedRole !== null && 'value' in selectedRole;
 
-    const foundRole = roles.find(r => r.value === initialRole);
-    if (foundRole) {
-      setSelectedRole(foundRole);
+    if (options.length > 0 && (!selectedRole || !isObject)) {
+      let foundRole: { value: string | number; label: string; key: string } | undefined;
+      foundRole = options.find(r => r.key === initialRole);
+      
+      if (foundRole) {
+        setSelectedRole(foundRole);
+      }
     }
-  }, [initialRole, roles]);
+  }, [options, initialRole, selectedRole, setSelectedRole]);
 
   return (
     <Select
       wrapperStyle={style.select}
-      options={roles}
+      options={options}
       value={selectedRole}
       onChange={setSelectedRole}
       isLoading={loading}

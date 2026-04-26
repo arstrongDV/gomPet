@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { OrganizationsApi } from "src/api";
 import { Avatar, Button, Card } from "src/components";
@@ -24,7 +24,7 @@ type RequestElementProps = {
     data: DataElements;
     onDelete: (e: number) => void;
     onRequestApproved: (id: number, e: any) => void;
-} 
+}
 
 const RequestElement = ({ data, onDelete, onRequestApproved }: RequestElementProps) => {
     const {
@@ -36,46 +36,34 @@ const RequestElement = ({ data, onDelete, onRequestApproved }: RequestElementPro
       joined_at,
     } = data;
     const date = getDaysAgo(joined_at, true);
-    const router = useRouter();
-
-    console.log(data);
+    const t = useTranslations('pages.organizations.requestCard');
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const DeleteUserRequest = async() => {
-        try{
-            const res = await OrganizationsApi.deleteUserInvitation(id);
-            console.log(res)
-            toast.success("Powiadomlenie zostaloo usuniete")
+    const DeleteUserRequest = async () => {
+        try {
+            await OrganizationsApi.deleteUserInvitation(id);
+            toast.success(t('invitationRemoved'));
             onDelete(id);
-            setIsLoading(false)
-        }catch(err){
-            console.log(err);
-            toast.success("Cos poszlo nie tak")
-            setIsLoading(true);
-        }
-        finally{
+        } catch (err) {
+            toast.error(t('errorMessage'));
+        } finally {
             setIsLoading(false);
         }
     }
 
-    const ApproveUserRequest = async() => {
+    const ApproveUserRequest = async () => {
         setIsLoading(true)
-        try{
+        try {
             const res = await OrganizationsApi.approveUserInvitation(id, {
                 invitation_confirmed: true
             });
-            console.log(res)
-            toast.success("Dodales nowego membera")
+            toast.success(t('memberAdded'));
             onDelete(id);
             onRequestApproved(id, data);
-            setIsLoading(false)
-        }catch(err){
-            console.log(err);
-            toast.success("Cos poszlo nie tak")
-            setIsLoading(true);
-        }
-        finally{
+        } catch (err) {
+            toast.error(t('errorMessage'));
+        } finally {
             setIsLoading(false);
         }
     }
@@ -88,34 +76,34 @@ const RequestElement = ({ data, onDelete, onRequestApproved }: RequestElementPro
             profile={user}
             src={user.image ? user.image : undefined}
           />
-  
+
           <div className={style.header}>
             <div className={style.info}>
-              <span className={style.name}>{user?.first_name || '-'}</span> 
+              <span className={style.name}>{user?.first_name || '-'}</span>
               <span className={style.date}>{date}</span>
             </div>
           </div>
         </div>
         <div className={style.content}>
-            <p className={style.text}>{invitation_message ? invitation_message : '-Nie nadeslano messegu-'}</p>
+            <p className={style.text}>{invitation_message ? invitation_message : t('noMessage')}</p>
         </div>
 
         {invitation_confirmed ? (
             <div>
-                Dodano
+                {t('added')}
             </div>
         ) : (
             <div className={style.btns}>
-                <Button 
+                <Button
                     className={style.submitButton}
-                    label={"Dodaj"}
+                    label={t('add')}
                     icon='plus'
                     onClick={ApproveUserRequest}
                     disabled={isLoading}
                 />
-                <Button 
+                <Button
                     className={style.deleteButton}
-                    label={"Usun"}
+                    label={t('remove')}
                     onClick={DeleteUserRequest}
                     disabled={isLoading}
                 />
@@ -124,6 +112,6 @@ const RequestElement = ({ data, onDelete, onRequestApproved }: RequestElementPro
       </Card>
     );
   };
-  
+
 
 export default RequestElement;

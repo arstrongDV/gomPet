@@ -1,1 +1,22 @@
-{}
+{
+  "title": "Create new account",
+  "subtitle": "and join our community",
+  "hasAccount": "Already have an account? Sign in",
+  "emailLabel": "Email",
+  "emailPlaceholder": "Enter your email",
+  "firstNameLabel": "First name",
+  "firstNamePlaceholder": "Enter your first name",
+  "lastNameLabel": "Last name",
+  "lastNamePlaceholder": "Enter your last name",
+  "passwordLabel": "Password",
+  "passwordPlaceholder": "Create a password",
+  "passwordRepeatLabel": "Repeat password",
+  "passwordRepeatPlaceholder": "Repeat your password",
+  "locationCheckbox": "Can we use your location",
+  "submitButton": "Create account",
+  "toast": {
+    "error": "An error occurred",
+    "success": "Profile has been created",
+    "locationError": "Failed to get location"
+  }
+}

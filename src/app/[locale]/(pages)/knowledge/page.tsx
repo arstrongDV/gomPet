@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { Button, Checkbox, List, Modal, Pagination } from 'src/components';
+import { Button, List, Modal, Pagination } from 'src/components';
 import { IArticle } from 'src/constants/types';
 
 import style from './BlogPage.module.scss';
@@ -12,8 +12,17 @@ import { Params } from 'src/constants/params';
 import { paginationConfig } from 'src/config/pagination';
 import AddKnowledge from './components/ArticleCard/AddKnowledge';
 import { useSession } from 'next-auth/react';
-import useCategories from 'src/components/hooks/useCategories';
 import KnowledgeCard from './components/ArticleCard';
+import { useTranslations } from 'next-intl';
+import CategoriesFilter from './components/CategoriesFilter';
+
+interface categoryGroupResponse {
+    id: number;
+    group: string;
+    name: string;
+    slug: string;
+    description: string;
+}
 
 const BlogPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -24,13 +33,10 @@ const BlogPage = () => {
   const router = useRouter();
   const [total, setTotal] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
-  const { categories, loading } = useCategories();
+  const t = useTranslations('pages.knowledge');
 
   const session = useSession();
-
-  console.log("knowladge::", knowladge);
 
   const changePage = (page: number) => {
     params.set(Params.PAGE, page.toString());
@@ -39,9 +45,20 @@ const BlogPage = () => {
 
   const currentPage = Number(searchParams.get('page')) || 1;
 
-  const hasCategoryParam = selectedCategories.length == 0 ? 'has-category=true' : `category=${selectedCategories.join(',')}`;
+  // const getCategoryGroup = async(selectedCategories: string[]) => {
+  //   try{
+  //     const group = await ArticlesApi.getArticlesCategories(selectedCategories);
+  //     setCategoryGroup(group.data.results)
+  //   } catch (err){
+  //     toast.error("Nie udalo sie pobrac group kategorii")
+  //     setCategoryGroup([])
+  //   }
+  // }
+  // useEffect(() => {
+  //   getCategoryGroup(selectedCategories)
+  // }, [selectedCategories])
 
-  const getKnowledge = async () => {
+  const getKnowledge = async (hasCategoryParam?: string) => {
     setIsLoading(true);
     try {
       const res = await ArticlesApi.getArticlesList(currentPage, hasCategoryParam);
@@ -54,31 +71,17 @@ const BlogPage = () => {
     }
   };
   useEffect(() => {
-    getKnowledge();
-  }, [currentPage, selectedCategories]);
+    const categoryGroup = searchParams.get('category');
+    const hasCategoryParam = categoryGroup ? `category=${categoryGroup}` : undefined;
+    getKnowledge(hasCategoryParam);
+  }, [currentPage, searchParams]);
 
   return (
     <div className={style.container}>
-      <div className={style.categories}>
-        {categories.map(cat => (
-          <Checkbox
-            key={cat.id}
-            id={`category-${cat.id}`}
-            className={style.checkbox}
-            checked={selectedCategories.includes(cat.id)}
-            onChange={() => {
-              setSelectedCategories(prev =>
-                prev.includes(cat.id)
-                  ? prev.filter(id => id !== cat.id)
-                  : [...prev, cat.id]
-              );
-            }}
-            label={cat.label}
-          />
-        ))}
-      </div>
+      <CategoriesFilter />
+
       {session.status === 'authenticated' && !isLoading &&(
-        <Button className={style.btnAdd} label="Dodaj wiedze" icon='plus' onClick={() => setIsOpen(prev => !prev)} />
+        <Button className={style.btnAdd} label={t('addKnowledge')} icon='plus' onClick={() => setIsOpen(prev => !prev)} />
       )}
 
       <List
@@ -106,7 +109,7 @@ const BlogPage = () => {
           className={style.modalAddWin} 
           isOpen={isOpen} 
           closeModal={() => setIsOpen(false)}
-          title='Dodaj Wiedze'
+          title={t('addKnowledge')}
         >
           <AddKnowledge setIsOpen={setIsOpen} refreshKnowledge={() => getKnowledge()} />
         </Modal>

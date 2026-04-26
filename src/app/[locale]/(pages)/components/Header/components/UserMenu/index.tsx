@@ -11,17 +11,17 @@ import { Routes } from 'src/constants/routes';
 import style from './UserMenu.module.scss';
 
 const UserMenu = () => {
-  const t = useTranslations();
+  const t = useTranslations('header.userMenu');
   const session = useSession();
 
   const menuItems: DropdownItemType[] = [
     {
-      title: 'Profile',
+      title: t('profile'),
       href: Routes.PROFILE,
       roles: []
     },
     {
-      title: 'Nowa organizacja',
+      title: t('newOrganization'),
       href: Routes.NEW_ORGANIZATION,
       roles: []
     }
