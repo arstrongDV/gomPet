@@ -267,8 +267,7 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
           }}
           isClearable
         /> */}
-        <AnimalSelect 
-          key={searchParams.get(Params.SPECIES)}
+        <AnimalSelect
           initialState={{
             speciesOpt: {
               value: searchParams.get(Params.SPECIES)
@@ -345,11 +344,11 @@ const AnimalFilters = ({ className }: AnimalFiltersProps) => {
             label={value}
           />
         ))} */}
-        {characteristics.map(({ id, label, value }) => (
+        {spacie && characteristics.map(({ id, label, value }) => (
           <Checkbox
             key={id}
             id={String(id)}
-            className={style.checkbox}
+            className={classNames(style.checkbox, { [style.noActive]: characteristics.length === 0 })}
             checked={!!searchParams
               .get(Params.CHARACTERISTICS)
               ?.split(',')

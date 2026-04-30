@@ -1,3 +1,5 @@
+'use client';
+
 import { Loader } from 'src/components';
 import style from './CategoriesFilter.module.scss'
 import { useEffect, useState } from 'react';

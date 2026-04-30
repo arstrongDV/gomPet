@@ -301,15 +301,15 @@ export class AnimalsApi {
   }
 
 
-  static async getAnimalsSpecies() {
-    return ApiClient.get(AnimalsRouts.ANIMAL_SPECIES, {
+  static async getAnimalsSpecies(page = 1) {
+    return ApiClient.get(AnimalsRouts.ANIMAL_SPECIES, { page }, {
       __tokenRequired: false
-    });
+    } as any);
   }
-  static async getAnimalsBreeds(speciesId: number) {
-    return ApiClient.get(AnimalsRouts.ANIMAL_BREEDS(speciesId), {
+  static async getAnimalsBreeds(speciesId: number, page = 1) {
+    return ApiClient.get(AnimalsRouts.ANIMAL_BREEDS(speciesId), { page }, {
       __tokenRequired: false
-    });
+    } as any);
   }
 
   static async getUserBookmarks(id: number, filters?: any) {

@@ -45,19 +45,6 @@ const BlogPage = () => {
 
   const currentPage = Number(searchParams.get('page')) || 1;
 
-  // const getCategoryGroup = async(selectedCategories: string[]) => {
-  //   try{
-  //     const group = await ArticlesApi.getArticlesCategories(selectedCategories);
-  //     setCategoryGroup(group.data.results)
-  //   } catch (err){
-  //     toast.error("Nie udalo sie pobrac group kategorii")
-  //     setCategoryGroup([])
-  //   }
-  // }
-  // useEffect(() => {
-  //   getCategoryGroup(selectedCategories)
-  // }, [selectedCategories])
-
   const getKnowledge = async (hasCategoryParam?: string) => {
     setIsLoading(true);
     try {
@@ -78,8 +65,6 @@ const BlogPage = () => {
 
   return (
     <div className={style.container}>
-      <CategoriesFilter />
-
       {session.status === 'authenticated' && !isLoading &&(
         <Button className={style.btnAdd} label={t('addKnowledge')} icon='plus' onClick={() => setIsOpen(prev => !prev)} />
       )}

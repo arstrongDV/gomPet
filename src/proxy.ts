@@ -44,25 +44,6 @@ const handleAuth = async (req: ProxyAuthRequest, isPublicOnlyPage: boolean, isPr
     return response;
   }
 
-  if (locales.length === 1) {
-    const [defaultLocale] = locales;
-    const localePath = `/${defaultLocale}`;
-    const { pathname } = req.nextUrl;
-
-    if (pathname === localePath || pathname.startsWith(`${localePath}/`)) {
-      const response = NextResponse.next();
-      response.headers.set('x-current-path', req.nextUrl.pathname);
-      return response;
-    }
-
-    const rewriteUrl = req.nextUrl.clone();
-    rewriteUrl.pathname = pathname === '/' ? localePath : `${localePath}${pathname}`;
-
-    const response = NextResponse.rewrite(rewriteUrl);
-    response.headers.set('x-current-path', req.nextUrl.pathname);
-    return response;
-  }
-
   const response = intlMiddleware(req);
   response.headers.set('x-current-path', req.nextUrl.pathname);
 

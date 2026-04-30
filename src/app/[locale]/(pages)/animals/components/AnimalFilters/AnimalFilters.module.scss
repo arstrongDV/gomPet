@@ -32,6 +32,19 @@
   margin-top: 2rem;///
 }
 
+.noActive {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.checkbox {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (max-width: 570px) {
   .filters {
     width: 100%;

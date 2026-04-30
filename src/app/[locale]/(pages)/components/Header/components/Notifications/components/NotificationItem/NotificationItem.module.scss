@@ -1,11 +1,13 @@
 @import 'styles';
 
 .item {
-  @include element-flex(row, space-between);
+  @include element-flex(row, flex-start, center);
   gap: $spacing-4;
-  padding: $spacing-4;
+  padding: $spacing-3 $spacing-4;
   transition: background-color $transition-main;
   cursor: pointer;
+  border-radius: $radius-m;
+  position: relative;
 
   &:hover {
     background-color: $color-background-4;
@@ -18,18 +20,38 @@
   }
 }
 
+.unread {
+  background-color: rgba($color-primary, 0.05);
+
+  @include dark-theme {
+    background-color: rgba($color-primary, 0.1);
+  }
+}
+
+.avatar {
+  width: 3.8rem;
+  height: 3.8rem;
+  min-width: 3.8rem;
+  flex-shrink: 0;
+}
+
 .col {
   @include element-flex(column, flex-start, stretch);
   gap: $spacing-2;
+  flex: 1;
+  min-width: 0;
 }
 
 .content {
   @include body2;
   font-weight: $font-regular;
   color: $color-foreground;
+  line-height: 1.5;
+  word-break: break-word;
 
   b {
     font-weight: $font-medium;
+    color: $color-foreground;
   }
 }
 
@@ -37,4 +59,14 @@
   @include caption;
   font-weight: $font-regular;
   color: $color-foreground-dim;
+}
+
+.unreadDot {
+  width: 0.8rem;
+  height: 0.8rem;
+  min-width: 0.8rem;
+  border-radius: 50%;
+  background-color: $color-primary;
+  align-self: center;
+  flex-shrink: 0;
 }

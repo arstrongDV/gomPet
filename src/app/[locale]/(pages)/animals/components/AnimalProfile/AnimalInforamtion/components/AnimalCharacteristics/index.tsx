@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef } from "react";
 import style from "./AnimalCharacteristics.module.scss";
 import { Icon } from "src/components";

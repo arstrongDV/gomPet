@@ -30,15 +30,17 @@ const OrganizationsScroll = ({organizations, isLoading}: AnimalScrollProps) => {
                 />
             </header>
 
-            <HorizontalScroll className={style.list}>
+            <HorizontalScroll className={style.list} >
                 {isLoading && <Loader />}
-                {organizations.map((org: any) => (
+                {organizations.length !== 0 ? organizations.map((org: any) => (
                 <OrganizationCard
                     key={org.organization.id}
                     className={style.item}
                     organization={org.organization}
                 />
-                ))}
+                )) : (
+                    <p>Brak organizacji</p>
+                )}
             </HorizontalScroll>
         </div>
     )

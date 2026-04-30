@@ -220,12 +220,26 @@ export interface withPagination<T = any> {
 }
 
 export interface NotificaitonItemType {
+  id?: number;
   created_at: string;
-  origin: {
+  origin?: {
     id: number;
     type: string;
-  };
+    label?: string;
+  } | null;
   actor: IUser;
+  type: string;
+  code?: string;
   verb: string;
   is_read: boolean;
+  target_type?: string;
+  target_id?: number;
+  target_label?: string;
+  target_organization?: {
+    id: number;
+    name: string;
+    email: string;
+  } | null;
+  target_owner?: IUser | null;
+  created_object_id?: number;
 }

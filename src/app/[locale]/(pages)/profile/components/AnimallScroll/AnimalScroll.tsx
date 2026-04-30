@@ -30,13 +30,15 @@ const AnimalScroll = ({animals, isLoading}: AnimalScrollProps) => {
 
             <HorizontalScroll className={style.list}>
                 {isLoading && <Loader />}
-                {animals.map((animal) => (
+                {animals.length !== 0 ? animals.map((animal) => (
                 <AnimalCard
                     className={style.animal}
                     key={animal.id}
                     animal={animal}
                 />
-                ))}
+                )) : (
+                    <p>Brak zwierzakow</p>
+                )}
             </HorizontalScroll>
         </div>
     )

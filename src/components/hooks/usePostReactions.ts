@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from "react";
 import useWebsocket from "./useWebsocket";
 import { WebsocketRoutes } from "src/api/routes";
